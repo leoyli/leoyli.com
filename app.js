@@ -9,11 +9,11 @@ var express                 = require('express'),
     cookieParser            = require('cookie-parser'),
     bodyParser              = require('body-parser'),
     mongoose                = require("mongoose"),
-    methodOverride          = require('method-override');
-    //favicon                 = require('serve-favicon'),
-    //passport                = require('passport'),
-    //LocalStrategy           = require('passport-local'),
-    //passportLocalMongoose   = require('passport-local-mongoose');
+    methodOverride          = require('method-override'),
+    favicon                 = require('serve-favicon'),
+    passport                = require('passport'),
+    LocalStrategy           = require('passport-local'),
+    passportLocalMongoose   = require('passport-local-mongoose');
 
 var app = express();
 
@@ -23,7 +23,7 @@ var app = express();
 //  DB LINKAGE
 // ==============================
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.DB || 'mongodb://localhost/leoyli-main-dev', {useMongoClient: true});
+mongoose.connect(process.env.DB, {useMongoClient: true});
 
 
 
@@ -38,7 +38,7 @@ app.set('view engine', 'ejs');
 // ==============================
 //  MIDDLEWARE
 // ==============================
-var middleware = require('./middleware');
+var middleware              = require('./middleware');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -55,47 +55,43 @@ app.use(flash());
 // ==============================
 //  PASSPORT
 // ==============================
-// app.use(require('express-session')({
-//     secret: 'to-be-defined',
-//     resave: false,
-//     saveUninitialized: false
-// }));
-//
-// app.use(passport.initialize());
-// app.use(passport.session());
+var UserModel               = require("./models/user");
+
+app.use(require('express-session')({
+    secret: process.env.PASSPORT_SECRET,
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(UserModel.createStrategy());
+passport.serializeUser(UserModel.serializeUser());
+passport.deserializeUser(UserModel.deserializeUser());
 
 
 
 // ==============================
 //  ROUTES
 // ==============================
-var index = require('./routes/index');
+var index                   = require('./routes/index'),
+    error                   = require('./routes/error');
+    // authentication          = require('./routes/authentication'),
+    // dashboard               = require('./routes/dashboard'),
+    // post                    = require('./routes/post');
 
 app.use('/', index);
+// app.use('/', authentication);
+// app.use('/dashboard', dashboard);
+// app.use('/post', post);
 
+// ** develop only ** //
+var seedSample              = require('./routes/seed');
+app.use('/seed', seedSample);
+// ** develop only ** //
 
-
-// ==============================
-//  ERRORS CONTROL
-// ==============================
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-});
-
-// error handler
-app.use(function(err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-    // render the error page
-    res.status(err.status || 500);
-    res.render('error');
-});
-
+app.use('/', error);
 
 
 // ==============================

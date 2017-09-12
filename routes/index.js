@@ -1,9 +1,13 @@
-var express = require('express');
-var router = express.Router();
+var express                 = require('express'),
+    router                  = express.Router();
 
-/* GET home page. */
+
+// ==============================
+//  ROUTE RULES
+// ==============================
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+    res.render('index', { title: 'Express' });
 });
 
+// route exports
 module.exports = router;
