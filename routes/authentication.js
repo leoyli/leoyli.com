@@ -5,13 +5,6 @@ var express                 = require('express'),
 
 
 // ==============================
-//  MIDDLEWARE
-// ==============================
-var middleware              = require('../middleware');
-
-
-
-// ==============================
 //  MODELS
 // ==============================
 var UserModel               = require('../models/user');
@@ -30,11 +23,14 @@ router.get('/signup', function (req, res) {
 // sign-up registration
 router.post('/signup', function (req, res) {
     UserModel.register(new UserModel({username: req.body.username}), req.body.password, function (err, registeredUser) {
-        if (err) return res.redirect('/signup');
-        passport.authenticate('local')(req, res, function () {  /// function (err, user) would worked???
+        // failed in registration
+        if (err) {
+            return res.redirect('/signup');     // >>> will highlight errors with qualified inputs remained
+        }
+        // passed responses
+        passport.authenticate('local')(req, res, function () {
             console.log(registeredUser);
-            res.redirect(req.session.returnTo || '/console/dashboard');   /// dir-to 1) user-profile
-            delete req.session.returnTo;
+            res.redirect('/console/dashboard');
         });
     });
 });
@@ -50,21 +46,19 @@ router.get('/signin', function (req, res) {
 router.post('/signin', function(req, res) {
     passport.authenticate('local', function(err, AuthUser) {
         if (err) {
-            console.log(err);
-            return res.send(err);
+            return res.send(err);   // >>> will hide from user
         }
         if (!AuthUser) {
-            // *** req.flash('error', 'Wrong username or password!');
-            console.log('Wrong username or password!');
+            // ('info' argument can be set)
+            req.flash('error', 'Wrong username or password!');
             return res.redirect('/signin');
         }
         req.logIn(AuthUser, function(err) {
             if (err) {
-                console.log(err);
-                return res.send(err);
+                return res.send(err);   // >>> will hide from user
             }
-            // *** req.flash('info', 'Welcome back <strong>' + AuthUser.username + '</strong>.');
             res.redirect(req.session.returnTo || '/console/dashboard');
+            // destroy the session variable obtained in 'isSignedIn' config
             delete req.session.returnTo;
         });
     })(req, res);

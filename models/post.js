@@ -1,4 +1,6 @@
-var mongoose                = require("mongoose");
+const
+    mongoose                = require("mongoose");
+
 
 
 // define new (DB)data schema

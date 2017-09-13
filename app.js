@@ -1,4 +1,3 @@
-
 // ==============================
 //  APP INITIALIZATION
 // ==============================
@@ -13,10 +12,7 @@ var express                 = require('express'),
     methodOverride          = require('method-override'),
     favicon                 = require('serve-favicon'),
     passport                = require('passport'),
-    LocalStrategy           = require('passport-local'),
-    passportLocalMongoose   = require('passport-local-mongoose');
-
-var app = express();
+    app = express();
 
 
 
@@ -29,18 +25,14 @@ mongoose.connect(process.env.DB, {useMongoClient: true});
 
 
 // ==============================
-//  VIEW ENGINE
+//  CONFIG
 // ==============================
+// view engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 
-
-// ==============================
-//  MIDDLEWARE
-// ==============================
-var middleware              = require('./middleware');
-
+// required packages
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -52,24 +44,13 @@ app.use(flash());
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 
+// middleware
+var middleware              = require('./config/middleware');
 
-// ==============================
-//  PASSPORT
-// ==============================
-var UserModel               = require("./models/user");
 
-app.use(require('express-session')({
-    secret: process.env.PASSPORT_SECRET,
-    resave: false,
-    saveUninitialized: false
-}));
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-passport.use(UserModel.createStrategy());
-passport.serializeUser(UserModel.serializeUser());
-passport.deserializeUser(UserModel.deserializeUser());
+// passport
+var passportConfig          = require('./config/passport');
+passportConfig(app, passport);
 
 
 
