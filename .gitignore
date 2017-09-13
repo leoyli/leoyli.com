@@ -59,3 +59,6 @@ typings/
 
 # webstorm config
 .idea
+
+# google cloud platform env.
+/app.yaml

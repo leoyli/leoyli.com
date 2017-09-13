@@ -1,3 +1,4 @@
+
 // ==============================
 //  APP INITIALIZATION
 // ==============================
@@ -76,14 +77,14 @@ passport.deserializeUser(UserModel.deserializeUser());
 //  ROUTES
 // ==============================
 var index                   = require('./routes/index'),
-    error                   = require('./routes/error');
-    // authentication          = require('./routes/authentication'),
-    // dashboard               = require('./routes/dashboard'),
-    // post                    = require('./routes/post');
+    error                   = require('./routes/error'),
+    authentication          = require('./routes/authentication'),
+    console                 = require('./routes/console'),
+    post                    = require('./routes/post');
 
 app.use('/', index);
-// app.use('/', authentication);
-// app.use('/dashboard', dashboard);
+app.use('/', authentication);
+app.use('/console', console);
 // app.use('/post', post);
 
 // ** develop only ** //
