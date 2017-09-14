@@ -25,11 +25,12 @@ router.post('/signup', function (req, res) {
     UserModel.register(new UserModel({username: req.body.username}), req.body.password, function (err, registeredUser) {
         // failed in registration
         if (err) {
+            req.flash('error', err.name + ' - ' + err.message);
             return res.redirect('/signup');     // >>> will highlight errors with qualified inputs remained
         }
         // passed responses
         passport.authenticate('local')(req, res, function () {
-            console.log(registeredUser);
+            req.flash('info', 'Welcome new user: ' + req.body.username);
             res.redirect('/console/dashboard');
         });
     });
@@ -44,19 +45,20 @@ router.get('/signin', function (req, res) {
 
 // sign-in authentication
 router.post('/signin', function(req, res) {
-    passport.authenticate('local', function(err, AuthUser) {
+    passport.authenticate('local', function(err, authUser) {
         if (err) {
             return res.send(err);   // >>> will hide from user
         }
-        if (!AuthUser) {
+        if (!authUser) {
             // ('info' argument can be set)
             req.flash('error', 'Wrong username or password!');
             return res.redirect('/signin');
         }
-        req.logIn(AuthUser, function(err) {
+        req.logIn(authUser, function(err) {
             if (err) {
                 return res.send(err);   // >>> will hide from user
             }
+            req.flash('info', 'Welcome back ' + authUser.username);
             res.redirect(req.session.returnTo || '/console/dashboard');
             // destroy the session variable obtained in 'isSignedIn' config
             delete req.session.returnTo;
@@ -68,6 +70,7 @@ router.post('/signin', function(req, res) {
 // sign-out
 router.get('/signout', function (req, res) {
     req.logout();
+    req.flash('info', 'See you next time!');
     res.redirect('back');
 });
 

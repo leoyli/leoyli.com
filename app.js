@@ -44,13 +44,14 @@ app.use(flash());
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 
-// middleware
-var middleware              = require('./config/middleware');
-
-
 // passport
 var passportConfig          = require('./config/passport');
 passportConfig(app, passport);
+
+
+// middleware
+var middleware              = require('./config/middleware');
+app.use(middleware.localVariables);
 
 
 

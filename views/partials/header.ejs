@@ -11,3 +11,9 @@
 
 <body>
 
+<% if (flashMessageError && flashMessageError.length > 0) {%>
+    <div class="alert alert-danger" role="alert"><%= flashMessageError %></div>
+<% }%>
+<% if (flashMessageInfo && flashMessageInfo.length > 0) {%>
+    <div class="alert alert-success" role="alert"><%= flashMessageInfo %></div>
+<% }%>
