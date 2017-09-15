@@ -7,14 +7,14 @@ var express                 = require('express'),
 // ==============================
 //  MIDDLEWARE
 // ==============================
-var middleware              = require('../config/middleware');
+var gate                    = require('../config/middleware');
 
 
 
 // ==============================
 //  ROUTE RULES
 // ==============================
-router.get('/dashboard', middleware.isSignedIn, function (req, res) {
+router.get('/dashboard', gate.isSignedIn, function (req, res) {
     res.render('./console/dashboard');
 });
 

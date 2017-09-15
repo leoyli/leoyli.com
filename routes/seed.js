@@ -16,6 +16,7 @@ var UserModel               = require('../models/user'),
 // ==============================
 //  ROUTE RULES
 // ==============================
+// seed plant
 router.get("/", function (req, res) {
     console.log("NEW SAMPLE INJECTION STARTED:");
 
@@ -36,10 +37,10 @@ router.get("/", function (req, res) {
 
         // if succeed, then seed a new post(obj.)
         PostModel.create({
-            postTitle: 'TEST POST',
-            postFeaturedImg: 'https://truth.bahamut.com.tw/s01/201708/33711956c380acf29d83d2c8321458f7.JPG',
-            postAuthor: 'LEO',
-            postContent: '<strong>Splatoon 2</strong> UPCOMING UPDATES! <script>alert("WARNING");</script>'
+            title: 'TEST POST',
+            featuredImg: 'https://truth.bahamut.com.tw/s01/201708/33711956c380acf29d83d2c8321458f7.JPG',
+            author: 'LEO',
+            content: '<strong>Splatoon 2</strong> UPCOMING UPDATES! <script>alert("WARNING");</script>'
         }, function (err, createdPost) {
             if (err) {
                 console.log('\n 2) ERRORS! (@CREATE INJECTION)');
@@ -77,17 +78,16 @@ router.get("/", function (req, res) {
 });
 
 
+// seed check
 router.get('/check', function (req, res) {
     console.log('\n 4) ASSOCIATION CHECKING:');
     UserModel.findOne({username: 'leo'}).populate('ownedPosts').exec(function (err, foundUser) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log(foundUser);
-            res.send(foundUser);
-        }
+        if (err) return console.log(err);
+        console.log(foundUser);
+        res.send(foundUser);
     });
 });
+
 
 
 // route exports

@@ -1,0 +1,23 @@
+<% include ./../partials/header %>
+
+<div>
+    <p><a href="/post">＜ BACK TO INDEX</a></p>
+    <h1><%= post.title %></h1>
+    <div id="<%= post._id %>" class="row">
+        <div class="col-md-8">
+            <%= post.author %>
+            ｜<a href="/post/<%= post._id %>/edit" target="_self">(edit)</a>
+            ｜<a href="/post/class/<%= post.class %>" target="_self"><%= post.class %></a>
+            ｜Times of revised: <%= post._revised %>
+        </div>
+        <div class="col-md-4">
+            <i><%= post._updated.toDateString(); %></i>
+        </div>
+    </div>
+    <div>&nbsp;</div>
+    <img src="<%= post.featuredImg %>">
+    <div>&nbsp;</div>
+    <div><%- post.content %></div>
+</div>
+
+<% include ./../partials/footer %>

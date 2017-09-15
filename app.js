@@ -35,7 +35,7 @@ app.set('view engine', 'ejs');
 // required packages
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressSanitizer());
@@ -67,7 +67,7 @@ var index                   = require('./routes/index'),
 app.use('/', index);
 app.use('/', authentication);
 app.use('/console', console);
-// app.use('/post', post);
+app.use('/post', post);
 
 // ** develop only ** //
 var seedSample              = require('./routes/seed');

@@ -16,6 +16,7 @@ var UserModel               = require('../models/user');
 // ==============================
 // sign-up
 router.get('/signup', function (req, res) {
+    if (req.isAuthenticated()) return res.redirect('/console/dashboard');
     res.render('console/signup');
 });
 
@@ -26,7 +27,7 @@ router.post('/signup', function (req, res) {
         // failed in registration
         if (err) {
             req.flash('error', err.name + ' - ' + err.message);
-            return res.redirect('/signup');     // >>> will highlight errors with qualified inputs remained
+            return res.redirect('/signup'); // todo: highlight errors with qualified inputs remained
         }
         // passed responses
         passport.authenticate('local')(req, res, function () {
@@ -39,6 +40,11 @@ router.post('/signup', function (req, res) {
 
 // sign-in
 router.get('/signin', function (req, res) {
+    if (req.isAuthenticated()) {
+        // pass message if an error received from the previous
+        req.flash('error', String(res.locals.flashMessageError));
+        return res.redirect('/console/dashboard');
+    }
     res.render('console/signin');
 });
 
@@ -46,18 +52,14 @@ router.get('/signin', function (req, res) {
 // sign-in authentication
 router.post('/signin', function(req, res) {
     passport.authenticate('local', function(err, authUser) {
-        if (err) {
-            return res.send(err);   // >>> will hide from user
-        }
+        if (err) return res.send(err);  // todo: hide from user
         if (!authUser) {
-            // ('info' argument can be set)
+            // option: 'info' argument can be set
             req.flash('error', 'Wrong username or password!');
             return res.redirect('/signin');
         }
         req.logIn(authUser, function(err) {
-            if (err) {
-                return res.send(err);   // >>> will hide from user
-            }
+            if (err) return res.send(err);  // todo: hide from user
             req.flash('info', 'Welcome back ' + authUser.username);
             res.redirect(req.session.returnTo || '/console/dashboard');
             // destroy the session variable obtained in 'isSignedIn' config
@@ -70,7 +72,7 @@ router.post('/signin', function(req, res) {
 // sign-out
 router.get('/signout', function (req, res) {
     req.logout();
-    req.flash('info', 'See you next time!');
+    req.flash('info', 'See you next time!');    // tofix: sent 'info' message if it will back to 'console' path
     res.redirect('back');
 });
 
