@@ -8,6 +8,7 @@ exports.localVariables = function(req, res, next) {
     // flash messages in classes
     res.locals.flashMessageError    = req.flash('error');
     res.locals.flashMessageInfo     = req.flash('info');
+
     return next();
 };
 
@@ -19,14 +20,18 @@ exports.isSignedIn = function(req, res, next) {
 
     // if fail in authentications: record the original address for latter redirection
     req.session.returnTo = req.originalUrl;
-    req.flash('error', 'Please sign in first!');
+
+    // gives a flash message based on if just signed out
+    if (req.session.justSignedOut) req.flash('info', String(res.locals.flashMessageInfo));
+    else req.flash('error', 'Please sign in first!');
+
     res.redirect('/signin');
 };
 
 
 // authorization checking
 exports.isAuthorized = function (req, res, next) {
-    if (req.user.ownedPosts.indexOf(req.params.POSTID) < 0) {
+    if (req.user.ownedPosts.indexOf(req.params.POSTID) === -1) {
         req.flash('error', 'Sorry... You have not been authorized!');
         return res.redirect('back');
     }

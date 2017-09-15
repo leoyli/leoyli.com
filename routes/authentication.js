@@ -71,8 +71,14 @@ router.post('/signin', function(req, res) {
 
 // sign-out
 router.get('/signout', function (req, res) {
-    req.logout();
-    req.flash('info', 'See you next time!');    // tofix: sent 'info' message if it will back to 'console' path
+    // only authenticated user can sign out and give a message
+    if (req.isAuthenticated()) {
+        req.logout();
+
+        // only back to pages need authentication after sign-out that flash message would be replaced
+        req.flash(req.session.justSignedOut = true);
+        req.flash('info', 'See you next time!');    // tofix: sent 'info' message if it will back to 'console' path
+    }
     res.redirect('back');
 });
 
