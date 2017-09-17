@@ -39,13 +39,14 @@ exports.isSignedIn = function (req, res, next) {
 
 
 // authorization checking
-exports.isAuthorized = function (req, res, next) {
-    if (req.user.ownedPosts.indexOf(req.params.POSTID) === -1) {    // option: find by post ID as a alternative
+_isAuthorized = function (req, res, next) {
+    if (req.user.ownedPosts.indexOf(req.params.POSTID || req.loadedPost._id) === -1) {    // option: find by post ID as a alternative
         req.flash('error', 'Sorry... You have not been authorized!');
         return res.redirect('back');
     }
     return next();
 };
+exports.isAuthorized = [exports.isSignedIn, _isAuthorized];
 
 
 // scripts sanitizer

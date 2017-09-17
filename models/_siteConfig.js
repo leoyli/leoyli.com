@@ -21,14 +21,10 @@ var _siteConfigSchema       = new mongoose.Schema({
 
 
 
-// define new methods
+// define new methods (in preventing the callback hell)
 _siteConfigSchema.static('newSiteConfig', function () {
     this.findOne({}, initializeSiteConfig);
 });
-
-
-// new site registration on DB
-var _siteConfig = mongoose.model('_SITECONFIG', _siteConfigSchema);
 
 function initializeSiteConfig (err, loadConfig) {
     if (err) return console.log(err);
@@ -36,5 +32,6 @@ function initializeSiteConfig (err, loadConfig) {
 }
 
 
-
+// new site registration on DB
+var _siteConfig = mongoose.model('_SITECONFIG', _siteConfigSchema);
 module.exports = _siteConfig;
