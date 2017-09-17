@@ -32,7 +32,7 @@ router.get('/', function (req, res) {
 
 // new
 router.get('/new', gate.isSignedIn, function (req, res) {
-    res.render('post/editor', {post : new PostModel()});
+    res.render('console/editor', {post : new PostModel()});
 });
 
 
@@ -56,7 +56,7 @@ router.post('/', gate.isSignedIn, gate.putSanitizer, function (req, res) {
 router.get('/:POSTID/edit', gate.isSignedIn, gate.isAuthorized, function (req, res) {
     PostModel.findById(req.params.POSTID, function (err, foundPost) {
         if (err) return res.send(err);  // todo: hide from user
-        res.render('post/editor', {post : foundPost});
+        res.render('console/editor', {post : foundPost});
     });
 });
 

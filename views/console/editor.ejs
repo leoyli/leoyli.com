@@ -1,4 +1,4 @@
-<% include ./../partials/header %>
+<% include ../_partials/_header.ejs %>
 
 <% if (post._revised !== undefined) {
     page = {title:  "UPDATE A POST", action: "/post/" + post._id + "?_method=PUT", submit: "UPDATE"};
@@ -14,15 +14,11 @@
 </div>
 <form action="<%= page.action %>" method="POST">
     <div class="form-row">
-        <div class="form-group col-md-4">
-            <label for="postAuthor">Author</label>
-            <input class="form-control" id="postAuthor" name="post[author]" value="<%= post.author %>" placeholder="Enter your name">
-        </div>
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-7">
             <label for="postTitle">Title</label>
             <input class="form-control" id="postTitle" name="post[title]" value="<%= post.title %>" placeholder="Enter the post title">
         </div>
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-5">
             <label for="postClass">Category</label>
             <input class="form-control" id="postClass" name="post[class]" value="<%= post.class %>" placeholder="Enter the category">
         </div>
@@ -30,7 +26,7 @@
     <div class="form-row">
         <div class="form-group col-md-12">
             <label for="postFtImg">Featured Image Address</label>
-            <input class="form-control" id="postFtImg" name="post[featuredImg]" value="<%= post.featuredImg %>" placeholder="Enter URL for a featured image">
+            <input class="form-control" id="postFtImg" name="post[featured]" value="<%= post.featured %>" placeholder="Enter URL for a featured image/video">
         </div>
         <div class="form-group col-md-12">
             <label for="postContent">Content</label>
@@ -52,4 +48,4 @@
 
 <% } %>
 
-<% include ./../partials/footer %>
+<% include ../_partials/_footer.ejs %>

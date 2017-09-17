@@ -22,11 +22,11 @@ router.get("/", function (req, res) {
 
     // seed a new user(obj.)
     UserModel.register(new UserModel({
-        username: 'leo',
-        firstName: 'leo',
-        lastName: 'li',
-        email: 'leo@leoyli.com'
-    }), 'password', function (err, registeredUser) {
+        username    : 'leo',
+        firstName   : 'leo',
+        lastName    : 'li',
+        email       : 'leo@leoyli.com'
+    }), 'leo', function (err, registeredUser) {
         if (err) {
             console.log('1.5) ERRORS! (@USER REGISTRATION)');
             console.log(err);
@@ -37,10 +37,10 @@ router.get("/", function (req, res) {
 
         // if succeed, then seed a new post(obj.)
         PostModel.create({
-            title: 'TEST POST',
-            featuredImg: 'https://truth.bahamut.com.tw/s01/201708/33711956c380acf29d83d2c8321458f7.JPG',
-            author: 'LEO',
-            content: '<strong>Splatoon 2</strong> UPCOMING UPDATES! <script>alert("WARNING");</script>'
+            title       : 'TEST POST',
+            featured    : 'https://truth.bahamut.com.tw/s01/201708/33711956c380acf29d83d2c8321458f7.JPG',
+            author      : {_id: registeredUser._id, username: registeredUser.username},
+            content     : '<strong>Splatoon 2</strong> UPCOMING UPDATES! <script>alert("WARNING");</script>'
         }, function (err, createdPost) {
             if (err) {
                 console.log('\n 2) ERRORS! (@CREATE INJECTION)');

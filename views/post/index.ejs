@@ -1,4 +1,4 @@
-<% include ./../partials/header %>
+<% include ../_partials/_header.ejs %>
 
 <h1>POST</h1>
 <div>&nbsp;</div>
@@ -7,12 +7,12 @@
     <div class="_postDisplay" id="<%= post._id %>">
         <div class="_title"><h3><a href="/post/<%= post._id %>"><%= post.title %></a></h3></div>
         <div class="row">
-            <div class="_author col-md-8">- <%= post.author %></div>
+            <div class="_author col-md-8">- <%= post.author.username %></div>
             <div class="_date col-md-4"><i><%= post._updated.toDateString(); %></i></div>
         </div>
-        <div class="_ftimg"><a href="/post/<%= post._id %>"><img src="<%= post.featuredImg %>"></a></div>
+        <div class="_ftimg"><a href="/post/<%= post._id %>"><img src="<%= post.featured %>"></a></div>
     </div>
     <div style="height: 60px">&nbsp;</div>
 <% }); %>
 
-<% include ./../partials/footer %>
+<% include ../_partials/_footer.ejs %>

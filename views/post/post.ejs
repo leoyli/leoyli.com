@@ -1,11 +1,11 @@
-<% include ./../partials/header %>
+<% include ../_partials/_header.ejs %>
 
 <div>
     <p><a href="/post">＜ BACK TO INDEX</a></p>
     <h1><%= post.title %></h1>
     <div id="<%= post._id %>" class="row">
         <div class="col-md-8">
-            <%= post.author %>
+            <%= post.author.username %>
             ｜<a href="/post/<%= post._id %>/edit" target="_self">(edit)</a>
             ｜<a href="/post/class/<%= post.class %>" target="_self"><%= post.class %></a>
             ｜Times of revised: <%= post._revised %>
@@ -15,9 +15,9 @@
         </div>
     </div>
     <div>&nbsp;</div>
-    <img src="<%= post.featuredImg %>">
+    <img src="<%= post.featured %>">
     <div>&nbsp;</div>
     <div><%- post.content %></div>
 </div>
 
-<% include ./../partials/footer %>
+<% include ../_partials/_footer.ejs %>

@@ -1,6 +1,6 @@
 const
-    mongoose                = require("mongoose"),
-    passportLocalMongoose   = require("passport-local-mongoose");
+    mongoose                = require('mongoose'),
+    passportLocalMongoose   = require('passport-local-mongoose');
 
 
 // define new (DB)data schema
@@ -15,14 +15,14 @@ var UserSchema              = new mongoose.Schema({
     ownedPosts              :
         [{
             type            : mongoose.Schema.Types.ObjectId,
-            ref             : "Post"
+            ref             : 'POST'
         }],
     _isGuest                : Boolean
 }, {
-    timestamps              : {createdAt: "_registered", updatedAt: "_updated"},
+    timestamps              : {createdAt: '_registered', updatedAt: '_updated'},
     versionKey              : false
 });
 
 UserSchema.plugin(passportLocalMongoose);
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model('USER', UserSchema);

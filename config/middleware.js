@@ -1,7 +1,9 @@
 var exports = module.exports = {};
 
+
+
 // username acquisition
-exports.localVariables = function(req, res, next) {
+exports.localVariables = function (req, res, next) {
     // username as a global variable
     res.locals.currentUser = req.user ? req.user : {username: 'guest', _isGuest: true};
 
@@ -14,7 +16,7 @@ exports.localVariables = function(req, res, next) {
 
 
 // authentication checking
-exports.isSignedIn = function(req, res, next) {
+exports.isSignedIn = function (req, res, next) {
     // if pass in authentications: move to next()
     if (req.isAuthenticated()) return next();
 
@@ -25,17 +27,17 @@ exports.isSignedIn = function(req, res, next) {
     if (req.session.justSignedOut) req.flash('info', String(res.locals.flashMessageInfo));
     else req.flash('error', 'Please sign in first!');
 
-    res.redirect('/signin');
+    return res.redirect('/signin');
 };
 
 
 // authorization checking
 exports.isAuthorized = function (req, res, next) {
-    if (req.user.ownedPosts.indexOf(req.params.POSTID) === -1) {
+    if (req.user.ownedPosts.indexOf(req.params.POSTID) === -1) {    // option: find by post ID as a alternative
         req.flash('error', 'Sorry... You have not been authorized!');
         return res.redirect('back');
     }
-    next();
+    return next();
 };
 
 

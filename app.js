@@ -23,6 +23,11 @@ mongoose.Promise = global.Promise;
 mongoose.connect(process.env.DB, {useMongoClient: true});
 
 
+// new site registration
+var _siteConfig             = require('./models/_siteConfig');
+_siteConfig.newSiteConfig();
+
+
 
 // ==============================
 //  CONFIG
@@ -61,12 +66,12 @@ app.use(middleware.localVariables);
 var index                   = require('./routes/index'),
     error                   = require('./routes/error'),
     authentication          = require('./routes/authentication'),
-    console                 = require('./routes/console'),
+    appconsole              = require('./routes/console'),
     post                    = require('./routes/post');
 
 app.use('/', index);
 app.use('/', authentication);
-app.use('/console', console);
+app.use('/console', appconsole);
 app.use('/post', post);
 
 // ** develop only ** //

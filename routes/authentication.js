@@ -17,7 +17,7 @@ var UserModel               = require('../models/user');
 // sign-up
 router.get('/signup', function (req, res) {
     if (req.isAuthenticated()) return res.redirect('/console/dashboard');
-    res.render('console/signup');
+    res.render('authentication/signup');
 });
 
 
@@ -32,7 +32,7 @@ router.post('/signup', function (req, res) {
         // passed responses
         passport.authenticate('local')(req, res, function () {
             req.flash('info', 'Welcome new user: ' + req.body.username);
-            res.redirect('/console/dashboard');
+            res.redirect('/console');
         });
     });
 });
@@ -43,9 +43,9 @@ router.get('/signin', function (req, res) {
     if (req.isAuthenticated()) {
         // pass message if an error received from the previous
         req.flash('error', String(res.locals.flashMessageError));
-        return res.redirect('/console/dashboard');
+        return res.redirect('/console');
     }
-    res.render('console/signin');
+    res.render('authentication/signin');
 });
 
 
