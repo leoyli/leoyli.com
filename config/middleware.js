@@ -2,16 +2,23 @@ var exports = module.exports = {};
 
 
 
-// username acquisition
+// local variables loading
 exports.localVariables = function (req, res, next) {
-    // username as a global variable
-    res.locals.currentUser = req.user ? req.user : {username: 'guest', _isGuest: true};
+    // always query site config with DB before move to the next()
+    var _siteConfig = require('./../models/_siteConfig');
+    _siteConfig.findOne({}, function (err, loadedConfig) {
+        // site config
+        res.locals._site = loadedConfig;
 
-    // flash messages in classes
-    res.locals.flashMessageError    = req.flash('error');
-    res.locals.flashMessageInfo     = req.flash('info');
+        // current username
+        res.locals.currentUser = req.user ? req.user : {username: 'guest', _isGuest: true};
 
-    return next();
+        // flash messages sorted as classes
+        res.locals.flashMessageError    = req.flash('error');
+        res.locals.flashMessageInfo     = req.flash('info');
+
+        return next();
+    });
 };
 
 
