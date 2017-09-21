@@ -1,6 +1,6 @@
 // ** develop only ** //
-
-var express                 = require('express'),
+const
+    express                 = require('express'),
     router                  = express.Router();
 
 
@@ -8,8 +8,8 @@ var express                 = require('express'),
 // ==============================
 //  MODELS
 // ==============================
-var UserModel               = require('../models/user'),
-    PostModel               = require('../models/post');
+const UserModel             = require('../models/user');
+const PostModel             = require('../models/post');
 
 
 
@@ -42,23 +42,12 @@ router.get("/", function (req, res) {
         console.log('\n 1) USER CREATED & SAVED:');
         console.log(registeredUser);
 
-        // if succeed, then seed a new post(obj.)
-        PostModel.create(SEEDPOST, function (err, createdPost) {
-            if (err) return res.send(err);
-            console.log('\n 2) A SAMPLE HAVE INJECTED:');
-            console.log(createdPost);
-
-            // if succeed, then associate user & post
-            UserModel.findOne({username: 'leo'}, function (err, foundUser) {
-                if (err) return res.send(err);
-                foundUser.ownedPosts.push(createdPost);
-                foundUser.save(function (err, pushedUser) {
-                    if (err) return res.send(err);
-                    console.log('\n 3) THE NEW POST HAVE ASSOCIATED WITH THE USER:');
-                    console.log(pushedUser);
-                    res.redirect('/seed/check');
-                });
-            });
+        req.user = registeredUser;
+        PostModel.postsCreateAndAssociate(req, res, SEEDPOST, function (err, newPost) {
+            if (err) return res.send(err);  // todo: hide from user
+            console.log('\n 2) A SAMPLE HAVE INJECTED AND ASSOCIATED WITH THE USER:');
+            console.log(newPost);
+            res.redirect('/seed/check');
         });
     });
 });
@@ -66,7 +55,7 @@ router.get("/", function (req, res) {
 
 // seed check
 router.get('/check', function (req, res) {
-    console.log('\n 4) ASSOCIATION CHECKING:');
+    console.log('\n 3) ASSOCIATION CHECKING:');
     UserModel.findOne({username: 'leo'}).populate('ownedPosts').exec(function (err, foundUser) {
         if (err) return console.log(err);
         console.log(foundUser);

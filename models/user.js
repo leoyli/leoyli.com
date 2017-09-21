@@ -17,12 +17,22 @@ var UserSchema              = new mongoose.Schema({
             type            : mongoose.Schema.Types.ObjectId,
             ref             : 'POST'
         }],
+    ownedMedia              :
+        [{
+            type            : mongoose.Schema.Types.ObjectId,
+            ref             : 'MEDIA'
+        }],
     _isGuest                : Boolean
 }, {
     timestamps              : {createdAt: '_registered', updatedAt: '_updated'},
     versionKey              : false
 });
 
+// define new methods
+// methods from a plugin
 UserSchema.plugin(passportLocalMongoose);
 
+
+
+// create a new model then export
 module.exports = mongoose.model('USER', UserSchema);

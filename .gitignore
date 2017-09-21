@@ -62,3 +62,4 @@ typings/
 
 # google cloud platform env.
 /app.yaml
+.DS_Store

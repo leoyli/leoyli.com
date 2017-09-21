@@ -4,10 +4,9 @@ const
 
 
 // define new (DB)data schema
-var PostSchema              = new mongoose.Schema({
+var MediaSchema              = new mongoose.Schema({
     _status                 : {type: Number, default: 0},
-    _pinTop                 : {type: Boolean, default: false},
-    author                  : {
+    uploader                : {
         _id                 :
             {
             type            : mongoose.Schema.Types.ObjectId,
@@ -15,13 +14,15 @@ var PostSchema              = new mongoose.Schema({
             },
         username            : String    // todo: nickname, and can be updated once changed
     },
-    featured                : String,   // todo: featured by a video
+    path                    : {type: String},
+    filename                : {type: String},
+    extname                 : {type: String},
     title                   : {type: String},  // todo: required: true
-    class                   : {type: String, lowercase: true, default: 'unclassified'},
-    tag                     : {type: String, lowercase: true},
-    content                 : String
+    description             : {type: String},
+    class                   : {type: String, lowercase: true},
+    tag                     : {type: String, lowercase: true}
 }, {
-    timestamps              : {createdAt: '_created', updatedAt: '_updated'},
+    timestamps              : {createdAt: '_uploaded', updatedAt: '_updated'},
     versionKey              : '_revised'
 });
 
@@ -29,38 +30,40 @@ var PostSchema              = new mongoose.Schema({
 
 // define new methods
 //// creation and association (model)
-PostSchema.static('postsCreateAndAssociate', function  (req, res, posts, next) {
+MediaSchema.static('mediaCreateAndAssociate', function  (req, res, media, next) {
     // normalize to an array
-    if (!Array.isArray(posts)) {
-        posts = [posts];
+    if (!Array.isArray(media)) {
+        media = [media];
     }
 
     // associate with the uploader
-    posts.map(function (self) {
-        self.author = req.user;
+    media.map(function (self) {
+        self.uploader = req.user;
         return self;
     });
 
     // create doc(s)
-    this.create(posts, function (err, createdPosts) {
+    this.create(media, function (err, createdMedia) {
         // associate with the doc(s) // note: if statement prevents from unSignIn crash
         if (req.user) {
-            req.user.ownedPosts = req.user.ownedPosts.concat(createdPosts);
+            req.user.ownedMedia = req.user.ownedMedia.concat(createdMedia);
             req.user.save(function (err) {
-                return next(err, createdPosts);
+                return next(err, createdMedia);
             });
         } else {
-            return next(err, createdPosts);
+            return next(err, createdMedia);
         }
     });
 });
 
 
 //// version counter (object method)
-PostSchema.methods.reviseCounter = function () {
+MediaSchema.methods.reviseCounter = function () {
     ++this._revised;
     this.save();
 };
 
+
+
 // create a new model then export
-module.exports = mongoose.model('POST', PostSchema);
+module.exports = mongoose.model('MEDIA', MediaSchema);

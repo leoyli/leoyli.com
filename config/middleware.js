@@ -5,7 +5,7 @@ var exports = module.exports = {};
 // local variables loading
 exports.localVariables = function (req, res, next) {
     // always query site config with DB before move to the next()
-    var _siteConfig = require('./../models/_siteConfig');
+    const _siteConfig = require('./../models/_siteConfig');
     _siteConfig.findOne({}, function (err, loadedConfig) {
         // site config
         res.locals._site = loadedConfig;
@@ -39,13 +39,13 @@ exports.isSignedIn = function (req, res, next) {
 
 
 // authorization checking
-_isAuthorized = function (req, res, next) {
+function _isAuthorized (req, res, next) {
     if (req.user.ownedPosts.indexOf(req.params.POSTID || req.loadedPost._id) === -1) {    // option: find by post ID as a alternative
         req.flash('error', 'Sorry... You have not been authorized!');
         return res.redirect('back');
     }
     return next();
-};
+}
 exports.isAuthorized = [exports.isSignedIn, _isAuthorized];
 
 

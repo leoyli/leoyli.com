@@ -1,4 +1,5 @@
-var express                 = require('express'),
+const
+    express                 = require('express'),
     router                  = express.Router(),
     passport                = require('passport');
 
@@ -7,7 +8,7 @@ var express                 = require('express'),
 // ==============================
 //  MODELS
 // ==============================
-var UserModel               = require('../models/user');
+const UserModel             = require('../models/user');
 
 
 
@@ -75,9 +76,9 @@ router.get('/signout', function (req, res) {
     if (req.isAuthenticated()) {
         req.logout();
 
-        // only back to pages need authentication after sign-out that flash message would be replaced
+        // pass a condition so that the flash message cna be displayed
         req.flash(req.session.justSignedOut = true);
-        req.flash('info', 'See you next time!');    // tofix: sent 'info' message if it will back to 'console' path
+        req.flash('info', 'See you next time!');
     }
     res.redirect('back');
 });

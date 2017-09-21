@@ -1,22 +1,26 @@
-var express                 = require('express'),
-    router                  = express.Router(),
-    passport                = require('passport');
+const
+    express                 = require('express'),
+    router                  = express.Router();
 
 
 
 // ==============================
 //  MODELS
 // ==============================
-var UserModel               = require('../models/user'),
-    _siteConfig             = require('../models/_siteConfig');
+const UserModel             = require('../models/user');
+const _siteConfig           = require('../models/_siteConfig');
 
 
 
 // ==============================
-//  MIDDLEWARE
+//  FUNCTIONS
 // ==============================
-var gate                    = require('../config/middleware');
+// middleware
+const gate                  = require('../config/middleware');
 router.all('*', gate.isSignedIn);
+
+// busboy configured image uploader
+const busboyImgUploader     = require('../config/busboy');
 
 
 
@@ -42,7 +46,7 @@ router
         });
     })
     .all(function (req, res) {
-        res.send('WE ARE CURRENTLY NOT ALLOW SETTING FILE TO BE DELETED OR CREATED.');
+        res.redirect('/console/setting');
     });
 
 
@@ -52,14 +56,35 @@ router
     .get(function (req, res) {
         res.render('./console/profile');
     })
-    .put(function (req, res) { // todo: change password
+    .put(function (req, res) {
         UserModel.update({_id: req.user._id}, {$set: req.body.userProfile}, res.redirect('back'));
     })
     .all(function (req, res) {
-        res.send('WE ARE CURRENTLY NOT ALLOW USER DATA TO BE DELETED OR ADDED.');
+        res.redirect('/console/profile');
+    });
+
+
+// (uploader)  // todo: to be integrated in profile and media manager
+router
+    .route('/upload')
+    .get(function (req, res) {
+        res.render('./console/upload');
+    })
+    .post(function (req,res) {
+        busboyImgUploader(req, res, {fileSize: 3*1048576, files: 2});
     });
 
 
 
 // route exports
 module.exports  = router;
+
+// todo - new features lists:
+// 1. (Profile) User profile picture upload (ongoing)
+//              Password change
+// 2. (content) Content manager
+//              Content export in JSON
+// 3. (media)   Media manager
+//              Media uploader
+// 4. (notice)  Notification
+// 5. (setting) Database backup

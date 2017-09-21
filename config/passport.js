@@ -1,6 +1,9 @@
-module.exports = function(app, passport) {
-    var UserModel = require("./../models/user");
+const UserModel = require("./../models/user");
 
+
+
+// passport configurations
+module.exports = function(app, passport) {
     // strategy is configured using passport-local-mongoose
     passport.use(UserModel.createStrategy());
 

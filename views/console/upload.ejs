@@ -1,0 +1,14 @@
+<% include ../_partials/_header.ejs %>
+
+<form action="/console/upload" method="post" enctype="multipart/form-data">
+    <div>
+        <input type="file" name="file1" id="file1" />
+    </div>
+    <div>&nbsp;</div>
+    <div>
+        <input type="file" name="file2" id="file2" />
+    </div>
+<input type="submit" value="UPLOAD" />
+</form>
+
+<% include ../_partials/_footer.ejs %>

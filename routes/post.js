@@ -1,20 +1,21 @@
-var express                 = require('express'),
-    router                  = express.Router(),
-    passport                = require('passport');
+const
+    express                 = require('express'),
+    router                  = express.Router();
 
 
 
 // ==============================
 //  MODELS
 // ==============================
-var PostModel               = require('../models/post');
+const PostModel = require('../models/post');
 
 
 
 // ==============================
-//  MIDDLEWARE
+//  FUNCTIONS
 // ==============================
-var gate                    = require('../config/middleware');
+// middleware
+const gate = require('../config/middleware');
 
 
 
@@ -41,17 +42,11 @@ router.post('/new', gate.isSignedIn, gate.putSanitizer, function (req, res) {
     // associate input array with the author
     req.body.post.author = {_id: req.user._id, username: req.user.username};
 
-    // create the post
-    PostModel.create(req.body.post, function (err, newPost) {
+    // create/associate posts
+    PostModel.postsCreateAndAssociate(req, res, req.body.post, function (err, newPost) {
         if (err) return res.send(err);  // todo: hide from user
-
-        // associate user with the post
-        req.user.ownedPosts.push(newPost);
-        req.user.save(function (err) {
-            if (err) return res.send(err);  // todo: hide from user
-            req.flash('info', 'Post have been successfully posted!');
-            res.redirect('/post');
-        });
+        req.flash('info', 'Post have been successfully posted!');
+        res.redirect('/post');
     });
 });
 

@@ -1,7 +1,8 @@
 // ==============================
 //  APP INITIALIZATION
 // ==============================
-var express                 = require('express'),
+const
+    express                 = require('express'),
     expressSanitizer        = require('express-sanitizer'),
     flash                   = require('connect-flash'),
     path                    = require('path'),
@@ -24,7 +25,7 @@ mongoose.connect(process.env.DB, {useMongoClient: true});
 
 
 // new site registration
-var _siteConfig             = require('./models/_siteConfig');
+const _siteConfig           = require('./models/_siteConfig');
 _siteConfig.newSiteConfig();
 
 
@@ -50,12 +51,12 @@ app.use(flash());
 
 
 // passport
-var passportConfig          = require('./config/passport');
+const passportConfig        = require('./config/passport');
 passportConfig(app, passport);
 
 
 // middleware
-var middleware              = require('./config/middleware');
+const middleware            = require('./config/middleware');
 app.use(middleware.localVariables);
 
 
@@ -63,7 +64,8 @@ app.use(middleware.localVariables);
 // ==============================
 //  ROUTES
 // ==============================
-var index                   = require('./routes/index'),
+const
+    index                   = require('./routes/index'),
     error                   = require('./routes/error'),
     authentication          = require('./routes/authentication'),
     appconsole              = require('./routes/console'),
@@ -75,7 +77,7 @@ app.use('/console', appconsole);
 app.use('/post', post);
 
 // ** develop only ** //
-var seedSample              = require('./routes/seed');
+const seedSample            = require('./routes/seed');
 app.use('/seed', seedSample);
 // ** develop only ** //
 
