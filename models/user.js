@@ -4,7 +4,7 @@ const
 
 
 // define new (DB)data schema
-var UserSchema              = new mongoose.Schema({
+let UserSchema              = new mongoose.Schema({
     username                : {type: String}, ///required: true
     firstName               : {type: String}, ///required: true
     lastName                : {type: String}, ///required: true

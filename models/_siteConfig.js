@@ -4,7 +4,7 @@ const
 
 
 // define new (DB)data schema   // todo: added CDN object for the header
-var _siteConfigSchema       = new mongoose.Schema({
+let _siteConfigSchema       = new mongoose.Schema({
     title                   : {type: String, default: 'NEW WEBSITE'},
     description             : {type: String, default: ''},
     keywords                : {type: String, default: []},
@@ -41,5 +41,5 @@ _siteConfigSchema.static('updateSettings', function (dataToBeUpdated, next) {
 
 
 // new site registration with DB
-var _siteConfig = mongoose.model('_SITECONFIG', _siteConfigSchema);
+let _siteConfig = mongoose.model('_SITECONFIG', _siteConfigSchema);
 module.exports = _siteConfig;

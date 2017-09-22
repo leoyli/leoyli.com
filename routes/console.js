@@ -66,11 +66,11 @@ router
 
 // (uploader)  // todo: to be integrated in profile and media manager
 router
-    .route('/upload')
+    .route('/upload') // todo: redirect back to media manager
     .get(function (req, res) {
         res.render('./console/upload');
     })
-    .post(function (req,res) {
+    .post(function (req, res) { // todo: will be responsible for all media uploading event and redirect user back
         busboyImgUploader(req, res, {fileSize: 3*1048576, files: 2});
     });
 

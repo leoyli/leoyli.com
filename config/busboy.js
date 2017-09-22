@@ -6,7 +6,7 @@ const
 
 
 
-// uploader configurations
+// uploader configurations // todo: extract (req, res) arguments; i.e. centralize flash messages
 function busboyImgUploader (req, res, limits, next) {
     // initialization
     const busOptions = {headers: req.headers, limits : limits};
@@ -15,8 +15,8 @@ function busboyImgUploader (req, res, limits, next) {
     const filePath = path.join(__dirname + '/..', 'public', 'images');
 
     // collectors
-    var streamCounter = 0;
-    var mediaArray = [];
+    let streamCounter = 0;
+    let mediaCollector = {};
 
     // pipe busboy
     req.pipe(busboy);
@@ -24,58 +24,71 @@ function busboyImgUploader (req, res, limits, next) {
 
     // BUSBOY-LISTENER: parse 'file' inputs
     busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
-        // path for saving
+        // content parser
+        const properties = fieldname.split(/[[\]]/).filter(string => string !== '');
+
+        // saving path
         const saveInName = Date.now() + path.extname(filename);
         const saveToPath = filePath + '/' + saveInName;
         // note: if set 'fs.createWriteStream()' as a variable here, it ends with an inexhaustible empty file
 
-        // parameters for validations
-        const isNotProvided = filename === '';
-        const isNotSupported = supportedType.indexOf(mimetype) === -1;
+        // validations
+        const isProvided = filename !== '';
+        const isSupported = supportedType.indexOf(mimetype) !== -1;
 
-        // file saving when 1) filename being provided; 2) supported types
-        if (isNotProvided || isNotSupported) {
-            file.resume();
-        } else {
+        // file saving as 1) filename provided; 2) MEME types supported
+        if (isProvided && isSupported) {
             file.pipe(fs.createWriteStream(saveToPath));
-            mediaArray.push({path: saveToPath, filename: saveInName});
+        } else {
+            file.resume();
         }
 
         // FILE-LISTENER: end (completed/terminated)
         file.on('end', function () {
-            // stream counter
-            ++streamCounter;
-
-            // if invalid
-            if (isNotProvided) return --streamCounter;
-            if (isNotSupported) return req.flash('error', 'Unsupported types!');
-
-            // if oversizing
+            // if limited
+            if (!isProvided || !isSupported || file.truncated) mediaCollector[properties[0]]['_ignore'] = true;
+            if (!isProvided) return;
+            if (!isSupported) return req.flash('error', 'Unsupported file types!');
             if (file.truncated) {
                 // note: 'fs.existsSync()' prevents the un-found crash
                 if (fs.existsSync(saveToPath)) fs.unlink(saveToPath);
-                mediaArray.pop();
                 return req.flash('error', 'Image is too big! (> ' + limits.fileSize/1048576 + ' MB)');
             }
+
+            // if normal // todo: nesting structure support
+            mediaCollector[properties[0]]['path'] = saveToPath;
+            mediaCollector[properties[0]]['filename'] = saveInName;
+            ++streamCounter;
         });
     });
 
 
     // BUSBOY-LISTENER: parse 'field' inputs
-    busboy.on('field', function (fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) {
-        // todo: field data integration into DB data
+    busboy.on('field', function (fieldname, val) {
+        let properties = fieldname.split(/[[\]]/).filter(string => string !== '');
+        if (!mediaCollector[properties[0]]) mediaCollector[properties[0]] = {};
+        mediaCollector[properties[0]][properties[1]] = val;
     });
 
 
     // BUSBOY-LISTENER: event finished
     busboy.on('finish', function() {
-        if (streamCounter === mediaArray.length && streamCounter > 0) {
+        // remove all sub-collectors (stored as top-keys in mediaCollector)
+        // *** (ECMAScript 2017+ || 2015) ***
+        Object.values = Object.values || (obj => Object.keys(obj).map(key => obj[key]));
+        let mediaArray = Object.values(mediaCollector).filter(obj => obj._ignore !== true);
+
+        // report succeed uploaded files for the user
+        if (streamCounter > 0 && streamCounter === mediaArray.length) {
             req.flash('info', mediaArray.length + ' File(s) successfully uploaded!');
         }
 
-        // DB association
+        // register documents into DB // todo: extra this step out
         if (mediaArray.length > 0) {
-            MediaModel.mediaCreateAndAssociate(req, res, mediaArray, function () {
+            MediaModel.mediaCreateAndAssociate(req, res, mediaArray, function (err, newMedia) {
+                if (err) return res.send(err);  // todo: hide from user  (error can pass to one more layer)
+                console.log(newMedia);
+
                 // ending header
                 res.writeHead(303, {Connection: 'close', Location: '/console/upload'});
                 return res.end();
@@ -86,6 +99,7 @@ function busboyImgUploader (req, res, limits, next) {
         }
     });
 }
+
 
 
 // function exports

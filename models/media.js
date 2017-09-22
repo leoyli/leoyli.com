@@ -4,7 +4,7 @@ const
 
 
 // define new (DB)data schema
-var MediaSchema              = new mongoose.Schema({
+let MediaSchema              = new mongoose.Schema({
     _status                 : {type: Number, default: 0},
     uploader                : {
         _id                 :
