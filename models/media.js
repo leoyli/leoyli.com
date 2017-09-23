@@ -14,9 +14,12 @@ let MediaSchema              = new mongoose.Schema({
             },
         username            : String    // todo: nickname, and can be updated once changed
     },
-    path                    : {type: String},
-    filename                : {type: String},
-    extname                 : {type: String},
+    file                    :
+        {
+            path            : {type: String},
+            filename        : {type: String},
+            ext             : {type: String}
+        },
     title                   : {type: String},  // todo: required: true
     description             : {type: String},
     class                   : {type: String, lowercase: true},

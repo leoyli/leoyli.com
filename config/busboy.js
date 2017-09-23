@@ -15,7 +15,6 @@ function busboyImgUploader (req, res, limits, next) {
     const filePath = path.join(__dirname + '/..', 'public', 'images');
 
     // collectors
-    let streamCounter = 0;
     let mediaCollector = {};
 
     // pipe busboy
@@ -24,9 +23,6 @@ function busboyImgUploader (req, res, limits, next) {
 
     // BUSBOY-LISTENER: parse 'file' inputs
     busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
-        // content parser
-        const properties = fieldname.split(/[[\]]/).filter(string => string !== '');
-
         // saving path
         const saveInName = Date.now() + path.extname(filename);
         const saveToPath = filePath + '/' + saveInName;
@@ -37,37 +33,30 @@ function busboyImgUploader (req, res, limits, next) {
         const isSupported = supportedType.indexOf(mimetype) !== -1;
 
         // file saving as 1) filename provided; 2) MEME types supported
-        if (isProvided && isSupported) {
-            file.pipe(fs.createWriteStream(saveToPath));
-        } else {
-            file.resume();
-        }
+        const $trigger = isProvided && isSupported ? file.pipe(fs.createWriteStream(saveToPath)) : file.resume();
+        // note: pseudo($) trigger: action is fired when 'value' as a function being executing for a return
 
         // FILE-LISTENER: end (completed/terminated)
         file.on('end', function () {
+            const properties = _propertyList(fieldname);
+            _updateByNestedProperty(mediaCollector, properties, {path: saveToPath, filename: saveInName});
+
             // if limited
             if (!isProvided || !isSupported || file.truncated) mediaCollector[properties[0]]['_ignore'] = true;
             if (!isProvided) return;
-            if (!isSupported) return req.flash('error', 'Unsupported file types!');
+            if (!isSupported) return req.flash('error', 'Some upload failed in unsupported file types!');
             if (file.truncated) {
                 // note: 'fs.existsSync()' prevents the un-found crash
                 if (fs.existsSync(saveToPath)) fs.unlink(saveToPath);
-                return req.flash('error', 'Image is too big! (> ' + limits.fileSize/1048576 + ' MB)');
+                return req.flash('error', 'Some upload failed in too big! (> ' + limits.fileSize/1048576 + ' MB)');
             }
-
-            // if normal // todo: nesting structure support
-            mediaCollector[properties[0]]['path'] = saveToPath;
-            mediaCollector[properties[0]]['filename'] = saveInName;
-            ++streamCounter;
         });
     });
 
 
     // BUSBOY-LISTENER: parse 'field' inputs
     busboy.on('field', function (fieldname, val) {
-        let properties = fieldname.split(/[[\]]/).filter(string => string !== '');
-        if (!mediaCollector[properties[0]]) mediaCollector[properties[0]] = {};
-        mediaCollector[properties[0]][properties[1]] = val;
+        if (val) return _updateByNestedProperty(mediaCollector, _propertyList(fieldname), val);
     });
 
 
@@ -76,10 +65,10 @@ function busboyImgUploader (req, res, limits, next) {
         // remove all sub-collectors (stored as top-keys in mediaCollector)
         // *** (ECMAScript 2017+ || 2015) ***
         Object.values = Object.values || (obj => Object.keys(obj).map(key => obj[key]));
-        let mediaArray = Object.values(mediaCollector).filter(obj => obj._ignore !== true);
+        const mediaArray = Object.values(mediaCollector).filter(obj => obj._ignore !== true);
 
         // report succeed uploaded files for the user
-        if (streamCounter > 0 && streamCounter === mediaArray.length) {
+        if (mediaArray.length > 0) {
             req.flash('info', mediaArray.length + ' File(s) successfully uploaded!');
         }
 
@@ -98,6 +87,20 @@ function busboyImgUploader (req, res, limits, next) {
             return res.end();
         }
     });
+}
+
+
+function _propertyList(expression) {
+    return expression.split(/[[\]]/).filter(frag => frag !== '');
+}
+
+
+function _updateByNestedProperty(obj, keys, value, index) {
+    if (!index) index = 0;
+    if (index < keys.length-1) {
+        let self = obj[keys[index]] ? obj[keys[index]] : (obj[keys[index]] = {});
+        return _updateByNestedProperty(self, keys, value, ++index);
+    } else obj[keys[index]] = value ? value : {};
 }
 
 
