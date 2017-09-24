@@ -1,6 +1,6 @@
 const
-    mongoose                = require('mongoose'),
-    ImgUploadByBusboy       = require('../config/busboy');
+    mongoose                = require('mongoose');
+
 
 
 // define new (DB)data schema
@@ -34,36 +34,29 @@ const
 
 // define new methods
 //// creation and association (model)
-MediaSchema.static('mediaCreateAndAssociate', function  (req, res, media, next) {
+MediaSchema.static('mediaCreateAndAssociate', function  (req, res, docs, next) {
     // normalize to an array
-    if (!Array.isArray(media)) media = [media];
+    if (!Array.isArray(docs)) docs = [docs];
 
     // ignore if no data being passed
-    if (media.length === 0 || !media[0]) return next();
+    if (docs.length === 0 || !docs[0]) return next();
 
     // associate with the uploader
-    media.map(function (self) {
-        self.uploader = req.user;
-        return self;
-    });
+    if (req.user) docs.map(self => self.uploader = req.user);
 
     // create doc(s)
-    this.create(media, function (err, createdMedia) {
+    this.create(docs, function (err, createdMedia) {
         // associate with the doc(s) // note: if statement prevents from unSignIn crash
         if (req.user) {
             req.user.ownedMedia = req.user.ownedMedia.concat(createdMedia);
-            req.user.save(function (err) {
-                return next(err, createdMedia);
-            });
-        } else {
-            return next(err, createdMedia);
-        }
+            req.user.save(err => next(err, createdMedia));
+        } else return next(err, createdMedia);
     });
 });
 
 
-//// image upload
-MediaSchema.static('ImgUploadByBusboy', ImgUploadByBusboy);
+//// image upload (model)
+MediaSchema.static('ImgUploadByBusboy', require('../config/busboy'));
 
 
 //// version counter (object method)

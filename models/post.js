@@ -30,29 +30,23 @@ const
 
 // define new methods
 //// creation and association (model)
-PostSchema.static('postsCreateAndAssociate', function  (req, res, posts, next) {
+PostSchema.static('postsCreateAndAssociate', function  (req, res, docs, next) {
     // normalize to an array
-    if (!Array.isArray(posts)) {
-        posts = [posts];
-    }
+    if (!Array.isArray(docs)) docs = [docs];
+
+    // ignore if no data being passed
+    if (docs.length === 0 || !docs[0]) return next();
 
     // associate with the uploader
-    posts.map(function (self) {
-        self.author = req.user;
-        return self;
-    });
+    if (req.user) docs.map(self => self.author = req.user);
 
     // create doc(s)
-    this.create(posts, function (err, createdPosts) {
+    this.create(docs, function (err, createdPosts) {
         // associate with the doc(s) // note: if statement prevents from unSignIn crash
         if (req.user) {
             req.user.ownedPosts = req.user.ownedPosts.concat(createdPosts);
-            req.user.save(function (err) {
-                return next(err, createdPosts);
-            });
-        } else {
-            return next(err, createdPosts);
-        }
+            req.user.save(err => next(err, createdPosts));
+        } else return next(err, createdPosts);
     });
 });
 
