@@ -7,7 +7,7 @@ const
 // ==============================
 //  MODELS
 // ==============================
-const PostModel = require('../models/post');
+const PostModel             = require('../models/post');
 
 
 
@@ -25,7 +25,7 @@ const gate = require('../config/middleware');
 // index
 router.get('/', function (req, res) {
     PostModel.find({}, function (err, foundPosts) {
-        if (err) return res.send(err);  // todo: hide from user
+        if (err) return res.send(err);  // todo: error handling
         res.render("post/", {posts : foundPosts});
     });
 });
@@ -43,8 +43,8 @@ router.post('/new', gate.isSignedIn, gate.putSanitizer, function (req, res) {
     req.body.post.author = {_id: req.user._id, username: req.user.username};
 
     // create/associate posts
-    PostModel.postsCreateAndAssociate(req, res, req.body.post, function (err, newPost) {
-        if (err) return res.send(err);  // todo: hide from user
+    PostModel.postsCreateAndAssociate(req, res, req.body.post, function (err, registeredPost) {
+        if (err) return res.send(err);  // todo: error handling
         req.flash('info', 'Post have been successfully posted!');
         res.redirect('/post');
     });
@@ -55,7 +55,7 @@ router.post('/new', gate.isSignedIn, gate.putSanitizer, function (req, res) {
 router.param('_POSTID', function (req, res, next, POSTID) {
     PostModel.findById(POSTID, function (err, foundPost) {
         if (err || foundPost === null) {
-            req.flash('error', 'UnfoundedPostError: NOTHING BEING FOUND.');   // todo: error control
+            req.flash('error', 'UnfoundedPostError: NOTHING BEING FOUND.');
             return res.redirect('/post');
         }
         foundPost.content = req.sanitize(foundPost.content);
@@ -80,7 +80,7 @@ router.get('/:_POSTID/edit', gate.isAuthorized, function (req, res) {
 // update
 router.put('/:POSTID', gate.isAuthorized, gate.putSanitizer, function (req, res) {
     PostModel.findByIdAndUpdate(req.params.POSTID, req.body.post, {new: true}, function (err, foundPost) {
-        if (err) return res.send(err);  // todo: hide from user
+        if (err) return res.send(err);  // todo: error handling
         foundPost.reviseCounter();
         req.flash('info', 'Post have been successfully updated!');
         res.redirect("/post/" + foundPost._id);
@@ -91,7 +91,7 @@ router.put('/:POSTID', gate.isAuthorized, gate.putSanitizer, function (req, res)
 // destroy  // todo: post recycling
 router.delete('/:POSTID', gate.isAuthorized, function (req, res) {
     PostModel.findByIdAndRemove(req.params.POSTID, function (err) {
-        if (err) return res.send(err);  // todo: hide from user
+        if (err) return res.send(err);  // todo: error handling
         req.flash('info', 'Post have been successfully deleted!');
         res.redirect("/post");
     });

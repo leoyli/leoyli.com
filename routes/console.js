@@ -8,7 +8,7 @@ const
 //  MODELS
 // ==============================
 const UserModel             = require('../models/user');
-const MediaModel             = require('../models/media');
+const MediaModel            = require('../models/media');
 const _siteConfig           = require('../models/_siteConfig');
 
 
@@ -69,9 +69,9 @@ router
         res.render('./console/upload');
     })
     .post(function (req, res) { // todo: will be responsible for all media uploading event and redirect user back
-        MediaModel.ImgUploadByBusboy(req, res, {fileSize: 3*1048576, files: 2}, function (mediaArray) {
-            MediaModel.mediaCreateAndAssociate(req, res, mediaArray, function (err, newMedia) {
-                if (err) return res.send(err);  // todo: hide from user
+        MediaModel.mediaUpload(req, res, {fileSize: 85*1048576, files: 2}, function (uploadedMedia) {
+            MediaModel.mediaCreateAndAssociate(req, res, uploadedMedia, function (err, registeredMedia) {
+                if (err) return res.send(err);  // todo: error handling
                 res.writeHead(303, {Connection: 'close', Location: '/console/upload'});
                 return res.end();
             });
@@ -84,7 +84,7 @@ router
 module.exports  = router;
 
 // todo - new features lists:
-// 1. (Profile) User profile picture upload (ongoing)
+// 1. (Profile) User profile picture upload (done)
 //              Password change
 // 2. (content) Content manager
 //              Content export in JSON

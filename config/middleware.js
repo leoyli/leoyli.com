@@ -14,10 +14,10 @@ exports.localVariables = function (req, res, next) {
         res.locals.currentUser = req.user ? req.user : {username: 'guest', _isGuest: true};
 
         // flash messages sorted as classes
-        res.locals.flashMessageError    = req.flash('error');
-        res.locals.flashMessageInfo     = req.flash('info');
+        res.locals.flashMessageError = req.flash('error');
+        res.locals.flashMessageInfo = req.flash('info');
 
-        return next();
+        next();
     });
 };
 
@@ -34,7 +34,7 @@ exports.isSignedIn = function (req, res, next) {
     if (req.session.justSignedOut) req.flash('info', String(res.locals.flashMessageInfo));
     else req.flash('error', 'Please sign in first!');
 
-    return res.redirect('/signin');
+    res.redirect('/signin');
 };
 
 
@@ -43,8 +43,7 @@ function _isAuthorized (req, res, next) {
     if (req.user.ownedPosts.indexOf(req.params.POSTID || req.loadedPost._id) === -1) {    // option: find by post ID as a alternative
         req.flash('error', 'Sorry... You have not been authorized!');
         return res.redirect('back');
-    }
-    return next();
+    } else next();
 }
 exports.isAuthorized = [exports.isSignedIn, _isAuthorized];
 
@@ -52,5 +51,5 @@ exports.isAuthorized = [exports.isSignedIn, _isAuthorized];
 // scripts sanitizer
 exports.putSanitizer = function (req, res, next) {
     if (req.body.post.content) req.body.post.content = req.sanitize(req.body.post.content);
-    return next();
+    next();
 };

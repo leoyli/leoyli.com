@@ -30,6 +30,7 @@ router.post('/signup', function (req, res) {
             req.flash('error', err.name + ' - ' + err.message);
             return res.redirect('/signup'); // todo: highlight errors with qualified inputs remained
         }
+
         // passed responses
         passport.authenticate('local')(req, res, function () {
             req.flash('info', 'Welcome new user: ' + req.body.username);
@@ -53,17 +54,20 @@ router.get('/signin', function (req, res) {
 // sign-in authentication
 router.post('/signin', function(req, res) {
     passport.authenticate('local', function(err, authUser) {
-        if (err) return res.send(err);  // todo: hide from user
+        if (err) return res.send(err);  // todo: error handling
         if (!authUser) {
             // option: 'info' argument can be set
             req.flash('error', 'Wrong username or password!');
             return res.redirect('/signin');
         }
+
+        // login the authenticated user
         req.logIn(authUser, function(err) {
-            if (err) return res.send(err);  // todo: hide from user
+            if (err) return res.send(err);  // todo: error handling
             req.flash('info', 'Welcome back ' + authUser.username);
             res.redirect(req.session.returnTo || '/console/dashboard');
-            // destroy the session variable obtained in 'isSignedIn' config
+
+            // clean up variable gained from 'isSignedIn' middleware
             delete req.session.returnTo;
         });
     })(req, res);

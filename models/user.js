@@ -30,10 +30,10 @@ const
 });
 
 // define new methods
-// methods from a plugin
+// methods from a plugin (object method)
 UserSchema.plugin(passportLocalMongoose);
 
 
 
-// create a new model then export
+// export model
 module.exports = mongoose.model('USER', UserSchema);

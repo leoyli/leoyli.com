@@ -24,13 +24,15 @@ let _siteConfigSchema       = new mongoose.Schema({
 // define new methods
 //// initialization (model)
 _siteConfigSchema.static('newSiteConfig', function () {
-    return this.findOne({}, initializeSiteConfig);
-});
+    let self = this;
+    return self.findOne({}, function (err, loadConfig) {
+        // error handler
+        if (err) return console.log(err); // todo: error handling
 
-function initializeSiteConfig (err, loadConfig) {
-    if (err) return console.log(err);
-    if (loadConfig === null) return _siteConfig.create({});
-}
+        // default for a new site
+        if (!loadConfig) self.create({});
+    });
+});
 
 
 //// update settings (model)
@@ -40,6 +42,5 @@ _siteConfigSchema.static('updateSettings', function (dataToBeUpdated, next) {
 
 
 
-// new site registration with DB
-let _siteConfig = mongoose.model('_SITECONFIG', _siteConfigSchema);
-module.exports = _siteConfig;
+// export model
+module.exports = mongoose.model('_SITECONFIG', _siteConfigSchema);

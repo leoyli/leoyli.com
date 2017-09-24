@@ -5,7 +5,7 @@ const
 
 // define new (DB)data schema
 const
-    MediaSchema              = new mongoose.Schema({
+    MediaSchema             = new mongoose.Schema({
     _status                 : {type: Number, default: 0},
     uploader                : {
         _id                 :
@@ -56,7 +56,7 @@ MediaSchema.static('mediaCreateAndAssociate', function  (req, res, docs, next) {
 
 
 //// image upload (model)
-MediaSchema.static('ImgUploadByBusboy', require('../config/busboy'));
+MediaSchema.static('mediaUpload', require('../config/busboy'));
 
 
 //// version counter (object method)
@@ -67,5 +67,5 @@ MediaSchema.methods.reviseCounter = function () {
 
 
 
-// create a new model then export
+// export model
 module.exports = mongoose.model('MEDIA', MediaSchema);

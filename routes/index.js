@@ -7,9 +7,11 @@ const
 // ==============================
 //  ROUTE RULES
 // ==============================
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
     res.render('index', { title: 'Express' });
 });
+
+
 
 // route exports
 module.exports = router;

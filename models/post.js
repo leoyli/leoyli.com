@@ -57,5 +57,7 @@ PostSchema.methods.reviseCounter = function () {
     this.save();
 };
 
-// create a new model then export
+
+
+// export model
 module.exports = mongoose.model('POST', PostSchema);

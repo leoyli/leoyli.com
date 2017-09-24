@@ -41,7 +41,6 @@ router.get("/", function (req, res) {
         if (err) return res.send(err);
         console.log('\n 1) USER CREATED & SAVED:');
         console.log(registeredUser);
-
         req.user = registeredUser;
         PostModel.postsCreateAndAssociate(req, res, SEEDPOST, function (err, newPost) {
             if (err) return res.send(err);  // todo: hide from user
