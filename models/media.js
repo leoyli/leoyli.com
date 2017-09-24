@@ -1,10 +1,11 @@
 const
-    mongoose                = require('mongoose');
-
+    mongoose                = require('mongoose'),
+    ImgUploadByBusboy       = require('../config/busboy');
 
 
 // define new (DB)data schema
-let MediaSchema              = new mongoose.Schema({
+const
+    MediaSchema              = new mongoose.Schema({
     _status                 : {type: Number, default: 0},
     uploader                : {
         _id                 :
@@ -35,9 +36,10 @@ let MediaSchema              = new mongoose.Schema({
 //// creation and association (model)
 MediaSchema.static('mediaCreateAndAssociate', function  (req, res, media, next) {
     // normalize to an array
-    if (!Array.isArray(media)) {
-        media = [media];
-    }
+    if (!Array.isArray(media)) media = [media];
+
+    // ignore if no data being passed
+    if (media.length === 0 || !media[0]) return next();
 
     // associate with the uploader
     media.map(function (self) {
@@ -58,6 +60,10 @@ MediaSchema.static('mediaCreateAndAssociate', function  (req, res, media, next) 
         }
     });
 });
+
+
+//// image upload
+MediaSchema.static('ImgUploadByBusboy', ImgUploadByBusboy);
 
 
 //// version counter (object method)

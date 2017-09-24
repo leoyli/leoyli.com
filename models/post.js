@@ -4,7 +4,8 @@ const
 
 
 // define new (DB)data schema
-let PostSchema              = new mongoose.Schema({
+const
+    PostSchema              = new mongoose.Schema({
     _status                 : {type: Number, default: 0},
     _pinTop                 : {type: Boolean, default: false},
     author                  : {

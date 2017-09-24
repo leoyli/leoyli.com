@@ -8,6 +8,7 @@ const
 //  MODELS
 // ==============================
 const UserModel             = require('../models/user');
+const MediaModel             = require('../models/media');
 const _siteConfig           = require('../models/_siteConfig');
 
 
@@ -18,9 +19,6 @@ const _siteConfig           = require('../models/_siteConfig');
 // middleware
 const gate                  = require('../config/middleware');
 router.all('*', gate.isSignedIn);
-
-// busboy configured image uploader
-const busboyImgUploader     = require('../config/busboy');
 
 
 
@@ -71,7 +69,13 @@ router
         res.render('./console/upload');
     })
     .post(function (req, res) { // todo: will be responsible for all media uploading event and redirect user back
-        busboyImgUploader(req, res, {fileSize: 3*1048576, files: 2});
+        MediaModel.ImgUploadByBusboy(req, res, {fileSize: 3*1048576, files: 2}, function (mediaArray) {
+            MediaModel.mediaCreateAndAssociate(req, res, mediaArray, function (err, newMedia) {
+                if (err) return res.send(err);  // todo: hide from user
+                res.writeHead(303, {Connection: 'close', Location: '/console/upload'});
+                return res.end();
+            });
+        });
     });
 
 
