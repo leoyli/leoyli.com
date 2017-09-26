@@ -62,6 +62,30 @@ router
     });
 
 
+// account security
+router
+    .route('/security')
+    .get(function (req, res) {
+        res.render('./console/security');
+    })
+    .put(function (req, res) {
+        if (!req.body.password.old || !req.body.password.new || !req.body.password.confirmation) {
+            req.flash('error', 'PLEASE FILL ALL FIELDS.');
+        } else if (req.body.password.new !== req.body.password.confirmation) {
+            req.flash('error', 'PASSWORD DOES NOT MATCH THE CONFIRMATION.');
+        } else if (req.body.password.old === req.body.password.new) {
+            req.flash('error', 'PASSWORD CANNOT BE SET THE SAME.');
+        } else {
+            return req.user.changePassword(req.body.password.old, req.body.password.new, function (err) {
+                if (err) req.flash('error', err);
+                else req.flash('info', 'PASSWORD HAVE BEEN SUCCESSFULLY CHANGED.');
+                res.redirect('back');
+            });
+        }
+        res.redirect('back');
+    });
+
+
 // (uploader)  // todo: to be integrated in profile and media manager
 router
     .route('/upload') // todo: redirect back to media manager
@@ -85,7 +109,7 @@ module.exports  = router;
 
 // todo - new features lists:
 // 1. (Profile) User profile picture upload (done)
-//              Password change
+//              Password change (done)
 // 2. (content) Content manager
 //              Content export in JSON
 // 3. (media)   Media manager

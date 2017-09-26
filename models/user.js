@@ -29,6 +29,8 @@ const
     versionKey              : false
 });
 
+
+
 // define new methods
 // methods from a plugin (object method)
 UserSchema.plugin(passportLocalMongoose);

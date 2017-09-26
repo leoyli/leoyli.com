@@ -15,7 +15,7 @@ const PostModel             = require('../models/post');
 //  FUNCTIONS
 // ==============================
 // middleware
-const gate = require('../config/middleware');
+const gate                  = require('../config/middleware');
 
 
 
