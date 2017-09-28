@@ -26,7 +26,7 @@ router.all('*', gate.isSignedIn);
 //  ROUTE RULES
 // ==============================
 // dashboard
-router.get(/^\/(dashboard)?(\/)?$/, function (req, res) {
+router.get(/^\/(dashboard)?(\/)?$/, (req, res) => {
     res.render('./console/dashboard');
 });
 
@@ -34,41 +34,35 @@ router.get(/^\/(dashboard)?(\/)?$/, function (req, res) {
 // site setting
 router
     .route('/setting')
-    .get(function (req, res) {
+    .get((req, res) => {
         res.render('./console/setting');
     })
-    .put(function (req, res) {
-        _siteConfig.updateSettings(req.body.siteSetting, function (err) {
+    .put((req, res) => {
+        _siteConfig.updateSettings(req.body.siteSetting, err => {
             if (err) return res.send(err);
             res.redirect('back');
         });
-    })
-    .all(function (req, res) {
-        res.redirect('/console/setting');
     });
 
 
 // user profile
 router
     .route('/profile')
-    .get(function (req, res) {
+    .get((req, res) => {
         res.render('./console/profile');
     })
-    .put(function (req, res) {
+    .put((req, res) => {
         UserModel.update({_id: req.user._id}, {$set: req.body.userProfile}, res.redirect('back'));
-    })
-    .all(function (req, res) {
-        res.redirect('/console/profile');
     });
 
 
 // account security
 router
     .route('/security')
-    .get(function (req, res) {
+    .get((req, res) => {
         res.render('./console/security');
     })
-    .put(function (req, res) {
+    .put((req, res) => {
         if (!req.body.password.old || !req.body.password.new || !req.body.password.confirmation) {
             req.flash('error', 'PLEASE FILL ALL FIELDS.');
         } else if (req.body.password.new !== req.body.password.confirmation) {
@@ -76,7 +70,7 @@ router
         } else if (req.body.password.old === req.body.password.new) {
             req.flash('error', 'PASSWORD CANNOT BE SET THE SAME.');
         } else {
-            return req.user.changePassword(req.body.password.old, req.body.password.new, function (err) {
+            return req.user.changePassword(req.body.password.old, req.body.password.new, err => {
                 if (err) req.flash('error', err);
                 else req.flash('info', 'PASSWORD HAVE BEEN SUCCESSFULLY CHANGED.');
                 res.redirect('back');
@@ -89,15 +83,15 @@ router
 // (uploader)  // todo: to be integrated in profile and media manager
 router
     .route('/upload') // todo: redirect back to media manager
-    .get(function (req, res) {
+    .get((req, res) => {
         res.render('./console/upload');
     })
-    .post(function (req, res) { // todo: will be responsible for all media uploading event and redirect user back
-        MediaModel.mediaUpload(req, res, {fileSize: 85*1048576, files: 2}, function (uploadedMedia) {
-            MediaModel.mediaCreateAndAssociate(req, res, uploadedMedia, function (err, registeredMedia) {
+    .post((req, res) => { // todo: will be responsible for all media uploading event and redirect user back
+        MediaModel.mediaUpload(req, res, {fileSize: 85*1048576, files: 2}, uploadedMedia => {
+            MediaModel.mediaCreateAndAssociate(req, res, uploadedMedia, (err, registeredMedia) => {
                 if (err) return res.send(err);  // todo: error handling
                 res.writeHead(303, {Connection: 'close', Location: '/console/upload'});
-                return res.end();
+                res.end();
             });
         });
     });

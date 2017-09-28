@@ -23,7 +23,7 @@ const
             type            : mongoose.Schema.Types.ObjectId,
             ref             : 'MEDIA'
         }],
-    _isGuest                : Boolean
+    _isActive               : {type: String, default: false},
 }, {
     timestamps              : {createdAt: '_registered', updatedAt: '_updated'},
     versionKey              : false

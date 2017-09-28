@@ -33,16 +33,16 @@ SEEDPOST = {
 
 
 // seed plant
-router.get("/", function (req, res) {
+router.get("/", (req, res) => {
     console.log("NEW SAMPLE INJECTION STARTED:");
 
     // seed a new user(obj.)
-    UserModel.register(new UserModel(SEEDUSER), 'leo', function (err, registeredUser) {
+    UserModel.register(new UserModel(SEEDUSER), 'leo', (err, registeredUser) => {
         if (err) return res.send(err);
         console.log('\n 1) USER CREATED & SAVED:');
         console.log(registeredUser);
         req.user = registeredUser;
-        PostModel.postsCreateAndAssociate(req, res, SEEDPOST, function (err, newPost) {
+        PostModel.postsCreateAndAssociate(req, res, SEEDPOST, (err, newPost) => {
             if (err) return res.send(err);  // todo: hide from user
             console.log('\n 2) A SAMPLE HAVE INJECTED AND ASSOCIATED WITH THE USER:');
             console.log(newPost);
@@ -53,9 +53,9 @@ router.get("/", function (req, res) {
 
 
 // seed check
-router.get('/check', function (req, res) {
+router.get('/check', (req, res) => {
     console.log('\n 3) ASSOCIATION CHECKING:');
-    UserModel.findOne({username: 'leo'}).populate('ownedPosts').exec(function (err, foundUser) {
+    UserModel.findOne({username: 'leo'}).populate('ownedPosts').exec((err, foundUser) => {
         if (err) return console.log(err);
         console.log(foundUser);
         res.send(foundUser);

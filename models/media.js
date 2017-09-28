@@ -34,7 +34,7 @@ const
 
 // define new methods
 //// creation and association (model)
-MediaSchema.static('mediaCreateAndAssociate', function  (req, res, docs, next) {
+MediaSchema.static('mediaCreateAndAssociate', function(req, res, docs, next) {
     // normalize to an array
     if (!Array.isArray(docs)) docs = [docs];
 
@@ -45,12 +45,12 @@ MediaSchema.static('mediaCreateAndAssociate', function  (req, res, docs, next) {
     if (req.user) docs.map(self => self.uploader = req.user);
 
     // create doc(s)
-    this.create(docs, function (err, createdMedia) {
+    this.create(docs, (err, createdMedia) => {
         // associate with the doc(s) // note: if statement prevents from unSignIn crash
         if (req.user) {
             req.user.ownedMedia = req.user.ownedMedia.concat(createdMedia);
             req.user.save(err => next(err, createdMedia));
-        } else return next(err, createdMedia);
+        } else next(err, createdMedia);
     });
 });
 
@@ -60,7 +60,7 @@ MediaSchema.static('mediaUpload', require('../config/busboy'));
 
 
 //// version counter (object method)
-MediaSchema.methods.reviseCounter = function () {
+MediaSchema.methods.reviseCounter = function() {
     ++this._revised;
     this.save();
 };

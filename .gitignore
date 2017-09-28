@@ -61,5 +61,8 @@ typings/
 .idea
 
 # google cloud platform env.
-/app.yaml
+app.yaml
+
+# local system files
 .DS_Store
+media/

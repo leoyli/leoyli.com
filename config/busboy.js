@@ -10,7 +10,7 @@ function ImgUploadByBusboy (req, res, limits, next) {
     // initialization
     const busboy = new Busboy({headers: req.headers, limits : limits});
     const supportedType = ['image/png', 'image/gif', 'image/jpeg', 'image/svg+xml', 'image/x-icon'];
-    const filePath = path.join(__dirname + '/..', 'public', 'images');
+    const filePath = path.join(__dirname + '/..', 'public', 'media');
     const mediaCollector = {};
 
     // message handler
@@ -26,7 +26,7 @@ function ImgUploadByBusboy (req, res, limits, next) {
 
 
     // BUSBOY-LISTENER: parse 'file' inputs
-    busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
+    busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
         // path structure
         const saveTime = new Date();
         const saveName = saveTime.getTime() + path.extname(filename);
@@ -43,7 +43,7 @@ function ImgUploadByBusboy (req, res, limits, next) {
 
 
         // FILE-LISTENER: end (completed/terminated)
-        file.on('end', function () {
+        file.on('end', () => {
             // nested property assignments
             const properties = _propertyReference(fieldname);
             _updateByNestedProperty(mediaCollector, properties, {path: savePath, filename: saveName});
@@ -62,13 +62,13 @@ function ImgUploadByBusboy (req, res, limits, next) {
 
 
     // BUSBOY-LISTENER: parse 'field' inputs
-    busboy.on('field', function (fieldname, val) {
+    busboy.on('field', (fieldname, val) => {
         if (val) _updateByNestedProperty(mediaCollector, _propertyReference(fieldname), val);
     });
 
 
     // BUSBOY-LISTENER: event finished
-    busboy.on('finish', function() {
+    busboy.on('finish', () => {
         // remove all sub-collectors (the top-level keys)
         // *** (ECMAScript 2017+ || 2015) ***
         Object.values = Object.values || (obj => Object.keys(obj).map(key => obj[key]));
@@ -81,19 +81,19 @@ function ImgUploadByBusboy (req, res, limits, next) {
 
 // extracted functions
 function _propertyReference(source) {
-    return source.split(/[[\]]/).filter(frag => frag !== '');
+    source.split(/[[\]]/).filter(frag => frag !== '');
 }
 
 function _updateByNestedProperty(obj, referenceKeys, bottomValue, index) {
     if (!index) index = 0;
     if (index < referenceKeys.length-1) {
-        let _extendedObj = obj[referenceKeys[index]] ? obj[referenceKeys[index]] : (obj[referenceKeys[index]] = {});
+        const _extendedObj = obj[referenceKeys[index]] ? obj[referenceKeys[index]] : (obj[referenceKeys[index]] = {});
         return _updateByNestedProperty(_extendedObj, referenceKeys, bottomValue, ++index);
     } else obj[referenceKeys[index]] = bottomValue ? bottomValue : {};
 }
 
 function _insuredFStream(savePath, file, message) {
-    fs.mkdir(path.dirname(savePath), function (err) {
+    fs.mkdir(path.dirname(savePath), err => {
         // only catch errors other than 'EEXIST'
         if (err && !(err.code === 'EEXIST')) {
             message.errorUnexpected();

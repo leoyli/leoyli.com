@@ -18,12 +18,12 @@ const UserModel             = require('../models/user');
 // sign-up
 router
     .route('/signup')
-    .get(function (req, res) {
+    .get((req, res) => {
         if (req.isAuthenticated()) return res.redirect('/console/dashboard');
         res.render('authentication/signup')
     })
-    .post(function (req, res) {
-        UserModel.register(new UserModel({username: req.body.username}), req.body.password, function (err, registeredUser) {
+    .post((req, res) => {
+        UserModel.register(new UserModel({username: req.body.username}), req.body.password, (err, registeredUser) => {
             // failed in registration
             if (err) {
                 req.flash('error', err.name + ' - ' + err.message);
@@ -31,7 +31,7 @@ router
             }
 
             // passed responses
-            passport.authenticate('local')(req, res, function () {
+            passport.authenticate('local')(req, res, () => {
                 req.flash('info', 'Welcome new user: ' + req.body.username);
                 res.redirect('/console');
             });
@@ -42,15 +42,15 @@ router
 // sign-in
 router
     .route('/signin')
-    .get(function (req, res) {
+    .get((req, res) => {
         if (req.isAuthenticated()) {
             // pass message if an error received from the previous
             req.flash('error', String(res.locals.flashMessageError));
             return res.redirect('/console');
         } else res.render('authentication/signin');
     })
-    .post(function(req, res) {
-        passport.authenticate('local', function(err, authUser) {
+    .post((req, res) => {
+        passport.authenticate('local', (err, authUser) => {
             if (err) return res.send(err);  // todo: error handling
             if (!authUser) {
                 // option: 'info' argument can be set
@@ -59,7 +59,7 @@ router
             }
 
             // login the authenticated user
-            req.logIn(authUser, function(err) {
+            req.logIn(authUser, err => {
                 if (err) return res.send(err);  // todo: error handling
                 req.flash('info', 'Welcome back ' + authUser.username);
                 res.redirect(req.session.returnTo || '/console/dashboard');
@@ -74,7 +74,7 @@ router
 // sign-out
 router
     .route('/signout')
-    .get(function (req, res) {
+    .get((req, res) => {
         // only authenticated user can sign out and give a message
         if (req.isAuthenticated()) {
             req.logout();

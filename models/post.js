@@ -30,8 +30,8 @@ const
 
 // define new methods
 //// creation and association (model)
-PostSchema.static('findByIDAndSanitize', function  (req, res, ID, next) {
-    this.findById(ID, function (err, doc) {
+PostSchema.static('findByIDAndSanitize', function(req, res, ID, next) {
+    this.findById(ID, (err, doc) => {
         if (err || doc === null) {
             req.flash('error', 'UnfoundedPostError: NOTHING BEING FOUND.');
             return res.redirect('back');
@@ -42,7 +42,7 @@ PostSchema.static('findByIDAndSanitize', function  (req, res, ID, next) {
 
 
 //// creation and association (model)
-PostSchema.static('postsCreateAndAssociate', function  (req, res, docs, next) {
+PostSchema.static('postsCreateAndAssociate', function(req, res, docs, next) {
     // normalize to an array
     if (!Array.isArray(docs)) docs = [docs];
 
@@ -53,18 +53,18 @@ PostSchema.static('postsCreateAndAssociate', function  (req, res, docs, next) {
     if (req.user) docs.map(self => self.author = req.user);
 
     // create doc(s)
-    this.create(docs, function (err, createdPosts) {
+    this.create(docs, (err, createdPosts) => {
         // associate with the doc(s) // note: if statement prevents from unSignIn crash
         if (req.user) {
             req.user.ownedPosts = req.user.ownedPosts.concat(createdPosts);
             req.user.save(err => next(err, createdPosts));
-        } else return next(err, createdPosts);
+        } else next(err, createdPosts);
     });
 });
 
 
 //// version counter (object method)
-PostSchema.methods.reviseCounter = function () {
+PostSchema.methods.reviseCounter = function() {
     ++this._revised;
     this.save();
 };

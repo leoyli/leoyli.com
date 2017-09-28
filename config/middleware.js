@@ -3,10 +3,10 @@ exports = module.exports = {};
 
 
 // local variables loading
-exports.localVariables = function (req, res, next) {
+exports.localVariables = (req, res, next) => {
     // always query site config with DB before move to the next()
     const _siteConfig = require('./../models/_siteConfig');
-    _siteConfig.findOne({}, function (err, loadedConfig) {
+    _siteConfig.findOne({}, (err, loadedConfig) => {
         // site config
         res.locals._site = loadedConfig;
 
@@ -23,7 +23,7 @@ exports.localVariables = function (req, res, next) {
 
 
 // authentication checking
-exports.isSignedIn = function (req, res, next) {
+exports.isSignedIn = (req, res, next) => {
     // if pass in authentications: move to next()
     if (req.isAuthenticated()) return next();
 
@@ -49,7 +49,7 @@ exports.isAuthorized = [exports.isSignedIn, _isAuthorized];
 
 
 // scripts sanitizer
-exports.putSanitizer = function (req, res, next) {
+exports.putSanitizer = (req, res, next) => {
     if (req.body.post.content) req.body.post.content = req.sanitize(req.body.post.content);
     next();
 };

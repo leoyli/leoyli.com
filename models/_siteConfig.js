@@ -23,21 +23,20 @@ let _siteConfigSchema       = new mongoose.Schema({
 
 // define new methods
 //// initialization (model)
-_siteConfigSchema.static('newSiteConfig', function () {
-    let self = this;
-    return self.findOne({}, function (err, loadConfig) {
+_siteConfigSchema.static('newSiteConfig', function() {
+    this.findOne({}, (err, loadConfig) => {
         // error handler
         if (err) return console.log(err); // todo: error handling
 
         // default for a new site
-        if (!loadConfig) self.create({});
+        if (!loadConfig) this.create({});
     });
 });
 
 
 //// update settings (model)
-_siteConfigSchema.static('updateSettings', function (dataToBeUpdated, next) {
-    return this.findOneAndUpdate({}, dataToBeUpdated, {new: true}, next);
+_siteConfigSchema.static('updateSettings', function(dataToBeUpdated, next) {
+    this.findOneAndUpdate({}, dataToBeUpdated, {new: true}, next);
 });
 
 
