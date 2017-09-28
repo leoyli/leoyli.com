@@ -30,6 +30,18 @@ const
 
 // define new methods
 //// creation and association (model)
+PostSchema.static('findByIDAndSanitize', function  (req, res, ID, next) {
+    this.findById(ID, function (err, doc) {
+        if (err || doc === null) {
+            req.flash('error', 'UnfoundedPostError: NOTHING BEING FOUND.');
+            return res.redirect('back');
+        } else doc.content = req.sanitize(doc.content);
+        next(doc);
+    });
+});
+
+
+//// creation and association (model)
 PostSchema.static('postsCreateAndAssociate', function  (req, res, docs, next) {
     // normalize to an array
     if (!Array.isArray(docs)) docs = [docs];

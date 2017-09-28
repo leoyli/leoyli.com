@@ -16,8 +16,8 @@ function ImgUploadByBusboy (req, res, limits, next) {
     // message handler
     const message = {
         infoSucceed     : count => req.flash('info', count + ' File(s) successfully uploaded!'),
-        errorUnaccepted : ()    => req.flash('error', 'There were unaccepted file types!'),
         errorOversizing : size  => req.flash('error', 'Some failed in oversizing! (> ' + size/1048576 + ' MB)'),
+        errorUnaccepted : ()    => req.flash('error', 'There were unaccepted file types!'),
         errorUnexpected : ()    => req.flash('error', 'Unexpected occurred!')
     };
 

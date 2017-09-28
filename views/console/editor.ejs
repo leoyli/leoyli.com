@@ -1,10 +1,10 @@
 <% include ../_partials/_header.ejs %>
 
 <% if (post._revised !== undefined) {
-    page = {title:  "UPDATE A POST", action: "/post/" + post._id + "?_method=PUT", submit: "UPDATE"};
+    page = {title:  "UPDATE A POST", action: "/post/editor/" + post._id + "?_method=PUT", submit: "UPDATE"};
 } else {
     post._id = null;
-    page = {title:  "RISE A NEW POST", action: "/post/new", submit: "POST"};
+    page = {title:  "RISE A NEW POST", action: "/post/editor/", submit: "POST"};
 }%>
 
 

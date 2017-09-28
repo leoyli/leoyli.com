@@ -6,7 +6,7 @@
     <div id="<%= post._id %>" class="row">
         <div class="col-md-8">
             <%= post.author.username %>
-            ｜<a href="/post/<%= post._id %>/edit" target="_self">(edit)</a>
+            ｜<a href="/post/editor/<%= post._id %>" target="_self">(edit)</a>
             ｜<a href="/post/class/<%= post.class %>" target="_self"><%= post.class %></a>
             ｜Times of revised: <%= post._revised %>
         </div>
