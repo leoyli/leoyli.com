@@ -44,8 +44,6 @@ router
     .route('/signin')
     .get((req, res) => {
         if (req.isAuthenticated()) {
-            // pass message if an error received from the previous
-            req.flash('error', String(res.locals.flashMessageError));
             return res.redirect('/console');
         } else res.render('authentication/signin');
     })
@@ -58,13 +56,13 @@ router
                 return res.redirect('/signin');
             }
 
-            // login the authenticated user
+            // sign-in the authenticated user
             req.logIn(authUser, err => {
                 if (err) return res.send(err);  // todo: error handling
                 req.flash('info', 'Welcome back ' + authUser.username);
                 res.redirect(req.session.returnTo || '/console/dashboard');
 
-                // clean up variable gained from 'isSignedIn' middleware
+                // drain the variable gained from 'isSignedIn'
                 delete req.session.returnTo;
             });
         })(req, res);
@@ -75,11 +73,11 @@ router
 router
     .route('/signout')
     .get((req, res) => {
-        // only authenticated user can sign out and give a message
+        // only authenticated user signing out
         if (req.isAuthenticated()) {
             req.logout();
 
-            // pass a condition so that the flash message cna be displayed
+            // flash a condition (catch by 'isSignedIn') for message forwarding
             req.flash(req.session.justSignedOut = true);
             req.flash('info', 'See you next time!');
         }

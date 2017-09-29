@@ -27,7 +27,7 @@ router
     .route(['/editor', '/editor/new'])
     .all(gate.isSignedIn)
     .get((req, res) => {
-        res.render('console/editor', {post : new PostModel()});
+        res.render('console/editor', {post : new PostModel({_id: null}), page: {}});
     })
     .post(gate.putSanitizer, (req, res) => {
         // associate input array with the author
@@ -48,7 +48,7 @@ router
     .all(gate.isAuthorized)
     .get((req, res) => {
         PostModel.findByIDAndSanitize(req, res, req.params.POSTID, foundPost => {
-            res.render('console/editor', {post: foundPost});
+            res.render('console/editor', {post: foundPost, page: {}});
         });
     })
     .put(gate.putSanitizer, (req, res) => {
