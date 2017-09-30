@@ -21,9 +21,6 @@ function ImgUploadByBusboy (req, res, limits, next) {
         errorUnexpected : ()    => req.flash('error', 'Unexpected occurred!')
     };
 
-    // pipe busboy
-    req.pipe(busboy);
-
 
     // BUSBOY-LISTENER: parse 'file' inputs
     busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
@@ -54,7 +51,7 @@ function ImgUploadByBusboy (req, res, limits, next) {
             if (!isAccepted) return message.errorUnaccepted();
             if (file.truncated) {
                 // note: should no error occurred since 'file.pipe()' have finished then get this 'end' event
-                fs.unlink(savePath, err => {if (err) return message.errorUnexpected()});
+                fs.unlink(savePath, err => {if (err) return next(err, null)});
                 message.errorOversizing(limits.fileSize);
             }
         });
@@ -74,8 +71,12 @@ function ImgUploadByBusboy (req, res, limits, next) {
         Object.values = Object.values || (obj => Object.keys(obj).map(key => obj[key]));
         const mediaArray = Object.values(mediaCollector).filter(obj => obj._ignore !== true);
         if (mediaArray.length > 0) message.infoSucceed(mediaArray.length);
-        next(mediaArray);
+        next(null, mediaArray);
     });
+
+
+    // ACTIVATION: pipe busboy
+    req.pipe(busboy);
 }
 
 
@@ -106,4 +107,18 @@ function _insuredFStream(savePath, file, message) {
 
 
 // function exports
-module.exports = ImgUploadByBusboy;
+// promisfication switch
+function ImgUploadByBusboySwitch(req, res, limits, next) {
+    // if callback existed, using the callback mode
+    if (typeof next === 'function') return ImgUploadByBusboy(req, res, limits, next);
+
+    // if callback not existed, switching to promise
+    return new Promise((resolve, reject) => {
+        ImgUploadByBusboy(req, res, limits, (err, docs) => {
+            if (err) return reject(err);
+            resolve(docs);
+        });
+    });
+}
+
+module.exports = ImgUploadByBusboySwitch;

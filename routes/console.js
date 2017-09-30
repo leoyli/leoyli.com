@@ -32,9 +32,7 @@ router.get(/^\/(dashboard)?(\/)?$/, (req, res) => res.render('./console/dashboar
 // site setting (to be promisified)
 router
     .route('/setting')
-    .get((req, res) => {
-        res.render('./console/setting');
-    })
+    .get((req, res) => res.render('./console/setting'))
     .put((req, res) => {
         _siteConfig.updateSettings(req.body.siteSetting, err => {
             if (err) return res.send(err);
@@ -57,9 +55,7 @@ router
 // account security (to be promisified)
 router
     .route('/security')
-    .get((req, res) => {
-        res.render('./console/security');
-    })
+    .get((req, res) => res.render('./console/security'))
     .put((req, res) => {
         if (!req.body.password.old || !req.body.password.new || !req.body.password.confirmation) {
             req.flash('error', 'PLEASE FILL ALL FIELDS.');
@@ -78,32 +74,34 @@ router
     });
 
 
-// (uploader)(to be promisified)  // todo: to be integrated in profile and media manager
+// (uploader)  // todo: to be integrated in profile and media manager
 router
     .route('/upload') // todo: redirect back to media manager
-    .get((req, res) => {
-        res.render('./console/upload');
-    })
+    .get((req, res) => res.render('./console/upload'))
     .post((req, res) => { // todo: will be responsible for all media uploading event and redirect user back
-        MediaModel.mediaUpload(req, res, {fileSize: 85*1048576, files: 2}, uploadedMedia => {
-            MediaModel.mediaCreateAndAssociate(req, res, uploadedMedia, (err, registeredMedia) => {
-                if (err) return res.send(err);  // todo: error handling
+        MediaModel.mediaUpload(req, res, {fileSize: 85*1048576, files: 2})
+            .then(uploadedMedia => MediaModel.mediaCreateAndAssociate(req, res, uploadedMedia))
+            .then(createdAndAssociatedMedia => {
                 res.writeHead(303, {Connection: 'close', Location: '/console/upload'});
                 res.end();
-            });
-        });
+            })
+            .catch(err => res.send(err));
     });
-    // tofix: adter 'busboy' config being promisifying
-    // .post((req, res) => { // todo: will be responsible for all media uploading event and redirect user back
-    //     MediaModel.mediaUpload(req, res, {fileSize: 85*1048576, files: 2})
-    //         .then(uploadedMedia => MediaModel.mediaCreateAndAssociate(req, res, uploadedMedia))
-    //         .then(registeredMedia => {
-    //             console.log(registeredMedia);
-    //             res.writeHead(303, {Connection: 'close', Location: '/console/upload'});
-    //             res.end();
-    //         })
-    //         .catch(res.send(err));
-    // });
+// (callback ver)
+// router
+//     .route('/upload') // todo: redirect back to media manager
+//     .get((req, res) => {
+//         res.render('./console/upload');
+//     })
+//     .post((req, res) => { // todo: will be responsible for all media uploading event and redirect user back
+//         MediaModel.mediaUpload(req, res, {fileSize: 85*1048576, files: 2}, (err, uploadedMedia) => {
+//             MediaModel.mediaCreateAndAssociate(req, res, uploadedMedia, (err, registeredMedia) => {
+//                 if (err) return res.send(err);  // todo: error handling
+//                 res.writeHead(303, {Connection: 'close', Location: '/console/upload'});
+//                 res.end();
+//             });
+//         });
+//     });
 
 
 

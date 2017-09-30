@@ -55,7 +55,7 @@ router
     })
     .put(gate.putSanitizer, (req, res) => {
         PostModel.findByIdAndUpdate(req.params.POSTID, req.body.post, {new: true})  // todo: versioning integration
-            .then(() => {
+            .then(foundPost => {
                 foundPost.reviseCounter();
                 req.flash('info', 'Post have been successfully updated!');
                 res.redirect("/post/" + foundPost._id);
@@ -69,7 +69,6 @@ router
                 res.redirect("/post");
             })
             .catch(err => res.send(err));       // todo: error handling
-
     });
 
 

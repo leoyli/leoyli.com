@@ -35,24 +35,24 @@ const
 // define new methods
 //// creation and association (model)
 MediaSchema.static('mediaCreateAndAssociate', function(req, res, docs, next) {
-    // normalize to an array
+    // normalize & check
+    if (typeof next !== 'function') next = (err, docs) => {return docs};
     if (!Array.isArray(docs)) docs = [docs];
-
-    // ignore if no data being passed
     if (docs.length === 0 || !docs[0]) return next();
 
-    // associate with the uploader
+    // associate & create
     if (req.user) docs.map(self => self.uploader = req.user);
-
-    // create doc(s)
-    this.create(docs, (err, createdMedia) => {
-        // associate with the doc(s) // note: if statement prevents from unSignIn crash
-        if (req.user) {
-            req.user.ownedMedia = req.user.ownedMedia.concat(createdMedia);
-            req.user.save(err => next(err, createdMedia));
-        } else next(err, createdMedia);
-    });
+    return this.create(docs)
+        .then(docs => {
+            if (req.user) {
+                req.user.ownedMedia = req.user.ownedMedia.concat(docs);
+                req.user.save();
+            } return next(null, docs);
+        });
 });
+
+
+//// todo: deletion and isolation (model)
 
 
 //// image upload (model)

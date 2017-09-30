@@ -30,23 +30,22 @@ const
 
 // define new methods
 //// creation and association (model)
-PostSchema.statics.postsCreateAndAssociate = function(req, res, docs) {
-    // normalize to an array
+PostSchema.static('postsCreateAndAssociate', function(req, res, docs, next) {
+    // normalize & check
+    if (typeof next !== 'function') next = (err, docs) => {return docs};
     if (!Array.isArray(docs)) docs = [docs];
+    if (docs.length === 0 || !docs[0]) return next();
 
-    // associate with the author
+    // associate & create
     if (req.user) docs.map(self => self.author = req.user);
-
-    // create doc(s)
     return this.create(docs)
-        .then(createdPosts => {
+        .then(docs => {
             if (req.user) {
-                // associate with the doc(s) // note: if statement prevents from unauthenticated crash
-                req.user.ownedPosts = req.user.ownedPosts.concat(createdPosts);
+                req.user.ownedPosts = req.user.ownedPosts.concat(docs);
                 req.user.save();
-            } return docs;
-    });
-};
+            } return next(null, docs);
+        });
+});
 
 
 //// todo: deletion and isolation (model)
