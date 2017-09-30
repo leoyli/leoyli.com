@@ -20,9 +20,7 @@ const
 // ==============================
 //  DB LINKAGE
 // ==============================
-mongoose.Promise = global.Promise;
 mongoose.connect(process.env.DB, {useMongoClient: true});
-
 
 // new site registration
 const _siteConfig           = require('./models/_siteConfig');
@@ -48,6 +46,10 @@ app.use(expressSanitizer());
 app.use(methodOverride('_method'));
 app.use(flash());
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
+
+// mongoose promise
+mongoose.Promise = Promise; // note: use ES6 native promise
 
 
 // passport

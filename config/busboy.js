@@ -81,7 +81,8 @@ function ImgUploadByBusboy (req, res, limits, next) {
 
 // extracted functions
 function _propertyReference(source) {
-    source.split(/[[\]]/).filter(frag => frag !== '');
+    return source.split(/[[\]]/).filter(frag => frag !== '');
+    // note: this return should be kept for value assignment
 }
 
 function _updateByNestedProperty(obj, referenceKeys, bottomValue, index) {

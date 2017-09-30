@@ -30,37 +30,26 @@ const
 
 // define new methods
 //// creation and association (model)
-PostSchema.static('findByIDAndSanitize', function(req, res, ID, next) {
-    this.findById(ID, (err, doc) => {
-        if (err || doc === null) {
-            req.flash('error', 'UnfoundedPostError: NOTHING BEING FOUND.');
-            return res.redirect('back');
-        } else doc.content = req.sanitize(doc.content);
-        next(doc);
-    });
-});
-
-
-//// creation and association (model)
-PostSchema.static('postsCreateAndAssociate', function(req, res, docs, next) {
+PostSchema.statics.postsCreateAndAssociate = function(req, res, docs) {
     // normalize to an array
     if (!Array.isArray(docs)) docs = [docs];
 
-    // ignore if no data being passed
-    if (docs.length === 0 || !docs[0]) return next();
-
-    // associate with the uploader
+    // associate with the author
     if (req.user) docs.map(self => self.author = req.user);
 
     // create doc(s)
-    this.create(docs, (err, createdPosts) => {
-        // associate with the doc(s) // note: if statement prevents from unSignIn crash
-        if (req.user) {
-            req.user.ownedPosts = req.user.ownedPosts.concat(createdPosts);
-            req.user.save(err => next(err, createdPosts));
-        } else next(err, createdPosts);
+    return this.create(docs)
+        .then(createdPosts => {
+            if (req.user) {
+                // associate with the doc(s) // note: if statement prevents from unauthenticated crash
+                req.user.ownedPosts = req.user.ownedPosts.concat(createdPosts);
+                req.user.save();
+            } return docs;
     });
-});
+};
+
+
+//// todo: deletion and isolation (model)
 
 
 //// version counter (object method)

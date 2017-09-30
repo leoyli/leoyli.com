@@ -26,12 +26,10 @@ router.all('*', gate.isSignedIn);
 //  ROUTE RULES
 // ==============================
 // dashboard
-router.get(/^\/(dashboard)?(\/)?$/, (req, res) => {
-    res.render('./console/dashboard');
-});
+router.get(/^\/(dashboard)?(\/)?$/, (req, res) => res.render('./console/dashboard'));
 
 
-// site setting
+// site setting (to be promisified)
 router
     .route('/setting')
     .get((req, res) => {
@@ -48,15 +46,15 @@ router
 // user profile
 router
     .route('/profile')
-    .get((req, res) => {
-        res.render('./console/profile');
-    })
+    .get((req, res) => res.render('./console/profile'))
     .put((req, res) => {
-        UserModel.update({_id: req.user._id}, {$set: req.body.userProfile}, res.redirect('back'));
+        UserModel.update({_id: req.user._id}, {$set: req.body.userProfile})
+            .then(() => res.redirect('back'))
+            .catch(err => res.send(err));       // todo: error handling
     });
 
 
-// account security
+// account security (to be promisified)
 router
     .route('/security')
     .get((req, res) => {
@@ -80,7 +78,7 @@ router
     });
 
 
-// (uploader)  // todo: to be integrated in profile and media manager
+// (uploader)(to be promisified)  // todo: to be integrated in profile and media manager
 router
     .route('/upload') // todo: redirect back to media manager
     .get((req, res) => {
@@ -95,6 +93,17 @@ router
             });
         });
     });
+    // tofix: adter 'busboy' config being promisifying
+    // .post((req, res) => { // todo: will be responsible for all media uploading event and redirect user back
+    //     MediaModel.mediaUpload(req, res, {fileSize: 85*1048576, files: 2})
+    //         .then(uploadedMedia => MediaModel.mediaCreateAndAssociate(req, res, uploadedMedia))
+    //         .then(registeredMedia => {
+    //             console.log(registeredMedia);
+    //             res.writeHead(303, {Connection: 'close', Location: '/console/upload'});
+    //             res.end();
+    //         })
+    //         .catch(res.send(err));
+    // });
 
 
 
