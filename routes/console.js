@@ -29,15 +29,14 @@ router.all('*', gate.isSignedIn);
 router.get(/^\/(dashboard)?(\/)?$/, (req, res) => res.render('./console/dashboard'));
 
 
-// site setting (to be promisified)
+// site setting
 router
     .route('/setting')
     .get((req, res) => res.render('./console/setting'))
     .put((req, res) => {
-        _siteConfig.updateSettings(req.body.siteSetting, err => {
-            if (err) return res.send(err);
-            res.redirect('back');
-        });
+        _siteConfig.updateSettings(req.body.siteSetting)
+            .then(() => res.redirect('back'))
+            .catch(err => res.send(err));   // todo: error handling
     });
 
 
@@ -48,11 +47,11 @@ router
     .put((req, res) => {
         UserModel.update({_id: req.user._id}, {$set: req.body.userProfile})
             .then(() => res.redirect('back'))
-            .catch(err => res.send(err));       // todo: error handling
+            .catch(err => res.send(err));   // todo: error handling
     });
 
 
-// account security (to be promisified)
+// account security (password changing)  // todo: error throwing & promisfication
 router
     .route('/security')
     .get((req, res) => res.render('./console/security'))
@@ -70,38 +69,19 @@ router
                 res.redirect('back');
             });
         }
-        res.redirect('back');
     });
 
 
-// (uploader)  // todo: to be integrated in profile and media manager
+// media uploader  // todo: to be integrated in profile and media manager
 router
     .route('/upload') // todo: redirect back to media manager
     .get((req, res) => res.render('./console/upload'))
     .post((req, res) => { // todo: will be responsible for all media uploading event and redirect user back
-        MediaModel.mediaUpload(req, res, {fileSize: 85*1048576, files: 2})
+        MediaModel.mediaUpload(req.user, {fileSize: 85*1048576, files: 2})
             .then(uploadedMedia => MediaModel.mediaCreateAndAssociate(req, res, uploadedMedia))
-            .then(createdAndAssociatedMedia => {
-                res.writeHead(303, {Connection: 'close', Location: '/console/upload'});
-                res.end();
-            })
+            .then(createdAndAssociatedMedia => res.redirect('back'))
             .catch(err => res.send(err));
     });
-// (callback ver)
-// router
-//     .route('/upload') // todo: redirect back to media manager
-//     .get((req, res) => {
-//         res.render('./console/upload');
-//     })
-//     .post((req, res) => { // todo: will be responsible for all media uploading event and redirect user back
-//         MediaModel.mediaUpload(req, res, {fileSize: 85*1048576, files: 2}, (err, uploadedMedia) => {
-//             MediaModel.mediaCreateAndAssociate(req, res, uploadedMedia, (err, registeredMedia) => {
-//                 if (err) return res.send(err);  // todo: error handling
-//                 res.writeHead(303, {Connection: 'close', Location: '/console/upload'});
-//                 res.end();
-//             });
-//         });
-//     });
 
 
 

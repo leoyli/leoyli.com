@@ -36,7 +36,7 @@ _siteConfigSchema.static('newSiteConfig', function() {
 
 //// update settings (model)
 _siteConfigSchema.static('updateSettings', function(dataToBeUpdated, next) {
-    this.findOneAndUpdate({}, dataToBeUpdated, {new: true}, next);
+    return this.findOneAndUpdate({}, dataToBeUpdated, {new: true}, next);
 });
 
 

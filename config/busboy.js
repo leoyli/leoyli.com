@@ -60,7 +60,7 @@ function ImgUploadByBusboy (req, res, limits, next) {
 
     // BUSBOY-LISTENER: parse 'field' inputs
     busboy.on('field', (fieldname, val) => {
-        if (val) _updateByNestedProperty(mediaCollector, _propertyReference(fieldname), val);
+        if (val) _updateByNestedProperty(mediaCollector, _propertyReference(fieldname), req.sanitize(val));
     });
 
 

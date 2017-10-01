@@ -42,7 +42,7 @@ router.get("/", (req, res) => {
         console.log('\n 1) USER CREATED & SAVED:');
         console.log(registeredUser);
         req.user = registeredUser;
-        PostModel.postsCreateAndAssociate(req, res, SEEDPOST, (err, newPost) => {
+        PostModel.postsCreateAndAssociate(req.user, SEEDPOST, (err, newPost) => {
             if (err) return res.send(err);  // todo: hide from user
             console.log('\n 2) A SAMPLE HAVE INJECTED AND ASSOCIATED WITH THE USER:');
             console.log(newPost);

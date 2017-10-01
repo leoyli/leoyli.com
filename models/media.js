@@ -34,25 +34,35 @@ const
 
 // define new methods
 //// creation and association (model)
-MediaSchema.static('mediaCreateAndAssociate', function(req, res, docs, next) {
+MediaSchema.static('mediaCreateAndAssociate', function(user, docs, next) {
     // normalize & check
-    if (typeof next !== 'function') next = (err, docs) => {return docs};
+    if (typeof next !== 'function') next = (err, docs) => {return docs}; // note: mainly for promise supports
     if (!Array.isArray(docs)) docs = [docs];
     if (docs.length === 0 || !docs[0]) return next();
 
     // associate & create
-    if (req.user) docs.map(self => self.uploader = req.user);
-    return this.create(docs)
-        .then(docs => {
-            if (req.user) {
-                req.user.ownedMedia = req.user.ownedMedia.concat(docs);
-                req.user.save();
-            } return next(null, docs);
-        });
+    if (user) docs.map(self => self.uploader = user);
+    return this.create(docs).then(docs => {
+        if (user) user.update({$pushAll: {ownedMedia: docs}}).then(next(null, docs));
+        else next(null, docs);
+    });
 });
 
 
-//// todo: deletion and isolation (model)
+//// delete and dissociate (model)
+MediaSchema.static('postsDeleteAndDissociate', function(user, docsID, next) {
+    // normalize & check
+    if (typeof next !== 'function') next = () => {return null};
+    if (!Array.isArray(docsID)) docsID = [docsID];
+    if (docsID.length === 0 || !docsID[0]) return next(); // todo: return error control
+
+    // remove and dissociate
+    return this.remove({_id: docsID})
+        .then(() => {
+            if (user) user.update({$pullAll: {ownedMedia: docsID}}).then(next()); // note: not worked for admin
+            else next();
+        })
+});
 
 
 //// image upload (model)

@@ -49,7 +49,7 @@ exports.isAuthorized = [exports.isSignedIn, _isAuthorized];
 
 
 // scripts sanitizer
-exports.putSanitizer = (req, res, next) => {
+exports.putPostSanitizer = (req, res, next) => {
     if (req.body.post.content) req.body.post.content = req.sanitize(req.body.post.content);
     next();
 };

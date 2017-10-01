@@ -29,26 +29,36 @@ const
 
 
 // define new methods
-//// creation and association (model)
-PostSchema.static('postsCreateAndAssociate', function(req, res, docs, next) {
+//// create and associate (model)
+PostSchema.static('postsCreateAndAssociate', function(user, docs, next) {
     // normalize & check
     if (typeof next !== 'function') next = (err, docs) => {return docs};
     if (!Array.isArray(docs)) docs = [docs];
-    if (docs.length === 0 || !docs[0]) return next();
+    if (docs.length === 0 || !docs[0]) return next(); // todo: return error control
 
-    // associate & create
-    if (req.user) docs.map(self => self.author = req.user);
-    return this.create(docs)
-        .then(docs => {
-            if (req.user) {
-                req.user.ownedPosts = req.user.ownedPosts.concat(docs);
-                req.user.save();
-            } return next(null, docs);
-        });
+    // create & associate
+    if (user) docs.map(self => self.author = user);
+    return this.create(docs).then(docs => {
+            if (user) user.update({$pushAll: {ownedPosts: docs}}).then(next(null, docs));
+            else next(null, docs);
+    });
 });
 
 
-//// todo: deletion and isolation (model)
+//// delete and dissociate (model)  // note: not workable for admin in deleting media owned by multiple users
+PostSchema.static('postsDeleteAndDissociate', function(user, docsID, next) {
+    // normalize & check
+    if (typeof next !== 'function') next = () => {return null};
+    if (!Array.isArray(docsID)) docsID = [docsID];
+    if (docsID.length === 0 || !docsID[0]) return next(); // todo: return error control
+
+    // remove and dissociate
+    return this.remove({_id: docsID})
+        .then(() => {
+            if (user) user.update({$pullAll: {ownedPosts: docsID}}).then(next());
+            else next();
+        })
+});
 
 
 //// version counter (object method)
