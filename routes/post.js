@@ -44,10 +44,11 @@ router
 // editor - existed
 router
     .route('/editor/:POSTID')
-    .all(gate.isAuthorized)
+    .all(gate.isAuthorized)     // todo: page validation (if not found, send the correct message)
     .get((req, res) => {
         PostModel.findById(req.params.POSTID)
             .then(foundPost => {
+                if (!foundPost) return res.redirect('back');
                 foundPost.content = req.sanitize(foundPost.content);
                 res.render('console/editor', {post: foundPost, page: {}})
             })
@@ -62,7 +63,7 @@ router
             })
             .catch(err => res.send(err));       // todo: error handling
     })
-    .delete((req, res) => {                     // todo: post recycling
+    .delete((req, res) => {                     // todo: post recycling; tofix: (bug) deleted then backward delete again
         PostModel.postsDeleteAndDissociate(req.user, req.params.POSTID)
             .then(() => {
                 req.flash('info', 'Post have been successfully deleted!');

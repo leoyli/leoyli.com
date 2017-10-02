@@ -34,13 +34,13 @@ PostSchema.static('postsCreateAndAssociate', function(user, docs, next) {
     // normalize & check
     if (typeof next !== 'function') next = (err, docs) => {return docs};
     if (!Array.isArray(docs)) docs = [docs];
-    if (docs.length === 0 || !docs[0]) return next(); // todo: return error control
+    if (docs.length === 0 || !docs[0]) return next(null, null); // tofix: ignored errors
 
     // create & associate
     if (user) docs.map(self => self.author = user);
-    return this.create(docs).then(docs => {
-            if (user) user.update({$pushAll: {ownedPosts: docs}}).then(next(null, docs));
-            else next(null, docs);
+    return this.create(docs, (err, docs) => {
+        if (user) user.update({$pushAll: {ownedPosts: docs}}).then(next(err, docs)); // tofix: potential errors
+        else next(err, docs);
     });
 });
 
@@ -48,16 +48,15 @@ PostSchema.static('postsCreateAndAssociate', function(user, docs, next) {
 //// delete and dissociate (model)  // note: not workable for admin in deleting media owned by multiple users
 PostSchema.static('postsDeleteAndDissociate', function(user, docsID, next) {
     // normalize & check
-    if (typeof next !== 'function') next = () => {return null};
+    if (typeof next !== 'function') next = (err, docsID) => {return docsID}; // tofix: ignored errors
     if (!Array.isArray(docsID)) docsID = [docsID];
-    if (docsID.length === 0 || !docsID[0]) return next(); // todo: return error control
+    if (docsID.length === 0 || !docsID[0]) return next(null, null);
 
     // remove and dissociate
-    return this.remove({_id: docsID})
-        .then(() => {
-            if (user) user.update({$pullAll: {ownedPosts: docsID}}).then(next());
-            else next();
-        })
+    return this.remove({_id: docsID}, err => {
+        if (user) user.update({$pullAll: {ownedPosts: docsID}}).then(next(err, docsID));  // tofix: potential errors
+        else next(err, docsID);
+    });
 });
 
 
