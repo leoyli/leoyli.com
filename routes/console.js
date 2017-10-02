@@ -77,8 +77,8 @@ router
     .route('/upload') // todo: redirect back to media manager
     .get((req, res) => res.render('./console/upload'))
     .post((req, res) => { // todo: will be responsible for all media uploading event and redirect user back
-        MediaModel.mediaUpload(req.user, {fileSize: 85*1048576, files: 2})
-            .then(uploadedMedia => MediaModel.mediaCreateAndAssociate(req, res, uploadedMedia))
+        MediaModel.mediaUpload(req, res, {fileSize: 85*1048576, files: 2})
+            .then(uploadedMedia => MediaModel.mediaCreateAndAssociate(uploadedMedia, req.user))
             .then(createdAndAssociatedMedia => res.redirect('back'))
             .catch(err => res.send(err));
     });

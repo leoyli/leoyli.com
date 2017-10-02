@@ -32,7 +32,7 @@ router
     .post(gate.putPostSanitizer, (req, res) => {
         // associate input array with the author then create
         req.body.post.author = {_id: req.user._id, username: req.user.username};
-        PostModel.postsCreateAndAssociate(req.user, req.body.post)
+        PostModel.postsCreateAndAssociate(req.body.post, req.user)
             .then(registeredPost => {
                 req.flash('info', 'Post have been successfully posted!');
                 res.redirect('/post');
@@ -64,7 +64,7 @@ router
             .catch(err => res.send(err));       // todo: error handling
     })
     .delete((req, res) => {                     // todo: post recycling; tofix: (bug) deleted then backward delete again
-        PostModel.postsDeleteAndDissociate(req.user, req.params.POSTID)
+        PostModel.postsDeleteAndDissociate(req.params.POSTID, req.user)
             .then(() => {
                 req.flash('info', 'Post have been successfully deleted!');
                 res.redirect("/post");

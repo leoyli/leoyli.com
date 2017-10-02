@@ -30,7 +30,7 @@ const
 
 // define new methods
 //// create and associate (model)
-PostSchema.static('postsCreateAndAssociate', function(user, docs, next) {
+PostSchema.static('postsCreateAndAssociate', function(docs, user, next) {
     // normalize & check
     if (typeof next !== 'function') next = (err, docs) => {return docs};
     if (!Array.isArray(docs)) docs = [docs];
@@ -46,7 +46,7 @@ PostSchema.static('postsCreateAndAssociate', function(user, docs, next) {
 
 
 //// delete and dissociate (model)  // note: not workable for admin in deleting media owned by multiple users
-PostSchema.static('postsDeleteAndDissociate', function(user, docsID, next) {
+PostSchema.static('postsDeleteAndDissociate', function(docsID, user, next) {
     // normalize & check
     if (typeof next !== 'function') next = (err, docsID) => {return docsID}; // tofix: ignored errors
     if (!Array.isArray(docsID)) docsID = [docsID];

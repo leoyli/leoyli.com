@@ -34,7 +34,7 @@ const
 
 // define new methods
 //// creation and association (model)
-MediaSchema.static('mediaCreateAndAssociate', function(user, docs, next) {
+MediaSchema.static('mediaCreateAndAssociate', function(docs, user, next) {
     // normalize & check
     if (typeof next !== 'function') next = (err, docs) => {return docs};
     if (!Array.isArray(docs)) docs = [docs];
@@ -51,7 +51,7 @@ MediaSchema.static('mediaCreateAndAssociate', function(user, docs, next) {
 
 
 //// delete and dissociate (model)
-MediaSchema.static('postsDeleteAndDissociate', function(user, docsID, next) {
+MediaSchema.static('postsDeleteAndDissociate', function(docsID, user, next) {
     // normalize & check
     if (typeof next !== 'function') next = (err, docsID) => {return docsID}; // tofix: ignored errors
     if (!Array.isArray(docsID)) docsID = [docsID];
