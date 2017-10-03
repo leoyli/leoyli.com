@@ -36,7 +36,7 @@ router
     .put((req, res) => {
         _siteConfig.updateSettings(req.body.siteSetting)
             .then(() => res.redirect('back'))
-            .catch(err => res.send(err));   // todo: error handling
+            .catch(err => res.send(err.message));   // todo: error handling
     });
 
 
@@ -47,7 +47,7 @@ router
     .put((req, res) => {
         UserModel.update({_id: req.user._id}, {$set: req.body.userProfile})
             .then(() => res.redirect('back'))
-            .catch(err => res.send(err));   // todo: error handling
+            .catch(err => res.send(err.message));   // todo: error handling
     });
 
 
@@ -80,7 +80,7 @@ router
         MediaModel.mediaUpload(req, res, {fileSize: 85*1048576, files: 2})
             .then(uploadedMedia => MediaModel.mediaCreateAndAssociate(uploadedMedia, req.user))
             .then(createdAndAssociatedMedia => res.redirect('back'))
-            .catch(err => res.send(err));
+            .catch(err => res.send(err.message));   // todo: error handling
     });
 
 

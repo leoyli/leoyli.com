@@ -42,7 +42,7 @@ exports.isSignedIn = (req, res, next) => {
 function _isAuthorized (req, res, next) {
     if (req.user.ownedPosts.indexOf(req.params.POSTID || req.loadedPost._id) === -1) {    // option: find by post ID as a alternative
         req.flash('error', 'Sorry... You have not been authorized!');
-        return res.redirect('back');
+        return res.status(404).render('/404');
     } else next();
 }
 exports.isAuthorized = [exports.isSignedIn, _isAuthorized];

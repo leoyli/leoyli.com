@@ -4,7 +4,7 @@
 <div>
     <p><a href="/post/<%= post._id %>">< TURN BACK</a></p>
 </div>
-<form action="/post/editor/<%= page.source = post._id ? (post._id + '?_method=PUT') : null %>" method="POST">
+<form action="/post/editor/<%= page.source = post._id ? `${post._id}?_method=PUT` : null %>" method="POST">
     <div class="form-row">
         <div class="form-group col-md-7">
             <label for="postTitle">Title</label>

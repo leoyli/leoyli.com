@@ -49,7 +49,7 @@ router
     })
     .post((req, res) => {
         passport.authenticate('local', (err, authUser) => {
-            if (err) return res.send(err);  // todo: error handling
+            if (err) return res.send(err.message);  // todo: error handling
             if (!authUser) {
                 // option: 'info' argument can be set
                 req.flash('error', 'Wrong username or password!');
@@ -58,7 +58,7 @@ router
 
             // sign-in the authenticated user
             req.logIn(authUser, err => {
-                if (err) return res.send(err);  // todo: error handling
+                if (err) return res.send(err.message);  // todo: error handling
                 req.flash('info', 'Welcome back ' + authUser.username);
                 res.redirect(req.session.returnTo || '/console/dashboard');
 
