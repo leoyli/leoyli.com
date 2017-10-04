@@ -33,50 +33,30 @@ const
 
 
 // define new methods
-//// creation and association (model)
-MediaSchema.static('mediaCreateAndAssociate', function (docs, user, next) {
-    return new Promise((resolve, reject) => {
-        // promise state handler
-        if (typeof next !== 'function') next = (err, docs) => {
-            if (err) return reject(err);
-            resolve(docs);
-        };
+const extFn                 = require('../config/extFn');
 
-        // normalization
-        if (!Array.isArray(docs)) docs = [docs];
-        if (docs.length === 0 || !docs[0]) return next(new Error('NO DATA BEING PROVIDED.'), null);
-
-        // main logic
-        if (user) docs.map(self => self.uploader = user);
-        this.create(docs, (err, docs) => {
+//// create and associate (model)
+MediaSchema.static('mediaCreateAndAssociate', function (raw, user, next) {
+    return extFn.normalization(raw, user, next, (raw, user, next) => {
+        if (user) raw.map(self => self.uploader = user);
+        this.create(raw, (err, docs) => {
             if (err) return next(err, null);
-            if (user) user.update({$pushAll: {ownedMedia: docs}}, (err, docs) => next(err, docs));
-            else next(err, docs);
+            if (user) user.update({$pushAll: {ownedMedia: docs}}, (err, dbRes) => next(err, docs));
+            else next(null, docs);
         });
-    })
+    });
 });
 
 
 //// delete and dissociate (model)  // note: not workable for admin in deleting media owned by multiple users
 MediaSchema.static('mediaDeleteAndDissociate', function (docsID, user, next) {
-    return new Promise((resolve, reject) => {
-        // promise state handler
-        if (typeof next !== 'function') next = (err, docs) => {
-            if (err) return reject(err);
-            resolve(docs);
-        };
-
-        // normalization
-        if (!Array.isArray(docsID)) docsID = [docsID];
-        if (docsID.length === 0 || !docsID[0]) return next(new Error('NO DATA BEING PROVIDED.'), null);
-
-        // main logic
+    return extFn.normalization(docsID, user, next, (docsID, user, next) => {
         this.remove({_id: docsID}, err => {
             if (err) return next(err, null);
-            if (user) user.update({$pullAll: {ownedMedia: docsID}}, (err, docs) => next(err, docs));
-            else next(err, docsID);
+            if (user) user.update({$pullAll: {ownedMedia: docsID}}, (err, dbRes) => next(err, docsID));
+            else next(null, docsID);
         });
-    })
+    });
 });
 
 

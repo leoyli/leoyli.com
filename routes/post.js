@@ -63,7 +63,7 @@ router
             })
             .catch(err => res.send(err.message));   // todo: error handling
     })
-    .delete((req, res) => {                     // todo: post recycling; tofix: (bug) deleted then backward delete again
+    .delete((req, res) => {                         // todo: post recycling;
         PostModel.postsDeleteAndDissociate(req.params.POSTID, req.user)
             .then(() => {
                 req.flash('info', 'Post have been successfully deleted!');
@@ -91,7 +91,7 @@ router.get('/:POSTID', (req, res) => {
 router.get('/', (req, res) => {
     PostModel.find({})
         .then(AllPosts => res.render("post/", {posts : AllPosts.reverse()}))
-        .catch(err => res.send(err.message));   // todo: error handling
+        .catch(err => res.send(err.message));       // todo: error handling
 });
 
 
