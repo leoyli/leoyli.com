@@ -1,9 +1,9 @@
-<% include ../_partials/_header.ejs %>
+{{# def.partial('_header') }}
 
-<h1>SIGN IN</h1>
+<h1>SIGN UP</h1>
 <div>&nbsp;</div>
 
-<form action="/signin" method="POST">
+<form action="/signup" method="POST">
     <div class="form-row">
         <div class="form-group col-md-12">
             <label for="username">username</label>
@@ -21,4 +21,4 @@
     </div>
 </form>
 
-<% include ../_partials/_footer.ejs %>
+{{# def.partial('_footer') }}

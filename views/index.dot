@@ -1,0 +1,6 @@
+{{# def.partial('_header') }}
+
+<h1>{{= _site.title }}</h1>
+    <p>Welcome to {{= _site.title }}</p>
+
+{{# def.partial('_footer') }}

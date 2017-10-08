@@ -1,4 +1,4 @@
-<% include ../_partials/_header.ejs %>
+{{# def.partial('_header') }}
 
 <h1>Change Password</h1>
 <div>&nbsp;</div>
@@ -25,4 +25,4 @@
     </div>
 </form>
 
-<% include ../_partials/_footer.ejs %>
+{{# def.partial('_footer') }}

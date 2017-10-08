@@ -5,6 +5,7 @@ const
     express                 = require('express'),
     expressSanitizer        = require('express-sanitizer'),
     flash                   = require('connect-flash'),
+    dot                     = require('dot'),
     path                    = require('path'),
     logger                  = require('morgan'),
     cookieParser            = require('cookie-parser'),
@@ -32,8 +33,10 @@ _siteConfig.newSiteConfig();
 //  CONFIG
 // ==============================
 // view engine
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set('view engine', 'dot');
+app.set('views', path.join(__dirname, './views'));
+app.set('partials', path.join(__dirname, './views/partial/'));
+app.engine('dot', require('./config/_viewEngine').__express);
 
 
 // required packages

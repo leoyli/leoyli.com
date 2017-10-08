@@ -1,4 +1,4 @@
-<% include ../_partials/_header.ejs %>
+{{# def.partial('_header') }}
 
 <form action="/console/upload" method="POST" enctype="multipart/form-data">
     <div>
@@ -16,4 +16,4 @@
     <input type="submit" value="UPLOAD" />
 </form>
 
-<% include ../_partials/_footer.ejs %>
+{{# def.partial('_footer') }}

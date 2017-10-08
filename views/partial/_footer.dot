@@ -1,7 +1,7 @@
 
 <div> </div>
 <div>
-    <p>CURRENT AS: <%= currentUser.username %></p>
+    <p>CURRENT AS: {{= currentUser.username }}</p>
     <p><a href="/console">CONSOLE</a></p>
     <p><a href="/console/security">CHANGE PW</a></p>
     <p><a href="/console/upload">IMG UPLOAD</a></p>
