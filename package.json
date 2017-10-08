@@ -1,6 +1,6 @@
 {
   "name": "leoyli-main",
-  "version": "0.0.29",
+  "version": "0.0.30",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
@@ -10,18 +10,18 @@
     "busboy": "^0.2.14",
     "connect-flash": "^0.1.1",
     "cookie-parser": "~1.4.3",
-    "debug": "~2.6.3",
+    "debug": "^2.6.9",
     "dot": "^1.1.2",
-    "express": "~4.15.2",
+    "express": "^4.15.5",
     "express-sanitizer": "^1.0.2",
-    "express-session": "^1.15.5",
+    "express-session": "^1.15.6",
     "lodash": "^4.17.4",
-    "method-override": "^2.3.9",
-    "mongoose": "^4.11.11",
+    "method-override": "^2.3.10",
+    "mongoose": "^4.12.0",
     "morgan": "~1.8.1",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^4.2.1",
-    "serve-favicon": "~2.4.2"
+    "serve-favicon": "^2.4.5"
   }
 }

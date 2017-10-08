@@ -35,7 +35,7 @@ _siteConfig.newSiteConfig();
 // view engine
 app.set('view engine', 'dot');
 app.set('views', path.join(__dirname, './views'));
-app.set('partials', path.join(__dirname, './views/partial/'));
+app.set('partials', path.join(__dirname, './views/_partials'));
 app.engine('dot', require('./config/_viewEngine').__express);
 
 

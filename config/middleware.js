@@ -8,7 +8,7 @@ exports.localVariables = (req, res, next) => {
     const _siteConfig = require('./../models/_siteConfig');
     _siteConfig.findOne({}, (err, loadedConfig) => {
         // site config
-        res.locals._site = loadedConfig;
+        res.locals._site = loadedConfig._doc;
 
         // current username
         res.locals.currentUser = req.user ? req.user : {username: 'guest', _isGuest: true};

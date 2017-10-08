@@ -1,33 +1,27 @@
 const _ = require('lodash');
 const fs = require('fs');
 const doT = require('dot');
+const path = require('path');
 
 
 
 // render function
 function render(filePath, options, next) {
-    // reference setup
     const reference = _.omit(options, ['settings', '_locals', 'cache']);
-    reference.express = {partials: options.settings['partials'], extname: options.settings['view engine']};
+    reference.set = {partials: options.settings['partials'], extName: options.settings['view engine']};
 
-    // page rendering
     return getTemplate(filePath, reference)
-        .then(Template => {
-            Template.render()
-                .then(result => next(null, result))
-                .catch(err => next(err, null));
-        })
-        .catch(err => console.log(err));
+        .then(Template => next(null, Template.render()))
+        .catch(err => next(err, null));
 }
 
 
 // access functions
 function getTemplate(filePath, reference, _SYNC) {
-    if (_SYNC === true) return buildTemplateFromFileContent(getFileContent(filePath, true), filePath, reference);
+    if (_SYNC === true) return buildTemplateFromFile(getFileContent(filePath, true), filePath, reference);
 
     return getFileContent(filePath)
-        .then(templateContent => buildTemplateFromFileContent(templateContent, filePath, reference))
-    // .catch(err => Promise.reject(err)); // note: if is unhandled errors, it will leave `getTemplate` to handle
+        .then(templateString => buildTemplateFromFile(templateString, filePath, reference));
 }
 
 
@@ -35,29 +29,31 @@ function getFileContent(filePath, _SYNC) {
     if (_SYNC === true) return fs.readFileSync(filePath, 'utf8');
 
     return new Promise((resolve, reject) => {
-        fs.readFile(filePath, 'utf8', (err, templateContent) => {
-            if (err) return reject(new Error(`Failed to open view file (${filePath})`));
-            return resolve(templateContent);
+        fs.readFile(filePath, 'utf8', (err, templateString) => {
+            if (err) return reject(new Error(`Failed to read the file: (${filePath})`));
+            return resolve(templateString);
         });
     });
 }
 
 
 // read function
-function buildTemplateFromFileContent(templateContent, filePath, reference) {
-    // todo: strip HTML comments
-    const reducedRef = _.omit(reference, 'express');
-    const segments = {};
-    segments.main = templateContent;
+function buildTemplateFromFile(templateString, filePath, reference) {   // todo: strip HTML comments @templateString
+    const identifier = _.omit(reference, 'set');
+    const sections = {main : templateString};   // todo: added multiple sections support
 
-    // construct a new Template by `params`
-    return new Template({
-        express: reference.express,
-        filePath: filePath,
-        segments: segments,
-        variables: Object.keys(reducedRef).toString(),
-        reference: reducedRef,
-    });
+    try {
+        return new Template({
+            set: reference.set,
+            sections: sections,
+            filePath: filePath,
+            varNames: Object.keys(identifier).toString(),
+            identifier: identifier,
+        });
+    }
+    catch (err) {
+        throw new Error(`Failed to build a Template: ('${filePath}'):\n${err.toString()}`);
+    }
 }
 
 
@@ -66,42 +62,45 @@ function Template(params) {
     // reserved for error handler
     this.filePath = params.filePath;
     // reference for templateFn
-    this.reference = params.reference;
+    this.identifier = params.identifier;
 
     // template text (tmpl)
-    this.segments = params.segments;
+    this.sections = params.sections;
     // compilation settings (c)
-    this.configs = new Settings(params.variables).doTConfig;
+    this.configs = new Settings(params.varNames).doTConfig;
     // compile-time evaluation (def)
-    this.def = new PreCompiledDef(params); // todo: add supports for 'partial'
+    this.def = new PreCompiledDef(params);
+
     // templateFn assemble
     this.templateFnAssemble = {};
-
     // templateFn compilation
-    for (const segment in this.segments) {
-        if (this.segments.hasOwnProperty(segment)) {
-            this.templateFnAssemble[segment] = doT.template(this.segments[segment], this.configs, this.def);
+    for (const section in this.sections) {
+        if (this.sections.hasOwnProperty(section)) {
+            this.templateFnAssemble[section] = doT.template(this.sections[section], this.configs, this.def);
         }
     }
 }
 
 
-Template.prototype.render = function(_SYNC) {
-    if (_SYNC === true) return this.templateFnAssemble.main(...Object.values(this.reference));
-
-    return new Promise((resolve, reject) => {
-        try {
-            const result = this.templateFnAssemble.main(...Object.values(this.reference));
-            resolve(result);
-        }
-        catch (err) {
-            reject(new Error(`Failed to render ('${this.filePath}'):\n${err.message}`));
-        }
-    });
+Template.prototype.render = function() {
+    try {
+        return this.templateFnAssemble.main(...Object.values(this.identifier));
+    }
+    catch (err) {
+        throw new Error(`Failed to render: ('${this.filePath}'):\n${err.toString()}`);
+    }
 };
 
 
-function Settings(variables) {
+function PreCompiledDef(params) {
+    this.partial = (partialFile) => {
+        partialFile = path.join(params.set.partials, `${partialFile}.${params.set.extName || 'dot'}`);
+        return getTemplate(partialFile, params.identifier, true).render();  // note: `getTemplate` is not a Promise here
+    };
+}
+
+
+function Settings(varNames) {
     this.doTConfig = {
         evaluate:           /\{\{([\s\S]+?)\}\}/g,
         interpolate:        /\{\{=([\s\S]+?)\}\}/g,
@@ -110,19 +109,10 @@ function Settings(variables) {
         define:             /\{\{##\s*([\w\.$]+)\s*(\:|=)([\s\S]+?)#\}\}/g,
         conditional:        /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
         iterate:            /\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
-        varname:            variables || 'it',
+        varname:            varNames || 'it',
         strip:              true,
         append:             true,
-        selfcontained:      false
-    };
-}
-
-
-function PreCompiledDef(params) {
-    this.partial = (partialFileName) => {
-        const filePath = `${params.express.partials}${partialFileName}.${params.express.extname || 'dot'}`;
-        const template = getTemplate(filePath, params.reference, true);
-        return template.render(true);
+        selfcontained:      false,
     };
 }
 
