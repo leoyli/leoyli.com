@@ -13,10 +13,10 @@
 
 <body>
 
-{{? flashMessageError && flashMessageError.length > 0 }}
-    <div class="alert alert-danger" role="alert">{{= flashMessageError }}</div>
+{{? _flash.error && _flash.error.length > 0 }}
+    <div class="alert alert-danger" role="alert">{{= _flash.error }}</div>
 {{?}}
 
-{{? flashMessageInfo && flashMessageInfo.length > 0 }}
-    <div class="alert alert-success" role="alert">{{= flashMessageInfo }}</div>
+{{? _flash.info && _flash.info.length > 0 }}
+    <div class="alert alert-success" role="alert">{{= _flash.info }}</div>
 {{?}}

@@ -9,13 +9,10 @@ exports.localVariables = (req, res, next) => {
     _siteConfig.findOne({}, (err, loadedConfig) => {
         // site config
         res.locals._site = loadedConfig._doc;
-
-        // current username
-        res.locals.currentUser = req.user ? req.user : {username: 'guest', _isGuest: true};
+        res.locals._site.currentUser = req.user ? req.user._doc : {username: 'guest', _isGuest: true};
 
         // flash messages sorted as classes
-        res.locals.flashMessageError = req.flash('error');
-        res.locals.flashMessageInfo = req.flash('info');
+        res.locals._flash = {error: req.flash('error'), info: req.flash('info')};
 
         next();
     });
@@ -31,7 +28,7 @@ exports.isSignedIn = (req, res, next) => {
     req.session.returnTo = req.originalUrl;
 
     // gives a flash message based on if just signed out
-    if (req.session.justSignedOut) req.flash('info', String(res.locals.flashMessageInfo));
+    if (req.session.justSignedOut) req.flash('info', String(res.locals._flash.info));
     else req.flash('error', 'Please sign in first!');
 
     res.redirect('/signin');
