@@ -26,13 +26,13 @@ router
         UserModel.register(new UserModel({username: req.body.username}), req.body.password, (err, registeredUser) => {
             // failed in registration
             if (err) {
-                req.flash('error', err.name + ' - ' + err.message);
+                req.flash('error', err.toString());
                 return res.redirect('/signup'); // todo: highlight errors with qualified inputs remained
             }
 
             // passed responses
             passport.authenticate('local')(req, res, () => {
-                req.flash('info', 'Welcome new user: ' + req.body.username);
+                req.flash('info', `Welcome new user: ${req.body.username}`);
                 res.redirect('/console');
             });
         });
@@ -49,7 +49,7 @@ router
     })
     .post((req, res) => {
         passport.authenticate('local', (err, authUser) => {
-            if (err) return res.send(err.message);  // todo: error handling
+            if (err) return res.send(err.toString());  // todo: error handling
             if (!authUser) {
                 // option: 'info' argument can be set
                 req.flash('error', 'Wrong username or password!');
@@ -58,8 +58,8 @@ router
 
             // sign-in the authenticated user
             req.logIn(authUser, err => {
-                if (err) return res.send(err.message);  // todo: error handling
-                req.flash('info', 'Welcome back ' + authUser.username);
+                if (err) return res.send(err.toString());  // todo: error handling
+                req.flash('info', `Welcome back ${authUser.username}`);
                 res.redirect(req.session.returnTo || '/console/dashboard');
 
                 // drain the variable gained from 'isSignedIn'

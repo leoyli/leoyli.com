@@ -1,6 +1,6 @@
 {
   "name": "leoyli-main",
-  "version": "0.0.31",
+  "version": "0.0.32",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
@@ -12,12 +12,12 @@
     "cookie-parser": "~1.4.3",
     "debug": "^2.6.9",
     "dot": "^1.1.2",
-    "express": "^4.15.5",
+    "express": "^4.16.2",
     "express-sanitizer": "^1.0.2",
     "express-session": "^1.15.6",
     "lodash": "^4.17.4",
     "method-override": "^2.3.10",
-    "mongoose": "^4.12.0",
+    "mongoose": "^4.12.1",
     "morgan": "~1.8.1",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",

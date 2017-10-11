@@ -8,69 +8,63 @@ const
 //uploader configurations
 function ImgUploadByBusboy (req, res, limits, next) {
     // initialization
+    const notice = new ClientNoticeHandler(req);
     const busboy = new Busboy({headers: req.headers, limits : limits});
-    const supportedType = ['image/png', 'image/gif', 'image/jpeg', 'image/svg+xml', 'image/x-icon'];
-    const filePath = path.join(__dirname + '/..', 'public', 'media');
-    const mediaCollector = {};
-
-    // message handler
-    const message = {
-        infoSucceed     : count => req.flash('info', count + ' File(s) successfully uploaded!'),
-        errorOversizing : size  => req.flash('error', 'Some failed in oversizing! (> ' + size/1048576 + ' MB)'),
-        errorUnaccepted : ()    => req.flash('error', 'There were unaccepted file types!'),
-        errorUnexpected : ()    => req.flash('error', 'Unexpected occurred!')
-    };
+    const saveRoot = path.join(__dirname + '/..', 'public', 'media');
+    const acceptedTypes = ['image/png', 'image/gif', 'image/jpeg', 'image/svg+xml', 'image/x-icon'];
+    const contentParser = {};
 
 
     // BUSBOY-LISTENER: parse 'file' inputs
-    busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
+    busboy.on('file', (fieldName, file, fileName, encoding, MIMEType) => {
         // path structure
-        const saveTime = new Date();
-        const saveName = saveTime.getTime() + path.extname(filename);
-        const saveNest = saveTime.getUTCFullYear() + ('0' + (saveTime.getUTCMonth()+1)).slice(-2);
-        const savePath = filePath + '/' + saveNest + '/' + saveName;
+        const taskTime = new Date();
+        const saveNest = taskTime.getUTCFullYear() + `0${taskTime.getUTCMonth()+1}`.slice(-2);
+        const saveName = taskTime.getTime() + path.extname(fileName);
+        const filePath = saveRoot + '/' + saveNest + '/' + saveName;
 
         // validations
-        const isProvided = filename !== '';
-        const isAccepted = supportedType.indexOf(mimetype) !== -1;
+        const isProvided = fileName !== '';
+        const isAccepted = acceptedTypes.indexOf(MIMEType) !== -1;
 
-        // stream switch
-        const $prompt = isProvided && isAccepted ? _insuredFStream(savePath, file, message) : file.resume();
+        // file streaming
+        const $prompt = isProvided && isAccepted ? _insuredFStream(filePath, file) : file.resume();
         // note: pseudo($) prompt: action is fired when 'value' as a function being executing for a return
 
 
         // FILE-LISTENER: end (completed/terminated)
         file.on('end', () => {
             // nested property assignments
-            const properties = _propertyReference(fieldname);
-            _updateByNestedProperty(mediaCollector, properties, {path: savePath, filename: saveName});
+            const properties = _propertyReference(fieldName);
+            _updateByNestedProperty(contentParser, properties, {path: filePath, fileName: saveName});
 
             // if limited
-            if (!isProvided || !isAccepted || file.truncated) mediaCollector[properties[0]]['_ignore'] = true;
+            if (!isProvided || !isAccepted || file.truncated) contentParser[properties[0]]['_toIgnore'] = true;
             if (!isProvided) return;
-            if (!isAccepted) return message.errorUnaccepted();
+            if (!isAccepted) return notice.errorUnaccepted();
             if (file.truncated) {
-                // note: should no error occurred since 'file.pipe()' have finished then get this 'end' event
-                fs.unlink(savePath, err => {if (err) return next(err, null)});
-                message.errorOversizing(limits.fileSize);
+                try {
+                    fs.unlink(filePath);
+                    notice.errorOversizing(limits.fileSize);
+                } catch (err) {
+                    throw new Error(`Failed in deleting truncated file: ('${filePath}'):\n${err.toString()}`);
+                }
             }
         });
     });
 
 
     // BUSBOY-LISTENER: parse 'field' inputs
-    busboy.on('field', (fieldname, val) => {
-        if (val) _updateByNestedProperty(mediaCollector, _propertyReference(fieldname), req.sanitize(val));
+    busboy.on('field', (fieldName, val) => {
+        if (val) _updateByNestedProperty(contentParser, _propertyReference(fieldName), req.sanitize(val));
     });
 
 
     // BUSBOY-LISTENER: event finished
     busboy.on('finish', () => {
         // remove all sub-collectors (the top-level keys)
-        // *** (ECMAScript 2017+ || 2015) ***
-        Object.values = Object.values || (obj => Object.keys(obj).map(key => obj[key]));
-        const mediaArray = Object.values(mediaCollector).filter(obj => obj._ignore !== true);
-        if (mediaArray.length > 0) message.infoSucceed(mediaArray.length);
+        const mediaArray = Object.values(contentParser).filter(obj => obj._toIgnore !== true);
+        if (mediaArray.length > 0) notice.infoSucceed(mediaArray.length);
         next(null, mediaArray);
     });
 
@@ -83,7 +77,6 @@ function ImgUploadByBusboy (req, res, limits, next) {
 // extracted functions
 function _propertyReference(source) {
     return source.split(/[[\]]/).filter(frag => frag !== '');
-    // note: this return should be kept for value assignment
 }
 
 function _updateByNestedProperty(obj, referenceKeys, bottomValue, index) {
@@ -94,25 +87,32 @@ function _updateByNestedProperty(obj, referenceKeys, bottomValue, index) {
     } else obj[referenceKeys[index]] = bottomValue ? bottomValue : {};
 }
 
-function _insuredFStream(savePath, file, message) {
-    fs.mkdir(path.dirname(savePath), err => {
-        // only catch errors other than 'EEXIST'
-        if (err && !(err.code === 'EEXIST')) {
-            message.errorUnexpected();
-            return file.resume();
-        } else file.pipe(fs.createWriteStream(savePath));
-    });
+function _insuredFStream(filePath, file) {
+    try {
+        fs.mkdir(path.dirname(filePath), err => {
+            if (err && !(err.code === 'EEXIST')) {
+                throw new Error(`Failed in creating directory: ('${path.dirname(filePath)}'):\n${err.toString()}`);
+            } else file.pipe(fs.createWriteStream(filePath));
+        });
+    } catch (err) {
+        throw new Error(`Failed in the file stream: ('${filePath}'):\n${err.toString()}`);
+    }
+}
+
+
+// client notice handler
+function ClientNoticeHandler(req) {
+    this.errorUnaccepted = ()    => req.flash('error', `There were unaccepted file types!`);
+    this.errorOversizing = size  => req.flash('error', `Some failed in oversizing! (> ${size/1048576} MB)`);
+    this.infoSucceed     = count => req.flash('info' , `${count} File(s) successfully uploaded!`);
 }
 
 
 
 // function exports
-// promisfication switch
 function ImgUploadByBusboySwitch(req, res, limits, next) {
-    // if callback existed, using the callback mode
     if (typeof next === 'function') return ImgUploadByBusboy(req, res, limits, next);
 
-    // if callback not existed, switching to promise
     return new Promise((resolve, reject) => {
         ImgUploadByBusboy(req, res, limits, (err, docs) => {
             if (err) return reject(err);

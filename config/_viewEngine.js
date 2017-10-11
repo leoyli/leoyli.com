@@ -1,7 +1,8 @@
-const _ = require('lodash');
-const fs = require('fs');
-const doT = require('dot');
-const path = require('path');
+const
+    _                       = require('lodash'),
+    fs                      = require('fs'),
+    doT                     = require('dot'),
+    path                    = require('path');
 
 
 
@@ -50,8 +51,7 @@ function buildTemplateFromFile(templateString, filePath, reference) {   // todo:
             varNames: Object.keys(identifier).toString(),
             identifier: identifier,
         });
-    }
-    catch (err) {
+    } catch (err) {
         throw new Error(`Failed to build a Template: ('${filePath}'):\n${err.toString()}`);
     }
 }
@@ -85,8 +85,7 @@ function Template(params) {
 Template.prototype.render = function() {
     try {
         return this.templateFnAssemble.main(...Object.values(this.identifier));
-    }
-    catch (err) {
+    } catch (err) {
         throw new Error(`Failed to render: ('${this.filePath}'):\n${err.toString()}`);
     }
 };
@@ -118,6 +117,7 @@ function Settings(varNames) {
 
 
 
+// view engine export
 module.exports = {
     __express:              render,
     render:                 render,

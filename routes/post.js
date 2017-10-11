@@ -37,7 +37,7 @@ router
                 req.flash('info', 'Post have been successfully posted!');
                 res.redirect('/post');
             })
-            .catch(err => res.send(err.message));   // todo: error handling
+            .catch(err => res.send(err.toString()));   // todo: error handling
     });
 
 
@@ -52,7 +52,7 @@ router
                 foundPost.content = req.sanitize(foundPost.content);
                 res.render('console/editor', {post: foundPost, page: {}})
             })
-            .catch(err => res.send(err.message));   // todo: error handling
+            .catch(err => res.send(err.toString()));   // todo: error handling
     })
     .put(gate.putPostSanitizer, (req, res) => {
         PostModel.findByIdAndUpdate(req.params.POSTID, req.body.post, {new: true})  // todo: versioning integration
@@ -61,7 +61,7 @@ router
                 req.flash('info', 'Post have been successfully updated!');
                 res.redirect("/post/" + foundPost._id);
             })
-            .catch(err => res.send(err.message));   // todo: error handling
+            .catch(err => res.send(err.toString()));   // todo: error handling
     })
     .delete((req, res) => {                         // todo: post recycling;
         PostModel.postsDeleteAndDissociate(req.params.POSTID, req.user)
@@ -69,7 +69,7 @@ router
                 req.flash('info', 'Post have been successfully deleted!');
                 res.redirect("/post");
             })
-            .catch(err => res.send(err.message));   // todo: error handling
+            .catch(err => res.send(err.toString()));   // todo: error handling
     });
 
 
@@ -91,7 +91,7 @@ router.get('/:POSTID', (req, res) => {
 router.get('/', (req, res) => {
     PostModel.find({})
         .then(AllPosts => res.render("post/", {posts : AllPosts.reverse()}))
-        .catch(err => res.send(err.message));       // todo: error handling
+        .catch(err => res.send(err.toString()));       // todo: error handling
 });
 
 
