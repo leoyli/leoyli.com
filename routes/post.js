@@ -26,17 +26,13 @@ const gate                  = require('../config/middleware');
 router
     .route(['/editor', '/editor/new'])
     .all(gate.isSignedIn)
-    .get((req, res) => {
-        res.render('console/editor', {post : new PostModel({_id: null}), page: {}});
-    })
+    .get((req, res) => res.render('console/editor', {post : new PostModel({_id: null}), page: {}}))
     .post(gate.putPostSanitizer, (req, res) => {
         // associate input array with the author then create
         req.body.post.author = {_id: req.user._id, username: req.user.username};
         PostModel.postsCreateAndAssociate(req.body.post, req.user)
-            .then(registeredPost => {
-                req.flash('info', 'Post have been successfully posted!');
-                res.redirect('/post');
-            })
+            .then(req.flash('info', 'Post have been successfully posted!'))
+            .then(res.redirect('/post'))
             .catch(err => res.send(err.toString()));   // todo: error handling
     });
 
@@ -56,19 +52,15 @@ router
     })
     .put(gate.putPostSanitizer, (req, res) => {
         PostModel.findByIdAndUpdate(req.params.POSTID, req.body.post, {new: true})  // todo: versioning integration
-            .then(foundPost => {
-                foundPost.reviseCounter();
-                req.flash('info', 'Post have been successfully updated!');
-                res.redirect("/post/" + foundPost._id);
-            })
+            .then(foundPost => foundPost.reviseCounter())
+            .then(req.flash('info', 'Post have been successfully updated!'))
+            .then(res.redirect("/post/" + foundPost._id))
             .catch(err => res.send(err.toString()));   // todo: error handling
     })
     .delete((req, res) => {                         // todo: post recycling;
         PostModel.postsDeleteAndDissociate(req.params.POSTID, req.user)
-            .then(() => {
-                req.flash('info', 'Post have been successfully deleted!');
-                res.redirect("/post");
-            })
+            .then(req.flash('info', 'Post have been successfully deleted!'))
+            .then(res.redirect("/post"))
             .catch(err => res.send(err.toString()));   // todo: error handling
     });
 

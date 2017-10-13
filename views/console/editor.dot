@@ -2,27 +2,27 @@
 
 <h1>{{= page.title = post._id ? 'UPDATE A POST' : 'WRITE A POST' }}</h1>
 <div>
-    <p><a href="/post/{{= post._id }}">< TURN BACK</a></p>
+    <p><a href="/post/{{? post._id }}{{= post._id }}{{?}}">< TURN BACK</a></p>
 </div>
-<form action="/post/editor/{{= page.source = post._id ? `${post._id}?_method=PUT` : null }}" method="POST">
+<form action="/post/editor/{{? post._id }}{{= `${post._id}?_method=PUT` }}{{?}}" method="POST">
     <div class="form-row">
         <div class="form-group col-md-7">
             <label for="postTitle">Title</label>
-            <input class="form-control" name="post[title]" value="{{= post.title }}" placeholder="Enter the post title">
+            <input {{? post.title }}{{= `value="${post.title}"` }}{{?}} class="form-control" name="post[title]" placeholder="Enter the post title">
         </div>
         <div class="form-group col-md-5">
             <label for="postClass">Category</label>
-            <input class="form-control" name="post[class]" value="{{= post.class }}" placeholder="Enter the category">
+            <input {{? post.class }}{{= `value="${post.class}"` }}{{?}} class="form-control" name="post[class]" placeholder="Enter the category">
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-12">
             <label for="postFtImg">Featured Image Address</label>
-            <input class="form-control" name="post[featured]" value="{{= post.featured }}" placeholder="Enter URL for a featured image/video">
+            <input {{? post.featured }}{{= `value="${post.featured}"` }}{{?}} class="form-control" name="post[featured]" placeholder="Enter URL for a featured image/video">
         </div>
         <div class="form-group col-md-12">
             <label for="postContent">Content</label>
-            <textarea class="form-control" name="post[content]" rows="7" placeholder="Enter the post content">{{= post.content }}</textarea>
+            <textarea class="form-control" name="post[content]" rows="7" placeholder="Enter the post content">{{? post.content }}{{= post.content }}{{?}}</textarea>
         </div>
         <div class="col-md-12">
             <button class="btn btn-primary">{{= page.button = post._id ? 'UPDATE' : 'SUBMIT' }}</button>
