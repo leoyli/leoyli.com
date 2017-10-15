@@ -28,15 +28,13 @@ router
     .all(gate.isSignedIn)
     .get((req, res) => res.render('console/editor', {post : new PostModel({_id: null}), page: {}}))
     .post(gate.putPostSanitizer, (req, res) => {
-        // associate input array with the author then create
-        req.body.post.author = {_id: req.user._id, username: req.user.username};
         PostModel.postsCreateAndAssociate(req.body.post, req.user)
-            .then(req.flash('info', 'Post have been successfully posted!'))
-            .then(res.redirect('/post'))
+            .then(() => req.flash('info', 'Post have been successfully posted!')) // note: ()=> is ensured the sequence
+            .then(() => res.redirect('/post'))
             .catch(err => {
                 req.flash('error', err.toString());
                 res.redirect('back');
-            })
+            });
     });
 
 
@@ -51,7 +49,10 @@ router
                 foundPost.content = req.sanitize(foundPost.content);
                 res.render('console/editor', {post: foundPost, page: {}})
             })
-            .catch(err => res.send(err.toString()));   // todo: error handling
+            .catch(err => {
+                req.flash('error', err.toString());
+                res.redirect('back');
+            });
     })
     .patch(gate.putPostSanitizer, (req, res) => {
         PostModel.findByIdAndUpdate(req.params.POSTID, req.body.post, {new: true})  // todo: versioning integration
@@ -60,13 +61,19 @@ router
                 req.flash('info', 'Post have been successfully updated!');
                 res.redirect("/post/" + foundPost._id);
             })
-            .catch(err => res.send(err.toString()));   // todo: error handling
+            .catch(err => {
+                req.flash('error', err.toString());
+                res.redirect('back');
+            });
     })
-    .delete((req, res) => {                         // todo: post recycling;
+    .delete((req, res) => { // todo: post recycling;
         PostModel.postsDeleteAndDissociate(req.params.POSTID, req.user)
-            .then(req.flash('info', 'Post have been successfully deleted!'))
-            .then(res.redirect("/post"))
-            .catch(err => res.send(err.toString()));   // todo: error handling
+            .then(() => req.flash('info', 'Post have been successfully deleted!'))
+            .then(() => res.redirect("/post"))
+            .catch(err => {
+                req.flash('error', err.toString());
+                res.redirect('back');
+            });
     });
 
 
@@ -88,7 +95,10 @@ router.get('/:POSTID', (req, res) => {
 router.get('/', (req, res) => {
     PostModel.find({})
         .then(AllPosts => res.render("post/", {posts : AllPosts.reverse()}))
-        .catch(err => res.send(err.toString()));       // todo: error handling
+        .catch(err => {
+            req.flash('error', err.toString());
+            res.redirect('back');
+        });
 });
 
 

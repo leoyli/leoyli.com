@@ -3,6 +3,13 @@ const
     validator               = require('validator');
 
 
+// define validation rules
+function featured (value) {
+    if (!value) return true;
+    return validator.isURL(value);
+}
+
+
 
 // define new (DB)data schema
 const
@@ -19,7 +26,7 @@ const
     featured                : {type: String, // todo: featured by a video
         validate: {
             isAsync         : false,
-            validator       : validator.isURL,
+            validator       : featured,
             message         : 'INVALID URL',
         }},
     title                   : {type: String, required: true, trim: true},
@@ -37,27 +44,23 @@ const
 const extFn                 = require('../config/extFn');
 
 //// create and associate (model)
-PostSchema.static('postsCreateAndAssociate', function (raw, user, next) { // tofix: Promise bug
-    return extFn.normalization(raw, user, next, (raw, user, next) => {
+PostSchema.static('postsCreateAndAssociate', async function (raw, user, next) { // tofix: Promise bug
+    return await (async (raw, user, next) => {
         if (user) raw.map(self => self.author = user);
-        this.create(raw, (err, docs) => {
-            if (err) return next(err, null);
-            if (user) user.update({$pushAll: {ownedPosts: docs}}, (err, dbRes) => next(err, docs));
-            else next(null, docs);
-        });
-    });
+        const docs = await this.create(raw);
+        if (user) await user.update({$pushAll: {ownedPosts: docs}});
+        return next(null, docs);
+    })(...extFn.normalization(raw, user, next));
 });
 
 
 //// delete and dissociate (model)  // note: not workable for admin in deleting media owned by multiple users
 PostSchema.static('postsDeleteAndDissociate', function (docsID, user, next) {
-    return extFn.normalization(docsID, user, next, (docsID, user, next) => {
-        this.remove({_id: docsID}, err => {
-            if (err) return next(err, null);
-            if (user) user.update({$pullAll: {ownedPosts: docsID}}, (err, dbRes) => next(err, docsID));
-            else next(null, docsID);
-        });
-    });
+    return (async (docsID, user, next) => {
+        await this.remove({_id: docsID});
+        await user.update({$pullAll: {ownedPosts: docsID}});
+        return next(null, docsID);
+    })(...extFn.normalization(docsID, user, next));
 });
 
 
