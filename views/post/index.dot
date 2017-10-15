@@ -10,7 +10,7 @@
             <div class="_author col-md-8">- {{= post.author.username }}</div>
             <div class="_date col-md-4"><i>{{= post._updated.toDateString() }}</i></div>
         </div>
-        <div class="_ftimg"><a href="/post/{{= post._id }}"><img src="{{= post.featured }}"></a></div>
+        <div class="_ftimg"><a href="/post/{{= post._id }}"><img src="{{= post.featured }}" style="width:800px"></a></div>
     </div>
     <div style="height: 60px">&nbsp;</div>
 {{ }); }}

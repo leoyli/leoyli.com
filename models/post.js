@@ -1,5 +1,6 @@
 const
-    mongoose                = require('mongoose');
+    mongoose                = require('mongoose'),
+    validator               = require('validator');
 
 
 
@@ -8,22 +9,26 @@ const
     PostSchema              = new mongoose.Schema({
     _status                 : {type: Number, default: 0},
     _pinTop                 : {type: Boolean, default: false},
-    author                  : {
-        _id                 :
-            {
+    author: {
+        _id: {
             type            : mongoose.Schema.Types.ObjectId,
-            ref             : 'USER'
-            },
-        username            : String    // todo: nickname, and can be updated once changed
+            ref             : 'USER',
+        },
+        username            : {type: String},
     },
-    featured                : String,   // todo: featured by a video
-    title                   : {type: String},  // todo: required: true
+    featured                : {type: String, // todo: featured by a video
+        validate: {
+            isAsync         : false,
+            validator       : validator.isURL,
+            message         : 'INVALID URL',
+        }},
+    title                   : {type: String, required: true, trim: true},
     class                   : {type: String, lowercase: true, default: 'unclassified'},
     tag                     : {type: String, lowercase: true},
-    content                 : String
+    content                 : {type: String, required: true},
 }, {
     timestamps              : {createdAt: '_created', updatedAt: '_updated'},
-    versionKey              : '_revised'
+    versionKey              : '_revised',
 });
 
 
@@ -32,7 +37,7 @@ const
 const extFn                 = require('../config/extFn');
 
 //// create and associate (model)
-PostSchema.static('postsCreateAndAssociate', function (raw, user, next) {
+PostSchema.static('postsCreateAndAssociate', function (raw, user, next) { // tofix: Promise bug
     return extFn.normalization(raw, user, next, (raw, user, next) => {
         if (user) raw.map(self => self.author = user);
         this.create(raw, (err, docs) => {

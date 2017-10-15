@@ -7,27 +7,25 @@ const
 const
     MediaSchema             = new mongoose.Schema({
     _status                 : {type: Number, default: 0},
-    uploader                : {
-        _id                 :
-            {
+    uploader: {
+        _id: {
             type            : mongoose.Schema.Types.ObjectId,
-            ref             : 'USER'
-            },
-        username            : String    // todo: nickname, and can be updated once changed
-    },
-    file                    :
-        {
-            path            : {type: String},
-            filename        : {type: String},
-            ext             : {type: String}
+            ref             : 'USER',
         },
-    title                   : {type: String},  // todo: required: true
-    description             : {type: String},
+        username            : {type: String},   // todo: nickname, and can be updated once changed
+    },
+    file: {
+        fullPath            : {type: String},
+        fileName            : {type: String},
+        fileType            : {type: String},
+    },
+    title                   : {type: String, required: true},
+    description             : {type: String, required: true},
     class                   : {type: String, lowercase: true},
-    tag                     : {type: String, lowercase: true}
+    tag                     : {type: String, lowercase: true},
 }, {
     timestamps              : {createdAt: '_uploaded', updatedAt: '_updated'},
-    versionKey              : '_revised'
+    versionKey              : '_revised',
 });
 
 

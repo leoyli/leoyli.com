@@ -1,6 +1,6 @@
 {
   "name": "leoyli-main",
-  "version": "0.0.33",
+  "version": "0.0.34",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
@@ -22,6 +22,7 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^4.2.1",
-    "serve-favicon": "^2.4.5"
+    "serve-favicon": "^2.4.5",
+    "validator": "^9.0.0"
   }
 }

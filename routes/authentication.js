@@ -23,14 +23,13 @@ router
         res.render('authentication/signup')
     })
     .post((req, res) => {
-        UserModel.register(new UserModel({username: req.body.username}), req.body.password, (err, registeredUser) => {
-            // failed in registration
+        UserModel.register(new UserModel(req.body), req.body.password, (err, registeredUser) => {
             if (err) {
-                req.flash('error', err.toString());
+                if (err.code === 11000) req.flash('error', 'EmailExistsError: This email have already been taken.'); // todo: specific error code
+                else req.flash('error', err.toString());
                 return res.redirect('/signup'); // todo: highlight errors with qualified inputs remained
             }
 
-            // passed responses
             passport.authenticate('local')(req, res, () => {
                 req.flash('info', `Welcome new user: ${req.body.username}`);
                 res.redirect('/console');

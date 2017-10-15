@@ -7,16 +7,16 @@ const
 let _siteConfigSchema       = new mongoose.Schema({
     title                   : {type: String, default: 'NEW WEBSITE'},
     description             : {type: String, default: ''},
-    keywords                : {type: String, default: []},
+    keywords                : {type: String, default: ''},
     domain                  : {type: String, default: ''},
-    time                    : {
+    time: {
         timezone            : {type: String, default: ''},
         format              : {type: String, default: 'default'}
     },
-    admin                   : String
+    admin                   : String,
 }, {
     timestamps              : {createdAt: '_created', updatedAt: '_updated'},
-    versionKey              : false
+    versionKey              : false,
 });
 
 
@@ -25,11 +25,11 @@ let _siteConfigSchema       = new mongoose.Schema({
 //// initialization (model)
 _siteConfigSchema.static('newSiteConfig', function() {
     this.findOne({}, (err, loadConfig) => {
-        // error handler
-        if (err) return console.log(err); // todo: error handling
-
-        // default for a new site
-        if (!loadConfig) this.create({});
+        try {
+            if (!loadConfig) this.create({});
+        } catch (err) {
+            throw new Error(`Failed in constructing new configurations: \n${err.toString()}`);
+        }
     });
 });
 

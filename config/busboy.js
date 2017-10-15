@@ -36,7 +36,11 @@ function ImgUploadByBusboy (req, res, limits, next) {
         file.on('end', () => {
             // nested property assignments
             const properties = _propertyReference(fieldName);
-            _updateByNestedProperty(contentParser, properties, {path: filePath, fileName: saveName});
+            _updateByNestedProperty(contentParser, properties, {
+                fileType: path.extname(fileName),
+                fileName: taskTime.getTime(),
+                fullPath: filePath,
+            });
 
             // if limited
             if (!isProvided || !isAccepted || file.truncated) contentParser[properties[0]]['_toIgnore'] = true;
@@ -47,7 +51,7 @@ function ImgUploadByBusboy (req, res, limits, next) {
                     fs.unlink(filePath);
                     notice.errorOversizing(limits.fileSize);
                 } catch (err) {
-                    throw new Error(`Failed in deleting truncated file: ('${filePath}'):\n${err.toString()}`);
+                    throw new Error(`Failed in deleting the truncated file: ('${filePath}'):\n${err.toString()}`);
                 }
             }
         });
@@ -91,7 +95,7 @@ function _insuredFStream(filePath, file) {
     try {
         fs.mkdir(path.dirname(filePath), err => {
             if (err && !(err.code === 'EEXIST')) {
-                throw new Error(`Failed in creating directory: ('${path.dirname(filePath)}'):\n${err.toString()}`);
+                throw new Error(`Failed in creating the directory: ('${path.dirname(filePath)}'):\n${err.toString()}`);
             } else file.pipe(fs.createWriteStream(filePath));
         });
     } catch (err) {

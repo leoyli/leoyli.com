@@ -79,8 +79,11 @@ router
     .post((req, res) => { // todo: will be responsible for all media uploading event and redirect user back
         MediaModel.mediaUpload(req, res, {fileSize: 85*1048576, files: 2})
             .then(uploadedMedia => MediaModel.mediaCreateAndAssociate(uploadedMedia, req.user))
-            .then(createdAndAssociatedMedia => res.redirect('back'))
-            .catch(err => res.send(err.toString()));   // todo: error handling
+            .catch(err => {
+                if (err.name === 'ValidationError') delete req.session.flash.info;
+                req.flash('error', err.toString());
+            })
+            .then(res.redirect('back'));
     });
 
 

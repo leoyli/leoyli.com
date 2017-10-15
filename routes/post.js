@@ -33,7 +33,10 @@ router
         PostModel.postsCreateAndAssociate(req.body.post, req.user)
             .then(req.flash('info', 'Post have been successfully posted!'))
             .then(res.redirect('/post'))
-            .catch(err => res.send(err.toString()));   // todo: error handling
+            .catch(err => {
+                req.flash('error', err.toString());
+                res.redirect('back');
+            })
     });
 
 
@@ -50,11 +53,13 @@ router
             })
             .catch(err => res.send(err.toString()));   // todo: error handling
     })
-    .put(gate.putPostSanitizer, (req, res) => {
+    .patch(gate.putPostSanitizer, (req, res) => {
         PostModel.findByIdAndUpdate(req.params.POSTID, req.body.post, {new: true})  // todo: versioning integration
-            .then(foundPost => foundPost.reviseCounter())
-            .then(req.flash('info', 'Post have been successfully updated!'))
-            .then(res.redirect("/post/" + foundPost._id))
+            .then(foundPost => {
+                foundPost.reviseCounter();
+                req.flash('info', 'Post have been successfully updated!');
+                res.redirect("/post/" + foundPost._id);
+            })
             .catch(err => res.send(err.toString()));   // todo: error handling
     })
     .delete((req, res) => {                         // todo: post recycling;
