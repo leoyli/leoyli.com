@@ -5,7 +5,7 @@
     <h1>{{= post.title }}</h1>
     <div id="{{= post._id }}" class="row">
         <div class="col-md-8">
-            {{= post.author.username }}
+            {{= post.provider.username }}
             ｜<a href="/post/editor/{{= post._id }}" target="_self">(edit)</a>
             ｜<a href="/post/class/{{= post.class }}" target="_self">{{= post.class }}</a>
             ｜Times of revised: {{= post._revised }}

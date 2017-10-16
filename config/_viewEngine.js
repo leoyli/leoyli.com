@@ -72,11 +72,11 @@ function Template(params) {
     this.def = new PreCompiledDef(params);
 
     // templateFn assemble
-    this.templateFnAssemble = {};
+    this.templateFnEnsemble = {};
     // templateFn compilation
     for (const section in this.sections) {
         if (this.sections.hasOwnProperty(section)) {
-            this.templateFnAssemble[section] = doT.template(this.sections[section], this.configs, this.def);
+            this.templateFnEnsemble[section] = doT.template(this.sections[section], this.configs, this.def);
         }
     }
 }
@@ -84,7 +84,7 @@ function Template(params) {
 
 Template.prototype.render = function() {
     try {
-        return this.templateFnAssemble.main(...Object.values(this.identifier));
+        return this.templateFnEnsemble.main(...Object.values(this.identifier));
     } catch (err) {
         throw new Error(`Failed to render: ('${this.filePath}'):\n${err.toString()}`);
     }

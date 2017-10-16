@@ -3,6 +3,7 @@ const
     validator               = require('validator');
 
 
+
 // define validation rules
 function featured (value) {
     if (!value) return true;
@@ -12,11 +13,10 @@ function featured (value) {
 
 
 // define new (DB)data schema
-const
-    PostSchema              = new mongoose.Schema({
+const PostSchema            = new mongoose.Schema({
     _status                 : {type: Number, default: 0},
     _pinTop                 : {type: Boolean, default: false},
-    author: {
+    provider: {
         _id: {
             type            : mongoose.Schema.Types.ObjectId,
             ref             : 'USER',
@@ -41,26 +41,17 @@ const
 
 
 // define new methods
-const extFn                 = require('../config/extFn');
+const exMethods             = require('../config/methods');
 
 //// create and associate (model)
-PostSchema.static('postsCreateAndAssociate', async function (raw, user, next) { // tofix: Promise bug
-    return await (async (raw, user, next) => {
-        if (user) raw.map(self => self.author = user);
-        const docs = await this.create(raw);
-        if (user) await user.update({$pushAll: {ownedPosts: docs}});
-        return next(null, docs);
-    })(...extFn.normalization(raw, user, next));
+PostSchema.static('postsCreateThenAssociate', function (raw, user, next) {
+    return new exMethods.CorrelateAsCreateOrDelete(raw, user, next, 'posts', '$push', this);
 });
 
 
 //// delete and dissociate (model)  // note: not workable for admin in deleting media owned by multiple users
-PostSchema.static('postsDeleteAndDissociate', function (docsID, user, next) {
-    return (async (docsID, user, next) => {
-        await this.remove({_id: docsID});
-        await user.update({$pullAll: {ownedPosts: docsID}});
-        return next(null, docsID);
-    })(...extFn.normalization(docsID, user, next));
+PostSchema.static('postsDeleteThenDissociate', function (docsID, user, next) {
+    return new exMethods.CorrelateAsCreateOrDelete(docsID, user, next, 'posts', '$pullAll', this);
 });
 
 

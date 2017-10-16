@@ -4,10 +4,9 @@ const
 
 
 // define new (DB)data schema
-const
-    MediaSchema             = new mongoose.Schema({
+const MediaSchema           = new mongoose.Schema({
     _status                 : {type: Number, default: 0},
-    uploader: {
+    provider: {
         _id: {
             type            : mongoose.Schema.Types.ObjectId,
             ref             : 'USER',
@@ -31,26 +30,17 @@ const
 
 
 // define new methods
-const extFn                 = require('../config/extFn');
+const exMethods             = require('../config/methods');
 
 //// create and associate (model)
-MediaSchema.static('mediaCreateAndAssociate', function (raw, user, next) {
-    return (async (raw, user, next) => {
-        if (user) raw.map(self => self.uploader = user);
-        const docs = await this.create(raw);
-        if (user) await user.update({$pushAll: {ownedMedia: docs}});
-        return next(null, docs);
-    })(...extFn.normalization(raw, user, next));
+MediaSchema.static('mediaCreateThenAssociate', function (raw, user, next) {
+    return new exMethods.CorrelateAsCreateOrDelete(raw, user, next, 'media', '$push', this);
 });
 
 
 //// delete and dissociate (model)  // note: not workable for admin in deleting media owned by multiple users
-MediaSchema.static('mediaDeleteAndDissociate', function (docsID, user, next) {
-    return (async (docsID, user, next) => {
-        await this.remove({_id: docsID});
-        await user.update({$pullAll: {ownedPosts: docsID}});
-        return next(null, docsID);
-    })(...extFn.normalization(docsID, user, next));
+MediaSchema.static('mediaDeleteThenDissociate', function (docsID, user, next) {
+    return new exMethods.CorrelateAsCreateOrDelete(docsID, user, next, 'media', '$pullAll', this);
 });
 
 

@@ -40,7 +40,7 @@ router.get("/", (req, res) => {
         if (err) return res.send(err);
         console.log(`\n1) USER CREATED & SAVED:\n${registeredUser}`);
         req.user = registeredUser;
-        PostModel.postsCreateAndAssociate(SEEDPOST, req.user, (err, newPost) => {
+        PostModel.postsCreateThenAssociate(SEEDPOST, req.user, (err, newPost) => {
             console.log(`\n2) A SAMPLE HAVE INJECTED AND ASSOCIATED WITH THE USER:\n${newPost}`);
             req.flash('info', 'ALL SEEDED SUCCESSFULLY!');
             res.redirect('/post');

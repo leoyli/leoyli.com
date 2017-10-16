@@ -28,7 +28,7 @@ router
     .all(gate.isSignedIn)
     .get((req, res) => res.render('console/editor', {post : new PostModel({_id: null}), page: {}}))
     .post(gate.putPostSanitizer, (req, res) => {
-        PostModel.postsCreateAndAssociate(req.body.post, req.user)
+        PostModel.postsCreateThenAssociate(req.body.post, req.user)
             .then(() => req.flash('info', 'Post have been successfully posted!')) // note: ()=> is ensured the sequence
             .then(() => res.redirect('/post'))
             .catch(err => {
@@ -67,12 +67,12 @@ router
             });
     })
     .delete((req, res) => { // todo: post recycling;
-        PostModel.postsDeleteAndDissociate(req.params.POSTID, req.user)
+        PostModel.postsDeleteThenDissociate(req.params.POSTID, req.user)
             .then(() => req.flash('info', 'Post have been successfully deleted!'))
             .then(() => res.redirect("/post"))
             .catch(err => {
                 req.flash('error', err.toString());
-                res.redirect('back');
+                res.redirect('/console');
             });
     });
 

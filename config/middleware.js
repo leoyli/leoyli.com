@@ -37,7 +37,7 @@ exports.isSignedIn = (req, res, next) => {
 
 // authorization checking
 function _isAuthorized (req, res, next) {
-    if (req.user.ownedPosts.indexOf(req.params.POSTID || req.loadedPost._id) === -1) {    // option: find by post ID as a alternative
+    if (req.user.docLists.posts.indexOf(req.params.POSTID || req.loadedPost._id) === -1) {    // option: find by post ID as a alternative
         req.flash('error', 'Sorry... You have not been authorized!');
         return res.status(404).render('/404');
     } else next();

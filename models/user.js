@@ -4,9 +4,21 @@ const
     passportLocalMongoose   = require('passport-local-mongoose');
 
 
+
 // define new (DB)data schema
-const
-    UserSchema              = new mongoose.Schema({
+const docLists              = new mongoose.Schema({
+    posts: [{
+        type                : mongoose.Schema.Types.ObjectId,
+        ref                 : 'POST',
+    }],
+    media: [{
+        type                : mongoose.Schema.Types.ObjectId,
+        ref                 : 'MEDIA',
+    }],
+});
+
+const UserSchema            = new mongoose.Schema({
+    _isActive               : {type: String, default: false},
     username                : {type: String, required: true},
     firstName               : {type: String, required: true},
     lastName                : {type: String, required: true},
@@ -19,15 +31,7 @@ const
         }},
     birthday                : {type: Date},
     gender                  : {type: String},
-    ownedPosts: [{
-        type                : mongoose.Schema.Types.ObjectId,
-        ref                 : 'POST',
-    }],
-    ownedMedia: [{
-            type            : mongoose.Schema.Types.ObjectId,
-            ref             : 'MEDIA',
-    }],
-    _isActive               : {type: String, default: false},
+    docLists                : docLists,
 }, {
     timestamps              : {createdAt: '_registered', updatedAt: '_updated'},
     versionKey              : false,
@@ -36,7 +40,7 @@ const
 
 
 // define new methods
-// methods from a plugin (object method)
+// methods from third-party plugin (object method)
 UserSchema.plugin(passportLocalMongoose);
 
 

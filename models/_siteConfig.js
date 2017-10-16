@@ -28,7 +28,7 @@ _siteConfigSchema.static('newSiteConfig', function() {
         try {
             if (!loadConfig) this.create({});
         } catch (err) {
-            throw new Error(`Failed in constructing new configurations: \n${err.toString()}`);
+            throw new Error(`Failed in generating default configurations: \n${err.toString()}`);
         }
     });
 });
