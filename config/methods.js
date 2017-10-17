@@ -23,15 +23,15 @@ exports.normalization = (data, user, next) => {
 };
 
 
-// method constructors
-exports.CorrelateAsCreateOrDelete = function (data, user, next, correlatedListName, operator, _THIS) {
+// correlation handler
+exports.correlateAsCreateOrDelete = function (data, user, next, correlatedListName, operator, _THIS) {
     return (async (data, user, next) => {
         // create/remove the doc(s)
         if (operator === '$pullAll') {
             await _THIS.remove({_id: data});
         } else if (operator === '$push') {
             if (user) await data.map(self => self.provider = user);
-            data = await _THIS.create(data);
+            data = await _THIS.create(data);    // note: this line reassign the following 'data'
         } else {
             throw new SyntaxError('Operator must be either \'$push\' (create) or \'$pullAll\' (delete)');
         }

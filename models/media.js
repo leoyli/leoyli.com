@@ -34,13 +34,13 @@ const exMethods             = require('../config/methods');
 
 //// create and associate (model)
 MediaSchema.static('mediaCreateThenAssociate', function (raw, user, next) {
-    return new exMethods.CorrelateAsCreateOrDelete(raw, user, next, 'media', '$push', this);
+    return exMethods.correlateAsCreateOrDelete(raw, user, next, 'media', '$push', this);
 });
 
 
 //// delete and dissociate (model)  // note: not workable for admin in deleting media owned by multiple users
 MediaSchema.static('mediaDeleteThenDissociate', function (docsID, user, next) {
-    return new exMethods.CorrelateAsCreateOrDelete(docsID, user, next, 'media', '$pullAll', this);
+    return exMethods.correlateAsCreateOrDelete(docsID, user, next, 'media', '$pullAll', this);
 });
 
 
