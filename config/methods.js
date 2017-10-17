@@ -24,7 +24,7 @@ exports.normalization = (data, user, next) => {
 
 
 // correlation handler
-exports.correlateAsCreateOrDelete = function (data, user, next, correlatedListName, operator, _THIS) {
+exports.correlateAsCreateOrDelete = function (data, user, next, ListField, operator, _THIS) {
     return (async (data, user, next) => {
         // create/remove the doc(s)
         if (operator === '$pullAll') {
@@ -37,10 +37,10 @@ exports.correlateAsCreateOrDelete = function (data, user, next, correlatedListNa
         }
 
         // push/pull user's owned list  // note: maybe it is not necessary have to do dissociation
-        if (user && correlatedListName) {
+        if (user && ListField) {
             const query = {}, wrapper = {};
             // note: $pullAll is not de deprecated: cannot use $each on $pull
-            query[`docLists.${correlatedListName}`] = (operator === '$push') ? {$each: data} : data;
+            query[`docLists.${ListField}`] = (operator === '$push') ? {$each: data} : data;
             wrapper[`${operator}`] = query;
             await user.update(wrapper);
         }

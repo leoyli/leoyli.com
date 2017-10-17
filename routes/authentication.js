@@ -51,7 +51,7 @@ router
             if (err) return res.send(err.toString());  // todo: error handling
             if (!authUser) {
                 // option: 'info' argument can be set
-                req.flash('error', 'Wrong username or password!');
+                req.flash('error', 'Wrong email/username or password!');
                 return res.redirect('/signin');
             }
 

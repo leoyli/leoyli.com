@@ -1,7 +1,7 @@
 const
     _                       = require('lodash'),
     fs                      = require('fs'),
-    doT                     = require('dot'),
+    doT                     = require('doT'),
     path                    = require('path');
 
 

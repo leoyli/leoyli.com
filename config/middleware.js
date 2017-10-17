@@ -9,7 +9,7 @@ exports.localVariables = (req, res, next) => {
     _siteConfig.findOne({}, (err, loadedConfig) => {
         // site config
         res.locals._site = loadedConfig._doc;
-        res.locals._site.currentUser = req.user ? req.user._doc : {username: 'guest', _isGuest: true};
+        res.locals._site.currentUser = req.user ? req.user._doc : {nickname: 'guest', _isGuest: true};
 
         // flash messages sorted as classes
         res.locals._flash = {error: req.flash('error'), info: req.flash('info')};
