@@ -48,11 +48,11 @@ MediaSchema.static('mediaDeleteThenDissociate', function (docsID, user, next) {
 MediaSchema.static('mediaUpload', require('../config/busboy'));
 
 
-//// version counter (object method)
-MediaSchema.methods.reviseCounter = function() {
-    ++this._revised;
-    this.save();
-};
+//// (pre-hook) version counter
+MediaSchema.pre('findOneAndUpdate', function (next) {
+    this.findOneAndUpdate({}, {$inc: {_revised: 1}});
+    next();
+});
 
 
 

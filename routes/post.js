@@ -57,7 +57,6 @@ router
     .patch(gate.putPostSanitizer, (req, res) => {
         PostModel.findByIdAndUpdate(req.params.POSTID, req.body.post, {new: true})  // todo: versioning integration
             .then(foundPost => {
-                foundPost.reviseCounter();
                 req.flash('info', 'Post have been successfully updated!');
                 res.redirect("/post/" + foundPost._id);
             })
