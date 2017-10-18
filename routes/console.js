@@ -35,8 +35,8 @@ router
     .get((req, res) => res.render('./console/setting'))
     .put((req, res) => {
         _siteConfig.updateSettings(req.body.siteSetting)
-            .then(() => res.redirect('back'))
-            .catch(err => res.send(err.toString()));   // todo: error handling
+            .catch(err => {req.flash('error', err.toString());})
+            .then(() => res.redirect('back'));
     });
 
 
@@ -46,12 +46,12 @@ router
     .get((req, res) => res.render('./console/profile'))
     .put((req, res) => {
         UserModel.update({_id: req.user._id}, {$set: req.body.userProfile})
-            .then(() => res.redirect('back'))
-            .catch(err => res.send(err.toString()));   // todo: error handling
+            .catch(err => {req.flash('error', err.toString());})
+            .then(() => res.redirect('back'));
     });
 
 
-// account security (password changing)  // todo: error throwing & promisfication
+// account security (password changing)
 router
     .route('/security')
     .get((req, res) => res.render('./console/security'))
@@ -64,7 +64,7 @@ router
             req.flash('error', 'PASSWORD CANNOT BE SET THE SAME.');
         } else {
             return req.user.changePassword(req.body.password.old, req.body.password.new, err => {
-                if (err) req.flash('error', err);
+                if (err) req.flash('error', err.toString());
                 else req.flash('info', 'PASSWORD HAVE BEEN SUCCESSFULLY CHANGED.');
                 res.redirect('back');
             });

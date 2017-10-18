@@ -53,6 +53,16 @@ UserSchema.plugin(passportLocalMongoose, {
 });
 
 
+// // passport-local-mongoose method overwrite (into a Promise)
+// const _authenticate = UserSchema.methods.authenticate;
+// UserSchema.methods.authenticate = async function authenticate(password, next) {
+//     await _authenticate.call(this, password, (err, result) => {
+//         if (err) throw err;
+//         if (typeof next === 'function') return next(err, result);
+//         return result;
+//     });
+// };
+
 
 // export model
 module.exports = mongoose.model('USER', UserSchema);

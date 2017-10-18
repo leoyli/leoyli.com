@@ -11,7 +11,7 @@ const MediaSchema           = new mongoose.Schema({
             type            : mongoose.Schema.Types.ObjectId,
             ref             : 'USER',
         },
-        username            : {type: String},   // todo: nickname, and can be updated once changed
+        username            : {type: String},
     },
     file: {
         fullPath            : {type: String},

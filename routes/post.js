@@ -41,7 +41,7 @@ router
 // editor - existed
 router
     .route('/editor/:POSTID')
-    .all(gate.isAuthorized)     // todo: page validation (if not found, send the correct message)
+    .all(gate.isAuthorized)
     .get((req, res) => {
         PostModel.findById(req.params.POSTID)
             .then(foundPost => {
@@ -55,7 +55,7 @@ router
             });
     })
     .patch(gate.putPostSanitizer, (req, res) => {
-        PostModel.findByIdAndUpdate(req.params.POSTID, req.body.post, {new: true})  // todo: versioning integration
+        PostModel.findByIdAndUpdate(req.params.POSTID, req.body.post, {new: true})
             .then(foundPost => {
                 req.flash('info', 'Post have been successfully updated!');
                 res.redirect("/post/" + foundPost._id);
@@ -65,7 +65,7 @@ router
                 res.redirect('back');
             });
     })
-    .delete((req, res) => { // todo: post recycling;
+    .delete((req, res) => { // todo: trash can
         PostModel.postsDeleteThenDissociate(req.params.POSTID, req.user)
             .then(() => req.flash('info', 'Post have been successfully deleted!'))
             .then(() => res.redirect("/post"))

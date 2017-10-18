@@ -25,7 +25,7 @@ router
     .post((req, res) => {
         UserModel.register(new UserModel(req.body), req.body.password, (err, registeredUser) => {
             if (err) {
-                if (err.code === 11000) req.flash('error', 'EmailExistsError: This email have already been taken.'); // todo: specific error code
+                if (err.code === 'MongoError') req.flash('error', 'DataExistsError: This username have already been taken.'); // todo: specific error code
                 else req.flash('error', err.toString());
                 return res.redirect('/signup'); // todo: highlight errors with qualified inputs remained
             }
@@ -42,28 +42,25 @@ router
 router
     .route('/signin')
     .get((req, res) => {
-        if (req.isAuthenticated()) {
-            return res.redirect('/console');
-        } else res.render('authentication/signin');
+        if (req.isAuthenticated()) return res.redirect('/console');
+        res.render('authentication/signin');
     })
-    .post((req, res) => {
-        passport.authenticate('local', (err, authUser) => {
-            if (err) return res.send(err.toString());  // todo: error handling
-            if (!authUser) {
-                // option: 'info' argument can be set
-                req.flash('error', 'Wrong email/username or password!');
-                return res.redirect('/signin');
-            }
+    .post((req, res) => { // tofix: drier codes needed
+        passport.authenticate('local', async (err, authUser) => {
+            if (err) req.flash('error', err.toString());
+            else if (!authUser) req.flash('error', 'Wrong email/username or password!');
+            else {
+                await req.logIn(authUser, err => { if (err) {
+                    req.flash('error', err.toString());
+                    return res.redirect('/signin');
+                }});
 
-            // sign-in the authenticated user
-            req.logIn(authUser, err => {
-                if (err) return res.send(err.toString());  // todo: error handling
+                // redirect the client and delete the temporary key
                 req.flash('info', `Welcome back ${authUser.username}`);
                 res.redirect(req.session.returnTo || '/console/dashboard');
-
-                // drain the variable gained from 'isSignedIn'
-                delete req.session.returnTo;
-            });
+                return delete req.session.returnTo;
+            }
+            res.redirect('/signin');
         })(req, res);
     });
 
