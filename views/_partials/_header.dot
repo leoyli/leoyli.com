@@ -12,11 +12,6 @@
 </head>
 
 <body>
-
-{{? _flash.error && _flash.error.length > 0 }}
-    <div class="alert alert-danger" role="alert">{{= _flash.error }}</div>
-{{?}}
-
-{{? _flash.info && _flash.info.length > 0 }}
-    <div class="alert alert-success" role="alert">{{= _flash.info }}</div>
-{{?}}
+<header>
+{{# def.partial('_navigator') }}
+</header>

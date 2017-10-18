@@ -40,17 +40,10 @@ function getFileContent(filePath, _SYNC) {
 
 // read function
 function buildTemplateFromFile(templateString, filePath, reference) {   // todo: strip HTML comments @templateString
-    const identifier = _.omit(reference, 'set');
     const sections = {main : templateString};   // todo: added multiple sections support
 
     try {
-        return new Template({
-            set: reference.set,
-            sections: sections,
-            filePath: filePath,
-            varNames: Object.keys(identifier).toString(),
-            identifier: identifier,
-        });
+        return new Template(filePath, reference, sections);
     } catch (err) {
         throw new Error(`Failed to build a Template: ('${filePath}'):\n${err.toString()}`);
     }
@@ -58,18 +51,20 @@ function buildTemplateFromFile(templateString, filePath, reference) {   // todo:
 
 
 // constructors
-function Template(params) {
+function Template(filePath, reference, sections) {
     // reserved for error handler
-    this.filePath = params.filePath;
-    // reference for templateFn
-    this.identifier = params.identifier;
+    this.filePath = filePath;
+
+    // reference for template functions
+    this.varNames = Object.keys(_.omit(reference, 'set'));
+    this.varValue = Object.values(_.omit(reference, 'set'));
 
     // template text (tmpl)
-    this.sections = params.sections;
+    this.sections = sections;
     // compilation settings (c)
-    this.configs = new Settings(params.varNames).doTConfig;
+    this.configs = new Settings(this.varNames.toString()).doTConfig;
     // compile-time evaluation (def)
-    this.def = new PreCompiledDef(params);
+    this.def = new PreCompiledDef(reference);
 
     // templateFn assemble
     this.templateFnEnsemble = {};
@@ -84,17 +79,17 @@ function Template(params) {
 
 Template.prototype.render = function() {
     try {
-        return this.templateFnEnsemble.main(...Object.values(this.identifier));
+        return this.templateFnEnsemble.main(...this.varValue);
     } catch (err) {
         throw new Error(`Failed to render: ('${this.filePath}'):\n${err.toString()}`);
     }
 };
 
 
-function PreCompiledDef(params) {
+function PreCompiledDef(reference) {
     this.partial = (partialFile) => {
-        partialFile = path.join(params.set.partials, `${partialFile}.${params.set.extName || 'dot'}`);
-        return getTemplate(partialFile, params.identifier, true).render();  // note: `getTemplate` is not a Promise here
+        partialFile = path.join(reference.set.partials, `${partialFile}.${reference.set.extName}`);
+        return getTemplate(partialFile, reference, true).render();  // note: `getTemplate` is not a Promise here
     };
 }
 
