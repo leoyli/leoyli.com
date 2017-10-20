@@ -17,8 +17,8 @@ const _siteConfig           = require('../models/_siteConfig');
 //  FUNCTIONS
 // ==============================
 // middleware
-const gate                  = require('../config/middleware');
-router.all('*', gate.isSignedIn);
+const _pre                  = require('../config/middleware');
+router.all('*', _pre.isSignedIn, _pre.setPageTitle('Console'));
 
 
 
@@ -26,14 +26,15 @@ router.all('*', gate.isSignedIn);
 //  ROUTE RULES
 // ==============================
 // dashboard
-router.get(/^\/(dashboard)?(\/)?$/, (req, res) => res.render('./console/dashboard'));
+router.get(/^\/(dashboard)?(\/)?$/, _pre.setPageTitle('Dashboard'), (req, res) => res.render('./console/dashboard'));
 
 
 // site setting
 router
     .route('/setting')
+    .all(_pre.setPageTitle('Website Configurations'))
     .get((req, res) => res.render('./console/setting'))
-    .put((req, res) => {
+    .patch((req, res) => {
         _siteConfig.updateSettings(req.body.siteSetting)
             .catch(err => {req.flash('error', err.toString());})
             .then(() => res.redirect('back'));
@@ -43,8 +44,9 @@ router
 // user profile
 router
     .route('/profile')
+    .all(_pre.setPageTitle('Profile'))
     .get((req, res) => res.render('./console/profile'))
-    .put((req, res) => {
+    .patch((req, res) => {
         UserModel.update({_id: req.user._id}, {$set: req.body.userProfile})
             .catch(err => {req.flash('error', err.toString());})
             .then(() => res.redirect('back'));
@@ -54,8 +56,9 @@ router
 // account security (password changing)
 router
     .route('/security')
+    .all(_pre.setPageTitle('Account Settings'))
     .get((req, res) => res.render('./console/security'))
-    .put((req, res) => {
+    .patch((req, res) => {
         if (!req.body.password.old || !req.body.password.new || !req.body.password.confirmation) {
             req.flash('error', 'PLEASE FILL ALL FIELDS.');
         } else if (req.body.password.new !== req.body.password.confirmation) {
@@ -75,6 +78,7 @@ router
 // media uploader  // todo: to be integrated in profile and media manager
 router
     .route('/upload') // todo: redirect back to media manager
+    .all(_pre.setPageTitle('Media Uploader'))
     .get((req, res) => res.render('./console/upload'))
     .post((req, res) => { // todo: will be responsible for all media uploading event and redirect user back
         MediaModel.mediaUpload(req, res, {fileSize: 85*1048576, files: 2})
@@ -90,13 +94,3 @@ router
 
 // route exports
 module.exports  = router;
-
-// todo - new features lists:
-// 1. (Profile) User profile picture upload (done)
-//              Password change (done)
-// 2. (content) Content manager
-//              Content export in JSON
-// 3. (media)   Media manager
-//              Media uploader
-// 4. (notice)  Notification
-// 5. (setting) Database backup

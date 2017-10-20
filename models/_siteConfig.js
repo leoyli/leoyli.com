@@ -23,7 +23,7 @@ let _siteConfigSchema       = new mongoose.Schema({
 
 // define new methods
 //// initialization (model)
-_siteConfigSchema.static('newSiteConfig', function() {
+_siteConfigSchema.static('siteInitialization', function() {
     this.findOne({}, (err, loadConfig) => {
         try {
             if (!loadConfig) this.create({});

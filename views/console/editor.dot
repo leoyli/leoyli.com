@@ -4,6 +4,7 @@
 <div>
     <p><a href="/post/{{? post._id }}{{= post._id }}{{?}}">< TURN BACK</a></p>
 </div>
+
 <form action="/post/editor/{{? post._id }}{{= `${post._id}?_method=PATCH` }}{{?}}" method="POST">
     <div class="form-row">
         <div class="form-group col-md-7">

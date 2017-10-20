@@ -15,7 +15,7 @@ const PostModel             = require('../models/post');
 //  FUNCTIONS
 // ==============================
 // middleware
-const gate                  = require('../config/middleware');
+const _pre                  = require('../config/middleware');
 
 
 
@@ -25,11 +25,11 @@ const gate                  = require('../config/middleware');
 // editor - new
 router
     .route(['/editor', '/editor/new'])
-    .all(gate.isSignedIn)
+    .all(_pre.isSignedIn, _pre.setPageTitle('New Post'))
     .get((req, res) => res.render('console/editor', {post : new PostModel({_id: null}), page: {}}))
-    .post(gate.putPostSanitizer, (req, res) => {
+    .post(_pre.putPostSanitizer, (req, res) => {
         PostModel.postsCreateThenAssociate(req.body.post, req.user)
-            .then(() => req.flash('info', 'Post have been successfully posted!')) // note: ()=> is ensured the sequence
+            .then(() => req.flash('info', 'Post have been successfully posted!'))
             .then(() => res.redirect('/post'))
             .catch(err => {
                 req.flash('error', err.toString());
@@ -41,11 +41,12 @@ router
 // editor - existed
 router
     .route('/editor/:POSTID')
-    .all(gate.isAuthorized)
+    .all(_pre.isAuthorized, _pre.setPageTitle('Post Editor'))
     .get((req, res) => {
         PostModel.findById(req.params.POSTID)
             .then(foundPost => {
                 if (!foundPost) return res.redirect('back');
+                _pre.setPageTitle(foundPost.title)(req, res);
                 foundPost.content = req.sanitize(foundPost.content);
                 res.render('console/editor', {post: foundPost, page: {}})
             })
@@ -54,7 +55,7 @@ router
                 res.redirect('back');
             });
     })
-    .patch(gate.putPostSanitizer, (req, res) => {
+    .patch(_pre.putPostSanitizer, (req, res) => {
         PostModel.findByIdAndUpdate(req.params.POSTID, req.body.post, {new: true})
             .then(foundPost => {
                 req.flash('info', 'Post have been successfully updated!');
@@ -80,11 +81,12 @@ router
 router.get('/:POSTID', (req, res) => {
     PostModel.findById(req.params.POSTID)
         .then(foundPost => {
+            _pre.setPageTitle(foundPost.title)(req, res);
             foundPost.content = req.sanitize(foundPost.content);
             res.render('post/post', {post: foundPost})
         })
         .catch(err => {
-            req.flash('error', 'UnfoundedPostError: NO POSTS BEING FOUND.');
+            if (err.name === 'CastError') req.flash('error', 'UnfoundedError: NO SUCH POST.');
             res.redirect('back');
         });
 });
@@ -92,8 +94,8 @@ router.get('/:POSTID', (req, res) => {
 
 // show - list
 router.get('/', (req, res) => {
-    PostModel.find({})
-        .then(AllPosts => res.render("post/", {posts : AllPosts.reverse()}))
+    PostModel.find()
+        .then(AllPosts => res.render("post/index", {posts : AllPosts.reverse()}))
         .catch(err => {
             req.flash('error', err.toString());
             res.redirect('back');

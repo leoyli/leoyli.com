@@ -13,11 +13,20 @@ const UserModel             = require('../models/user');
 
 
 // ==============================
+//  FUNCTIONS
+// ==============================
+// middleware
+const _pre                  = require('../config/middleware');
+
+
+
+// ==============================
 //  ROUTE RULES
 // ==============================
 // sign-up
 router
     .route('/signup')
+    .all(_pre.setPageTitle('Sign Up'))
     .get((req, res) => {
         if (req.isAuthenticated()) return res.redirect('/console/dashboard');
         res.render('authentication/signup')
@@ -41,6 +50,7 @@ router
 // sign-in
 router
     .route('/signin')
+    .all(_pre.setPageTitle('Sign In'))
     .get((req, res) => {
         if (req.isAuthenticated()) return res.redirect('/console');
         res.render('authentication/signin');

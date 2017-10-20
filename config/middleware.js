@@ -2,20 +2,20 @@ exports = module.exports = {};
 
 
 
-// local variables loading
-exports.localVariables = (req, res, next) => {
-    // always query site config with DB before move to the next()
-    const _siteConfig = require('./../models/_siteConfig');
-    _siteConfig.findOne({}, (err, loadedConfig) => {
-        // site config
-        res.locals._site = loadedConfig._doc;
-        res.locals._site.currentUser = req.user ? req.user._doc : {nickname: 'guest', _isGuest: true};
+// local variables pre-loading (global middleware)
+exports.preloadLocals = (req, res, next) => {
+    // flash message
+    res.locals._flash = {error: req.flash('error'), info: req.flash('info')};
 
-        // flash messages sorted as classes
-        res.locals._flash = {error: req.flash('error'), info: req.flash('info')};
-
-        next();
-    });
+    // site settings
+    require('./../models/_siteConfig').findOne()
+        .then(_siteConfig => {
+            if (!_siteConfig) throw new Error('Database corrupted, please restart the server for DB initialization.');
+            res.locals._site = _siteConfig._doc;
+            res.locals._site.currentUser = req.user ? req.user._doc : {nickname: 'guest', _isGuest: true};
+            next();
+        })
+        .catch(err => next(err, null));
 };
 
 
@@ -49,4 +49,14 @@ exports.isAuthorized = [exports.isSignedIn, _isAuthorized];
 exports.putPostSanitizer = (req, res, next) => {
     if (req.body.post.content) req.body.post.content = req.sanitize(req.body.post.content);
     next();
+};
+
+
+// section title handler
+exports.setPageTitle = (title) => {
+    return (req, res, next) => {
+        if (!next) next = () => {};
+        res.locals._site.title = `${res.locals._site.title} - ${title}`;
+        next();
+    }
 };

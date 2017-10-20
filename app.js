@@ -24,9 +24,8 @@ const
 mongoose.connect(process.env.DB, {useMongoClient: true});
 mongoose.Promise = Promise;
 
-// new site registration
-const _siteConfig           = require('./models/_siteConfig');
-_siteConfig.newSiteConfig();
+// site initialization (for the neo-installed website)
+require('./models/_siteConfig').siteInitialization();
 
 
 
@@ -53,13 +52,11 @@ app.use(flash());
 
 
 // passport
-const passportConfig        = require('./config/passport');
-passportConfig(app, passport);
+require('./config/passport')(app, passport);
 
 
 // middleware
-const middleware            = require('./config/middleware');
-app.use(middleware.localVariables);
+app.use(require('./config/middleware').preloadLocals);
 
 
 
