@@ -31,8 +31,8 @@ router
         if (req.isAuthenticated()) return res.redirect('/console/dashboard');
         res.render('authentication/signup')
     })
-    .post((req, res) => {
-        UserModel.register(new UserModel(req.body), req.body.password, (err, registeredUser) => {
+    .post(_pre.passwordValidation, (req, res) => {
+        UserModel.register(new UserModel(req.body), req.body.password.new, (err, registeredUser) => {
             if (err) {
                 if (err.code === 'MongoError') req.flash('error', 'DataExistsError: This username have already been taken.'); // todo: specific error code
                 else req.flash('error', err.toString());

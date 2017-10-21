@@ -58,20 +58,12 @@ router
     .route('/security')
     .all(_pre.setPageTitle('Account Settings'))
     .get((req, res) => res.render('./console/security'))
-    .patch((req, res) => {
-        if (!req.body.password.old || !req.body.password.new || !req.body.password.confirmation) {
-            req.flash('error', 'PLEASE FILL ALL FIELDS.');
-        } else if (req.body.password.new !== req.body.password.confirmation) {
-            req.flash('error', 'PASSWORD DOES NOT MATCH THE CONFIRMATION.');
-        } else if (req.body.password.old === req.body.password.new) {
-            req.flash('error', 'PASSWORD CANNOT BE SET THE SAME.');
-        } else {
-            return req.user.changePassword(req.body.password.old, req.body.password.new, err => {
-                if (err) req.flash('error', err.toString());
-                else req.flash('info', 'PASSWORD HAVE BEEN SUCCESSFULLY CHANGED.');
-                res.redirect('back');
-            });
-        }
+    .patch(_pre.passwordValidation, (req, res) => {
+        req.user.changePassword(req.body.password.old, req.body.password.new, err => {
+            if (err) req.flash('error', err.toString());
+            else req.flash('info', 'Password have been successfully changed.');
+            res.redirect('back');
+        });
     });
 
 

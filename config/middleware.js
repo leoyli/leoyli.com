@@ -53,6 +53,21 @@ exports.putPostSanitizer = (req, res, next) => {
 };
 
 
+// password validating rules
+exports.passwordValidation = (req, res, next) => {
+    if (!req.body.password.old || !req.body.password.new || !req.body.password.confirmed) {
+        req.flash('error', 'Please fill all fields.');
+    } else if (req.body.password.new !== req.body.password.confirmed) {
+        req.flash('error', 'Two new password does not the same.');
+    } else if (req.body.password.old === req.body.password.new) {
+        req.flash('error', 'Password cannot be the same as the old one.');
+    } else {
+        return next();
+    }
+    res.redirect('back');
+};
+
+
 // section title handler
 exports.setPageTitle = (title) => {
     return (req, res, next) => {
