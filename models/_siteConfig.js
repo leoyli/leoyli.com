@@ -5,10 +5,9 @@ const
 
 // define new (DB)data schema   // todo: added CDN object for the header
 let _siteConfigSchema       = new mongoose.Schema({
-    title                   : {type: String, default: 'NEW WEBSITE'},
-    description             : {type: String, default: ''},
-    keywords                : {type: String, default: ''},
-    domain                  : {type: String, default: ''},
+    title                   : {type: String, default: 'New Website'},
+    description             : {type: String, default: 'n/a'},
+    keywords                : {type: String, default: 'n/a'},
     time: {
         timezone            : {type: String, default: ''},
         format              : {type: String, default: 'default'}

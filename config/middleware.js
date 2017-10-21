@@ -12,7 +12,8 @@ exports.preloadLocals = (req, res, next) => {
         .then(_siteConfig => {
             if (!_siteConfig) throw new Error('Database corrupted, please restart the server for DB initialization.');
             res.locals._site = _siteConfig._doc;
-            res.locals._site.currentUser = req.user ? req.user._doc : {nickname: 'guest', _isGuest: true};
+            res.locals._site.titleTag = res.locals._site.title;
+            res.locals._site.client = req.user ? req.user._doc : {nickname: 'guest', isGuest: true};
             next();
         })
         .catch(err => next(err, null));
@@ -56,7 +57,7 @@ exports.putPostSanitizer = (req, res, next) => {
 exports.setPageTitle = (title) => {
     return (req, res, next) => {
         if (!next) next = () => {};
-        res.locals._site.title = `${res.locals._site.title} - ${title}`;
+        res.locals._site.titleTag = `${res.locals._site.titleTag} - ${title}`;
         next();
     }
 };

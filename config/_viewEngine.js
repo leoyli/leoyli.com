@@ -67,11 +67,14 @@ function Template(filePath, reference, sections) {
     this.def = new PreCompiledDef(reference);
 
     // templateFn assemble
-    this.templateFnEnsemble = {};
+    this.templateFnSet = {};
     // templateFn compilation
-    for (const section in this.sections) {
-        if (this.sections.hasOwnProperty(section)) {
-            this.templateFnEnsemble[section] = doT.template(this.sections[section], this.configs, this.def);
+    for (const item in this.sections) {
+        if (this.sections.hasOwnProperty(item)) {
+            // comments stripping (defaulted in HTML)
+            if (this.configs.stripComment) this.sections[item] = this.sections[item].replace(this.configs.comment, '');
+            // doT compilation
+            this.templateFnSet[item] = doT.template(this.sections[item], this.configs, this.def);
         }
     }
 }
@@ -79,7 +82,7 @@ function Template(filePath, reference, sections) {
 
 Template.prototype.render = function() {
     try {
-        return this.templateFnEnsemble.main(...this.varValue);
+        return this.templateFnSet.main(...this.varValue);
     } catch (err) {
         throw new Error(`Failed to render: ('${this.filePath}'):\n${err.toString()}`);
     }
@@ -96,6 +99,7 @@ function PreCompiledDef(reference) {
 
 function Settings(varNames) {
     this.doTConfig = {
+        comment:            /<!--([\s\S]+?)-->/g,
         evaluate:           /\{\{([\s\S]+?)\}\}/g,
         interpolate:        /\{\{=([\s\S]+?)\}\}/g,
         encode:             /\{\{!([\s\S]+?)\}\}/g,
@@ -104,6 +108,7 @@ function Settings(varNames) {
         conditional:        /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
         iterate:            /\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
         varname:            varNames || 'it',
+        stripComment:       true,
         strip:              true,
         append:             true,
         selfcontained:      false,
