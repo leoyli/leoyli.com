@@ -1,17 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>{{= _site.titleTag }}</title>
+
+    <!-- meta tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="{{= _site.description }}">
     <meta name="keywords" content="{{= _site.keywords }}">
-    <title>{{= _site.title }}</title>
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+        integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
     <link rel="stylesheet" href="/stylesheets/style.css" />
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
 
-<body>
+<body class="bg-dark">
 <header>
-{{# def.partial('_navigator') }}
+    {{# def.partial('_navigator') }}
 </header>
+
+<div class="bg-white pb-5 pt-4">
+    <!-- client notifications -->
+    <div class="container pb-2">
+        {{? _flash.error && _flash.error.length > 0 }}
+            <div class="alert alert-danger" role="alert">{{= _flash.error }}</div>
+        {{?}}
+        {{? _flash.info && _flash.info.length > 0 }}
+            <div class="alert alert-success" role="alert">{{= _flash.info }}</div>
+        {{?}}
+    </div>
+
+    <!-- main content -->
+    <div class="container d-flex flex-row-reverse pb-4">
+        <!-- content outline -->
+        <div class="col-3 d-none d-lg-block"></div>
+        <!-- content field -->
+        <div class="col-lg-9">

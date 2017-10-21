@@ -1,23 +1,20 @@
 {{# def.partial('_header') }}
 
-<h1>SIGN IN</h1>
-<div>&nbsp;</div>
+<h1 class="mb-4">SIGN IN</h1>
 
 <form action="/signin" method="POST">
     <div class="form-row">
-        <div class="form-group col-md-12">
-            <label for="username">username</label>
-            <input class="form-control" id="email" name="email" placeholder="email or username">
+        <div class="form-group col-12">
+            <label class="font-weight-bold" for="username">Email / Username</label>
+            <input class="form-control" id="email" name="email" placeholder="Email / Username">
         </div>
-        <div class="form-group col-md-12">
-            <label for="password">password</label>
-            <input class="form-control" id="password" name="password" placeholder="password" type="password">
+        <div class="form-group col-12">
+            <label class="font-weight-bold" for="password">Password</label>
+            <input class="form-control" id="password" name="password" placeholder="Password" type="password">
         </div>
     </div>
     <div class="form-row">
-        <div class="col-md-12">
-            <button class="btn btn-primary">SUBMIT</button>
-        </div>
+        <button class="btn btn-primary">SUBMIT</button>
     </div>
 </form>
 

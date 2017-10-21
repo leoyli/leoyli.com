@@ -1,7 +1,6 @@
 {{# def.partial('_header') }}
 
-<h1>SIGN UP</h1>
-<div>&nbsp;</div>
+<h1 class="mb-4">SIGN UP</h1>
 
 <form action="/signup" method="POST">
     <div class="form-row">

@@ -2,21 +2,19 @@
 
 <div>
     <p><a href="/post">＜ BACK TO INDEX</a></p>
-    <h1>{{= post.title }}</h1>
+    <div class="h2">{{= post.title }}</div>
     <div id="{{= post._id }}" class="row">
-        <div class="col-md-8">
+        <div class="col-md-9">
             {{= post.provider.username }}
             ｜<a href="/post/editor/{{= post._id }}" target="_self">(edit)</a>
             ｜<a href="/post/class/{{= post.class }}" target="_self">{{= post.class }}</a>
-            ｜Times of revised: {{= post._revised }}
+            ｜Revised: {{= post._revised }}
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3 text-lg-right">
             <i>{{= post._updated.toDateString() }}</i>
         </div>
     </div>
-    <div>&nbsp;</div>
-    <img src="{{= post.featured }}" style="width:800px">
-    <div>&nbsp;</div>
+    <img class="img-fluid pb-2 pt-2" src="{{= post.featured }}">
     <div>{{= post.content }}</div>
 </div>
 

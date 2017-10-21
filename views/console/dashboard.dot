@@ -1,5 +1,5 @@
 {{# def.partial('_header') }}
 
-<h1>DASHBOARD</h1>
+<h1 class="mb-4">DASHBOARD</h1>
 
 {{# def.partial('_footer') }}

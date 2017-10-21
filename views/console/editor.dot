@@ -1,6 +1,6 @@
 {{# def.partial('_header') }}
 
-<h1>{{= page.title = post._id ? 'UPDATE A POST' : 'WRITE A POST' }}</h1>
+<h1 class="mb-4">{{= page.title = post._id ? 'UPDATE A POST' : 'WRITE A POST' }}</h1>
 <div>
     <p><a href="/post/{{? post._id }}{{= post._id }}{{?}}">< TURN BACK</a></p>
 </div>
@@ -8,35 +8,32 @@
 <form action="/post/editor/{{? post._id }}{{= `${post._id}?_method=PATCH` }}{{?}}" method="POST">
     <div class="form-row">
         <div class="form-group col-md-7">
-            <label for="postTitle">Title</label>
+            <label class="font-weight-bold" for="postTitle">Title</label>
             <input {{? post.title }}{{= `value="${post.title}"` }}{{?}} class="form-control" name="post[title]" placeholder="Enter the post title">
         </div>
         <div class="form-group col-md-5">
-            <label for="postClass">Category</label>
+            <label class="font-weight-bold" for="postClass">Category</label>
             <input {{? post.class }}{{= `value="${post.class}"` }}{{?}} class="form-control" name="post[class]" placeholder="Enter the category">
         </div>
     </div>
     <div class="form-row">
-        <div class="form-group col-md-12">
-            <label for="postFtImg">Featured Image Address</label>
+        <div class="form-group col-12">
+            <label class="font-weight-bold" for="postFtImg">Featured Image Address</label>
             <input {{? post.featured }}{{= `value="${post.featured}"` }}{{?}} class="form-control" name="post[featured]" placeholder="Enter URL for a featured image/video">
         </div>
-        <div class="form-group col-md-12">
-            <label for="postContent">Content</label>
+        <div class="form-group col-12">
+            <label class="font-weight-bold" for="postContent">Content</label>
             <textarea class="form-control" name="post[content]" rows="7" placeholder="Enter the post content">{{? post.content }}{{= post.content }}{{?}}</textarea>
         </div>
-        <div class="col-md-12">
-            <button class="btn btn-primary">{{= page.button = post._id ? 'UPDATE' : 'SUBMIT' }}</button>
+        <div class="text-right">
+            {{? post._id }}
+                <form class="d-inline" action="/post/editor/{{= post._id }}?_method=DELETE" method="POST">
+                    <button class="btn btn-outline-danger text-uppercase">DELETE</button>
+                </form>
+            {{?}}
+            <button class="btn btn-outline-primary text-uppercase">{{= page.button = post._id ? 'Update' : 'Submit' }}</button>
         </div>
     </div>
 </form>
-
-{{? post._id }}
-<form action="/post/editor/{{= post._id }}?_method=DELETE" method="POST">
-    <div class="col-md-12">
-        <button class="btn btn-danger">DELETE</button>
-    </div>
-</form>
-{{?}}
 
 {{# def.partial('_footer') }}

@@ -1,7 +1,7 @@
 {{# def.partial('_header') }}
 
-<h1>{{= message }}</h1>
-<h2>{{= error.status }}</h2>
+<h1 class="mb-4">{{= message }}</h1>
+<h2 class="mb-4">{{= error.status }}</h2>
 <pre>{{= error.stack }}</pre>
 
 {{# def.partial('_footer') }}

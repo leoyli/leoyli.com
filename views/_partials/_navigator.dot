@@ -1,7 +1,39 @@
-{{? _flash.error && _flash.error.length > 0 }}
-    <div class="alert alert-danger" role="alert">{{= _flash.error }}</div>
-{{?}}
+<!-- client notifications -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
+    <div class="container">
+        <a class="navbar-brand mb-0 h1" href="/">{{= _site.title }}</a>
 
-{{? _flash.info && _flash.info.length > 0 }}
-    <div class="alert alert-success" role="alert">{{= _flash.info }}</div>
-{{?}}
+        <!-- Nav-bar items -->
+        <div class="collapse navbar-collapse justify-content-end text-uppercase">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/seed">Seed</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/post">Blog</a>
+                </li>
+                {{? _site.client.isGuest }}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/signin">Sign In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/signup">Sign Up</a>
+                    </li>
+                {{?}}
+                {{? !_site.client.isGuest }}
+                    <li class="nav-item dropdown text-capitalize">
+                        <a class="nav-link dropdown-toggle text-uppercase" href="#" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dashboard</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/post/editor">New Post</a>
+                            <a class="dropdown-item" href="/console/upload">Media Uploader</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/console/security">Account Settings</a>
+                            <a class="dropdown-item" href="/signout">Sign Out</a>
+                        </div>
+                    </li>
+                {{?}}
+            </ul>
+        </div>
+    </div>
+</nav>
