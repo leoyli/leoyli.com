@@ -29,7 +29,7 @@ router
     .all(_pre.setPageTitle('Sign Up'))
     .get((req, res) => {
         if (req.isAuthenticated()) return res.redirect('/console/dashboard');
-        res.render('authentication/signup')
+        res.render('./console/account/signup')
     })
     .post(_pre.passwordValidation, (req, res) => {
         UserModel.register(new UserModel(req.body), req.body.password.new, (err, registeredUser) => {
@@ -53,7 +53,7 @@ router
     .all(_pre.setPageTitle('Sign In'))
     .get((req, res) => {
         if (req.isAuthenticated()) return res.redirect('/console');
-        res.render('authentication/signin');
+        res.render('./console/account/signin');
     })
     .post((req, res) => { // tofix: drier codes needed
         passport.authenticate('local', async (err, authUser) => {

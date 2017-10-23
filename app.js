@@ -5,7 +5,6 @@ const
     express                 = require('express'),
     expressSanitizer        = require('express-sanitizer'),
     flash                   = require('connect-flash'),
-    dot                     = require('dot'),
     path                    = require('path'),
     logger                  = require('morgan'),
     cookieParser            = require('cookie-parser'),
@@ -35,7 +34,8 @@ require('./models/_siteConfig').siteInitialization();
 // view engine
 app.set('view engine', 'dot');
 app.set('views', path.join(__dirname, './views'));
-app.set('partials', path.join(__dirname, './views/_partials'));
+app.set('consolePartials', path.join(__dirname, './views/console/_partials'));
+app.set('partials', path.join(__dirname, './views/theme/_partials'));
 app.engine('dot', require('./config/_viewEngine').__express);
 
 
@@ -44,7 +44,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, './public')));
 app.use(expressSanitizer());
 app.use(methodOverride('_method'));
 app.use(flash());

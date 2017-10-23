@@ -5,15 +5,15 @@
 <form action="/console/security/?_method=PATCH" method="POST">
     <div class="form-group">
         <label class="font-weight-bold" for="username">Old password</label>
-        <input class="form-control" name="password[old]" type="password" >
+        <input class="form-control" name="password[old]" type="password" />
     </div>
     <div class="form-group">
         <label class="font-weight-bold" for="password">New password</label>
-        <input class="form-control" name="password[new]" type="password" >
+        <input class="form-control" name="password[new]" type="password" />
     </div>
     <div class="form-group">
         <label class="font-weight-bold" for="password">New password (again)</label>
-        <input class="form-control" name="password[confirmed]" type="password" >
+        <input class="form-control" name="password[confirmed]" type="password" />
     </div>
     <div class="text-right">
         <button class="btn btn-outline-primary text-uppercase">Submit</button>

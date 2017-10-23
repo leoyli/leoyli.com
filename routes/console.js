@@ -45,7 +45,7 @@ router
 router
     .route('/profile')
     .all(_pre.setPageTitle('Profile'))
-    .get((req, res) => res.render('./console/profile'))
+    .get((req, res) => res.render('./console/account/profile'))
     .patch((req, res) => {
         UserModel.update({_id: req.user._id}, {$set: req.body.userProfile})
             .catch(err => {req.flash('error', err.toString());})
@@ -57,7 +57,7 @@ router
 router
     .route('/security')
     .all(_pre.setPageTitle('Account Settings'))
-    .get((req, res) => res.render('./console/security'))
+    .get((req, res) => res.render('./console/account/security'))
     .patch(_pre.passwordValidation, (req, res) => {
         req.user.changePassword(req.body.password.old, req.body.password.new, err => {
             if (err) req.flash('error', err.toString());

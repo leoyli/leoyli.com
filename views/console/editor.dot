@@ -9,26 +9,31 @@
     <div class="form-row">
         <div class="form-group col-md-7">
             <label class="font-weight-bold" for="postTitle">Title</label>
-            <input {{? post.title }}{{= `value="${post.title}"` }}{{?}} class="form-control" name="post[title]" placeholder="Enter the post title">
+            <input {{? post.title }}{{= `value="${post.title}"` }}{{?}}
+                    class="form-control" name="post[title]" placeholder="Enter the post title" />
         </div>
         <div class="form-group col-md-5">
             <label class="font-weight-bold" for="postClass">Category</label>
-            <input {{? post.class }}{{= `value="${post.class}"` }}{{?}} class="form-control" name="post[class]" placeholder="Enter the category">
+            <input {{? post.class }}{{= `value="${post.class}"` }}{{?}}
+                    class="form-control" name="post[class]" placeholder="Enter the category" />
         </div>
     </div>
     <div class="form-group">
         <label class="font-weight-bold" for="postFtImg">Featured Image Address</label>
-        <input {{? post.featured }}{{= `value="${post.featured}"` }}{{?}} class="form-control" name="post[featured]" placeholder="Enter URL for a featured image/video">
+        <input {{? post.featured }}{{= `value="${post.featured}"` }}{{?}}
+                class="form-control" name="post[featured]" placeholder="Enter URL for a featured image/video" />
     </div>
     <div class="form-group">
         <label class="font-weight-bold" for="postContent">Content</label>
-        <textarea class="form-control" name="post[content]" rows="7" placeholder="Enter the post content">{{? post.content }}{{= post.content }}{{?}}</textarea>
+        <textarea class="form-control" name="post[content]" rows="7" placeholder="Enter the post content">
+            {{? post.content }}{{= post.content }}{{?}}
+        </textarea>
     </div>
     <div class="text-right">
         {{? post._id }}
-        <form class="d-inline" action="/post/editor/{{= post._id }}?_method=DELETE" method="POST">
-            <button class="btn btn-outline-danger text-uppercase">DELETE</button>
-        </form>
+            <form class="d-inline" action="/post/editor/{{= post._id }}?_method=DELETE" method="POST">
+                <button class="btn btn-outline-danger text-uppercase">DELETE</button>
+            </form>
         {{?}}
         <button class="btn btn-outline-primary text-uppercase">{{= page.button = post._id ? 'Update' : 'Submit' }}</button>
     </div>

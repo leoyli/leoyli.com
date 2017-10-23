@@ -8,7 +8,7 @@ const
 //  ROUTE RULES
 // ==============================
 router.get('/', (req, res) => {
-    res.render('index');
+    res.render('./theme/index');
 });
 
 

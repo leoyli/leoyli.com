@@ -26,7 +26,7 @@ const _pre                  = require('../config/middleware');
 router
     .route(['/editor', '/editor/new'])
     .all(_pre.isSignedIn, _pre.setPageTitle('New Post'))
-    .get((req, res) => res.render('console/editor', {post : new PostModel({_id: null}), page: {}}))
+    .get((req, res) => res.render('./console/editor', {post : new PostModel({_id: null}), page: {}}))
     .post(_pre.putPostSanitizer, (req, res) => {
         PostModel.postsCreateThenAssociate(req.body.post, req.user)
             .then(() => req.flash('info', 'Post have been successfully posted!'))
@@ -48,7 +48,7 @@ router
                 if (!foundPost) return res.redirect('back');
                 _pre.setPageTitle(foundPost.title)(req, res);
                 foundPost.content = req.sanitize(foundPost.content);
-                res.render('console/editor', {post: foundPost, page: {}})
+                res.render('./console/editor', {post: foundPost, page: {}})
             })
             .catch(err => {
                 req.flash('error', err.toString());
@@ -83,7 +83,7 @@ router.get('/:POSTID', (req, res) => {
         .then(foundPost => {
             _pre.setPageTitle(foundPost.title)(req, res);
             foundPost.content = req.sanitize(foundPost.content);
-            res.render('post/post', {post: foundPost})
+            res.render('./theme/post/post', {post: foundPost})
         })
         .catch(err => {
             if (err.name === 'CastError') req.flash('error', 'UnfoundedError: NO SUCH POST.');
@@ -95,7 +95,7 @@ router.get('/:POSTID', (req, res) => {
 // show - list
 router.get('/', (req, res) => {
     PostModel.find()
-        .then(AllPosts => res.render("post/index", {posts : AllPosts.reverse()}))
+        .then(AllPosts => res.render("./theme/post/index", {posts : AllPosts.reverse()}))
         .catch(err => {
             req.flash('error', err.toString());
             res.redirect('back');
