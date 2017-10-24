@@ -65,4 +65,7 @@ app.yaml
 
 # local system files
 .DS_Store
+package-lock.json
+___playground.js
 media/
+*.map

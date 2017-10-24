@@ -26,7 +26,7 @@ const _pre                  = require('../config/middleware');
 // sign-up
 router
     .route('/signup')
-    .all(_pre.setPageTitle('Sign Up'))
+    .all(_pre.prependTitleTag('Sign Up'))
     .get((req, res) => {
         if (req.isAuthenticated()) return res.redirect('/console/dashboard');
         res.render('./console/account/signup')
@@ -50,7 +50,7 @@ router
 // sign-in
 router
     .route('/signin')
-    .all(_pre.setPageTitle('Sign In'))
+    .all(_pre.prependTitleTag('Sign In'))
     .get((req, res) => {
         if (req.isAuthenticated()) return res.redirect('/console');
         res.render('./console/account/signin');

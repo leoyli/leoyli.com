@@ -1,0 +1,21 @@
+// variable
+$footerColor: #AFAFAF;
+
+
+// identifier
+footer {
+    hr {
+        border-width: 2px;
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    #sitemap a {
+        color: $footerColor;
+        &:hover {
+            color: #3D9970;
+            text-decoration: none;
+        }
+    }
+    #copyright {
+        color: $footerColor;
+    }
+}

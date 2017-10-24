@@ -18,6 +18,7 @@ const docLists              = new mongoose.Schema({
 });
 
 const UserSchema            = new mongoose.Schema({
+    _role                   : {type: String, default: 'admin'},
     _isActive               : {type: String, default: false},
     username                : {type: String, unique: true, lowercase: true},
     email                   : {type: String, unique: true, required: true,

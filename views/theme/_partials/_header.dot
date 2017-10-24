@@ -11,13 +11,14 @@
 
     <!-- stylesheets -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
-        integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/colors/3.0.0/css/colors.min.css" />
     <link rel="stylesheet" href="/stylesheets/style.css" />
 </head>
 
-<body class="bg-dark">
+<body class="bg-black">
 <header>
-    {{# def.partial('_navigator') }}
+    {{# def.partial('_navibar') }}
 </header>
 
 <div class="bg-white pb-5 pt-4">
@@ -34,6 +35,6 @@
     <!-- main content -->
     <div class="container d-flex flex-row-reverse pb-4">
         <!-- content outline -->
-        <div class="col-3 d-none d-lg-block"></div>
+        <div class="col-3 d-none d-lg-block"><!-- sidebar placeholder --></div>
         <!-- content field -->
         <div class="col-lg-9">

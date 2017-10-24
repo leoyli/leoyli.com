@@ -18,7 +18,7 @@ const _siteConfig           = require('../models/_siteConfig');
 // ==============================
 // middleware
 const _pre                  = require('../config/middleware');
-router.all('*', _pre.isSignedIn, _pre.setPageTitle('Console'));
+router.all('*', _pre.isSignedIn, _pre.prependTitleTag('Console'));
 
 
 
@@ -26,13 +26,13 @@ router.all('*', _pre.isSignedIn, _pre.setPageTitle('Console'));
 //  ROUTE RULES
 // ==============================
 // dashboard
-router.get(/^\/(dashboard)?(\/)?$/, _pre.setPageTitle('Dashboard'), (req, res) => res.render('./console/dashboard'));
+router.get(/^\/(dashboard)?(\/)?$/, _pre.prependTitleTag('Dashboard'), (req, res) => res.render('./console/dashboard'));
 
 
 // site setting
 router
     .route('/setting')
-    .all(_pre.setPageTitle('Website Configurations'))
+    .all(_pre.prependTitleTag('Website Configurations'))
     .get((req, res) => res.render('./console/setting'))
     .patch((req, res) => {
         _siteConfig.updateSettings(req.body.siteSetting)
@@ -44,7 +44,7 @@ router
 // user profile
 router
     .route('/profile')
-    .all(_pre.setPageTitle('Profile'))
+    .all(_pre.prependTitleTag('Profile'))
     .get((req, res) => res.render('./console/account/profile'))
     .patch((req, res) => {
         UserModel.update({_id: req.user._id}, {$set: req.body.userProfile})
@@ -56,7 +56,7 @@ router
 // account security (password changing)
 router
     .route('/security')
-    .all(_pre.setPageTitle('Account Settings'))
+    .all(_pre.prependTitleTag('Account Settings'))
     .get((req, res) => res.render('./console/account/security'))
     .patch(_pre.passwordValidation, (req, res) => {
         req.user.changePassword(req.body.password.old, req.body.password.new, err => {
@@ -70,7 +70,7 @@ router
 // media uploader  // todo: to be integrated in profile and media manager
 router
     .route('/upload') // todo: redirect back to media manager
-    .all(_pre.setPageTitle('Media Uploader'))
+    .all(_pre.prependTitleTag('Media Uploader'))
     .get((req, res) => res.render('./console/upload'))
     .post((req, res) => { // todo: will be responsible for all media uploading event and redirect user back
         MediaModel.mediaUpload(req, res, {fileSize: 85*1048576, files: 2})

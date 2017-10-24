@@ -69,7 +69,15 @@ exports.passwordValidation = (req, res, next) => {
 
 
 // section title handler
-exports.setPageTitle = (title) => {
+exports.prependTitleTag = (title) => {
+    return (req, res, next) => {
+        if (!next) next = () => {};
+        res.locals._site.titleTag = `${title} - ${res.locals._site.titleTag}`;
+        next();
+    }
+};
+
+exports.appendTitleTag = (title) => {
     return (req, res, next) => {
         if (!next) next = () => {};
         res.locals._site.titleTag = `${res.locals._site.titleTag} - ${title}`;

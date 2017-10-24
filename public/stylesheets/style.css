@@ -1,0 +1,17 @@
+footer hr {
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+footer #sitemap a {
+    color: #AFAFAF;
+}
+
+footer #sitemap a:hover {
+    color: #3D9970;
+    text-decoration: none;
+}
+
+footer #copyright {
+    color: #AFAFAF;
+}

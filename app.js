@@ -31,6 +31,9 @@ require('./models/_siteConfig').siteInitialization();
 // ==============================
 //  CONFIG
 // ==============================
+// express
+app.set('x-powered-by', false);
+
 // view engine
 app.set('view engine', 'dot');
 app.set('views', path.join(__dirname, './views'));

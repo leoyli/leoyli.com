@@ -25,7 +25,7 @@ const _pre                  = require('../config/middleware');
 // editor - new
 router
     .route(['/editor', '/editor/new'])
-    .all(_pre.isSignedIn, _pre.setPageTitle('New Post'))
+    .all(_pre.isSignedIn, _pre.prependTitleTag('New Post'))
     .get((req, res) => res.render('./console/editor', {post : new PostModel({_id: null}), page: {}}))
     .post(_pre.putPostSanitizer, (req, res) => {
         PostModel.postsCreateThenAssociate(req.body.post, req.user)
@@ -41,12 +41,12 @@ router
 // editor - existed
 router
     .route('/editor/:POSTID')
-    .all(_pre.isAuthorized, _pre.setPageTitle('Post Editor'))
+    .all(_pre.isAuthorized, _pre.prependTitleTag('Post Editor'))
     .get((req, res) => {
         PostModel.findById(req.params.POSTID)
             .then(foundPost => {
                 if (!foundPost) return res.redirect('back');
-                _pre.setPageTitle(foundPost.title)(req, res);
+                _pre.prependTitleTag(foundPost.title)(req, res);
                 foundPost.content = req.sanitize(foundPost.content);
                 res.render('./console/editor', {post: foundPost, page: {}})
             })
@@ -81,7 +81,7 @@ router
 router.get('/:POSTID', (req, res) => {
     PostModel.findById(req.params.POSTID)
         .then(foundPost => {
-            _pre.setPageTitle(foundPost.title)(req, res);
+            _pre.prependTitleTag(foundPost.title)(req, res);
             foundPost.content = req.sanitize(foundPost.content);
             res.render('./theme/post/post', {post: foundPost})
         })
