@@ -1,17 +1,45 @@
-footer hr {
-    border-width: 2px;
-    border-color: rgba(255, 255, 255, 0.1);
+header nav {
+    font-size: 0.85rem;
+    font-weight: 600;
 }
 
-footer #sitemap a {
-    color: #AFAFAF;
+footer {
+    color: #afafaf;
 }
 
-footer #sitemap a:hover {
-    color: #3D9970;
+footer #siteMap a {
+    color: inherit;
+}
+
+footer #siteMap a::before {
+    color: rgba(128, 128, 128, 0.2);
+    padding-right: 5px;
+}
+
+footer #siteMap a:hover, footer #siteMap a:hover::before {
+    color: #3d9970;
     text-decoration: none;
 }
 
-footer #copyright {
-    color: #AFAFAF;
+footer #misc {
+    border-top: 2px solid rgba(128, 128, 128, 0.2);
+}
+
+footer #misc #copyright {
+    color: inherit;
+    font-size: 0.85rem;
+}
+
+footer #misc #licence {
+    color: #757575;
+    font-size: 0.80rem;
+}
+
+footer #misc #licence a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+footer #misc #licence a:hover {
+    color: #afafaf;
 }

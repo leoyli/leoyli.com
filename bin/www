@@ -7,20 +7,30 @@
 const
     app         = require('../app'),
     debug       = require('debug')('leoyli-main:server'),
-    http        = require('http');
+    fs          = require('fs'),
+    http2       = require('spdy');
+
+/**
+ * Get SSL credentials as options
+ */
+
+const options = {
+    key         : fs.readFileSync('SSL/server.key', 'utf8'),
+    cert        : fs.readFileSync('SSL/server.crt', 'utf8'),
+};
 
 /**
  * Get port from environment and store in Express.
  */
 
-const port        = normalizePort(process.env.PORT || '3000');
+const port      = normalizePort(process.env.PORT || '3443');
 app.set('port', port);
 
 /**
- * Create HTTP server.
+ * Create HTTP2 server.
  */
 
-const server      = http.createServer(app);
+const server    = http2.createServer(options, app);
 
 /**
  * Listen on provided port, on all network interfaces.

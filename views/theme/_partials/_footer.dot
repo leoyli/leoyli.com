@@ -5,29 +5,44 @@
 
 <footer class="mt-4 pt-4 pb-4">
     <!-- site map -->
-    <div class="container d-sm-flex text-light" id="sitemap">
+    <div class="container d-sm-flex text-light" id="siteMap">
         <div class="col-lg-2 pb-4">
             <div class="h5 text-uppercase">Info</div>
             <ul class="list-unstyled">
-                <li><a href="/">About Me</a></li>
-                <li><a href="/">My Project</a></li>
+                <li><a class="fa fa-chevron-right" href="/">About Me</a></li>
+                <li><a class="fa fa-chevron-right" href="/">My Projects</a></li>
+                <li><a class="fa fa-chevron-right" href="/">Site Policy</a></li>
             </ul>
         </div>
 
         <div class="col-lg-2 pb-4">
             <div class="h5 text-uppercase">Contact</div>
             <ul class="list-unstyled">
-                <li><a href="/">Contact Me</a></li>
-                <li><a href="/">Content Report</a></li>
-                <li><a href="/">Cooperate Propose</a></li>
+                <li><a class="fa fa-chevron-right" href="/">Contact Me</a></li>
+                <li><a class="fa fa-chevron-right" href="/">Content Report</a></li>
+                <li><a class="fa fa-chevron-right" href="/">Cooperate</a></li>
             </ul>
         </div>
     </div>
 
-    <!-- copyright -->
-    <div class="container text-center pt-3">
-        <hr />
-        <p id="copyright">{{= new Date().getFullYear() }} &copy; {{= _site.title }}</p>
+    <!-- misc -->
+    <div class="container d-md-flex pt-3 text-justify" id="misc">
+        <!-- copyright -->
+        <div class="col-md-8" id="sitePolicy">
+            <p id="copyright">
+                {{= new Date().getFullYear() }} &copy; {{= _site.title }}.
+            </p>
+            <p id="licence">
+                Except as otherwise noted, the content of this site is licensed under the
+                <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">
+                    CC Attribution 4.0 International License</a>, and code samples are licensed under the
+                <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">
+                    Apache 2.0 License</a>.
+            </p>
+        </div>
+
+        <!-- social media -->
+        <div class="col-md-4 text-md-right" id="sociallinks"><!-- social media placeholder --></div>
     </div>
 </footer>
 

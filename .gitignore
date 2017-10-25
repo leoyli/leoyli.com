@@ -1,6 +1,5 @@
 # Logs
 logs
-*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -16,9 +15,6 @@ lib-cov
 
 # Coverage directory used by tools like istanbul
 coverage
-
-# nyc test coverage
-.nyc_output
 
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
@@ -48,9 +44,6 @@ typings/
 # Optional REPL history
 .node_repl_history
 
-# Output of 'npm pack'
-*.tgz
-
 # Yarn Integrity file
 .yarn-integrity
 
@@ -62,6 +55,9 @@ typings/
 
 # google cloud platform env.
 app.yaml
+
+# self-signed SSL keys folder
+SSL/
 
 # local system files
 .DS_Store

@@ -1,21 +1,46 @@
-// variable
-$footerColor: #AFAFAF;
+// palette
+$footerMarkColor    : rgba(128, 128, 128, 0.2);
+$footerTextColor    : rgba(175, 175, 175, 1);
+$oliver             : rgba(61, 153, 112, 1);
 
 
-// identifier
-footer {
-    hr {
-        border-width: 2px;
-        border-color: rgba(255, 255, 255, 0.1);
+// classes
+header {
+    nav {
+        font-size: 0.85rem;
+        font-weight: 600;
     }
-    #sitemap a {
-        color: $footerColor;
-        &:hover {
-            color: #3D9970;
+}
+
+footer {
+    color: $footerTextColor;
+    #siteMap a {
+        color: inherit;
+        &::before {
+            color: $footerMarkColor;
+            padding-right: 5px;
+        }
+        &:hover, &:hover::before {
+            color: $oliver;
             text-decoration: none;
         }
     }
-    #copyright {
-        color: $footerColor;
+    #misc {
+        border-top: 2px solid $footerMarkColor;
+        #copyright {
+            color: inherit;
+            font-size: 0.85rem;
+        }
+        #licence {
+            color: $footerTextColor/1.5;
+            font-size: 0.80rem;
+            a {
+                color: inherit;
+                text-decoration: underline;
+            }
+            a:hover {
+                color: $footerTextColor;
+            }
+        }
     }
 }
