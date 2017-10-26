@@ -66,7 +66,7 @@ router
                 res.redirect('back');
             });
     })
-    .delete((req, res) => { // todo: trash can
+    .delete((req, res) => { // todo: trash can || double check
         PostModel.postsDeleteThenDissociate(req.params.POSTID, req.user)
             .then(() => req.flash('info', 'Post have been successfully deleted!'))
             .then(() => res.redirect("/post"))

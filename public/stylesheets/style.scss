@@ -1,8 +1,15 @@
 // palette
 $footerMarkColor    : rgba(128, 128, 128, 0.2);
-$footerTextColor    : rgba(175, 175, 175, 1);
-$oliver             : rgba(61, 153, 112, 1);
+$footerTextColor    : rgba(175, 175, 175, 1.0);
+$oliver             : rgba(061, 153, 112, 1.0);
 
+
+// mixins
+@mixin socialIconTransition($color) {
+    background: $color;
+    color: #fff;
+    transition: .3s;
+}
 
 // classes
 header {
@@ -40,6 +47,26 @@ footer {
             }
             a:hover {
                 color: $footerTextColor;
+            }
+        }
+        #socialLinks a {
+            color: inherit;
+            display: inline-block;
+            font-size: 1.2rem;
+            text-align: center;
+            text-decoration: none;
+            padding-top: 0.5rem;
+            height: 35px;
+            width: 35px;
+            transition: .3s;
+            &.fa-github:hover {
+                @include socialIconTransition($oliver)
+            }
+            &.fa-facebook-official:hover {
+                @include socialIconTransition(#3b5998)
+            }
+            &.fa-rss:hover {
+                @include socialIconTransition(#f26522)
             }
         }
     }

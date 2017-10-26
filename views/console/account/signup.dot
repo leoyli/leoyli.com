@@ -1,39 +1,41 @@
-{{# def.partial('_header') }}
+{{= _fn.partial('_header') }}
 
-<h1 class="mb-4">SIGN UP</h1>
+<h1 class="container mb-4">SIGN UP</h1>
 
-<form action="/signup" method="POST">
-    <div class="form-row">
-        <div class="form-group col-md-4">
-            <label class="font-weight-bold" for="firstName">First name</label>
-            <input class="form-control" id="firstName" name="firstName" placeholder="first name" />
+<div class="container">
+    <form class="col-lg-9" action="/signup" method="POST">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label class="font-weight-bold" for="firstName">First name</label>
+                <input class="form-control" id="firstName" name="firstName" placeholder="first name" />
+            </div>
+            <div class="form-group col-md-4">
+                <label class="font-weight-bold" for="lastName">Last name</label>
+                <input class="form-control" id="lastName" name="lastName" placeholder="last Name" />
+            </div>
+            <div class="form-group col-md-4">
+                <label class="font-weight-bold" for="username">
+                    Username <span class="badge badge-info text-uppercase">optional</span>
+                </label>
+                <input class="form-control" id="username" name="username" placeholder="Username" />
+            </div>
         </div>
-        <div class="form-group col-md-4">
-            <label class="font-weight-bold" for="lastName">Last name</label>
-            <input class="form-control" id="lastName" name="lastName" placeholder="last Name" />
+        <div class="form-group">
+            <label class="font-weight-bold" for="email">Email</label>
+            <input class="form-control" id="email" name="email" placeholder="Email" type="email" />
         </div>
-        <div class="form-group col-md-4">
-            <label class="font-weight-bold" for="username">
-                Username <span class="badge badge-info text-uppercase">optional</span>
-            </label>
-            <input class="form-control" id="username" name="username" placeholder="Username" />
+        <div class="form-group">
+            <label class="font-weight-bold" for="password">Password</label>
+            <input class="form-control" id="password" name="password[new]" placeholder="Password" type="password" />
         </div>
-    </div>
-    <div class="form-group">
-        <label class="font-weight-bold" for="email">Email</label>
-        <input class="form-control" id="email" name="email" placeholder="Email" type="email" />
-    </div>
-    <div class="form-group">
-        <label class="font-weight-bold" for="password">Password</label>
-        <input class="form-control" id="password" name="password[new]" placeholder="Password" type="password" />
-    </div>
-    <div class="form-group">
-        <label class="font-weight-bold" for="password">Password (again)</label>
-        <input class="form-control" id="password" name="password[confirmed]" placeholder="Password" type="password" />
-    </div>
-    <div class="text-right">
-        <button class="btn btn-outline-primary">SUBMIT</button>
-    </div>
-</form>
+        <div class="form-group">
+            <label class="font-weight-bold" for="password">Password (again)</label>
+            <input class="form-control" id="password" name="password[confirmed]" placeholder="Password" type="password" />
+        </div>
+        <div class="text-right">
+            <button class="btn btn-outline-primary">SUBMIT</button>
+        </div>
+    </form>
+</div>
 
-{{# def.partial('_footer') }}
+{{= _fn.partial('_footer') }}

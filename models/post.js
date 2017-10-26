@@ -30,7 +30,7 @@ const PostSchema            = new mongoose.Schema({
             message         : 'INVALID URL',
         }},
     title                   : {type: String, required: true, trim: true},
-    class                   : {type: String, lowercase: true, default: 'unclassified'},
+    class                   : {type: String, lowercase: true, default: 'unclassified'}, // tofix: empty space handling
     tag                     : {type: String, lowercase: true},
     content                 : {type: String, required: true},
 }, {

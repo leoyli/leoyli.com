@@ -1,5 +1,5 @@
 <!-- client notifications -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
+<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between" role="navigation" aria-label="Primary">
     <div class="container">
         <a class="navbar-brand mb-0 h1" href="/">{{= _site.title }}</a>
 

@@ -1,25 +1,38 @@
-{{# def.partial('_header') }}
+{{= _fn.partial('_header') }}
 
-<h1 class="mb-4">POST</h1>
+<h1 class="container mb-4">POST</h1>
 
-{{ posts.forEach(function(post) { }}
-    <div class="mb-4 pb-4" id="{{= post._id }}">
-        <div class="_title h2"><a href="/post/{{= post._id }}">{{= post.title }}</a></div>
-        <div class="d-flex row">
-            <div class="col-md-9">
-                {{= post.provider.username }}
-                ｜<a href="/post/editor/{{= post._id }}" target="_self">(edit)</a>
-                ｜<a href="/post/class/{{= post.class }}" target="_self">{{= post.class }}</a>
-                ｜Revised: {{= post._revised }}
-            </div>
-            <div class="col-md-3 text-lg-right">
-                <i>{{= post._updated.toDateString() }}</i>
-            </div>
-        </div>
-        <div class="_featured pb-2 pt-2">
-            <a href="/post/{{= post._id }}"><img src="{{= post.featured }}" class="img-fluid"></a>
-        </div>
+<div class="container d-flex flex-row-reverse pb-4">
+    <!-- breadcrumb <ol class="breadcrumb"></ol> -->
+
+    <!-- outline -->
+    <aside class="col-3 d-none d-lg-block"><!-- sidebar placeholder --></aside>
+
+    <!-- content -->
+    <div class="col-9">
+        {{ posts.forEach(function(post) { }}
+            <article class="mb-4 pb-4" id="{{= post._id }}">
+                <h2 class="_title"><a href="/post/{{= post._id }}">{{= post.title }}</a></h2>
+                <header class="row">
+                    <div class="col-md-9">
+                        {{= post.provider.username }}
+                        ｜<a href="/post/editor/{{= post._id }}">(edit)</a>
+                        ｜<a href="/post/class/{{= post.class }}">{{= post.class }}</a>
+                        ｜Revised: {{= post._revised }}
+                    </div>
+                    <time class="col-md-3 text-lg-right"
+                          datetime="{{= post._updated.toISOString() }}">{{= post._updated.toDateString() }}</time>
+                </header>
+                {{? post.featured }}
+                    <figure class="_featured pb-2 pt-2">
+                        <a href="/post/{{= post._id }}">
+                            <img class="img-fluid" src="{{= post.featured }}" alt="{{= post.title }}" />
+                        </a>
+                    </figure>
+                {{?}}
+            </article>
+        {{ }); }}
     </div>
-{{ }); }}
+</div>
 
-{{# def.partial('_footer') }}
+{{= _fn.partial('_footer') }}

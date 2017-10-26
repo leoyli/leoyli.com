@@ -1,13 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
     <title>{{= _site.titleTag }}</title>
 
     <!-- meta tags -->
     <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="{{= _site.description }}">
     <meta name="keywords" content="{{= _site.keywords }}">
+
+    <!-- SEO -->
+    <link rel="canonical" href="" />
 
     <!-- CDN stylesheets -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
@@ -18,27 +22,26 @@
 
     <!-- Local stylesheets -->
     <link rel="stylesheet" href="/stylesheets/style.css" />
+
+    <!-- Facebook OG / Twitter Cards -->
 </head>
 
+
 <body class="bg-black">
-<header>
-    {{# def.partial('_navibar') }}
+<header role="banner">
+    {{= _fn.partial('_navibar') }}
 </header>
 
-<div class="bg-white pb-5 pt-4">
-    <!-- client notifications -->
-    <div class="container pb-2">
-        {{? _flash.error && _flash.error.length > 0 }}
-            <div class="alert alert-danger" role="alert">{{= _flash.error }}</div>
-        {{?}}
-        {{? _flash.info && _flash.info.length > 0 }}
-            <div class="alert alert-success" role="alert">{{= _flash.info }}</div>
-        {{?}}
-    </div>
 
-    <!-- main content -->
-    <div class="container d-flex flex-row-reverse pb-4">
-        <!-- content outline -->
-        <div class="col-3 d-none d-lg-block"><!-- sidebar placeholder --></div>
-        <!-- content field -->
-        <div class="col-lg-9">
+<main class="bg-white pb-5 pt-4" role="main">
+    <!-- flash message -->
+    {{? _flash && _flash.length > 0 }}
+        <div class="container pb-2" id="flashMessage">
+            {{? _flash.error && _flash.error.length > 0 }}
+                <div class="alert alert-danger" role="alert">{{= _flash.error }}</div>
+            {{?}}
+            {{? _flash.info && _flash.info.length > 0 }}
+                <div class="alert alert-success" role="alert">{{= _flash.info }}</div>
+            {{?}}
+        </div>
+    {{?}}

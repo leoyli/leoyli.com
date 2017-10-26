@@ -1,5 +1,5 @@
-{{# def.partial('_header') }}
+{{= _fn.partial('_header') }}
 
-<h1 class="mb-4">{{= _site.title }}</h1>
+<h1 class="container mb-4">{{= _site.title }}</h1>
 
-{{# def.partial('_footer') }}
+{{= _fn.partial('_footer') }}

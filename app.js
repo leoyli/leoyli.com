@@ -44,12 +44,12 @@ app.engine('dot', require('./config/_viewEngine').__express);
 
 // required packages
 app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, './public')));
-app.use(expressSanitizer());
 app.use(methodOverride('_method'));
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(expressSanitizer());
 app.use(flash());
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 

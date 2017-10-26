@@ -38,11 +38,9 @@ exports.correlateAsCreateOrDelete = function (data, user, next, ListField, opera
 
         // push/pull user's owned list  // note: maybe it is not necessary have to do dissociation
         if (user && ListField) {
-            const query = {}, wrapper = {};
+            const query = {[operator]: {[`docLists.${ListField}`]: (operator === '$push') ? {$each: data} : data}};
             // note: $pullAll is not de deprecated: cannot use $each on $pull
-            query[`docLists.${ListField}`] = (operator === '$push') ? {$each: data} : data;
-            wrapper[`${operator}`] = query;
-            await user.update(wrapper);
+            await user.update(query);
         }
 
         return next(null, data);

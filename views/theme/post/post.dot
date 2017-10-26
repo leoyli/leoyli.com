@@ -1,21 +1,31 @@
-{{# def.partial('_header') }}
+{{= _fn.partial('_header') }}
 
-<div>
-    <p><a href="/post">＜ BACK TO INDEX</a></p>
-    <div class="h2">{{= post.title }}</div>
-    <div id="{{= post._id }}" class="row">
-        <div class="col-md-9">
-            {{= post.provider.username }}
-            ｜<a href="/post/editor/{{= post._id }}" target="_self">(edit)</a>
-            ｜<a href="/post/class/{{= post.class }}" target="_self">{{= post.class }}</a>
-            ｜Revised: {{= post._revised }}
-        </div>
-        <div class="col-md-3 text-lg-right">
-            <i>{{= post._updated.toDateString() }}</i>
-        </div>
-    </div>
-    <img class="img-fluid pb-2 pt-2" src="{{= post.featured }}">
-    <div>{{= post.content }}</div>
+<div class="container d-flex flex-row-reverse pb-4">
+    <!-- breadcrumb <ol class="breadcrumb"></ol> -->
+
+    <!-- outline -->
+    <aside class="col-3 d-none d-lg-block"><!-- sidebar placeholder --></aside>
+
+    <!-- content -->
+    <article class="col-9" id="{{= post._id }}">
+        <h2>{{= post.title }}</h2>
+        <header class="row">
+            <div class="col-md-9">
+                {{= post.provider.username }}
+                ｜<a href="/post/editor/{{= post._id }}">(edit)</a>
+                ｜<a href="/post/class/{{= post.class }}">{{= post.class }}</a>
+                ｜Revised: {{= post._revised }}
+            </div>
+            <time class="col-md-3 text-lg-right"
+                  datetime="{{= post._updated.toISOString() }}">{{= post._updated.toDateString() }}</time>
+        </header>
+        {{? post.featured }}
+            <figure class="_featured pb-2 pt-2">
+                <img class="img-fluid" src="{{= post.featured }}" alt="{{= post.title }}" />
+            </figure>
+        {{?}}
+        <section class="pt-4">{{= _fn.useMarkdown(post.content) }}</section>
+    </article>
 </div>
 
-{{# def.partial('_footer') }}
+{{= _fn.partial('_footer') }}

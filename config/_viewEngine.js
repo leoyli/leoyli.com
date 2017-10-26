@@ -1,15 +1,25 @@
 const
     _                       = require('lodash'),
     fs                      = require('fs'),
-    doT                     = require('doT'),
-    path                    = require('path');
+    doT                     = require('dot'),
+    path                    = require('path'),
+    marked                  = require('marked');
 
 
 
 // render function
 function render(filePath, options, next) {
+    // reference from express
     const reference = _.omit(options, ['settings', '_locals', 'cache']);
     reference.set = {partials: options.settings['partials'], extName: options.settings['view engine']};
+
+    // run-time functions
+    reference._fn = {
+        useMarkdown : marked,
+        partial     : (partialFile) => {
+            partialFile = path.join(reference.set.partials, `${partialFile}.${reference.set.extName}`);
+            return getTemplate(partialFile, reference, true).render();},
+    };
 
     return getTemplate(filePath, reference)
         .then(Template => next(null, Template.render()))
@@ -63,8 +73,6 @@ function Template(filePath, reference, sections) {
     this.sections = sections;
     // compilation settings (c)
     this.configs = new Settings(this.varNames.toString()).doTConfig;
-    // compile-time evaluation (def)
-    this.def = new PreCompiledDef(reference);
 
     // templateFn assemble
     this.templateFnSet = {};
@@ -74,7 +82,7 @@ function Template(filePath, reference, sections) {
             // comments stripping (defaulted in HTML)
             if (this.configs.stripComment) this.sections[item] = this.sections[item].replace(this.configs.comment, '');
             // doT compilation
-            this.templateFnSet[item] = doT.template(this.sections[item], this.configs, this.def);
+            this.templateFnSet[item] = doT.template(this.sections[item], this.configs);
         }
     }
 }
@@ -89,14 +97,6 @@ Template.prototype.render = function() {
 };
 
 
-function PreCompiledDef(reference) {
-    this.partial = (partialFile) => {
-        partialFile = path.join(reference.set.partials, `${partialFile}.${reference.set.extName}`);
-        return getTemplate(partialFile, reference, true).render();  // note: `getTemplate` is not a Promise here
-    };
-}
-
-
 function Settings(varNames) {
     this.doTConfig = {
         comment:            /<!--([\s\S]+?)-->/g,
@@ -107,7 +107,7 @@ function Settings(varNames) {
         define:             /\{\{##\s*([\w\.$]+)\s*(\:|=)([\s\S]+?)#\}\}/g,
         conditional:        /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
         iterate:            /\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
-        varname:            varNames || 'it',
+        varname:            varNames,
         stripComment:       true,
         strip:              true,
         append:             true,

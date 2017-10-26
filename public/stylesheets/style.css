@@ -43,3 +43,33 @@ footer #misc #licence a {
 footer #misc #licence a:hover {
     color: #afafaf;
 }
+
+footer #misc #socialLinks a {
+    color: inherit;
+    display: inline-block;
+    font-size: 1.2rem;
+    text-align: center;
+    text-decoration: none;
+    padding-top: 0.5rem;
+    height: 35px;
+    width: 35px;
+    transition: .3s;
+}
+
+footer #misc #socialLinks a.fa-github:hover {
+    background: #3d9970;
+    color: #fff;
+    transition: .3s;
+}
+
+footer #misc #socialLinks a.fa-facebook-official:hover {
+    background: #3b5998;
+    color: #fff;
+    transition: .3s;
+}
+
+footer #misc #socialLinks a.fa-rss:hover {
+    background: #f26522;
+    color: #fff;
+    transition: .3s;
+}

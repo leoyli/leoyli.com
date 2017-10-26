@@ -1,6 +1,6 @@
 {
   "name": "leoyli-main",
-  "version": "0.0.48",
+  "version": "0.0.49",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
@@ -16,6 +16,7 @@
     "express-sanitizer": "^1.0.2",
     "express-session": "^1.15.6",
     "lodash": "^4.17.4",
+    "marked": "^0.3.6",
     "method-override": "^2.3.10",
     "mongoose": "^4.12.4",
     "morgan": "~1.8.1",
