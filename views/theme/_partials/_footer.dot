@@ -62,5 +62,13 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
         integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
         crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"
+        integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw="
+        crossorigin="anonymous"></script>
+
+<!-- endpoint scripts local -->
+<!--<script src="/lib/highlightJS/highlight.pack.js"></script>-->
+<script>hljs.initHighlightingOnLoad();</script>
+
 </body>
 </html>

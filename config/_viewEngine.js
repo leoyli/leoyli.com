@@ -15,7 +15,7 @@ function render(filePath, options, next) {
 
     // run-time functions
     reference._fn = {
-        useMarkdown : marked,
+        useMarkdown : (content) => marked(content.replace(/&gt;+/g, '>')),
         partial     : (partialFile) => {
             partialFile = path.join(reference.set.partials, `${partialFile}.${reference.set.extName}`);
             return getTemplate(partialFile, reference, true).render();},

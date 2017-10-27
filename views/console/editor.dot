@@ -2,7 +2,7 @@
 
 <h1 class="container mb-4">{{= page.title = post._id ? 'UPDATE A POST' : 'WRITE A POST' }}</h1>
 
-<div class="container">
+<div class="container pb-5">
     <form class="col-lg-9" action="/post/editor/{{? post._id }}{{= `${post._id}?_method=PATCH` }}{{?}}" method="POST">
         <div class="form-row">
             <div class="form-group col-md-7">
@@ -23,7 +23,7 @@
         </div>
         <div class="form-group">
             <label class="font-weight-bold" for="postContent">Content</label>
-            <textarea class="form-control" name="post[content]" rows="7"
+            <textarea class="form-control" name="post[content]" rows="16"
                       placeholder="Enter the post content">{{? post.content }}{{= post.content }}{{?}}</textarea>
         </div>
         <div class="float-right">
