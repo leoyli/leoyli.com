@@ -20,10 +20,11 @@ const
 // ==============================
 //  DB
 // ==============================
+// connection
 mongoose.connect(process.env.DB, {useMongoClient: true});
 mongoose.Promise = Promise;
 
-// site initialization (for the neo-installed website)
+// initialization (for the new installed site)
 require('./models/_siteConfig').siteInitialization();
 
 
@@ -33,8 +34,6 @@ require('./models/_siteConfig').siteInitialization();
 // ==============================
 // express
 app.set('x-powered-by', false);
-
-// view engine
 app.set('view engine', 'dot');
 app.set('views', path.join(__dirname, './views'));
 app.set('consolePartials', path.join(__dirname, './views/console/_partials'));
@@ -42,7 +41,7 @@ app.set('partials', path.join(__dirname, './views/theme/_partials'));
 app.engine('dot', require('./config/_viewEngine').__express);
 
 
-// required packages
+// dependencies
 app.use(logger('dev'));
 app.use(express.static(path.join(__dirname, './public')));
 app.use(methodOverride('_method'));
@@ -52,13 +51,14 @@ app.use(cookieParser());
 app.use(expressSanitizer());
 app.use(flash());
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-
-
-// passport
 require('./config/passport')(app, passport);
 
 
-// middleware
+// app
+//// permanent methods
+require('./config/methods').extendStringPrototypeMethods();
+
+//// permanent middleware
 app.use(require('./config/middleware').preloadLocals);
 
 

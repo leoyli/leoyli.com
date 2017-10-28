@@ -81,7 +81,7 @@ router
 router.get('/editor/:KEY', _pre.isAuthorized, (req, res) => {
         PostModel.findOne({canonicalKey: req.params.KEY})
             .then(foundPost => {
-                if (!doc) {
+                if (!foundPost) {
                     req.flash('error', 'Nothing were found...');
                     res.redirect('back');
                 }

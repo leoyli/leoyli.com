@@ -63,5 +63,6 @@ SSL/
 .DS_Store
 package-lock.json
 ___playground.js
-media/
+public/media/
+public/lib/
 *.map

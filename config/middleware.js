@@ -4,9 +4,6 @@ exports = module.exports = {};
 
 // local variables pre-loading (global middleware)
 exports.preloadLocals = (req, res, next) => {
-    // extend string method for reading mongo ObjectID
-    String.prototype.readObjectID = function () {return /[a-f\d]{24}(\/)?/.exec(this)[0];};
-
     // flash message
     res.locals._flash = {error: req.flash('error'), info: req.flash('info')};
 

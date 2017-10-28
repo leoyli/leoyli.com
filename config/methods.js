@@ -2,6 +2,18 @@ exports = module.exports = {};
 
 
 
+// String prototype extension
+exports.extendStringPrototypeMethods = () => {
+    String.prototype.readObjectID = function () {
+        return /[a-f\d]{24}(\/)?/.exec(this)[0];
+    };
+
+    String.prototype.canonicalize = function () {
+        return this.toLowerCase().replace(/[~!@#$^&*()_+`\-=\[\]\\;',.\/{}|:"<>?\s]+/g, '-').replace(/-$/, '');
+    };
+};
+
+
 // normalization
 exports.normalization = (data, user, next) => {
     const haveCallback = (typeof user === 'function' || typeof next === 'function') && typeof user !== typeof next;

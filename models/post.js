@@ -58,9 +58,7 @@ PostSchema.static('postsDeleteThenDissociate', function (docsID, user, next) {
 
 //// (pre-hook) canonical key evaluation
 PostSchema.pre('save', function (next) {
-    if (!this.canonicalKey || this.canonicalKey === '') {
-        this.canonicalKey = this.title.replace(/[~!@#$%^&*()_+`\-=\[\]\\;',.\/{}|:"<>?\s]+/g, '-').replace(/-$/, '');
-    }
+    if (!this.canonicalKey || this.canonicalKey === '') this.canonicalKey = this.title.canonicalize();
     next();
 });
 
