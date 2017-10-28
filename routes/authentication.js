@@ -55,7 +55,7 @@ router
         if (req.isAuthenticated()) return res.redirect('/console');
         res.render('./console/account/signin');
     })
-    .post((req, res) => { // tofix: drier codes needed
+    .post((req, res) => {
         passport.authenticate('local', async (err, authUser) => {
             if (err) req.flash('error', err.toString());
             else if (!authUser) req.flash('error', 'Wrong email/username or password!');
@@ -67,8 +67,9 @@ router
 
                 // redirect the client and delete the temporary key
                 req.flash('info', `Welcome back ${authUser.username}`);
-                res.redirect(req.session.returnTo || '/console/dashboard');
-                return delete req.session.returnTo;
+                const returnTo = req.session.returnTo;
+                delete req.session.returnTo;
+                return res.redirect(returnTo || '/console/dashboard');
             }
             res.redirect('/signin');
         })(req, res);

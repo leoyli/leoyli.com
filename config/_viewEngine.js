@@ -8,10 +8,10 @@ const
 
 
 // render function
-function render(filePath, options, next) {
+function render(filePath, locals, next) {
     // reference from express
-    const reference = _.omit(options, ['settings', '_locals', 'cache']);
-    reference.set = {partials: options.settings['partials'], extName: options.settings['view engine']};
+    const reference = _.omit(locals, ['settings', '_locals', 'cache']);
+    reference.set = {partials: locals.settings['partials'], extName: locals.settings['view engine']};
 
     // run-time functions
     reference._fn = {

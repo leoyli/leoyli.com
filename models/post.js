@@ -30,6 +30,7 @@ const PostSchema            = new mongoose.Schema({
             message         : 'INVALID URL',
         }},
     title                   : {type: String, required: true, trim: true},
+    canonicalKey            : {type: String, lowercase: true, unique: true},
     class                   : {type: String, lowercase: true, default: 'unclassified'}, // tofix: empty space handling
     tag                     : {type: String, lowercase: true},
     content                 : {type: String, required: true},
@@ -52,6 +53,15 @@ PostSchema.static('postsCreateThenAssociate', function (raw, user, next) {
 //// delete and dissociate (model)  // note: not workable for admin in deleting media owned by multiple users
 PostSchema.static('postsDeleteThenDissociate', function (docsID, user, next) {
     return exMethods.correlateAsCreateOrDelete(docsID, user, next, 'posts', '$pullAll', this);
+});
+
+
+//// (pre-hook) canonical key evaluation
+PostSchema.pre('save', function (next) {
+    if (!this.canonicalKey || this.canonicalKey === '') {
+        this.canonicalKey = this.title.replace(/[~!@#$%^&*()_+`\-=\[\]\\;',.\/{}|:"<>?\s]+/g, '-').replace(/-$/, '');
+    }
+    next();
 });
 
 

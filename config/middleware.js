@@ -4,6 +4,9 @@ exports = module.exports = {};
 
 // local variables pre-loading (global middleware)
 exports.preloadLocals = (req, res, next) => {
+    // extend string method for reading mongo ObjectID
+    String.prototype.readObjectID = function () {return /[a-f\d]{24}(\/)?/.exec(this)[0];};
+
     // flash message
     res.locals._flash = {error: req.flash('error'), info: req.flash('info')};
 
@@ -38,7 +41,7 @@ exports.isSignedIn = (req, res, next) => {
 
 // authorization checking
 function _isAuthorized (req, res, next) {
-    if (req.user.docLists.posts.indexOf(req.params.POSTID || req.loadedPost._id) === -1) {    // option: find by post ID as a alternative
+    if (req.user.docLists.posts.indexOf(req.url.readObjectID()) === -1) {    // option: find by post ID as a alternative
         req.flash('error', 'Sorry... You have not been authorized!');
         return res.status(401).render('./theme/error', {message: '401 UNAUTHORIZED', error: new Error('UNAUTHORIZED')});
     } else next();
