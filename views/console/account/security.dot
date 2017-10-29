@@ -1,4 +1,4 @@
-{{= _fn.partial('_header') }}
+{{= _fn.loadPartial('_header') }}
 
 <h1 class="container mb-4">Change Password</h1>
 
@@ -22,4 +22,4 @@
     </form>
 </div>
 
-{{= _fn.partial('_footer') }}
+{{= _fn.loadPartial('_footer') }}

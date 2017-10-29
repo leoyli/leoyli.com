@@ -1,4 +1,4 @@
-{{= _fn.partial('_header') }}
+{{= _fn.loadPartial('_header') }}
 
 <div class="container d-flex flex-row-reverse pb-4">
     <!-- breadcrumb <ol class="breadcrumb"></ol> -->
@@ -28,4 +28,4 @@
     </article>
 </div>
 
-{{= _fn.partial('_footer') }}
+{{= _fn.loadPartial('_footer') }}

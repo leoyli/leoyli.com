@@ -1,5 +1,5 @@
-{{= _fn.partial('_header') }}
+{{= _fn.loadPartial('_header') }}
 
 <h1 class="container mb-4">DASHBOARD</h1>
 
-{{= _fn.partial('_footer') }}
+{{= _fn.loadPartial('_footer') }}

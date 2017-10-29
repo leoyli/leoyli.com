@@ -9,25 +9,30 @@ const
 
 // render function
 function render(filePath, locals, next) {
-    // reference from express
-    const reference = _.omit(locals, ['settings', '_locals', 'cache']);
-    reference.set = {partials: locals.settings['partials'], extName: locals.settings['view engine']};
-
-    // run-time functions
-    reference._fn = {
-        useMarkdown : (content) => marked(content.replace(/&gt;+/g, '>')),
-        partial     : (partialFile) => {
-            partialFile = path.join(reference.set.partials, `${partialFile}.${reference.set.extName}`);
-            return getTemplate(partialFile, reference, true).render();},
-    };
-
-    return getTemplate(filePath, reference)
+    return getTemplate(filePath, getReference(locals))
         .then(Template => next(null, Template.render()))
         .catch(err => next(err, null));
 }
 
 
 // access functions
+function getReference(locals) { // todo: allows the user to added customized runtime function
+    // load express configs by restricting `locals`
+    const reference = _.omit(locals, ['settings', '_locals', 'cache']);
+    reference.set = {partials: locals.settings['partials'], extName: locals.settings['view engine']};
+
+    // populate the run-time available functions
+    reference._fn = {   // note: runtime functions
+        useMarkdown : (markdown) => marked(markdown.replace(/&gt;/g, '>')),
+        loadPartial : (filePath) => {
+            filePath = path.join(reference.set.partials, `${filePath}.${reference.set.extName}`);
+            return getTemplate(filePath, reference, true).render();},
+    };
+
+    return reference;
+}
+
+
 function getTemplate(filePath, reference, _SYNC) {
     if (_SYNC === true) return buildTemplateFromFile(getFileContent(filePath, true), filePath, reference);
 
@@ -49,7 +54,7 @@ function getFileContent(filePath, _SYNC) {
 
 
 // read function
-function buildTemplateFromFile(templateString, filePath, reference) {   // todo: strip HTML comments @templateString
+function buildTemplateFromFile(templateString, filePath, reference) {
     const sections = {main : templateString};   // todo: added multiple sections support
 
     try {
@@ -97,7 +102,7 @@ Template.prototype.render = function() {
 };
 
 
-function Settings(varNames) {
+function Settings(varNames) {   // todo: allows the user to customized the delimiters
     this.doTConfig = {
         comment:            /<!--([\s\S]+?)-->/g,
         evaluate:           /\{\{([\s\S]+?)\}\}/g,
