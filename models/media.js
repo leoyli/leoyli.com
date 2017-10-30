@@ -15,7 +15,7 @@ const MediaSchema           = new mongoose.Schema({
     },
     file: {
         fullPath            : {type: String},
-        fileName            : {type: String},
+        fileBase            : {type: String},
         fileType            : {type: String},
     },
     title                   : {type: String, required: true},

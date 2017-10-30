@@ -1,3 +1,11 @@
+### 0.0.55 / 2017-10-30
+> App
+- Improved code efficiency and accuracy in the 'busboy'.
+
+> UI
+- Corrected the field name for the 'busboy' to parse.
+
+
 ### 0.0.54 / 2017-10-29
 > App
 - Fixed a bug in 'methods'.

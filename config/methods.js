@@ -30,7 +30,7 @@ exports.normalization = (data, user, next) => {
 
     // normalization
     if (!Array.isArray(data)) data = [data];
-    if (data.length === 0 || !data[0]) return next(new Error('NO DATA BEING PROVIDED.'), null);
+    if (data.length === 0 || !data[0]) return next(new ReferenceError('Nothing were provided...'), null);
 
     return [data, user, next];
 };
