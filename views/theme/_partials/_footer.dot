@@ -1,7 +1,7 @@
 </main>
 
 
-<footer class="mt-4 pt-4 pb-4">
+<footer class="mt-4 py-4">
     <!-- site map -->
     <div class="container d-sm-flex text-light" id="siteMap" role="navigation" aria-label="Secondary">
         <div class="col-lg-3 col-xl-2 pb-4">
@@ -43,10 +43,14 @@
         <div class="col-md-4 col-lg-5 text-md-right" id="socialLinks" aria-label="socialMedia">
             <a class="fa fa-github" href="https://github.com/leoyli"
                title="GitHub" aria-label="GitHub"></a>
+            <a class="fa fa-linkedin" href="https://www.linkedin.com/in/leoyli"
+               title="Twitter" aria-label="Twitter"></a>
             <a class="fa fa-facebook-official" href="https://www.facebook.com/leo.yuxiu.li"
                title="Facebook" aria-label="Facebook"></a>
-            <a class="fa fa-rss" href="/" target="_blank" rel="noopener"
-               title="RSS" aria-label="RSS"></a>
+            <!--<a class="fa fa-twitter" href="https://twitter.com/leoyli"-->
+                <!--title="Twitter" aria-label="Twitter"></a>-->
+            <!--<a class="fa fa-rss" href="/" target="_blank" rel="noopener"-->
+               <!--title="RSS" aria-label="RSS"></a>-->
         </div>
     </div>
 </footer>

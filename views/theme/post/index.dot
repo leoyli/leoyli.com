@@ -24,7 +24,7 @@
                           datetime="{{= post._updated.toISOString() }}">{{= post._updated.toDateString() }}</time>
                 </header>
                 {{? post.featured }}
-                    <figure class="_featured pb-2 pt-2">
+                    <figure class="_featured py-2">
                         <a href="/post/{{= post.canonicalKey }}">
                             <img class="img-fluid" src="{{= post.featured }}" alt="{{= post.title }}" />
                         </a>

@@ -39,8 +39,8 @@ exports.isSignedIn = (req, res, next) => {
 // authorization checking
 function _isAuthorized (req, res, next) {
     if (req.user.docLists.posts.indexOf(req.url.readObjectID()) === -1) {    // option: find by post ID as a alternative
-        req.flash('error', 'Sorry... You have not been authorized!');
-        return res.status(401).render('./theme/error', {message: '401 UNAUTHORIZED', error: new Error('UNAUTHORIZED')});
+        req.flash('error', 'Nothing were found...');
+        return res.redirect('/');
     } else next();
 }
 exports.isAuthorized = [exports.isSignedIn, _isAuthorized];

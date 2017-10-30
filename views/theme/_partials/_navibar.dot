@@ -4,8 +4,8 @@
         <a class="navbar-brand mb-0 h1" href="/">{{= _site.title }}</a>
 
         <!-- Nav-bar items -->
-        <div class="collapse navbar-collapse justify-content-end text-uppercase">
-            <ul class="navbar-nav">
+        <div class="collapse navbar-collapse justify-content-end ">
+            <ul class="navbar-nav d-flex align-items-end text-uppercase">
                 <li class="nav-item">
                     <a class="nav-link" href="/seed">Seed</a>
                 </li>
@@ -14,22 +14,36 @@
                 </li>
                 {{? _site.client.isGuest }}
                     <li class="nav-item">
-                        <a class="nav-link" href="/signin">Sign In</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="/signup">Sign Up</a>
+                    </li>
+                    <li class="nav-item pt-1">
+                        <a class="nav-link" href="/signin">Sign In</a>
                     </li>
                 {{?}}
                 {{? !_site.client.isGuest }}
-                    <li class="nav-item dropdown text-capitalize">
-                        <a class="nav-link dropdown-toggle text-uppercase" href="#" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dashboard</a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="/post/editor">New Post</a>
-                            <a class="dropdown-item" href="/console/upload">Media Uploader</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/console/security">Account Settings</a>
-                            <a class="dropdown-item" href="/signout">Sign Out</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center px-1" href="#" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{? _site.client.picture !== '' }}
+                                <img class="" alt="User" src="{{= _site.client.picture }}" />
+                            {{?}}
+                            {{? !_site.client.picture || _site.client.picture === '' }}
+                            <!-- tofix: load the profile image as svg -->
+                                <svg width="25" height="25">
+                                    <rect width="25" height="25" style="fill:rgba(0,0,0,.1);" />
+                                </svg>
+                            {{?}}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right py-2" aria-labelledby="navbarDropdown">
+                            <span class="dropdown-header text-truncate px-3 py-0 mb-2">Hi, {{= _site.client.nickname }}!</span>
+                            <div class="dropdown-divider my-1"></div>
+                            <a class="dropdown-item px-3" href="/console">Dashboard</a>
+                            <div class="dropdown-divider my-1"></div>
+                            <a class="dropdown-item px-3" href="/post/editor">New Post</a>
+                            <a class="dropdown-item px-3" href="/console/upload">Media Uploader</a>
+                            <div class="dropdown-divider my-1"></div>
+                            <a class="dropdown-item px-3" href="/console/security">Account Settings</a>
+                            <a class="dropdown-item px-3" href="/signout">Sign Out</a>
                         </div>
                     </li>
                 {{?}}

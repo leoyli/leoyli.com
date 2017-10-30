@@ -1,3 +1,14 @@
+### 0.0.54 / 2017-10-29
+> App
+- Fixed a bug in 'methods'.
+- Added user profile picture filed in 'user' schema.
+
+> UI
+- Added more social linkages.
+- User profile was now displayed.
+- Polished the dropdown menu in nav-bar.
+
+
 ### 0.0.53 / 2017-10-29
 > App
 - Added 'HISTORY.md' tracking logs.

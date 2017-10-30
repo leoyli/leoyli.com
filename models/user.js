@@ -30,6 +30,7 @@ const UserSchema            = new mongoose.Schema({
     nickname                : {type: String},
     firstName               : {type: String, required: true},
     lastName                : {type: String, required: true},
+    picture                 : {type: String, required: true, default: ''},
     docLists                : docLists,
 }, {
     timestamps              : {createdAt: '_registered', updatedAt: '_updated'},
@@ -50,7 +51,7 @@ UserSchema.pre('save', function (next) {
 UserSchema.plugin(passportLocalMongoose, {
     usernameField: 'email',
     usernameQueryFields: ['username'],
-    selectFields: ['_id', 'email', 'username', 'nickname', 'docLists'],
+    selectFields: ['_id', 'email', 'username', 'nickname', 'picture', 'docLists'],
 });
 
 

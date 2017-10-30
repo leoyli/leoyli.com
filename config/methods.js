@@ -5,7 +5,8 @@ exports = module.exports = {};
 // String prototype extension
 exports.extendStringPrototypeMethods = () => {
     String.prototype.readObjectID = function () {
-        return /[a-f\d]{24}(\/)?/.exec(this)[0];
+        const value = /[a-f\d]{24}(\/)?/.exec(this);
+        return value ? value[0]: value;
     };
 
     String.prototype.canonicalize = function () {

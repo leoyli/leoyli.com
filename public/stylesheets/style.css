@@ -3,6 +3,46 @@ header nav {
     font-weight: 600;
 }
 
+header nav .dropdown-toggle {
+    outline: none;
+}
+
+header nav .dropdown-toggle img {
+    height: 25px;
+    width: 25px;
+}
+
+header nav .dropdown-menu-right {
+    font-size: inherit;
+    text-transform: none;
+    max-width: 175px;
+}
+
+header nav .dropdown-menu-right::before, header nav .dropdown-menu-right::after {
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    content: "";
+    display: inline-block;
+    position: absolute;
+    right: 20px;
+}
+
+header nav .dropdown-menu-right::before {
+    border-bottom: 6px solid rgba(0, 0, 0, 0.2);
+    top: -7px;
+}
+
+header nav .dropdown-menu-right::after {
+    border-bottom: 6px solid #FFF;
+    top: -6px;
+}
+
+header nav .dropdown-item:focus, header nav .dropdown-item:hover, header nav .dropdown-item:active {
+    background: #0074D9;
+    color: #FFF;
+    transition: 175ms;
+}
+
 footer {
     color: #afafaf;
 }
@@ -47,29 +87,41 @@ footer #misc #licence a:hover {
 footer #misc #socialLinks a {
     color: inherit;
     display: inline-block;
-    font-size: 1.2rem;
     text-align: center;
     text-decoration: none;
+    font-size: 1.2rem;
     padding-top: 0.5rem;
     height: 35px;
     width: 35px;
-    transition: .3s;
-}
-
-footer #misc #socialLinks a.fa-github:hover {
-    background: #3d9970;
-    color: #fff;
-    transition: .3s;
+    transition: 175ms;
 }
 
 footer #misc #socialLinks a.fa-facebook-official:hover {
     background: #3b5998;
-    color: #fff;
-    transition: .3s;
+    color: #FFF;
+    transition: 175ms;
+}
+
+footer #misc #socialLinks a.fa-linkedin:hover {
+    background: #0077b5;
+    color: #FFF;
+    transition: 175ms;
+}
+
+footer #misc #socialLinks a.fa-twitter:hover {
+    background: #00aced;
+    color: #FFF;
+    transition: 175ms;
+}
+
+footer #misc #socialLinks a.fa-github:hover {
+    background: #3d9970;
+    color: #FFF;
+    transition: 175ms;
 }
 
 footer #misc #socialLinks a.fa-rss:hover {
     background: #f26522;
-    color: #fff;
-    transition: .3s;
+    color: #FFF;
+    transition: 175ms;
 }
