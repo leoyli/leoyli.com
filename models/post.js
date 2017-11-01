@@ -46,13 +46,13 @@ const exMethods             = require('../config/methods');
 
 //// create and associate (model)
 PostSchema.static('postsCreateThenAssociate', function (raw, user, next) {
-    return exMethods.correlateAsCreateOrDelete(raw, user, next, 'posts', '$push', this);
+    return Promise.resolve().then(() => exMethods.updateThenCorrelate(raw, user, next, 'posts', '$push', this));
 });
 
 
 //// delete and dissociate (model)  // note: not workable for admin in deleting media owned by multiple users
 PostSchema.static('postsDeleteThenDissociate', function (docsID, user, next) {
-    return exMethods.correlateAsCreateOrDelete(docsID, user, next, 'posts', '$pullAll', this);
+    return Promise.resolve().then(() => exMethods.updateThenCorrelate(docsID, user, next, 'posts', '$pullAll', this));
 });
 
 

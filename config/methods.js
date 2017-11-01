@@ -24,6 +24,7 @@ exports.normalization = (data, user, next) => {
 
     // callback pre-assignment
     if (!haveCallback) next = (err, docs) => {
+        debugger;
         if (err) throw err;
         return docs;
     };
@@ -37,21 +38,24 @@ exports.normalization = (data, user, next) => {
 
 
 // correlation handler
-exports.correlateAsCreateOrDelete = function (data, user, next, ListField, operator, _THIS) {
+exports.updateThenCorrelate = function (data, user, next, fieldName, operator, _THIS) {
     return (async (data, user, next) => {
         // create/remove the doc(s)
-        if (operator === '$pullAll') {
-            await _THIS.remove({_id: data});
-        } else if (operator === '$push') {
-            if (user) await data.map(self => self.provider = user);
-            data = await _THIS.create(data);    // note: this line reassign the following 'data'
-        } else {
-            throw new SyntaxError('Operator must be either \'$push\' (create) or \'$pullAll\' (delete)');
+        switch (operator) {
+            case '$pullAll':
+                await _THIS.remove({_id: data});
+                break;
+            case '$push':
+                if (user) await data.map(self => self.provider = user);
+                data = await _THIS.create(data);    // note: this line reassign the following 'data'
+                break;
+            default:
+                throw new SyntaxError('Operator must be either \'$push\' (create) or \'$pullAll\' (delete)');
         }
 
         // push/pull user's owned list  // note: maybe it is not necessary have to do dissociation
-        if (user && ListField) {
-            const query = {[operator]: {[`docLists.${ListField}`]: (operator === '$push') ? {$each: data} : data}};
+        if (user && fieldName) {
+            const query = {[operator]: {[`docLists.${fieldName}`]: (operator === '$push') ? {$each: data} : data}};
             // note: $pullAll is not de deprecated: cannot use $each on $pull
             await user.update(query);
         }

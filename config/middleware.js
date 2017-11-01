@@ -84,3 +84,8 @@ exports.appendTitleTag = (title) => {
         next();
     }
 };
+
+// busboy in multipart form for media uploading
+exports.busboy = (limits) => {
+    return (req, res, next) => require('./busboy')(req, res, limits, next);
+};

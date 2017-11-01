@@ -34,18 +34,14 @@ const exMethods             = require('../config/methods');
 
 //// create and associate (model)
 MediaSchema.static('mediaCreateThenAssociate', function (raw, user, next) {
-    return exMethods.correlateAsCreateOrDelete(raw, user, next, 'media', '$push', this);
+    return Promise.resolve().then(() => exMethods.updateThenCorrelate(raw, user, next, 'media', '$push', this));
 });
 
 
 //// delete and dissociate (model)  // note: not workable for admin in deleting media owned by multiple users
 MediaSchema.static('mediaDeleteThenDissociate', function (docsID, user, next) {
-    return exMethods.correlateAsCreateOrDelete(docsID, user, next, 'media', '$pullAll', this);
+    return Promise.resolve().then(() => exMethods.updateThenCorrelate(docsID, user, next, 'media', '$pullAll', this));
 });
-
-
-//// image upload (model)
-MediaSchema.static('mediaUpload', require('../config/busboy'));
 
 
 //// (pre-hook) version counter

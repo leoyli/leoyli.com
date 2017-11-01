@@ -1,3 +1,13 @@
+### 0.0.56 / 2017-10-31
+> App
+- 'busboy' was transformed into a middleware.
+- `.correlateAsCreateOrDelete` was renamed as `.updateThenCorrelate`.
+- Promisified correlation methods in models.
+
+> UI
+- n/a
+
+
 ### 0.0.55 / 2017-10-30
 > App
 - Improved code efficiency and accuracy in the 'busboy'.

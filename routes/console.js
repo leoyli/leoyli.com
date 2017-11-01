@@ -36,7 +36,7 @@ router
     .get((req, res) => res.render('./console/setting'))
     .patch((req, res) => {
         _siteConfig.updateSettings(req.body.siteSetting)
-            .catch(err => {req.flash('error', err.toString());})
+            .catch(err => req.flash('error', err.toString()))
             .then(() => res.redirect('back'));
     });
 
@@ -48,7 +48,7 @@ router
     .get((req, res) => res.render('./console/account/profile'))
     .patch((req, res) => {
         UserModel.update({_id: req.user._id}, {$set: req.body.userProfile})
-            .catch(err => {req.flash('error', err.toString());})
+            .catch(err => req.flash('error', err.toString()))
             .then(() => res.redirect('back'));
     });
 
@@ -72,13 +72,18 @@ router
     .route('/upload') // todo: redirect back to media manager
     .all(_pre.prependTitleTag('Media Uploader'))
     .get((req, res) => res.render('./console/upload'))
-    .post((req, res) => { // todo: will be responsible for all media uploading event and redirect user back
-        MediaModel.mediaUpload(req, res, {fileSize: 85*1048576, files: 2})
-            .then(uploadedMedia => MediaModel.mediaCreateThenAssociate(uploadedMedia, req.user))
-            .catch(err => {
-                if (err.name === 'ValidationError') delete req.session.flash.info;
-                req.flash('error', err.toString());
-            })
+    .post(_pre.busboy({fileSize: 3*1048576, files: 2}), (req, res) => { // todo: will be responsible for all media uploading event and redirect user back
+
+
+
+        if (req.body.busboySlip.notice[0]) {
+            req.body.busboySlip.notice.forEach(notice => req.flash('error', notice));
+            if (req.body.busboySlip.raw[0]) return res.redirect('back');
+        }
+
+        MediaModel.mediaCreateThenAssociate(req.body.busboySlip.raw, req.user)
+            .then(doc => {if (doc.length > 0) req.flash('info', `${doc.length} file(s) successfully uploaded!`);})
+            .catch(err => req.flash('error', err.toString()))
             .then(() => res.redirect('back'));
     });
 
