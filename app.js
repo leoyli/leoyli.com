@@ -3,7 +3,6 @@
 // ==============================
 const
     express                 = require('express'),
-    expressSanitizer        = require('express-sanitizer'),
     flash                   = require('connect-flash'),
     path                    = require('path'),
     logger                  = require('morgan'),
@@ -48,7 +47,6 @@ app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(expressSanitizer());
 app.use(flash());
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 require('./config/passport')(app, passport);

@@ -1,8 +1,7 @@
 const
     fs                      = require('fs'),
     path                    = require('path'),
-    Busboy                  = require('busboy'),
-    sanitizer               = require('sanitizer');
+    Busboy                  = require('busboy');
 
 
 
@@ -49,7 +48,7 @@ function ImgUploadByBusboy (req, res, limits, next) {
 
     // BUSBOY-LISTENER: 'field' as in inputs
     busboy.on('field', (fieldName, val) => {
-            if (val) _assignInNest(populator, _readObjectProperties(fieldName), sanitizer.sanitize(val));
+            if (val) _assignInNest(populator, _readObjectProperties(fieldName), val.$sanitize());
         });
 
     // BUSBOY-LISTENER: after all streams resolved
@@ -80,7 +79,7 @@ function FileStreamBranch(fileName, MIMEType) {
 
 // ancillary functions
 function _readObjectProperties(source) {
-    if (!source || /[^a-zA-Z0-9._$\[\]]/g.test(source)) {
+    if (!source || /[^a-zA-Z0-9_$.\[\]]/g.test(source)) {
         throw new SyntaxError('Field name cannot have special characters other than ".$[]".');
     } else return source.match(/[a-zA-Z0-9_$]+/g);
 }

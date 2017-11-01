@@ -4,13 +4,17 @@ exports = module.exports = {};
 
 // String prototype extension
 exports.extendStringPrototypeMethods = () => {
-    String.prototype.readObjectID = function () {
-        const value = /[a-f\d]{24}(\/)?/.exec(this);
-        return value ? value[0]: value;
-    };
-
-    String.prototype.canonicalize = function () {
-        return this.toLowerCase().replace(/[~!@#$^&*()_+`\-=\[\]\\;',.\/{}|:"<>?\s]+/g, '-').replace(/-$/, '');
+    String.prototype._$ = {
+        readObjectID    : function () {
+            const value = /[a-f\d]{24}(\/)?/.exec(this);
+            return value ? value[0]: value;
+        },
+        canonicalize    : function () {
+            return this.toLowerCase().replace(/[~!@#$^&*()_+`\-=\[\]\\;',.\/{}|:"<>?\s]+/g, '-').replace(/-$/, '');
+        },
+        sanitize        : function () {
+            return this.replace(/[<>{}]/g, i => `&#${i.charCodeAt(0)};`);
+        },
     };
 };
 

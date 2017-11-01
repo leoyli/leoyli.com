@@ -1,3 +1,15 @@
+### 0.0.57 / 2017-11-01
+> App
+- Withdrew the dependency of 'express.sanitizer'.
+- Used property name '$_' to collect all customized `String.prototype` methods.
+- Added `String.prototype._$.sanitize` to avoid basic code injections.
+- Corrected regex in '_viewEngine'.
+- Fixed typos in 'HISTORY.md'.
+
+> UI
+- n/a
+
+
 ### 0.0.56 / 2017-10-31
 > App
 - 'busboy' was transformed into a middleware.
@@ -39,16 +51,16 @@
 ### 0.0.52 / 2017-10-28
 > App
 - Restructured minor architecture. (String proto-method pre-defined.)
-- Removed '%' as the replacedment criteria in `.canonicalKey` method (for encoded URL usages).
+- Removed '%' as the replacement criteria in `.canonicalKey` method (for encoded URL usages).
 
 > UI
-- Fxied a typo in 'post' route.
+- Fixed a typo in 'post' route.
 
 
 ### 0.0.51 / 2017-10-28
 > App
 - Extend the String method for reading mongo ObjectID.
-- Inplemented the 'canonicalKey' feature for the user-friendly URL.
+- Implemented the 'canonicalKey' feature for the user-friendly URL.
 - Changed routing rules to adapt the user-friendly URL. (with the accessing by ObjectID as an alias)
 - Fixed a bug in 'middleware'.
 
@@ -59,7 +71,7 @@
 
 ### 0.0.50 / 2017-10-27
 > App
-- Fixed markdown compilation erros in `blockquote`, which was due to DB stored `>` as `&gt;`. (in '_viewEngine')
+- Fixed markdown compilation errors in `blockquote`, which was due to DB stored `>` as `&gt;`. (in '_viewEngine')
 
 > UI
 - Used 'highlight.JS' lib as the code highlighter. (running on client side)
@@ -94,7 +106,7 @@
 - Added `_role` property into 'user' schema.
 - Removed `x-powered-by` tag from the header.
 - Adapted ES6 syntax into 'bin/www'.
-- Splitted `setPageTitle` into `prependTitleTag` and `appendTitleTag` middleware.
+- Split `setPageTitle` into `prependTitleTag` and `appendTitleTag` middleware.
 
 
 > UI
@@ -115,7 +127,7 @@
 
 
 ### 0.0.44 / 2017-10-21
-- Inplemented Bootstrap 4.
+- Implemented Bootstrap 4.
 - Enhanced major UI.
 
 
@@ -125,9 +137,9 @@
 
 
 ### 0.0.42 / 2017-10-19
-- Used Promise for codes rearanging in 'middleware'.
+- Used Promise for codes rearranging in 'middleware'.
 - Introduced an new middleware for subtitle setup (also could be used within the endpoint).
-- Renamed varialbe `gate` to be `_pre`, and `localVariables` to be `preloadLocals`.
+- Renamed variable `gate` to be `_pre`, and `localVariables` to be `preloadLocals`.
 - Fine-tuned some minor parts.
 
 
@@ -162,15 +174,15 @@
 
 
 ### 0.0.35 / 2017-10-15
-- Added addtional validation rule for 'feature' field in 'post' schema.
-- Introduced `async/await` from ES2017 for code restructing.
+- Added additional validation rule for 'feature' field in 'post' schema.
+- Introduced `async/await` from ES2017 for code restructuring.
 - Bug fixed: Promise chain.
 
 
 ### 0.0.34 / 2017-10-14
 - Modified modle schema in demanding data requirements and validations.
 - Handled potential '_siteConfig' errors.
-- Adapted authentication rules in corresonding to the current schema.
+- Adapted authentication rules in corresponding to the current schema.
 - Replaced PUT by PATCH.
 - Included other minor twits...
 
@@ -193,12 +205,12 @@
 ### 0.0.30 / 2017-10-08
 - Updated dependent packages.
 - Restructured '_viewEngine', and added more error handlers.
-- Renameed the partial directory.
+- Renamed the partial directory.
 - Corrected the data type of `loadedConfig` in 'middleware'.
 
 
 ### 0.0.29 / 2017-10-07
-- Switched to a customed doT view engine.
+- Switched to a customized doT view engine.
 
 
 ### 0.0.28 / 2017-10-03
@@ -208,7 +220,7 @@
 
 ### 0.0.27 / 2017-10-02
 - Bug fixed: redirect loop trigger by `redirect('back')` in a middleware.
-- Reconstructed modle methods in terms of Promise. (yet to be dried)
+- Reconstructed model methods in terms of Promise. (yet to be dried)
 - Applied template literals.
 
 
@@ -224,7 +236,7 @@
 
 ### 0.0.24 / 2017-09-30
 - Promisified '_siteConfig' model.
-- Inplemented dissociation while deleting posts.
+- Implemented dissociation while deleting posts.
 - Simplified methods in 'post' and 'media' models.
 - Sanitized field 'val' in 'busboy' config.
 - Bugs fixed.
@@ -232,7 +244,7 @@
 
 ### 0.0.23 / 2017-09-30
 - Promisified 'busboy' config, 'media' and 'post' models, with callback usage supports.
-- Further promisfied 'console' route with commented "callbck ver.".
+- Further promisified 'console' route with commented "callback ver.".
 - Bug fixed.
 
 
@@ -256,7 +268,7 @@
 
 
 ### 0.0.18 / 2017-09-25
-- Inplemented 'security' route for user password updating.
+- Implemented 'security' route for user password updating.
 
 
 ### 0.0.17 / 2017-09-24
@@ -265,7 +277,7 @@
 
 ### 0.0.16 / 2017-09-24
 - Refined 'post' and 'media' model for more consistent.
-- Handled erros from 'fs' libs.
+- Handled errors from 'fs' libs.
 - introduced "the time-named folder" for grouping uploaded files.
 - Renamed some elements for more readability.
 
@@ -276,7 +288,7 @@
 Configured Busboy uploader:
 - Separate documents 'uploading' and 'creating'.
 - Centralized all flash messages.
-- Embeded into 'Media' model.
+- Embedded into 'Media' model.
 
 
 ### 0.0.14 / 2017-09-22
@@ -285,7 +297,7 @@ Configured Busboy uploader:
 
 ### 0.0.13 / 2017-09-21
 - Started to use EC6 syntax.
-- Simplified, and added filedsparser into uploader, so the meta of image could be written into DB.
+- Simplified, and added fields parser into uploader, so the meta of image could be written into DB.
 
 
 ### 0.0.12 / 2017-09-20
@@ -330,20 +342,20 @@ Configured Busboy uploader:
 - Added new middleware for authorization checking, and script sanitizing.
 - Simplified names in variables in DB data structure.
 - Fixed bugs in authentication route so it can pass the correct message.
-- Added post routes and the correspondings.
+- Added post routes and the corresponding.
 - Revised seed routes.
 - Started to use 'todo', 'tofix', 'option' comments supported by Webstorm as a tool kit.
 
 
 ### 0.0.5 / 2017-09-13
-- Added flash messages and the correspondings.
+- Added flash messages and the corresponding.
 - Typo corrected.
 
 
 ### 0.0.4 / 2017-09-13
 - Separated passport configurations.
 - Rearranged authentication route.
-- Added sign-up testing page, and correspondings.
+- Added sign-up testing page, and corresponding.
 
 
 ### 0.0.3 / 2017-09-12
@@ -360,5 +372,5 @@ Configured Busboy uploader:
 
 ### 0.0.1 / 2017-09-11
 - Added additional npm packages
-- Restructuralized files & dirs
+- Restructured files & dirs
 - As a template

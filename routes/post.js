@@ -48,7 +48,7 @@ router
             delete req.session.foundPost;
             return renderWithDoc(req, res, './console/editor', foundPost);
         }
-        PostModel.findById(req.url.readObjectID())
+        PostModel.findById(req.url._$.readObjectID())
             .then(foundPost => renderWithDoc(req, res, './console/editor', foundPost))
             .catch(err => {
                 req.flash('error', err.toString());
@@ -56,7 +56,7 @@ router
             });
     })
     .patch(_pre.putPostSanitizer, (req, res) => {
-        PostModel.findByIdAndUpdate(req.url.readObjectID(), req.body.post, {new: true})
+        PostModel.findByIdAndUpdate(req.url._$.readObjectID(), req.body.post, {new: true})
             .then(foundPost => {
                 req.flash('info', 'Post have been successfully updated!');
                 res.redirect("/post/" + foundPost._id);
@@ -67,7 +67,7 @@ router
             });
     })
     .delete((req, res) => { // todo: trash can || double check
-        PostModel.postsDeleteThenDissociate(req.url.readObjectID(), req.user)
+        PostModel.postsDeleteThenDissociate(req.url._$.readObjectID(), req.user)
             .then(() => req.flash('info', 'Post have been successfully deleted!'))
             .then(() => res.redirect("/post"))
             .catch(err => {
@@ -99,7 +99,7 @@ router.get('/editor/:KEY', _pre.isAuthorized, (req, res) => {
 // show - post
 router
     .get(/^\/[a-f\d]{24}(\/)?$/, (req, res) => {  // note: match all valid ObjectID format
-        PostModel.findById(req.url.readObjectID())
+        PostModel.findById(req.url._$.readObjectID())
             .then(foundPost => {
                 req.session.foundPost = foundPost;
                 res.redirect(`/post/${req.session.foundPost._doc.canonicalKey}`);
@@ -135,6 +135,11 @@ router.get('/', (req, res) => {
 });
 
 
+// error
+router.use((err, req, res, next) => {
+    console.log(err);
+});
+
 
 // extracted end-ware
 function renderWithDoc(req, res, view, doc) {
@@ -143,7 +148,6 @@ function renderWithDoc(req, res, view, doc) {
         res.redirect('back');
     }
     _pre.prependTitleTag(doc.title)(req, res);
-    doc.content = req.sanitize(doc.content);
     res.render(view, {post: doc, page: {}})
 }
 
