@@ -1,7 +1,8 @@
 const
     fs                      = require('fs'),
     path                    = require('path'),
-    Busboy                  = require('busboy');
+    Busboy                  = require('busboy'),
+    _fn                     = require('./methods');
 
 
 
@@ -30,12 +31,12 @@ function ImgUploadByBusboy (req, res, limits, next) {
         // FILE-LISTENER: after file uploaded
         file.on('end', () => {
             if (branch.isAttached && branch.isAccepted && !file.truncated) {
-                return _assignInNest(populator, _readObjectProperties(fieldName), {
+                return _assignInNest(populator, _fn.string.parseNestKey(fieldName), {
                     fileType: path.extname(branch.fileBase),
                     fileBase: branch.fileBase,
                     fullPath: branch.fullPath,
                 });
-            } else populator[_readObjectProperties(fieldName)[0]] = {isSkipped: true};
+            } else populator[_fn.string.parseNestKey(fieldName)[0]] = {isSkipped: true};
 
             // exception handler
             if (branch.isAttached && !branch.isAccepted) return notice.push(`${fileName} is in unaccepted file types!`);
@@ -48,7 +49,7 @@ function ImgUploadByBusboy (req, res, limits, next) {
 
     // BUSBOY-LISTENER: 'field' as in inputs
     busboy.on('field', (fieldName, val) => {
-            if (val) _assignInNest(populator, _readObjectProperties(fieldName), val.$sanitize());
+            if (val) _assignInNest(populator, _fn.string.parseNestKey(fieldName), _fn.string.escapeInHTML(val));
         });
 
     // BUSBOY-LISTENER: after all streams resolved
@@ -78,12 +79,6 @@ function FileStreamBranch(fileName, MIMEType) {
 
 
 // ancillary functions
-function _readObjectProperties(source) {
-    if (!source || /[^a-zA-Z0-9_$.\[\]]/g.test(source)) {
-        throw new SyntaxError('Field name cannot have special characters other than ".$[]".');
-    } else return source.match(/[a-zA-Z0-9_$]+/g);
-}
-
 function _assignInNest(obj, referenceKeys, bottomValue, index) {
     if (!index) index = 0;
     if (index < referenceKeys.length-1) {

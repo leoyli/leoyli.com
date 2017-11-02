@@ -1,69 +1,68 @@
 exports = module.exports = {};
+const _ = require('lodash');
 
 
 
 // String prototype extension
-exports.extendStringPrototypeMethods = () => {
-    String.prototype._$ = {
-        readObjectID    : function () {
-            const value = /[a-f\d]{24}(\/)?/.exec(this);
-            return value ? value[0]: value;
-        },
-        canonicalize    : function () {
-            return this.toLowerCase().replace(/[~!@#$^&*()_+`\-=\[\]\\;',.\/{}|:"<>?\s]+/g, '-').replace(/-$/, '');
-        },
-        sanitize        : function () {
-            return this.replace(/[<>{}]/g, i => `&#${i.charCodeAt(0)};`);
-        },
-    };
+exports.string = {
+    escapeInHTML: (str) =>_.escape(str),
+    canonicalize: (str) =>_.kebabCase(str),
+    readObjectID: (str) => {
+        const value = /[a-f\d]{24}(\/)?/.exec(str);
+        return value ? value[0]: value;
+    },
+    parseNestKey: (str) => {
+        if (!str || /[^a-zA-Z0-9_$.\[\]]/g.test(str)) {
+            throw new SyntaxError('String cannot have special characters other than ".$[]".');
+        } else return str.match(/[a-zA-Z0-9_$]+/g);
+    }
 };
 
 
 // normalization
-exports.normalization = (data, user, next) => {
-    const haveCallback = (typeof user === 'function' || typeof next === 'function') && typeof user !== typeof next;
+exports.schema = {
+    normalization: function(data, user, next) {
+        const haveCallback = (typeof user === 'function' || typeof next === 'function') && typeof user !== typeof next;
 
-    // callback correction  // note: i.e. 'user' is misplaced as in `fn(data, callback)`
-    [next, user] = (haveCallback && !next) ? [user, null] : [next, user];
+        // callback correction  // note: i.e. 'user' is misplaced as in `fn(data, callback)`
+        [next, user] = (haveCallback && !next) ? [user, null] : [next, user];
 
-    // callback pre-assignment
-    if (!haveCallback) next = (err, docs) => {
-        debugger;
-        if (err) throw err;
-        return docs;
-    };
+        // callback pre-assignment
+        if (!haveCallback) next = (err, docs) => {
+            debugger;
+            if (err) throw err;
+            return docs;
+        };
 
-    // normalization
-    if (!Array.isArray(data)) data = [data];
-    if (data.length === 0 || !data[0]) return next(new ReferenceError('Nothing were provided...'), null);
+        // normalization
+        if (!Array.isArray(data)) data = [data];
+        if (data.length === 0 || !data[0]) return next(new ReferenceError('Nothing were provided...'), null);
 
-    return [data, user, next];
-};
+        return [data, user, next];
+    },
+    updateAndBind: function(data, user, next, fieldName, operator, _THIS) {
+        return (async (data, user, next) => {
+            // create/remove the doc(s)
+            switch (operator) {
+                case '$pullAll':
+                    await _THIS.remove({_id: data});
+                    break;
+                case '$push':
+                    if (user) await data.map(self => self.provider = user);
+                    data = await _THIS.create(data);    // note: this line reassign the following 'data'
+                    break;
+                default:
+                    throw new SyntaxError('Operator must be either \'$push\' (create) or \'$pullAll\' (delete)');
+            }
 
+            // push/pull user's owned list  // note: maybe it is not necessary have to do dissociation
+            if (user && fieldName) {
+                const query = {[operator]: {[`docLists.${fieldName}`]: (operator === '$push') ? {$each: data} : data}};
+                // note: $pullAll is not de deprecated: cannot use $each on $pull
+                await user.update(query);
+            }
 
-// correlation handler
-exports.updateThenCorrelate = function (data, user, next, fieldName, operator, _THIS) {
-    return (async (data, user, next) => {
-        // create/remove the doc(s)
-        switch (operator) {
-            case '$pullAll':
-                await _THIS.remove({_id: data});
-                break;
-            case '$push':
-                if (user) await data.map(self => self.provider = user);
-                data = await _THIS.create(data);    // note: this line reassign the following 'data'
-                break;
-            default:
-                throw new SyntaxError('Operator must be either \'$push\' (create) or \'$pullAll\' (delete)');
-        }
-
-        // push/pull user's owned list  // note: maybe it is not necessary have to do dissociation
-        if (user && fieldName) {
-            const query = {[operator]: {[`docLists.${fieldName}`]: (operator === '$push') ? {$each: data} : data}};
-            // note: $pullAll is not de deprecated: cannot use $each on $pull
-            await user.update(query);
-        }
-
-        return next(null, data);
-    })(...exports.normalization(data, user, next));
+            return next(null, data);
+        })(...exports.schema.normalization(data, user, next));
+    },
 };

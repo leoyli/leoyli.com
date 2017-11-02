@@ -3,7 +3,10 @@ const
 
 
 
-// define new (DB)data schema   // todo: added CDN object for the header
+// ==============================
+//  SCHEMA
+// ==============================
+// todo: added CDN object for the header
 let _siteConfigSchema       = new mongoose.Schema({
     title                   : {type: String, default: 'New Website'},
     description             : {type: String, default: 'n/a'},
@@ -20,8 +23,10 @@ let _siteConfigSchema       = new mongoose.Schema({
 
 
 
-// define new methods
-//// initialization (model)
+// ==============================
+//  STATIC METHODS
+// ==============================
+// initialization (model)
 _siteConfigSchema.static('siteInitialization', function() {
     this.findOne({}, (err, loadConfig) => {
         try {
@@ -33,7 +38,7 @@ _siteConfigSchema.static('siteInitialization', function() {
 });
 
 
-//// update settings (model)
+// update settings (model)
 _siteConfigSchema.static('updateSettings', function(dataToBeUpdated, next) {
     return this.findOneAndUpdate({}, dataToBeUpdated, {new: true}, next);
 });

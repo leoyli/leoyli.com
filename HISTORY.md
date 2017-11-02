@@ -1,3 +1,12 @@
+### 0.0.58 / 2017-11-01
+> App
+- Removed the anti-pattern as adding methods into `String.prototype` and restructured the corresponding calls.
+- Replaced some methods by 'lodash'.
+
+> UI
+- n/a
+
+
 ### 0.0.57 / 2017-11-01
 > App
 - Withdrew the dependency of 'express.sanitizer'.

@@ -1,6 +1,9 @@
 exports = module.exports = {};
 
 
+// ancillaries
+const _fn                   = require('./methods');
+
 
 // local variables pre-loading (global middleware)
 exports.preloadLocals = (req, res, next) => {
@@ -38,7 +41,7 @@ exports.isSignedIn = (req, res, next) => {
 
 // authorization checking
 function _isAuthorized (req, res, next) {
-    if (req.user.docLists.posts.indexOf(req.url._$.readObjectID()) === -1) {    // option: find by post ID as a alternative
+    if (req.user.docLists.posts.indexOf(_fn.string.readObjectID(req.url)) === -1) {    // option: find by post ID as a alternative
         req.flash('error', 'Nothing were found...');
         return res.redirect('/');
     } else next();
@@ -48,7 +51,7 @@ exports.isAuthorized = [exports.isSignedIn, _isAuthorized];
 
 // scripts sanitizer
 exports.putPostSanitizer = (req, res, next) => {
-    if (req.body.post.content) req.body.post.content = req.body.post.content._$.sanitize();
+    if (req.body.post.content) req.body.post.content = _fn.string.escapeInHTML(req.body.post.content);
     next();
 };
 

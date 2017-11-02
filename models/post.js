@@ -4,7 +4,13 @@ const
 
 
 
-// define validation rules
+// ==============================
+//  FUNCTIONS
+// ==============================
+// ancillaries
+const _fn                   = require('../config/methods');
+
+// validating functions
 function featured (value) {
     if (!value) return true;
     return validator.isURL(value);
@@ -12,7 +18,9 @@ function featured (value) {
 
 
 
-// define new (DB)data schema
+// ==============================
+//  SCHEMA
+// ==============================
 const PostSchema            = new mongoose.Schema({
     _status                 : {type: Number, default: 0},
     _pinTop                 : {type: Boolean, default: false},
@@ -41,29 +49,29 @@ const PostSchema            = new mongoose.Schema({
 
 
 
-// define new methods
-const exMethods             = require('../config/methods');
-
-//// create and associate (model)
+// ==============================
+//  STATIC METHODS
+// ==============================
+// create and associate (model)
 PostSchema.static('postsCreateThenAssociate', function (raw, user, next) {
-    return Promise.resolve().then(() => exMethods.updateThenCorrelate(raw, user, next, 'posts', '$push', this));
+    return Promise.resolve().then(() => _fn.schema.updateAndBind(raw, user, next, 'posts', '$push', this));
 });
 
 
-//// delete and dissociate (model)  // note: not workable for admin in deleting media owned by multiple users
+// delete and dissociate (model)  // note: not workable for admin in deleting media owned by multiple users
 PostSchema.static('postsDeleteThenDissociate', function (docsID, user, next) {
-    return Promise.resolve().then(() => exMethods.updateThenCorrelate(docsID, user, next, 'posts', '$pullAll', this));
+    return Promise.resolve().then(() => _fn.schema.updateAndBind(docsID, user, next, 'posts', '$pullAll', this));
 });
 
 
-//// (pre-hook) canonical key evaluation
+// (pre-hook) canonical key evaluation
 PostSchema.pre('save', function (next) {
-    if (!this.canonicalKey || this.canonicalKey === '') this.canonicalKey = this.title._$.canonicalize();
+    if (!this.canonicalKey || this.canonicalKey === '') this.canonicalKey = _fn.string.canonicalize(this.title);
     next();
 });
 
 
-//// (pre-hook) version counter
+// (pre-hook) version counter
 PostSchema.pre('findOneAndUpdate', function (next) {
     this.findOneAndUpdate({}, {$inc: {_revised: 1}});
     next();

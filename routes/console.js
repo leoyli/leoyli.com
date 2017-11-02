@@ -73,9 +73,6 @@ router
     .all(_pre.prependTitleTag('Media Uploader'))
     .get((req, res) => res.render('./console/upload'))
     .post(_pre.busboy({fileSize: 3*1048576, files: 2}), (req, res) => { // todo: will be responsible for all media uploading event and redirect user back
-
-
-
         if (req.body.busboySlip.notice[0]) {
             req.body.busboySlip.notice.forEach(notice => req.flash('error', notice));
             if (req.body.busboySlip.raw[0]) return res.redirect('back');

@@ -3,7 +3,17 @@ const
 
 
 
-// define new (DB)data schema
+// ==============================
+//  FUNCTIONS
+// ==============================
+// ancillaries
+const _fn                   = require('../config/methods');
+
+
+
+// ==============================
+//  SCHEMA
+// ==============================
 const MediaSchema           = new mongoose.Schema({
     _status                 : {type: Number, default: 0},
     provider: {
@@ -29,22 +39,22 @@ const MediaSchema           = new mongoose.Schema({
 
 
 
-// define new methods
-const exMethods             = require('../config/methods');
-
-//// create and associate (model)
+// ==============================
+//  STATIC METHODS
+// ==============================
+// create and associate (model)
 MediaSchema.static('mediaCreateThenAssociate', function (raw, user, next) {
-    return Promise.resolve().then(() => exMethods.updateThenCorrelate(raw, user, next, 'media', '$push', this));
+    return Promise.resolve().then(() => _fn.schema.updateAndBind(raw, user, next, 'media', '$push', this));
 });
 
 
-//// delete and dissociate (model)  // note: not workable for admin in deleting media owned by multiple users
+// delete and dissociate (model)  // note: not workable for admin in deleting media owned by multiple users
 MediaSchema.static('mediaDeleteThenDissociate', function (docsID, user, next) {
-    return Promise.resolve().then(() => exMethods.updateThenCorrelate(docsID, user, next, 'media', '$pullAll', this));
+    return Promise.resolve().then(() => _fn.schema.updateAndBind(docsID, user, next, 'media', '$pullAll', this));
 });
 
 
-//// (pre-hook) version counter
+// (pre-hook) version counter
 MediaSchema.pre('findOneAndUpdate', function (next) {
     this.findOneAndUpdate({}, {$inc: {_revised: 1}});
     next();

@@ -53,9 +53,6 @@ require('./config/passport')(app, passport);
 
 
 // app
-//// permanent methods
-require('./config/methods').extendStringPrototypeMethods();
-
 //// permanent middleware
 app.use(require('./config/middleware').preloadLocals);
 

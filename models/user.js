@@ -5,7 +5,9 @@ const
 
 
 
-// define new (DB)data schema
+// ==============================
+//  SCHEMA
+// ==============================
 const docLists              = new mongoose.Schema({
     posts: [{
         type                : mongoose.Schema.Types.ObjectId,
@@ -39,7 +41,9 @@ const UserSchema            = new mongoose.Schema({
 
 
 
-// define new methods
+// ==============================
+//  STATIC METHODS
+// ==============================
 // nickname assignment (pre-hook)
 UserSchema.pre('save', function (next) {
     if (!this.nickname) this.nickname = `${this.firstName} ${this.lastName}`;
@@ -54,16 +58,6 @@ UserSchema.plugin(passportLocalMongoose, {
     selectFields: ['_id', 'email', 'username', 'nickname', 'picture', 'docLists'],
 });
 
-
-// // passport-local-mongoose method overwrite (into a Promise)
-// const _authenticate = UserSchema.methods.authenticate;
-// UserSchema.methods.authenticate = async function authenticate(password, next) {
-//     await _authenticate.call(this, password, (err, result) => {
-//         if (err) throw err;
-//         if (typeof next === 'function') return next(err, result);
-//         return result;
-//     });
-// };
 
 
 // export model
