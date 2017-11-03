@@ -17,7 +17,7 @@
                 ｜Revised: {{= post._revised }}
             </div>
             <time class="col-md-3 text-lg-right"
-                  datetime="{{= post._updated.toISOString() }}">{{= post._updated.toDateString() }}</time>
+                  datetime="{{= post._updated }}">{{= new Date(post._updated).toDateString() }}</time>
         </header>
         {{? post.featured }}
             <figure class="_featured py-2">

@@ -10,7 +10,7 @@
 
     <!-- content -->
     <div class="col-9">
-        {{ posts.forEach(function(post) { }}
+        {{ post.forEach(function(post) { }}
             <article class="mb-4 pb-4" id="{{= post._id }}">
                 <h2 class="_title"><a href="/post/{{= post.canonicalKey }}">{{= post.title }}</a></h2>
                 <header class="row">
@@ -21,7 +21,7 @@
                         ｜Revised: {{= post._revised }}
                     </div>
                     <time class="col-md-3 text-lg-right"
-                          datetime="{{= post._updated.toISOString() }}">{{= post._updated.toDateString() }}</time>
+                          datetime="{{= post._updated }}">{{= new Date(post._updated).toDateString() }}</time>
                 </header>
                 {{? post.featured }}
                     <figure class="_featured py-2">

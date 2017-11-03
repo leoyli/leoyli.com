@@ -1,12 +1,16 @@
-exports = module.exports = {};
-
-
 // ancillaries
 const _fn                   = require('./methods');
 
+// collector
+const _pre = {};
+const _end = {next: {}, error: {}};
 
-// local variables pre-loading (global middleware)
-exports.preloadLocals = (req, res, next) => {
+
+
+// ==============================
+//  APP GLOBAL
+// ==============================
+const preloadLocals = (req, res, next) => {
     // flash message
     res.locals._flash = {error: req.flash('error'), info: req.flash('info')};
 
@@ -19,12 +23,16 @@ exports.preloadLocals = (req, res, next) => {
             res.locals._site.client = req.user ? req.user._doc : {nickname: 'guest', isGuest: true};
             next();
         })
-        .catch(err => next(err, null));
+        .catch(err => {throw err;});
 };
 
 
+
+// ==============================
+//  _pre
+// ==============================
 // authentication checking
-exports.isSignedIn = (req, res, next) => {
+_pre.isSignedIn = (req, res, next) => {
     // if pass in authentications: move to next()
     if (req.isAuthenticated()) return next();
 
@@ -46,18 +54,11 @@ function _isAuthorized (req, res, next) {
         return res.redirect('/');
     } else next();
 }
-exports.isAuthorized = [exports.isSignedIn, _isAuthorized];
-
-
-// scripts sanitizer
-exports.putPostSanitizer = (req, res, next) => {
-    if (req.body.post.content) req.body.post.content = _fn.string.escapeInHTML(req.body.post.content);
-    next();
-};
+_pre.isAuthorized = [_pre.isSignedIn, _isAuthorized];
 
 
 // password validating rules
-exports.passwordValidation = (req, res, next) => {
+_pre.passwordValidation = (req, res, next) => {
     if (!req.body.password.old || !req.body.password.new || !req.body.password.confirmed) {
         req.flash('error', 'Please fill all fields.');
     } else if (req.body.password.new !== req.body.password.confirmed) {
@@ -72,7 +73,7 @@ exports.passwordValidation = (req, res, next) => {
 
 
 // section title handler
-exports.prependTitleTag = (title) => {
+_pre.prependTitleTag = (title) => {
     return (req, res, next) => {
         if (!next) next = () => {};
         res.locals._site.titleTag = `${title} - ${res.locals._site.titleTag}`;
@@ -80,7 +81,7 @@ exports.prependTitleTag = (title) => {
     }
 };
 
-exports.appendTitleTag = (title) => {
+_pre.appendTitleTag = (title) => {
     return (req, res, next) => {
         if (!next) next = () => {};
         res.locals._site.titleTag = `${res.locals._site.titleTag} - ${title}`;
@@ -88,7 +89,38 @@ exports.appendTitleTag = (title) => {
     }
 };
 
+
 // busboy in multipart form for media uploading
-exports.busboy = (limits) => {
+_pre.hireBusboy = (limits) => {
     return (req, res, next) => require('./busboy')(req, res, limits, next);
 };
+
+
+// express async wrapper
+_pre.wrapAsync = (fn) => {
+    return (req, res, next) => fn(req, res, next).catch(next);
+};
+
+
+
+// ==============================
+//  _end
+// ==============================
+// post render handler
+_end.next.postRender = (view, doc) => (req, res) => {
+    [view, doc] = !(view && doc) ? [res.locals._render.view, res.locals._render.post]: [view, doc];
+    if (!doc) {
+        req.flash('error', 'Nothing were found...');
+        return res.redirect('back');
+    } else if (doc.title) _pre.prependTitleTag(doc.title)(req, res);
+    res.render(view, {post: doc});
+};
+
+
+// general error handler
+_end.error.clientError = (err, req, res, next) => { // todo: shows client errors only or crash the server
+    req.flash('error', err.toString());
+    res.redirect('/');
+};
+
+module.exports = {_pre, _end, preloadLocals};

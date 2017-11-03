@@ -16,7 +16,7 @@ const UserModel             = require('../models/user');
 //  FUNCTIONS
 // ==============================
 // middleware
-const _pre                  = require('../config/middleware');
+const {_pre}                = require('../config/middleware');
 
 
 

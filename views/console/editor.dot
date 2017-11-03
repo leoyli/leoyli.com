@@ -1,6 +1,6 @@
 {{= _fn.loadPartial('_header') }}
 
-<h1 class="container mb-4">{{= page.title = post._id ? 'UPDATE A POST' : 'WRITE A POST' }}</h1>
+<h1 class="container mb-4">{{= post._id ? 'UPDATE A POST' : 'WRITE A POST' }}</h1>
 
 <div class="container pb-5">
     <form class="col-lg-9" action="/post/editor/{{? post._id }}{{= `${post._id}?_method=PATCH` }}{{?}}" method="POST">
@@ -28,7 +28,7 @@
         </div>
         <div class="float-right">
             <button class="btn btn-outline-primary text-uppercase">
-                {{= page.button = post._id ? 'Update' : 'Submit' }}
+                {{= post._id ? 'Update' : 'Submit' }}
             </button>
         </div>
     </form>

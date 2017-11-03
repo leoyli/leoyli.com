@@ -1,4 +1,3 @@
-// ** develop only ** //
 const
     express                 = require('express'),
     router                  = express.Router();
@@ -22,6 +21,7 @@ SEEDUSER = {
     firstName   : 'Leo',
     lastName    : 'Li',
     email       : 'leo@leoyli.com',
+    picture     : '/media/201710/1509304639065.png'
 };
 
 SEEDPOST = {
@@ -33,19 +33,22 @@ SEEDPOST = {
 
 
 // seed plant
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
     console.log("NEW SAMPLE INJECTION STARTED:");
+    const registeredUser = await UserModel.register(new UserModel(SEEDUSER), 'leo');
+    console.log(`\n1) USER CREATED & SAVED:\n${registeredUser}`);
+    req.user = registeredUser;
+    const newPost = PostModel.postsCreateThenAssociate(SEEDPOST, req.user)
+    console.log(`\n2) A SAMPLE HAVE INJECTED AND ASSOCIATED WITH THE USER:\n${newPost}`);
+    req.flash('info', 'ALL SEEDED SUCCESSFULLY!');
+    res.redirect('/post');
+});
 
-    UserModel.register(new UserModel(SEEDUSER), 'leo', (err, registeredUser) => {
-        if (err) return res.send(err);
-        console.log(`\n1) USER CREATED & SAVED:\n${registeredUser}`);
-        req.user = registeredUser;
-        PostModel.postsCreateThenAssociate(SEEDPOST, req.user, (err, newPost) => {
-            console.log(`\n2) A SAMPLE HAVE INJECTED AND ASSOCIATED WITH THE USER:\n${newPost}`);
-            req.flash('info', 'ALL SEEDED SUCCESSFULLY!');
-            res.redirect('/post');
-        });
-    });
+
+// error handler
+router.use((err, req, res, next) => {
+    req.flash('error', err.toString());
+    res.redirect('back');
 });
 
 

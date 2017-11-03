@@ -1,3 +1,15 @@
+### 0.1.0 / 2017-11-02
+> App
+- Categorized 'middleware' based on the triggering positions as `._pre` or `_end`.
+- Greatly restructured many 'router' by using `async/await` ES2017 features to replace most of Promises.
+- Used `_end.error.clientError` end-ware to handle error messages. 
+- Used `res.locals._render` to collaborate with `_end.next.postRender` end-ware.
+
+> UI
+- Adapted `Date` type of variable in corresponding with the change in server side.
+- Removed redundant `page` variable as in 'editor'.
+
+
 ### 0.0.58 / 2017-11-01
 > App
 - Removed the anti-pattern as adding methods into `String.prototype` and restructured the corresponding calls.
