@@ -37,9 +37,7 @@ router
                 if (err.code === 'MongoError') req.flash('error', 'DataExistsError: This username have already been taken.'); // todo: specific error code
                 else req.flash('error', err.toString());
                 return res.redirect('/signup'); // todo: highlight errors with qualified inputs remained
-            }
-
-            passport.authenticate('local')(req, res, () => {
+            } else passport.authenticate('local')(req, res, () => {
                 req.flash('info', `Welcome new user: ${req.body.username}`);
                 res.redirect('/console');
             });
@@ -55,37 +53,29 @@ router
         if (req.isAuthenticated()) return res.redirect('/console');
         res.render('./console/account/signin');
     })
-    .post((req, res) => {
-        passport.authenticate('local', async (err, authUser) => {
-            if (err) req.flash('error', err.toString());
-            else if (!authUser) req.flash('error', 'Wrong email/username or password!');
-            else {
-                await req.logIn(authUser, err => { if (err) {
-                    req.flash('error', err.toString());
-                    return res.redirect('/signin');
-                }});
-
-                // redirect the client and delete the temporary key
-                req.flash('info', `Welcome back ${authUser.username}`);
-                const returnTo = req.session.returnTo;
-                delete req.session.returnTo;
-                return res.redirect(returnTo || '/console/dashboard');
-            }
-            res.redirect('/signin');
-        })(req, res);
-    });
+    .post((req, res) => passport.authenticate('local', async (err, authUser) => {
+        if (err) req.flash('error', err.toString());
+        else if (authUser) {
+            await req.logIn(authUser, err => { if (err) {
+                req.flash('error', err.toString());
+                return res.redirect('/signin');
+            }});
+            req.flash('info', `Welcome back ${authUser.username}`);
+            const returnTo = req.session.returnTo;
+            delete req.session.returnTo;
+            return res.redirect(returnTo || '/console/dashboard');
+        } else req.flash('error', 'Wrong email/username or password!');
+        res.redirect('/signin');
+    })(req, res));
 
 
 // sign-out
 router
     .route('/signout')
     .get((req, res) => {
-        // only authenticated user signing out
         if (req.isAuthenticated()) {
             req.logout();
-
-            // flash a condition (catch by 'isSignedIn') for message forwarding
-            req.flash(req.session.justSignedOut = true);
+            req.session.justSignedOut = true;
             req.flash('info', 'See you next time!');
         }
         res.redirect('back');

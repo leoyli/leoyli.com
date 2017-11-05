@@ -10,20 +10,18 @@ const _end = {next: {}, error: {}};
 // ==============================
 //  APP GLOBAL
 // ==============================
-const preloadLocals = (req, res, next) => {
+const preloadLocals = async (req, res, next) => {
     // flash message
     res.locals._flash = {error: req.flash('error'), info: req.flash('info')};
 
     // site settings
-    require('./../models/_siteConfig').findOne()
-        .then(_siteConfig => {
-            if (!_siteConfig) throw new Error('Database corrupted, please restart the server for DB initialization.');
-            res.locals._site = _siteConfig._doc;
-            res.locals._site.titleTag = res.locals._site.title;
-            res.locals._site.client = req.user ? req.user._doc : {nickname: 'guest', isGuest: true};
-            next();
-        })
-        .catch(err => {throw err;});
+    const _config = await require('./../models/_siteConfig').findOne();
+    if (!_config) throw new Error('Database might be corrupted, please restart the server for DB initialization.');
+    res.locals._site = _config._doc;
+    res.locals._site.titleTag = res.locals._site.title;
+    res.locals._site.client = req.user ? req.user._doc : {nickname: 'guest', isGuest: true};
+
+    next();
 };
 
 
@@ -40,21 +38,22 @@ _pre.isSignedIn = (req, res, next) => {
     req.session.returnTo = req.originalUrl;
 
     // gives a flash message based on if just signed out
-    if (req.session.justSignedOut) req.flash('info', String(res.locals._flash.info));
-    else req.flash('error', 'Please sign in first!');
+    if (req.session.justSignedOut) {
+        delete req.session.justSignedOut;
+        req.flash('info', String(res.locals._flash.info));
+    } else req.flash('error', 'Please sign in first!');
 
     res.redirect('/signin');
 };
 
 
 // authorization checking
-function _isAuthorized (req, res, next) {
+_pre.isAuthorized = [_pre.isSignedIn, (req, res, next) => {
     if (req.user.docLists.posts.indexOf(_fn.string.readObjectID(req.url)) === -1) {    // option: find by post ID as a alternative
         req.flash('error', 'Nothing were found...');
         return res.redirect('/');
     } else next();
-}
-_pre.isAuthorized = [_pre.isSignedIn, _isAuthorized];
+}];
 
 
 // password validating rules
@@ -73,33 +72,25 @@ _pre.passwordValidation = (req, res, next) => {
 
 
 // section title handler
-_pre.prependTitleTag = (title) => {
-    return (req, res, next) => {
-        if (!next) next = () => {};
-        res.locals._site.titleTag = `${title} - ${res.locals._site.titleTag}`;
-        next();
-    }
+_pre.prependTitleTag = (title) => (req, res, next) => {
+    if (!next) next = () => {};
+    res.locals._site.titleTag = `${title} - ${res.locals._site.titleTag}`;
+    next();
 };
 
-_pre.appendTitleTag = (title) => {
-    return (req, res, next) => {
-        if (!next) next = () => {};
-        res.locals._site.titleTag = `${res.locals._site.titleTag} - ${title}`;
-        next();
-    }
+_pre.appendTitleTag = (title) => (req, res, next) => {
+    if (!next) next = () => {};
+    res.locals._site.titleTag = `${res.locals._site.titleTag} - ${title}`;
+    next();
 };
 
 
 // busboy in multipart form for media uploading
-_pre.hireBusboy = (limits) => {
-    return (req, res, next) => require('./busboy')(req, res, limits, next);
-};
+_pre.hireBusboy = (limits) => (req, res, next) => require('./busboy')(req, res, limits, next);
 
 
 // express async wrapper
-_pre.wrapAsync = (fn) => {
-    return (req, res, next) => fn(req, res, next).catch(next);
-};
+_pre.wrapAsync = (fn) => (req, res, next) => fn(req, res, next).catch(next);
 
 
 
