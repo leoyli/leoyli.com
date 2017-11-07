@@ -25,6 +25,10 @@
             <input class="form-control" id="email" name="email" placeholder="Email" type="email" />
         </div>
         <div class="form-group">
+            <label class="font-weight-bold" for="picture">Picture</label>
+            <input class="form-control" id="picture" name="picture" placeholder="Picture" />
+        </div>
+        <div class="form-group">
             <label class="font-weight-bold" for="password">Password</label>
             <input class="form-control" id="password" name="password[new]" placeholder="Password" type="password" />
         </div>

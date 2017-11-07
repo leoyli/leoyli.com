@@ -1,9 +1,10 @@
 // ancillaries
+const { MongoError }        = require('mongodb');
 const _fn                   = require('./methods');
 
 // collector
 const _pre = {};
-const _end = {next: {}, error: {}};
+const _end = { next: {}, error: {} };
 
 
 
@@ -12,14 +13,14 @@ const _end = {next: {}, error: {}};
 // ==============================
 const preloadLocals = async (req, res, next) => {
     // flash message
-    res.locals._flash = {error: req.flash('error'), info: req.flash('info')};
+    res.locals._flash = { error: req.flash('error'), info: req.flash('info') };
 
     // site settings
     const _config = await require('./../models/_siteConfig').findOne();
     if (!_config) throw new Error('Database might be corrupted, please restart the server for DB initialization.');
     res.locals._site = _config._doc;
     res.locals._site.titleTag = res.locals._site.title;
-    res.locals._site.client = req.user ? req.user._doc : {nickname: 'guest', isGuest: true};
+    res.locals._site.client = req.user ? req.user._doc : { nickname: 'guest', isGuest: true };
 
     next();
 };
@@ -49,7 +50,7 @@ _pre.isSignedIn = (req, res, next) => {
 
 // authorization checking
 _pre.isAuthorized = [_pre.isSignedIn, (req, res, next) => {
-    if (req.user.docLists.posts.indexOf(_fn.string.readObjectID(req.url)) === -1) {    // option: find by post ID as a alternative
+    if (!req.user.docLists || req.user.docLists.posts.indexOf(_fn.string.readObjectID(req.url)) === -1) {    // option: find by post ID as a alternative
         req.flash('error', 'Nothing were found...');
         return res.redirect('/');
     } else next();
@@ -58,8 +59,8 @@ _pre.isAuthorized = [_pre.isSignedIn, (req, res, next) => {
 
 // password validating rules
 _pre.passwordValidation = (req, res, next) => {
-    if (!req.body.password.old || !req.body.password.new || !req.body.password.confirmed) {
-        req.flash('error', 'Please fill all fields.');
+    if (!req.body.password.new || !req.body.password.confirmed) {
+        req.flash('error', 'Please fill all required fields.');
     } else if (req.body.password.new !== req.body.password.confirmed) {
         req.flash('error', 'Two new password does not the same.');
     } else if (req.body.password.old === req.body.password.new) {
@@ -89,14 +90,14 @@ _pre.appendTitleTag = (title) => (req, res, next) => {
 _pre.hireBusboy = (limits) => (req, res, next) => require('./busboy')(req, res, limits, next);
 
 
-// express async wrapper
-_pre.wrapAsync = (fn) => (req, res, next) => fn(req, res, next).catch(next);
-
-
 
 // ==============================
 //  _end
 // ==============================
+// express async wrapper
+_end.wrapAsync = (fn) => (req, res, next) => fn(req, res, next).catch(next);
+
+
 // post render handler
 _end.next.postRender = (view, doc) => (req, res) => {
     [view, doc] = !(view && doc) ? [res.locals._render.view, res.locals._render.post]: [view, doc];
@@ -104,14 +105,22 @@ _end.next.postRender = (view, doc) => (req, res) => {
         req.flash('error', 'Nothing were found...');
         return res.redirect('back');
     } else if (doc.title) _pre.prependTitleTag(doc.title)(req, res);
-    res.render(view, {post: doc});
+    res.render(view, { post: doc });
 };
 
 
 // general error handler
 _end.error.clientError = (err, req, res, next) => { // todo: shows client errors only or crash the server
+    if (err.name === 'MongoError' && err.code === 11000) {
+        req.flash('error', 'This username is not available.');
+        return res.redirect('back');
+    }
+    if (err.name === 'UserExistsError') {
+        req.flash('error', 'This email have been registered.');
+        return res.redirect('back');
+    }
     req.flash('error', err.toString());
     res.redirect('/');
 };
 
-module.exports = {_pre, _end, preloadLocals};
+module.exports = { _pre, _end, preloadLocals };

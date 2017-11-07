@@ -22,28 +22,28 @@ function featured (value) {
 //  SCHEMA
 // ==============================
 const PostSchema            = new mongoose.Schema({
-    _status                 : {type: Number, default: 0},
-    _pinTop                 : {type: Boolean, default: false},
+    _status                 : { type: Number, default: 0 },
+    _pinTop                 : { type: Boolean, default: false },
     provider: {
         _id: {
             type            : mongoose.Schema.Types.ObjectId,
             ref             : 'USER',
         },
-        username            : {type: String},
+        username            : { type: String },
     },
-    featured                : {type: String, // todo: featured by a video
+    featured                : { type: String, // todo: featured by a video
         validate: {
             isAsync         : false,
             validator       : featured,
             message         : 'INVALID URL',
         }},
-    title                   : {type: String, required: true, trim: true},
-    content                 : {type: String, required: true},
-    canonicalKey            : {type: String, lowercase: true, unique: true},
-    class                   : {type: String, lowercase: true, default: 'unclassified'}, // tofix: empty space handling
-    tag                     : {type: String, lowercase: true},
+    title                   : { type: String, required: true, trim: true },
+    content                 : { type: String, required: true },
+    canonicalKey            : { type: String, lowercase: true, unique: true },
+    class                   : { type: String, lowercase: true, default: 'unclassified' }, // tofix: empty space handling
+    tag                     : { type: String, lowercase: true },
 }, {
-    timestamps              : {createdAt: '_created', updatedAt: '_updated'},
+    timestamps              : { createdAt: '_created', updatedAt: '_updated' },
     versionKey              : '_revised',
 });
 
@@ -54,13 +54,13 @@ const PostSchema            = new mongoose.Schema({
 // ==============================
 // create and associate (model)
 PostSchema.static('postsCreateThenAssociate', function (raw, user, next) {
-    return _fn.schema.updateAndBind(raw, user, next, 'posts', '$push', this);
+    return Promise.resolve().then(() => _fn.schema.updateAndBind(raw, user, next, 'posts', '$push', this));
 });
 
 
 // delete and dissociate (model)  // note: not workable for admin in deleting media owned by multiple users
 PostSchema.static('postsDeleteThenDissociate', function (docsID, user, next) {
-    return _fn.schema.updateAndBind(docsID, user, next, 'posts', '$pullAll', this);
+    return Promise.resolve().then(() => _fn.schema.updateAndBind(docsID, user, next, 'posts', '$pullAll', this));
 });
 
 
@@ -73,7 +73,7 @@ PostSchema.pre('save', function (next) {
 
 // (pre-hook) version counter
 PostSchema.pre('findOneAndUpdate', function (next) {
-    this.findOneAndUpdate({}, {$inc: {_revised: 1}});
+    this.findOneAndUpdate({}, { $inc: { _revised: 1 }});
     next();
 });
 

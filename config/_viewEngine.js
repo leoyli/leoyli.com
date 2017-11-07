@@ -19,7 +19,7 @@ function render(filePath, locals, next) {
 function getReference(locals) { // todo: allows the user to added customized runtime function
     // load express configs by restricting `locals`
     const reference = _.omit(locals, ['settings', 'cache', '_locals', '_render']);
-    reference.set = {partials: locals.settings['partials'], extName: locals.settings['view engine']};
+    reference.set = { partials: locals.settings['partials'], extName: locals.settings['view engine'] };
 
     // populate the run-time available functions
     reference._fn = {   // note: runtime functions
@@ -55,7 +55,7 @@ function getFileContent(filePath, _SYNC) {
 
 // read function
 function buildTemplateFromFile(templateString, filePath, reference) {
-    const sections = {main : templateString};   // todo: added multiple sections support
+    const sections = { main : templateString };   // todo: added multiple sections support
 
     try {
         return new Template(filePath, reference, sections);

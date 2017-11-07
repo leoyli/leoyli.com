@@ -6,6 +6,14 @@ const
 
 
 // ==============================
+//  FUNCTIONS
+// ==============================
+// ancillaries
+const _fn                   = require('../config/methods');
+
+
+
+// ==============================
 //  SCHEMA
 // ==============================
 const docLists              = new mongoose.Schema({
@@ -20,22 +28,22 @@ const docLists              = new mongoose.Schema({
 });
 
 const UserSchema            = new mongoose.Schema({
-    _role                   : {type: String, default: 'admin'},
-    _isActive               : {type: String, default: false},
-    username                : {type: String, unique: true, lowercase: true},
-    email                   : {type: String, unique: true, required: true,
+    _role                   : { type: String, default: 'admin' },
+    _isActive               : { type: String, default: false },
+    username                : { type: String, unique: true, lowercase: true },
+    email                   : { type: String, unique: true, required: true,
         validate: {
             isAsync         : false,
             validator       : validator.isEmail,
             message         : 'INVALID EMAIL ADDRESS',
         }},
-    nickname                : {type: String},
-    firstName               : {type: String, required: true},
-    lastName                : {type: String, required: true},
-    picture                 : {type: String, required: true, default: ''},
+    nickname                : { type: String },
+    firstName               : { type: String, required: true },
+    lastName                : { type: String, required: true },
+    picture                 : { type: String, required: true, default: '' },
     docLists                : docLists,
 }, {
-    timestamps              : {createdAt: '_registered', updatedAt: '_updated'},
+    timestamps              : { createdAt: '_registered', updatedAt: '_updated' },
     versionKey              : false,
 });
 
@@ -57,6 +65,18 @@ UserSchema.plugin(passportLocalMongoose, {
     usernameQueryFields: ['username'],
     selectFields: ['_id', 'email', 'username', 'nickname', 'picture', 'docLists'],
 });
+
+
+//// rewrite plugin methods as promises
+const _register = UserSchema.statics.register;
+UserSchema.statics.register = function (doc, pw, next) {
+    return _fn.schema.promisify(_register, arguments, this);
+};
+
+const _authenticate = UserSchema.methods.authenticate;
+UserSchema.methods.authenticate = function (pw, next) {
+    return _fn.schema.promisify(_authenticate, arguments, this);
+};
 
 
 

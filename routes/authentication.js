@@ -16,7 +16,7 @@ const UserModel             = require('../models/user');
 //  FUNCTIONS
 // ==============================
 // middleware
-const {_pre}                = require('../config/middleware');
+const { _pre, _end }        = require('../config/middleware');
 
 
 
@@ -31,18 +31,14 @@ router
         if (req.isAuthenticated()) return res.redirect('/console/dashboard');
         res.render('./console/account/signup')
     })
-    .post(_pre.passwordValidation, (req, res) => {
-        UserModel.register(new UserModel(req.body), req.body.password.new, (err, registeredUser) => {
-            if (err) {
-                if (err.code === 'MongoError') req.flash('error', 'DataExistsError: This username have already been taken.'); // todo: specific error code
-                else req.flash('error', err.toString());
-                return res.redirect('/signup'); // todo: highlight errors with qualified inputs remained
-            } else passport.authenticate('local')(req, res, () => {
-                req.flash('info', `Welcome new user: ${req.body.username}`);
-                res.redirect('/console');
-            });
+    .post(_pre.passwordValidation, _end.wrapAsync(async (req, res) => {
+        const newUser = await UserModel.register(new UserModel(req.body), req.body.password.new);
+        req.logIn(newUser, err => {
+            if (err) throw err;
+            req.flash('info', `Welcome new user: ${req.body.username}`);
+            res.redirect('/console');
         });
-    });
+    }));
 
 
 // sign-in
@@ -53,19 +49,19 @@ router
         if (req.isAuthenticated()) return res.redirect('/console');
         res.render('./console/account/signin');
     })
-    .post((req, res) => passport.authenticate('local', async (err, authUser) => {
-        if (err) req.flash('error', err.toString());
-        else if (authUser) {
-            await req.logIn(authUser, err => { if (err) {
-                req.flash('error', err.toString());
-                return res.redirect('/signin');
-            }});
-            req.flash('info', `Welcome back ${authUser.username}`);
+    .post((req, res, next) => passport.authenticate('local', (err, authUser) => {   // note: async/await will handle error; otherwise handle by calling next();
+        // exception
+        if (err) return next(err);
+        if (!authUser) return next(new Error('Wrong email/username or password!'));
+
+        // normal
+        req.logIn(authUser, err => {
+            if (err) return next(err);
             const returnTo = req.session.returnTo;
             delete req.session.returnTo;
+            req.flash('info', `Welcome back ${authUser.username}`);
             return res.redirect(returnTo || '/console/dashboard');
-        } else req.flash('error', 'Wrong email/username or password!');
-        res.redirect('/signin');
+        });
     })(req, res));
 
 
@@ -80,6 +76,10 @@ router
         }
         res.redirect('back');
     });
+
+
+// error handler
+router.use(_end.error.clientError);
 
 
 

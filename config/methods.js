@@ -65,4 +65,11 @@ exports.schema = {
             return next(null, data);
         })(...exports.schema.normalization(data, user, next));
     },
+    promisify: (fn, arg, THIS) => {
+        if (typeof arg[arg.length-1] === 'function') return fn.call(THIS, ...arg);
+        return new Promise((resolve, reject) => fn.call(THIS, ...arg, (err, result) => {
+            if (err) return reject(err);
+            resolve(result);
+        }));
+    },
 };

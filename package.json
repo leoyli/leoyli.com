@@ -1,6 +1,6 @@
 {
   "name": "leoyli-main",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
@@ -17,6 +17,7 @@
     "lodash": "^4.17.4",
     "marked": "^0.3.6",
     "method-override": "^2.3.10",
+    "mongodb": "^2.2.33",
     "mongoose": "^4.12.4",
     "morgan": "~1.8.1",
     "passport": "^0.4.0",

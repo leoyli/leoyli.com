@@ -1,3 +1,14 @@
+### 0.1.2 / 2017-11-05
+> App
+- Added a method function `.promisify` for promisification.
+- Rename middleware from `_pre.wrapAsync` to `_end.wrapAsync`.
+- Fixed the 'authentication' route.
+
+> UI
+- Updated 'singup' template.
+
+
+
 ### 0.1.1 / 2017-11-05
 > App
 - Simplified code structures in 'middleware' and 'authentication' route.
@@ -8,7 +19,7 @@
 
 ### 0.1.0 / 2017-11-02
 > App
-- Categorized 'middleware' based on the triggering positions as `._pre` or `_end`.
+- Categorized 'middleware' based on the triggering positions as `._pre` or `._end`.
 - Greatly restructured many 'router' by using `async/await` ES2017 features to replace most of Promises.
 - Used `_end.error.clientError` end-ware to handle error messages. 
 - Used `res.locals._render` to collaborate with `_end.next.postRender` end-ware.

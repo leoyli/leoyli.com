@@ -54,7 +54,7 @@ function ImgUploadByBusboy (req, res, limits, next) {
 
     // BUSBOY-LISTENER: after all streams resolved
     busboy.on('finish', () => {
-        req.body.busboySlip = {raw: Object.values(populator).filter(obj => obj.isSkipped !== true), notice};
+        req.body.busboySlip = { raw: Object.values(populator).filter(obj => obj.isSkipped !== true), notice };
         next();
     });
 

@@ -15,25 +15,25 @@ const _fn                   = require('../config/methods');
 //  SCHEMA
 // ==============================
 const MediaSchema           = new mongoose.Schema({
-    _status                 : {type: Number, default: 0},
+    _status                 : { type: Number, default: 0 },
     provider: {
         _id: {
             type            : mongoose.Schema.Types.ObjectId,
             ref             : 'USER',
         },
-        username            : {type: String},
+        username            : { type: String },
     },
     file: {
-        fullPath            : {type: String},
-        fileBase            : {type: String},
-        fileType            : {type: String},
+        fullPath            : { type: String },
+        fileBase            : { type: String },
+        fileType            : { type: String },
     },
-    title                   : {type: String, required: true},
-    description             : {type: String, required: true},
-    class                   : {type: String, lowercase: true},
-    tag                     : {type: String, lowercase: true},
+    title                   : { type: String, required: true },
+    description             : { type: String, required: true },
+    class                   : { type: String, lowercase: true },
+    tag                     : { type: String, lowercase: true },
 }, {
-    timestamps              : {createdAt: '_uploaded', updatedAt: '_updated'},
+    timestamps              : { createdAt: '_uploaded', updatedAt: '_updated' },
     versionKey              : '_revised',
 });
 
@@ -56,7 +56,7 @@ MediaSchema.static('mediaDeleteThenDissociate', function (docsID, user, next) {
 
 // (pre-hook) version counter
 MediaSchema.pre('findOneAndUpdate', function (next) {
-    this.findOneAndUpdate({}, {$inc: {_revised: 1}});
+    this.findOneAndUpdate({}, { $inc: { _revised: 1 }});
     next();
 });
 
