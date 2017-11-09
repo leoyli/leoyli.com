@@ -7,9 +7,7 @@ const
 // ==============================
 //  MODELS
 // ==============================
-const UserModel             = require('../models/user');
-const MediaModel            = require('../models/media');
-const _siteConfig           = require('../models/_siteConfig');
+const { _siteConfig, mediaModel, userModel } = require('../schema');
 
 
 
@@ -46,7 +44,7 @@ router
     .all(_pre.prependTitleTag('Profile'))
     .get((req, res) => res.render('./console/account/profile'))
     .patch(_end.wrapAsync(async (req, res) => {
-        await UserModel.update({ _id: req.user._id }, { $set: req.body.userProfile });
+        await userModel.update({ _id: req.user._id }, { $set: req.body.userProfile });
         res.redirect('back');
     }));
 
@@ -73,7 +71,7 @@ router
             req.body.busboySlip.notice.forEach(notice => req.flash('error', notice));
             if (req.body.busboySlip.raw[0]) return res.redirect('back');
         }
-        const doc = await MediaModel.mediaCreateThenAssociate(req.body.busboySlip.raw, req.user);
+        const doc = await mediaModel.mediaCreateThenAssociate(req.body.busboySlip.raw, req.user);
         if (doc.length > 0) req.flash('info', `${doc.length} file(s) successfully uploaded!`);
         res.redirect('back');
     }));

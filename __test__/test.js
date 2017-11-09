@@ -1,11 +1,12 @@
+const request = require('supertest');
 const { app, mongoose } = require('../app');
-const request   = require('supertest');
+const { userModel, mediaModel, postModel } = require('../schema');
 
 
 
 // setup
 beforeAll((done) => {
-    require('../models/_siteConfig').siteInitialization(done);
+    require('../schema')._siteConfig.siteInitialization(done);
 });
 
 afterAll((done) => {
@@ -18,11 +19,35 @@ afterAll((done) => {
 
 // test
 describe('Server Initialization', () => {
-    it('Should failed when env not test ', () => {
-        expect(process.env.ENV).toEqual('test');
+    test('Testing Environment: test', () => {
+        return expect(process.env.ENV).toEqual('test');
     });
 
-    it('200 - GET /', () => {
+    test('Connection: 200 - GET /', () => {
         return request(app).get('/').expect(200);
+    });
+});
+
+
+describe('Route - Seed', () => {
+    test('response: 302 - GET /', async () => {
+        const res = await request(app).get('/seed');
+        expect(res.headers.location).toBe('/post');
+        expect(res.statusCode).toBe(302);
+    });
+
+    test('db: data counting', async () => {
+        await expect(userModel.count({})).resolves.toBe(1);
+        await expect(postModel.count({})).resolves.toBe(1);
+    });
+});
+
+
+describe('Route - Authentication', () => {
+    test('User login via email or username', async () => {
+        const req = (doc) => request(app).patch('/signin').send(doc);
+        const doc = [{ email: 'leo@leoyli.com', password: 'leo' }, { email: 'leo', password: 'leo' }];
+        const res = await Promise.all([req(doc[0]), req(doc[1])]);
+        res.forEach(res => expect(res.headers.location).toBe('/console/dashboard'));
     });
 });

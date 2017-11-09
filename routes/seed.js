@@ -7,8 +7,7 @@ const
 // ==============================
 //  MODELS
 // ==============================
-const UserModel             = require('../models/user');
-const PostModel             = require('../models/post');
+const { postModel, userModel } = require('../schema');
 
 
 
@@ -17,10 +16,11 @@ const PostModel             = require('../models/post');
 // ==============================
 // seed data
 SEEDUSER = {
+    email       : 'leo@leoyli.com',
     username    : 'leo',
+    password    : 'leo',
     firstName   : 'Leo',
     lastName    : 'Li',
-    email       : 'leo@leoyli.com',
     picture     : '/media/201710/1509304639065.png'
 };
 
@@ -34,13 +34,9 @@ SEEDPOST = {
 
 // seed plant
 router.get("/", async (req, res) => {
-    console.log("NEW SAMPLE INJECTION STARTED:");
-    const registeredUser = await UserModel.register(new UserModel(SEEDUSER), 'leo');
-    console.log(`\n1) USER CREATED & SAVED:\n${registeredUser}`);
-    req.user = registeredUser;
-    const newPost = PostModel.postsCreateThenAssociate(SEEDPOST, req.user);
-    console.log(`\n2) A SAMPLE HAVE INJECTED AND ASSOCIATED WITH THE USER:\n${newPost}`);
-    req.flash('info', 'ALL SEEDED SUCCESSFULLY!');
+    req.user = await userModel.register(new userModel(SEEDUSER), SEEDUSER.password);
+    await postModel.postsCreateThenAssociate(SEEDPOST, req.user);
+    req.flash('info', 'Successfully seeded.');
     res.redirect('/post');
 });
 

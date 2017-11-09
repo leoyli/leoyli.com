@@ -73,7 +73,7 @@ function FileStreamBranch(fileName, MIMEType) {
 
     // validation   // todo: customize in accepting file types
     const acceptedTypes = ['image/png', 'image/gif', 'image/jpeg', 'image/svg+xml', 'image/x-icon'];
-    this.isAttached = fileName !== '';
+    this.isAttached = !!fileName;
     this.isAccepted = acceptedTypes.indexOf(MIMEType) !== -1;
 }
 

@@ -16,7 +16,7 @@ const preloadLocals = async (req, res, next) => {
     res.locals._flash = { error: req.flash('error'), info: req.flash('info') };
 
     // site settings
-    const _config = await require('./../models/_siteConfig').findOne();
+    const _config = await require('./../schema')._siteConfig.findOne();
     if (!_config) throw new Error('Database might be corrupted, please restart the server for DB initialization.');
     res.locals._site = _config._doc;
     res.locals._site.titleTag = res.locals._site.title;

@@ -1,3 +1,15 @@
+### 0.1.4 / 2017-11-09
+> App
+- Added 'Route - Seed' and 'Route - Authentication' for testing.
+- Replaced conditional syntax from `var !== ''` by `!!var`.
+- Renamed folder 'model' to be 'schema'.
+- Added 'schema/index.js' for destructuring for modules loading.
+- Updated 'seed' route.
+
+> UI
+- Adapted the method changing in 'signin'.
+
+
 ### 0.1.3 / 2017-11-08
 > App
 - Started to use Jest as testing frameworks.
@@ -7,7 +19,7 @@
 - n/a
 
 
-### 0.1.2 / 2017-11-05
+### 0.1.2 / 2017-11-06
 > App
 - Added a method function `.promisify` for promisification.
 - Rename middleware from `_pre.wrapAsync` to `_end.wrapAsync`.

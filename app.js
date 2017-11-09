@@ -24,7 +24,7 @@ mongoose.connect(process.env.DB, { useMongoClient: true });
 mongoose.Promise = Promise;
 
 // initialization (for the new installed site)
-require('./models/_siteConfig').siteInitialization();
+require('./schema')._siteConfig.siteInitialization();
 
 
 

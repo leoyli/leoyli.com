@@ -29,7 +29,6 @@ exports.schema = {
 
         // callback pre-assignment
         if (!haveCallback) next = (err, docs) => {
-            debugger;
             if (err) throw err;
             return docs;
         };

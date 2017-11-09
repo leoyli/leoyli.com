@@ -24,10 +24,10 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle d-flex align-items-center px-1" href="#" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{? _site.client.picture !== '' }}
+                            {{? _site.client.picture }}
                                 <img class="" alt="User" src="{{= _site.client.picture }}" />
                             {{?}}
-                            {{? !_site.client.picture || _site.client.picture === '' }}
+                            {{? !_site.client.picture }}
                             <!-- tofix: load the profile image as svg -->
                                 <svg width="25" height="25">
                                     <rect width="25" height="25" style="fill:rgba(0,0,0,.1);" />

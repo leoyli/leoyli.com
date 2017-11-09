@@ -8,7 +8,7 @@ const
 // ==============================
 //  MODELS
 // ==============================
-const UserModel             = require('../models/user');
+const { userModel }         = require('../schema');
 
 
 
@@ -32,7 +32,7 @@ router
         res.render('./console/account/signup')
     })
     .post(_pre.passwordValidation, _end.wrapAsync(async (req, res) => {
-        const newUser = await UserModel.register(new UserModel(req.body), req.body.password.new);
+        const newUser = await userModel.register(new userModel(req.body), req.body.password.new);
         req.logIn(newUser, err => {
             if (err) throw err;
             req.flash('info', `Welcome new user: ${req.body.username}`);
@@ -49,7 +49,7 @@ router
         if (req.isAuthenticated()) return res.redirect('/console');
         res.render('./console/account/signin');
     })
-    .post((req, res, next) => passport.authenticate('local', (err, authUser) => {   // note: async/await will handle error; otherwise handle by calling next();
+    .patch((req, res, next) => passport.authenticate('local', (err, authUser) => {   // note: async/await will handle error; otherwise handle by calling next();
         // exception
         if (err) return next(err);
         if (!authUser) return next(new Error('Wrong email/username or password!'));

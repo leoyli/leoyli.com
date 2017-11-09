@@ -1,15 +1,15 @@
-const UserModel = require("./../models/user");
+const { userModel } = require("./../schema");
 
 
 
 // passport configurations
 module.exports = (app, passport) => {
     // strategy is configured using passport-local-mongoose
-    passport.use(UserModel.createStrategy());
+    passport.use(userModel.createStrategy());
 
     // serialize & deserialize
-    passport.serializeUser(UserModel.serializeUser());
-    passport.deserializeUser(UserModel.deserializeUser());
+    passport.serializeUser(userModel.serializeUser());
+    passport.deserializeUser(userModel.deserializeUser());
 
     // related app configs
     app.use(require('express-session')({
