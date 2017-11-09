@@ -27,13 +27,10 @@ let _siteConfigSchema       = new mongoose.Schema({
 //  STATIC METHODS
 // ==============================
 // initialization (model)
-_siteConfigSchema.static('siteInitialization', function() {
-    this.findOne({}, (err, loadConfig) => {
-        try {
-            if (!loadConfig) this.create({});
-        } catch (err) {
-            throw new Error(`Failed in generating default configurations: \n${err.toString()}`);
-        }
+_siteConfigSchema.static('siteInitialization', function(next) {
+    return this.findOne({}, (err, loadConfig) => {
+        if (!loadConfig) return this.create({}, next);
+        if (typeof next === 'function') return next();
     });
 });
 

@@ -1,3 +1,12 @@
+### 0.1.3 / 2017-11-08
+> App
+- Started to use Jest as testing frameworks.
+- Adjusted `_siteConfig.siteInitialization` method.
+
+> UI
+- n/a
+
+
 ### 0.1.2 / 2017-11-05
 > App
 - Added a method function `.promisify` for promisification.
@@ -6,7 +15,6 @@
 
 > UI
 - Updated 'singup' template.
-
 
 
 ### 0.1.1 / 2017-11-05

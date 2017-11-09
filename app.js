@@ -20,7 +20,7 @@ const
 //  DB
 // ==============================
 // connection
-mongoose.connect(process.env.DB, {useMongoClient: true});
+mongoose.connect(process.env.DB, { useMongoClient: true });
 mongoose.Promise = Promise;
 
 // initialization (for the new installed site)
@@ -41,7 +41,7 @@ app.engine('dot', require('./config/_viewEngine').__express);
 
 
 // dependencies
-app.use(logger('dev'));
+if (process.env.ENV === 'dev') app.use(logger('dev'));
 app.use(express.static(path.join(__dirname, './public')));
 app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({extended: true}));
@@ -84,4 +84,4 @@ app.use('/', error);
 // ==============================
 //  APP EXPORTS
 // ==============================
-module.exports = app;
+module.exports = (process.env.ENV === 'test') ? { app, mongoose } : app;
