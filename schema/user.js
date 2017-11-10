@@ -78,6 +78,11 @@ UserSchema.methods.authenticate = function (pw, next) {
     return _fn.schema.promisify(_authenticate, arguments, this);
 };
 
+const _changePassword = UserSchema.methods.changePassword;
+UserSchema.methods.changePassword = function (old_PW, new_PW, next) {
+    return _fn.schema.promisify(_changePassword, arguments, this);
+};
+
 
 
 // export model

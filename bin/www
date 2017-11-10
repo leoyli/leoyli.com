@@ -7,16 +7,16 @@
 const
     app         = require('../app'),
     debug       = require('debug')('leoyli-main:server'),
-    fs          = require('fs'),
-    http2       = require('spdy');
+    http2       = require('spdy'),
+    fs          = require('fs');
 
 /**
  * Get SSL credentials as options
  */
 
 const options = {
-    key         : fs.readFileSync('SSL/server.key', 'utf8'),
-    cert        : fs.readFileSync('SSL/server.crt', 'utf8'),
+    key         : fs.readFileSync(process.env.SSL_KEY, 'utf8'),
+    cert        : fs.readFileSync(process.env.SSL_CRT, 'utf8'),
 };
 
 /**

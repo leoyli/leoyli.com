@@ -1,9 +1,20 @@
+### 0.1.5 / 2017-11-10
+> App
+- Added new testing items (for the console route).
+- Renamed and rearranged some files and directories.
+- Used environment variables for pointing SSL documents.
+- Promisified `.changePassword` method in the user schema.
+
+> UI
+- n/a
+
+
 ### 0.1.4 / 2017-11-09
 > App
 - Added 'Route - Seed' and 'Route - Authentication' for testing.
 - Replaced conditional syntax from `var !== ''` by `!!var`.
 - Renamed folder 'model' to be 'schema'.
-- Added 'schema/index.js' for destructuring for modules loading.
+- Added 'schema/test.js' for destructuring for modules loading.
 - Updated 'seed' route.
 
 > UI

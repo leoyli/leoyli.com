@@ -44,7 +44,7 @@ router
     .all(_pre.prependTitleTag('Profile'))
     .get((req, res) => res.render('./console/account/profile'))
     .patch(_end.wrapAsync(async (req, res) => {
-        await userModel.update({ _id: req.user._id }, { $set: req.body.userProfile });
+        await userModel.update({ _id: req.user._id }, { $set: req.body.profile });
         res.redirect('back');
     }));
 

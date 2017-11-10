@@ -57,7 +57,7 @@ typings/
 app.yaml
 
 # self-signed SSL keys folder
-SSL/
+config/SSL/
 
 # local system files
 .DS_Store
