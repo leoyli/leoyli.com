@@ -84,6 +84,13 @@ describe('Route - Authentication', () => {
 
 
 describe('Route - Console', () => {
+    test('Should have "x-robots-tag" header set to "none"', async () => {
+        const res = await agent
+            .get('/console/dashboard');
+        //
+        expect(res.headers['x-robots-tag']).toBe('none');
+    });
+
     test('Should updates configs of the site', async () => {
         await agent
             .patch('/console/setting')

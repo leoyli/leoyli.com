@@ -35,14 +35,20 @@ require('./schema')._siteConfig.siteInitialization();
 app.set('x-powered-by', false);
 app.set('view engine', 'dot');
 app.set('views', path.join(__dirname, './views'));
-app.set('consolePartials', path.join(__dirname, './views/console/_partials'));
-app.set('partials', path.join(__dirname, './views/theme/_partials'));
+app.set('partials', {
+    theme: path.join(__dirname, './views/theme/_partials'),
+    console: path.join(__dirname, './views/console/_partials'),
+});
 app.engine('dot', require('./config/_viewEngine').__express);
 
 
 // dependencies
 if (process.env.ENV === 'dev') app.use(logger('dev'));
-app.use(express.static(path.join(__dirname, './public')));
+app.use(express.static(path.join(__dirname, './public'), {
+    setHeaders: (res, path, stat) => {
+        res.set('x-robots-tag', 'none');
+    }
+}));
 app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());

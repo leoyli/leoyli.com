@@ -1,3 +1,15 @@
+### 0.1.6 / 2017-11-10
+> App
+- Added `x-robots-tag = none` header into static path and pages needed authentications for preventing crawling from searching engine robots.
+- Added `_pre.doNotCrawled` into 'middleware'.
+- Added `option` as an argument into runtime functions in '_viewEngine'.
+- Separate the the default partials path between console and others.
+- Renamed some variables.
+
+> UI
+- n/a
+
+
 ### 0.1.5 / 2017-11-10
 > App
 - Added new testing items (for the console route).

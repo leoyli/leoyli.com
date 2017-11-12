@@ -7,13 +7,6 @@
     <meta charset="UTF-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="{{= _site.description }}">
-    <meta name="keywords" content="{{= _site.keywords }}">
-
-    <!-- SEO -->
-    {{? typeof post !== 'undefined' }}
-        <link rel="canonical" href="/post/{{= post.canonicalKey }}" />
-    {{?}}
 
     <!-- CDN stylesheets -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
@@ -28,13 +21,11 @@
     <!-- Local stylesheets -->
     <!--<link rel="stylesheet" href="/lib/highlightJS/styles/androidstudio.css" />-->
     <link rel="stylesheet" href="/stylesheets/style.css" />
-    <!-- Facebook OG / Twitter Cards -->
 </head>
 
 
 <body class="bg-black">
 <header role="banner">
-    {{= _fn.loadPartial('_navibar') }}
 </header>
 
 

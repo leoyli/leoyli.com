@@ -23,9 +23,12 @@ function getReference(locals) { // todo: allows the user to added customized run
 
     // populate the run-time available functions
     reference._fn = {   // note: runtime functions
-        useMarkdown : (markdown) => marked(markdown.replace(/&gt;|&#62;/g, '>')),
-        loadPartial : (filePath) => {
-            filePath = path.join(reference.set.partials, `${filePath}.${reference.set.extName}`);
+        useMarkdown : (markdown, option) => marked(markdown.replace(/&gt;|&#62;/g, '>')),
+        loadPartial : (filePath, option) => {
+            const partialsPath = ((option && option.isConsole) || reference._view.isConsole)
+                ? reference.set.partials.console
+                : reference.set.partials.theme;
+            filePath = path.join(partialsPath, `${filePath}.${reference.set.extName}`);
             return getTemplate(filePath, reference, true).render();},
     };
 

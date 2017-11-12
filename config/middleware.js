@@ -19,9 +19,13 @@ const preloadLocals = async (req, res, next) => {
     const _config = await require('./../schema')._siteConfig.findOne();
     if (!_config) throw new Error('Database might be corrupted, please restart the server for DB initialization.');
     res.locals._site = _config._doc;
-    res.locals._site.titleTag = res.locals._site.title;
-    res.locals._site.client = req.user ? req.user._doc : { nickname: 'guest', isGuest: true };
+    res.locals._site.user = req.user ? req.user._doc : { nickname: 'guest', isGuest: true };
 
+    // view settings
+    res.locals._view = {
+        isConsole: (req.url.includes('/console')),
+        titleTag: res.locals._site.title,
+    };
     next();
 };
 
@@ -30,8 +34,15 @@ const preloadLocals = async (req, res, next) => {
 // ==============================
 //  _pre
 // ==============================
+// setting http header for prevent searching engine crawler
+_pre.doNotCrawled = (req, res, next) => {
+    res.set('x-robots-tag', 'none');
+    next();
+};
+
+
 // authentication checking
-_pre.isSignedIn = (req, res, next) => {
+_pre.isSignedIn = [_pre.doNotCrawled, (req, res, next) => {
     // if pass in authentications: move to next()
     if (req.isAuthenticated()) return next();
 
@@ -45,11 +56,11 @@ _pre.isSignedIn = (req, res, next) => {
     } else req.flash('error', 'Please sign in first!');
 
     res.redirect('/signin');
-};
+}];
 
 
 // authorization checking
-_pre.isAuthorized = [_pre.isSignedIn, (req, res, next) => {
+_pre.isAuthorized = [..._pre.isSignedIn, (req, res, next) => {
     if (!req.user.docLists || req.user.docLists.posts.indexOf(_fn.string.readObjectID(req.url)) === -1) {    // option: find by post ID as a alternative
         req.flash('error', 'Nothing were found...');
         return res.redirect('/');
@@ -75,13 +86,13 @@ _pre.passwordValidation = (req, res, next) => {
 // section title handler
 _pre.prependTitleTag = (title) => (req, res, next) => {
     if (!next) next = () => {};
-    res.locals._site.titleTag = `${title} - ${res.locals._site.titleTag}`;
+    res.locals._view.titleTag = `${title} - ${res.locals._view.titleTag}`;
     next();
 };
 
 _pre.appendTitleTag = (title) => (req, res, next) => {
     if (!next) next = () => {};
-    res.locals._site.titleTag = `${res.locals._site.titleTag} - ${title}`;
+    res.locals._view.titleTag = `${res.locals._view.titleTag} - ${title}`;
     next();
 };
 
