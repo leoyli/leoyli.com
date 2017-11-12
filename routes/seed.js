@@ -34,8 +34,8 @@ SEEDPOST = {
 
 // seed plant
 router.get("/", async (req, res) => {
-    req.user = await userModel.register(new userModel(SEEDUSER), SEEDUSER.password);
-    await postModel.postsCreateThenAssociate(SEEDPOST, req.user);
+    const newUser = await userModel.register(new userModel(SEEDUSER), SEEDUSER.password);
+    await postModel.postsCreateThenAssociate(SEEDPOST, newUser);
     req.flash('info', 'Successfully seeded.');
     res.redirect('/post');
 });

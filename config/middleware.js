@@ -19,13 +19,14 @@ const preloadLocals = async (req, res, next) => {
     const _config = await require('./../schema')._siteConfig.findOne();
     if (!_config) throw new Error('Database might be corrupted, please restart the server for DB initialization.');
     res.locals._site = _config._doc;
-    res.locals._site.user = req.user ? req.user._doc : { nickname: 'guest', isGuest: true };
+    res.locals._site.user = req.user ? req.user._doc : { nickname: 'guest', isGuest: true }; // tofix: use session instead
 
     // view settings
     res.locals._view = {
         isConsole: (req.url.includes('/console')),
         titleTag: res.locals._site.title,
     };
+
     next();
 };
 

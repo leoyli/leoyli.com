@@ -12,11 +12,6 @@ module.exports = (app, passport) => {
     passport.deserializeUser(userModel.deserializeUser());
 
     // related app configs
-    app.use(require('express-session')({
-        secret: process.env.PASSPORT_SECRET,
-        resave: false,
-        saveUninitialized: false
-    }));
     app.use(passport.initialize());
     app.use(passport.session());
 };

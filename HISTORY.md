@@ -1,4 +1,14 @@
-### 0.1.6 / 2017-11-10
+### 0.2.0 / 2017-11-12
+> App
+- Removed unused dependencies 'cookieParser'.
+- Configured 'express-session' for allowing to sign-in persistently.
+- Implemented 'connect-mongo' as the session store.
+
+> UI
+- Added 'stay sign-in for 14 days' checkbox into 'sign-in' template.
+
+
+### 0.1.6 / 2017-11-11
 > App
 - Added `x-robots-tag = none` header into static path and pages needed authentications for preventing crawling from searching engine robots.
 - Added `_pre.doNotCrawled` into 'middleware'.

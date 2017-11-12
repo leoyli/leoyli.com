@@ -57,6 +57,12 @@ router
         // normal
         req.logIn(authUser, err => {
             if (err) return next(err);
+
+            // session storage
+            if (req.body.isPersisted) req.session.cookie.maxAge = 14 * 24 * 60 * 60 * 1000;
+            if (req.session.passport) req.session.passport.userID = authUser._id;
+
+            // other response
             const returnTo = req.session.returnTo;
             delete req.session.returnTo;
             req.flash('info', `Welcome back ${authUser.username}`);

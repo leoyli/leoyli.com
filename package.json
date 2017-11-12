@@ -1,6 +1,6 @@
 {
   "name": "leoyli-main",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
@@ -10,7 +10,7 @@
     "body-parser": "~1.17.1",
     "busboy": "^0.2.14",
     "connect-flash": "^0.1.1",
-    "cookie-parser": "~1.4.3",
+    "connect-mongo": "^2.0.0",
     "debug": "^2.6.9",
     "dot": "^1.1.2",
     "express": "^4.16.2",
