@@ -1,3 +1,5 @@
+const passport              = require('passport');
+
 // ancillaries
 const { MongoError }        = require('mongodb');
 const _fn                   = require('./methods');
@@ -13,13 +15,16 @@ const _end = { next: {}, error: {} };
 // ==============================
 const preloadLocals = async (req, res, next) => {
     // flash message
-    res.locals._flash = { error: req.flash('error'), info: req.flash('info') };
+    res.locals._flash = { error: req.flash('error'), info: req.flash('info'), pass: req.flash('pass') };
 
     // site settings
     const _config = await require('./../schema')._siteConfig.findOne();
     if (!_config) throw new Error('Database might be corrupted, please restart the server for DB initialization.');
     res.locals._site = _config._doc;
-    res.locals._site.user = req.user ? req.user._doc : { nickname: 'guest', isGuest: true }; // tofix: use session instead
+
+    // session loading
+    if (!req.session.user && req.session.cookie.expires) req.session.cookie.expires = false;
+    res.locals._session = (req.session.user) ? { user: req.session.user } : {};
 
     // view settings
     res.locals._view = {
@@ -42,8 +47,12 @@ _pre.doNotCrawled = (req, res, next) => {
 };
 
 
+// passport loading
+_pre.usePassport = [passport.initialize(), passport.session()];
+
+
 // authentication checking
-_pre.isSignedIn = [_pre.doNotCrawled, (req, res, next) => {
+_pre.isSignedIn = [_pre.doNotCrawled, ..._pre.usePassport, (req, res, next) => {
     // if pass in authentications: move to next()
     if (req.isAuthenticated()) return next();
 
@@ -51,8 +60,8 @@ _pre.isSignedIn = [_pre.doNotCrawled, (req, res, next) => {
     req.session.returnTo = req.originalUrl;
 
     // gives a flash message based on if just signed out
-    if (req.session.justSignedOut) {
-        delete req.session.justSignedOut;
+    if (res.locals._flash.pass) {
+        req.flash('error', String(res.locals._flash.error));
         req.flash('info', String(res.locals._flash.info));
     } else req.flash('error', 'Please sign in first!');
 

@@ -1,3 +1,13 @@
+### 0.2.1 / 2017-11-12
+> App
+- Rewired 'passport' configs so only pages needed authentications will use the passport to generate `req.user` object.
+- After a successful authentications, the required user info will be populated into `req.session.user` object.
+- Used `req.flash('pass')` for replacing `res.session.justSignOut`.
+
+> UI
+- n/a
+
+
 ### 0.2.0 / 2017-11-12
 > App
 - Removed unused dependencies 'cookieParser'.

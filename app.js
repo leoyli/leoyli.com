@@ -63,7 +63,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(flash());
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-require('./config/passport')(app, passport);
+require('./config/passport')(passport);
 
 
 // app
@@ -75,24 +75,13 @@ app.use(require('./config/middleware').preloadLocals);
 // ==============================
 //  ROUTES
 // ==============================
-const
-    index                   = require('./routes/index'),
-    error                   = require('./routes/error'),
-    authentication          = require('./routes/authentication'),
-    appconsole              = require('./routes/console'),
-    post                    = require('./routes/post');
+app.use('/', require('./routes/index'));
+app.use('/', require('./routes/authentication'));
+app.use('/console', require('./routes/console'));
+app.use('/post', require('./routes/post'));
+app.use('/seed', require('./routes/seed'));
+app.use('/', require('./routes/error'));
 
-app.use('/', index);
-app.use('/', authentication);
-app.use('/console', appconsole);
-app.use('/post', post);
-
-// ** develop only ** //
-const seedSample            = require('./routes/seed');
-app.use('/seed', seedSample);
-// ** develop only ** //
-
-app.use('/', error);
 
 
 // ==============================

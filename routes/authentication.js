@@ -49,7 +49,7 @@ router
         if (req.isAuthenticated()) return res.redirect('/console');
         res.render('./console/account/signin');
     })
-    .patch((req, res, next) => passport.authenticate('local', (err, authUser) => {   // note: async/await will handle error; otherwise handle by calling next();
+    .patch(_pre.usePassport, (req, res, next) => passport.authenticate('local', (err, authUser) => {   // note: async/await will handle error; otherwise handle by calling next();
         // exception
         if (err) return next(err);
         if (!authUser) return next(new Error('Wrong email/username or password!'));
@@ -58,9 +58,13 @@ router
         req.logIn(authUser, err => {
             if (err) return next(err);
 
-            // session storage
-            if (req.body.isPersisted) req.session.cookie.maxAge = 14 * 24 * 60 * 60 * 1000;
-            if (req.session.passport) req.session.passport.userID = authUser._id;
+            // session population
+            req.session.cookie.expires = (req.body.isPersisted) ? new Date(Date.now() + 14 * 24 * 3600 * 1000) : false;
+            req.session.user = {
+                _id: authUser._id,
+                nickname: authUser.nickname,
+                picture: authUser.picture,
+            };
 
             // other response
             const returnTo = req.session.returnTo;
@@ -74,12 +78,13 @@ router
 // sign-out
 router
     .route('/signout')
-    .get((req, res) => {
+    .get(_pre.usePassport, (req, res) => {
         if (req.isAuthenticated()) {
             req.logout();
-            req.session.justSignedOut = true;
+            req.flash('pass', true);
             req.flash('info', 'See you next time!');
         }
+        delete req.session.user;
         res.redirect('back');
     });
 
