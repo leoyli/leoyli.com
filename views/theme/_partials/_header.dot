@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-    <title>{{= _view.titleTag }}</title>
+    <title>{{= _view.title }}</title>
 
     <!-- meta tags -->
     <meta charset="UTF-8">
@@ -40,13 +40,13 @@
 
 <main class="bg-white pb-5 pt-4" role="main">
     <!-- flash message -->
-    {{? _flash && (_flash.error || _flash.info) && (_flash.error.length || _flash.info.length > 0) }}
+    {{? _view.flash && (_view.flash.error || _view.flash.info) }}
         <div class="container pb-2" id="flashMessage">
-            {{? _flash.error.length > 0 }}
-                <div class="alert alert-danger" role="alert">{{= _flash.error }}</div>
+            {{? _view.flash.error.length > 0 }}
+                <div class="alert alert-danger" role="alert">{{= _view.flash.error }}</div>
             {{?}}
-            {{? _flash.info.length > 0 }}
-                <div class="alert alert-success" role="alert">{{= _flash.info }}</div>
+            {{? _view.flash.info.length > 0 }}
+                <div class="alert alert-success" role="alert">{{= _view.flash.info }}</div>
             {{?}}
         </div>
     {{?}}

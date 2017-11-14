@@ -12,7 +12,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/post">Blog</a>
                 </li>
-                {{? !_session.user }}
+                {{? !_view.user }}
                     <li class="nav-item">
                         <a class="nav-link" href="/signup">Sign Up</a>
                     </li>
@@ -20,14 +20,14 @@
                         <a class="nav-link" href="/signin">Sign In</a>
                     </li>
                 {{?}}
-                {{? _session.user }}
+                {{? _view.user }}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle d-flex align-items-center px-1" href="#" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{? _session.user.picture }}
-                                <img class="" alt="User" src="{{= _session.user.picture }}" />
+                            {{? _view.user.picture }}
+                                <img class="" alt="User" src="{{= _view.user.picture }}" />
                             {{?}}
-                            {{? !_session.user.picture }}
+                            {{? !_view.user.picture }}
                             <!-- tofix: load the profile image as svg -->
                                 <svg width="25" height="25">
                                     <rect width="25" height="25" style="fill:rgba(0,0,0,.1);" />
@@ -35,7 +35,7 @@
                             {{?}}
                         </a>
                         <div class="dropdown-menu dropdown-menu-right py-2" aria-labelledby="navbarDropdown">
-                            <span class="dropdown-header text-truncate px-3 py-0 mb-2">Hi, {{= _session.user.nickname }}!</span>
+                            <span class="dropdown-header text-truncate px-3 py-0 mb-2">Hi, {{= _view.user.nickname }}!</span>
                             <div class="dropdown-divider my-1"></div>
                             <a class="dropdown-item px-3" href="/console">Dashboard</a>
                             <div class="dropdown-divider my-1"></div>

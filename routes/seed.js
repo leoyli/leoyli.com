@@ -12,10 +12,18 @@ const { postModel, userModel } = require('../schema');
 
 
 // ==============================
+//  FUNCTIONS
+// ==============================
+// middleware
+const { _end }              = require('../config/middleware');
+
+
+
+// ==============================
 //  ROUTE RULES
 // ==============================
 // seed data
-SEEDUSER = {
+const SEEDUSER = {
     email       : 'leo@leoyli.com',
     username    : 'leo',
     password    : 'leo',
@@ -24,7 +32,7 @@ SEEDUSER = {
     picture     : '/media/201710/1509304639065.png'
 };
 
-SEEDPOST = {
+const SEEDPOST = {
     title       : 'New weapon arrived: Custom E-liter 4K!',
     author      : { _id: SEEDUSER._id, username: SEEDUSER.username },
     featured    : 'http://www.perfectly-nintendo.com/wp-content/gallery/splatoon-2-13-10-2017/1.jpg',
@@ -33,12 +41,12 @@ SEEDPOST = {
 
 
 // seed plant
-router.get("/", async (req, res) => {
+router.get("/", _end.wrapAsync(async (req, res) => {
     const newUser = await userModel.register(new userModel(SEEDUSER), SEEDUSER.password);
     await postModel.postsCreateThenAssociate(SEEDPOST, newUser);
     req.flash('info', 'Successfully seeded.');
     res.redirect('/post');
-});
+}));
 
 
 // error handler

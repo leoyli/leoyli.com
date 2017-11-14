@@ -1,3 +1,16 @@
+### 0.2.2 / 2017-11-12
+> App
+- Restructured 'middleware' and 'app'.
+- Recombined 'passport' config file into 'app'.
+- Renamed `_siteConfigSchema.siteInitialization` into `_siteConfigSchema.dbInitialize`.
+- Grouped local variables into `_view`.
+- Fixed 'seed' route.
+
+> UI
+- Renamed variables with respect to the changes in the app.
+- Set default as checked for 'Stay sign-in for 14 days.' option in 'signin'.
+
+
 ### 0.2.1 / 2017-11-12
 > App
 - Rewired 'passport' configs so only pages needed authentications will use the passport to generate `req.user` object.
