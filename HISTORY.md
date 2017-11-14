@@ -1,4 +1,13 @@
-### 0.2.2 / 2017-11-12
+### 0.2.3 / 2017-11-14
+> App
+- Restructured 'methods'.
+- Fixed 'app.test'.
+
+> UI
+- n/a
+
+
+### 0.2.2 / 2017-11-13
 > App
 - Restructured 'middleware' and 'app'.
 - Recombined 'passport' config file into 'app'.

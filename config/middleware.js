@@ -4,7 +4,7 @@ const _fn                   = require('./methods');
 
 
 // ==============================
-//  GLOBAL
+//  GLOBAL MIDDLEWARE
 // ==============================
 const _global = async (req, res, next) => {
     // website settings

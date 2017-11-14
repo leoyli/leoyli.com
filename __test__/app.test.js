@@ -13,7 +13,7 @@ const cookiesJar = [];
 beforeAll(async (done) => {
     if (process.env.ENV === 'test') await mongoose.connection.dropDatabase();
     else throw new Error('Should run in test mode!');
-    await _siteConfig.siteInitialization(done);
+    await _siteConfig.dbInitialize(done);
 });
 
 afterAll((done) => mongoose.disconnect(done));
