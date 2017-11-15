@@ -16,17 +16,6 @@ const _fn                   = require('../config/methods');
 // ==============================
 //  SCHEMA
 // ==============================
-const docLists              = new mongoose.Schema({
-    posts: [{
-        type                : mongoose.Schema.Types.ObjectId,
-        ref                 : 'POST',
-    }],
-    media: [{
-        type                : mongoose.Schema.Types.ObjectId,
-        ref                 : 'MEDIA',
-    }],
-});
-
 const UserSchema            = new mongoose.Schema({
     _role                   : { type: String, default: 'admin' },
     _isActive               : { type: String, default: false },
@@ -41,7 +30,6 @@ const UserSchema            = new mongoose.Schema({
     firstName               : { type: String, required: true },
     lastName                : { type: String, required: true },
     picture                 : { type: String, required: true, default: '' },
-    docLists                : docLists,
 }, {
     timestamps              : { createdAt: '_registered', updatedAt: '_updated' },
     versionKey              : false,
@@ -63,7 +51,7 @@ UserSchema.pre('save', function (next) {
 UserSchema.plugin(passportLocalMongoose, {
     usernameField: 'email',
     usernameQueryFields: ['username'],
-    selectFields: ['_id', 'email', 'username', 'nickname', 'picture', 'docLists'],
+    selectFields: ['_id', 'email', 'username', 'nickname', 'picture'],
 });
 
 

@@ -50,7 +50,6 @@ const _normalizeArguments = function(data, user, next) {
 // doc correlations
 schema.updateAndBind = function(data, user, next, fieldName, operator, _THIS) {
     return (async (data, user, next) => {
-        // create/remove the doc(s)
         switch (operator) {
             case '$pullAll':
                 await _THIS.remove({_id: data});
@@ -61,16 +60,7 @@ schema.updateAndBind = function(data, user, next, fieldName, operator, _THIS) {
                 break;
             default:
                 next(new ReferenceError('Operator must be either \'$push\' (create) or \'$pullAll\' (delete)'), null);
-        }
-
-        // push/pull user's owned list  // note: maybe it is not necessary to do dissociation
-        if (user && fieldName) {
-            const query = {[operator]: {[`docLists.${fieldName}`]: (operator === '$push') ? {$each: data} : data}};
-            // note: $pullAll is not de deprecated: cannot use $each on $pull
-            await user.update(query);
-        }
-
-        return next(null, data);
+        } return next(null, data);
     })(..._normalizeArguments(data, user, next));
 };
 

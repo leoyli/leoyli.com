@@ -31,7 +31,7 @@ router
         if (req.isAuthenticated()) return res.redirect('/console/dashboard');
         res.render('./console/account/signup')
     })
-    .post(_pre.passwordValidation, _end.wrapAsync(async (req, res) => {
+    .post(_pre.passwordValidation, _pre.usePassport, _end.wrapAsync(async (req, res) => {
         const newUser = await userModel.register(new userModel(req.body), req.body.password.new);
         req.logIn(newUser, err => {
             if (err) throw err;
@@ -45,34 +45,37 @@ router
 router
     .route('/signin')
     .all(_pre.prependTitleTag('Sign In'))
-    .get((req, res) => {
+    .get(_pre.usePassport, (req, res) => {
         if (req.isAuthenticated()) return res.redirect('/console');
         res.render('./console/account/signin');
     })
-    .patch(_pre.usePassport, (req, res, next) => passport.authenticate('local', (err, authUser) => {   // note: async/await will handle error; otherwise handle by calling next();
-        // exception
-        if (err) return next(err);
-        if (!authUser) return next(new Error('Wrong email/username or password!'));
-
-        // normal
-        req.logIn(authUser, err => {
+    .patch(_pre.usePassport, (req, res, next) => {
+        if (req.isAuthenticated()) return res.redirect('/console');
+        passport.authenticate('local', (err, authUser) => {   // note: async/await will handle error; otherwise handle by calling next();
+            // exception
             if (err) return next(err);
+            if (!authUser) return next(new Error('Wrong email/username or password!'));
 
-            // session population
-            req.session.cookie.expires = (req.body.isPersisted) ? new Date(Date.now() + 14 * 24 * 3600 * 1000) : false;
-            req.session.user = {
-                _id: authUser._id,
-                nickname: authUser.nickname,
-                picture: authUser.picture,
-            };
+            // normal
+            req.logIn(authUser, err => {
+                if (err) return next(err);
 
-            // other response
-            const returnTo = req.session.returnTo;
-            delete req.session.returnTo;
-            req.flash('info', `Welcome back ${authUser.username}`);
-            return res.redirect(returnTo || '/console/dashboard');
-        });
-    })(req, res));
+                // session population
+                req.session.cookie.expires = (req.body.isPersisted) ? new Date(Date.now() + 14 * 24 * 3600 * 1000) : false;
+                req.session.user = {
+                    _id: authUser._id,
+                    nickname: authUser.nickname,
+                    picture: authUser.picture,
+                };
+
+                // other response
+                const returnTo = req.session.returnTo;
+                delete req.session.returnTo;
+                req.flash('info', `Welcome back ${authUser.username}`);
+                return res.redirect(returnTo || '/console/dashboard');
+            });
+        })(req, res)
+    });
 
 
 // sign-out

@@ -1,3 +1,13 @@
+### 0.2.4 / 2017-11-14
+> App
+- Removed the Mongo's anti-pattern as in `docList` schema.
+- Authorization was replaced by `Model.count()` method due to the removal of the anti-pattern.
+- Replaced `req.locals._render` by `req.session.view` for much dryer codes.
+
+> UI
+- n/a
+
+
 ### 0.2.3 / 2017-11-14
 > App
 - Restructured 'methods'.

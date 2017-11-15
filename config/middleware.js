@@ -58,9 +58,14 @@ _pre.isSignedIn = [_pre.doNotCrawled, ..._pre.usePassport, (req, res, next) => {
 
 
 // authorization
-_pre.isAuthorized = [..._pre.isSignedIn, (req, res, next) => {
-    if (!req.user.docLists || req.user.docLists.posts.indexOf(_fn.string.readObjectID(req.url)) === -1) {
-        req.flash('error', 'Nothing were found...');
+_pre.isAuthorized = [..._pre.isSignedIn, async (req, res, next) => {
+    const count = await require('../schema').postModel.count({
+        '_id': _fn.string.readObjectID(req.url),
+        'provider._id': req.user,
+    });
+
+    if (count !== 1) {
+        req.flash('error', 'You do not have a valid authorization...');
         return res.redirect('/');
     } else next();
 }];
@@ -111,12 +116,16 @@ _end.wrapAsync = (fn) => (req, res, next) => fn(req, res, next).catch(next);
 
 // post render handler
 _end.next.postRender = (view, doc) => (req, res) => {
-    [view, doc] = !(view && doc) ? [res.locals._render.view, res.locals._render.post]: [view, doc];
-    if (!doc) {
+    [view, doc] = !(view && doc) ? [req.session.view.template, req.session.view.post]: [view, doc];
+    delete req.session.view;
+
+    if (doc) {
+        if (doc.title) _pre.prependTitleTag(doc.title)(req, res);
+        return res.render(view, { post: doc });
+    } else {
         req.flash('error', 'Nothing were found...');
         return res.redirect('back');
-    } else if (doc.title) _pre.prependTitleTag(doc.title)(req, res);
-    res.render(view, { post: doc });
+    }
 };
 
 

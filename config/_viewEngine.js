@@ -18,7 +18,7 @@ function render(filePath, locals, next) {
 // access functions
 function getReference(locals) { // todo: allows the user to added customized runtime function
     // load express configs by restricting `locals`
-    const reference = _.omit(locals, ['settings', 'cache', '_locals', '_render']);
+    const reference = _.omit(locals, ['settings', 'cache', '_locals']);
     reference.set = { partials: locals.settings['partials'], extName: locals.settings['view engine'] };
 
     // populate the run-time available functions

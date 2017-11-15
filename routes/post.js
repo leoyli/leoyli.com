@@ -43,10 +43,8 @@ router
     .route(/^\/editor\/[a-f\d]{24}(\/)?$/)
     .all(_pre.isAuthorized, _pre.prependTitleTag('Post Editor'))
     .get(_end.wrapAsync(async (req, res) => {
-        res.locals._render = (req.session.post && req.session.post._id === _fn.string.readObjectID(req.url))
-            ? {view: './console/editor', post: req.session.post}
-            : {view: './console/editor', post: await postModel.findById(_fn.string.readObjectID(req.url))};
-        if (req.session.post) delete req.session.post;
+        if (!req.session.view) req.session.view = { post : await postModel.findById(_fn.string.readObjectID(req.url))};
+        req.session.view.template = './console/editor';
         _end.next.postRender()(req, res);
     }))
     .patch(_end.wrapAsync(async (req, res) => {
@@ -63,34 +61,32 @@ router
 
 router
     .get('/editor/:KEY', _pre.isAuthorized, _end.wrapAsync(async (req, res) => {
-        req.session.post = await postModel.findOne({ canonicalKey: req.params.KEY });
-        if (!req.session.post) {
-            delete req.session.post;
+        req.session.view = { post: await postModel.findOne({ canonicalKey: req.params.KEY })};
+        if (!req.session.view.post) {
+            delete req.session.view;
             req.flash('error', 'Nothing were found...');
             res.redirect('back');
-        } else res.redirect(`/post/editor/${req.session.post._id}`);
+        } else res.redirect(`/post/editor/${req.session.view.post._id}`);
     }));
 
 
 // show
 router
     .get(/^\/[a-f\d]{24}(\/)?$/, _end.wrapAsync(async (req, res) => {
-        req.session.post = await postModel.findById(_fn.string.readObjectID(req.url));
-        if (!req.session.post) {
-            delete req.session.post;
+        req.session.view = { post: await postModel.findById(_fn.string.readObjectID(req.url)) };
+        if (!req.session.view.post) {
+            delete req.session.view;
             req.flash('error', 'Nothing were found...');
             res.redirect('back');
-        } else res.redirect(`/post/${req.session.post.canonicalKey}`);
+        } else res.redirect(`/post/${req.session.view.post.canonicalKey}`);
     }))
     .get('/:KEY', _end.wrapAsync(async (req, res) => {
-        res.locals._render = (req.session.post && req.session.post.canonicalKey === req.params.KEY)
-            ? { view: './theme/post/post', post: req.session.post }
-            : { view: './theme/post/post', post: await postModel.findOne({ canonicalKey: req.params.KEY })};
-        if (req.session.post) delete req.session.post;
+        if (!req.session.view) req.session.view = { post: await postModel.findOne({ canonicalKey: req.params.KEY })};
+        req.session.view.template = './theme/post/post';
         _end.next.postRender()(req, res);
     }))
     .get('/', _end.wrapAsync(async (req, res) => {
-        res.locals._render = { view: './theme/post/index', post: (await postModel.find()).reverse() };
+        req.session.view = { template: './theme/post/index', post: (await postModel.find()).reverse() };
         _end.next.postRender()(req, res);
     }));
 
