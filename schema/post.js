@@ -37,8 +37,8 @@ const PostSchema            = new mongoose.Schema({
             validator       : featured,
             message         : 'INVALID URL',
         }},
-    title                   : { type: String, required: true, trim: true },
-    content                 : { type: String, required: true },
+    title                   : { type: String, trim: true, required: [true, 'is required'] },
+    content                 : { type: String, trim: true, required: [true, 'is required'] },
     canonicalKey            : { type: String, lowercase: true, unique: true },
     class                   : { type: String, lowercase: true, default: 'unclassified' }, // tofix: empty space handling
     tag                     : { type: String, lowercase: true },

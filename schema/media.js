@@ -28,8 +28,8 @@ const MediaSchema           = new mongoose.Schema({
         fileBase            : { type: String },
         fileType            : { type: String },
     },
-    title                   : { type: String, required: true },
-    description             : { type: String, required: true },
+    title                   : { type: String, trim: true, required: [true, 'is required'] },
+    description             : { type: String, trim: true, required: [true, 'is required'] },
     class                   : { type: String, lowercase: true },
     tag                     : { type: String, lowercase: true },
 }, {

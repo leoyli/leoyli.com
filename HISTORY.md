@@ -1,3 +1,11 @@
+### 0.2.6 / 2017-11-15
+> App
+- Customized validation error messages.
+
+> UI
+- n/a
+
+
 ### 0.2.5 / 2017-11-14
 > App
 - Fixed the sign-out flash message.
