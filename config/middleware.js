@@ -59,10 +59,8 @@ _pre.isSignedIn = [_pre.doNotCrawled, ..._pre.usePassport, (req, res, next) => {
 
 // authorization
 _pre.isAuthorized = [..._pre.isSignedIn, async (req, res, next) => {
-    const count = await require('../schema').postModel.count({
-        '_id': _fn.string.readObjectID(req.url),
-        'provider._id': req.user,
-    });
+    const [field, val] = (req.params.KEY) ? ['canonicalKey', req.params.KEY] : ['_id', _fn.string.readObjectID(req.url)];
+    const count = await require('../schema').postModel.count({ [field]: val, 'provider._id': req.user });
 
     if (count !== 1) {
         req.flash('error', 'You do not have a valid authorization...');
@@ -115,8 +113,8 @@ _end.wrapAsync = (fn) => (req, res, next) => fn(req, res, next).catch(next);
 
 
 // post render handler
-_end.next.postRender = (view, doc) => (req, res) => {
-    [view, doc] = !(view && doc) ? [req.session.view.template, req.session.view.post]: [view, doc];
+_end.next.postRender = (view, doc) => async (req, res) => {
+    [view, doc] = !(view && doc) ? [req.session.view.template, req.session.view.post]: [await view, await doc];
     delete req.session.view;
 
     if (doc) {

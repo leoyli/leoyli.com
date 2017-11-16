@@ -24,7 +24,7 @@ const UserSchema            = new mongoose.Schema({
         validate: {
             isAsync         : false,
             validator       : validator.isEmail,
-            message         : 'INVALID EMAIL ADDRESS',
+            message         : 'Invalid email address',
         }},
     nickname                : { type: String },
     firstName               : { type: String, required: true },
@@ -53,7 +53,6 @@ UserSchema.plugin(passportLocalMongoose, {
     usernameQueryFields: ['username'],
     selectFields: ['_id', 'email', 'username', 'nickname', 'picture'],
 });
-
 
 //// rewrite plugin methods as promises
 const _register = UserSchema.statics.register;

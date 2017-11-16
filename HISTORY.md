@@ -1,3 +1,12 @@
+### 0.2.7 / 2017-11-15
+> App
+- Dried up 'post' route.
+- Fixed authorization error as visiting by `canonicalKey`.
+
+> UI
+- n/a
+
+
 ### 0.2.6 / 2017-11-15
 > App
 - Customized validation error messages.
