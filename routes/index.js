@@ -1,17 +1,16 @@
-const
-    express                 = require('express'),
-    router                  = express.Router();
+module.exports = (app) => {
+    // global middleware
+    app.use(require('../configurations/middleware')._global);
 
+    // seed
+    if (process.env.ENV === 'dev' || 'test') app.use('/seed', require('../routes/seed'));
 
+    // functional
+    app.use('/console', require('../routes/console'));
+    app.use('/post', require('../routes/post'));
+    app.use('/', require('../routes/authentication'));
+    app.use('/', require('../routes/page'));
 
-// ==============================
-//  ROUTE RULES
-// ==============================
-router.get('/', (req, res) => {
-    res.render('./theme/index');
-});
-
-
-
-// route exports
-module.exports = router;
+    // error
+    app.use('/', require('../routes/error'));
+};

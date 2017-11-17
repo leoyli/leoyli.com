@@ -1,4 +1,13 @@
-### 0.2.7 / 2017-11-15
+### 0.3.0 / 2017-11-17
+> App
+- Developed in the new '0.3 branch'.
+- Renamed and restructured files.
+
+> UI
+- n/a
+
+
+### 0.2.7 / 2017-11-16
 > App
 - Dried up 'post' route.
 - Fixed authorization error as visiting by `canonicalKey`.

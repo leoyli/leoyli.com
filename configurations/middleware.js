@@ -8,7 +8,7 @@ const _fn                   = require('./methods');
 // ==============================
 const _global = async (req, res, next) => {
     // website settings
-    const _config = await require('./../schema')._siteConfig.findOne();
+    const _config = await require('../models')._siteConfig.findOne();
     if (!_config) throw new Error('Database might be corrupted, please restart the server for DB initialization.');
     res.locals._site = _config._doc;
 
@@ -60,7 +60,7 @@ _pre.isSignedIn = [_pre.doNotCrawled, ..._pre.usePassport, (req, res, next) => {
 // authorization
 _pre.isAuthorized = [..._pre.isSignedIn, async (req, res, next) => {
     const [field, val] = (req.params.KEY) ? ['canonicalKey', req.params.KEY] : ['_id', _fn.string.readObjectID(req.url)];
-    const count = await require('../schema').postModel.count({ [field]: val, 'provider._id': req.user });
+    const count = await require('../models').postModel.count({ [field]: val, 'provider._id': req.user });
 
     if (count !== 1) {
         req.flash('error', 'You do not have a valid authorization...');

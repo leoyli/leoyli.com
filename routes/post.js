@@ -7,7 +7,7 @@ const
 // ==============================
 //  MODELS
 // ==============================
-const { postModel }         = require('../schema');
+const { postModel }         = require('../models');
 
 
 
@@ -15,10 +15,10 @@ const { postModel }         = require('../schema');
 //  FUNCTIONS
 // ==============================
 // ancillaries
-const _fn                   = require('../config/methods');
+const _fn                   = require('../configurations/methods');
 
 // middleware
-const { _pre, _end }        = require('../config/middleware');
+const { _pre, _end }        = require('../configurations/middleware');
 
 
 

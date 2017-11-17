@@ -1,7 +1,7 @@
 const path = require('path');
 const request = require('supertest');
 const { app, mongoose } = require('../app');
-const { _siteConfig, userModel, mediaModel, postModel } = require('../schema');
+const { _siteConfig, userModel, mediaModel, postModel } = require('../models');
 
 
 

@@ -7,7 +7,7 @@ const
 // ==============================
 //  MODELS
 // ==============================
-const { _siteConfig, mediaModel, userModel } = require('../schema');
+const { _siteConfig, mediaModel, userModel } = require('../models');
 
 
 
@@ -15,7 +15,7 @@ const { _siteConfig, mediaModel, userModel } = require('../schema');
 //  FUNCTIONS
 // ==============================
 // middleware
-const { _pre, _end }        = require('../config/middleware');
+const { _pre, _end }        = require('../configurations/middleware');
 router.all('*', _pre.isSignedIn, _pre.prependTitleTag('Console'));
 
 

@@ -15,7 +15,7 @@ const
     favicon                 = require('serve-favicon'),
     app = express();
 
-const { _siteConfig, userModel } = require('./schema');
+const { _siteConfig, userModel } = require('./models');
 
 
 
@@ -56,7 +56,7 @@ app.use(express.static(path.join(__dirname, './public'), {
 
 
 // view engine
-app.engine('dot', require('./config/_viewEngine').__express);
+app.engine('dot', require('./configurations/viewEngine').__express);
 app.set('view engine', 'dot');
 app.set('views', path.join(__dirname, './views'));
 app.set('partials', {
@@ -84,20 +84,7 @@ app.use(flash());
 // ==============================
 //  ROUTING RULES
 // ==============================
-// global middleware
-app.use(require('./config/middleware')._global);
-
-// seed
-if (process.env.ENV === 'dev' || 'test') app.use('/seed', require('./routes/seed'));
-
-// functional
-app.use('/console', require('./routes/console'));
-app.use('/post', require('./routes/post'));
-app.use('/', require('./routes/authentication'));
-app.use('/', require('./routes/index'));
-
-// error
-app.use('/', require('./routes/error'));
+require('./routes')(app);
 
 
 

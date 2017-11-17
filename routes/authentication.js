@@ -8,7 +8,7 @@ const
 // ==============================
 //  MODELS
 // ==============================
-const { userModel }         = require('../schema');
+const { userModel }         = require('../models');
 
 
 
@@ -16,7 +16,7 @@ const { userModel }         = require('../schema');
 //  FUNCTIONS
 // ==============================
 // middleware
-const { _pre, _end }        = require('../config/middleware');
+const { _pre, _end }        = require('../configurations/middleware');
 router.all('*', _pre.usePassport);
 
 
