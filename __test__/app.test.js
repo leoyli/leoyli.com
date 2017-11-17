@@ -1,7 +1,7 @@
 const path = require('path');
 const request = require('supertest');
 const { app, mongoose } = require('../app');
-const { _siteConfig, userModel, mediaModel, postModel } = require('../models');
+const { settingModel, userModel, mediaModel, postModel } = require('../models');
 
 
 
@@ -11,9 +11,9 @@ const cookiesJar = [];
 
 
 beforeAll(async (done) => {
-    if (process.env.ENV === 'test') await mongoose.connection.dropDatabase();
+    if (process.env.NODE_ENV === 'test') await mongoose.connection.dropDatabase();
     else throw new Error('Should run in test mode!');
-    await _siteConfig.dbInitialize(done);
+    await settingModel.dbInitialize(done);
 });
 
 afterAll((done) => mongoose.disconnect(done));
@@ -23,7 +23,7 @@ afterAll((done) => mongoose.disconnect(done));
 // test
 describe('Server Initialization', () => {
     test('Should run in test mode', () => {
-        expect(process.env.ENV).toEqual('test');
+        expect(process.env.NODE_ENV).toEqual('test');
     });
 
     test('Should get access to the root', async() => {
@@ -97,7 +97,7 @@ describe('Route - Console', () => {
             .patch('/console/setting')
             .send({ siteSetting: { title: 'Testing Website' }});
         //
-        expect((await _siteConfig.findOne({})).title).toContain('Testing Website');
+        expect((await settingModel.findOne({})).title).toContain('Testing Website');
     });
 
     test('Should updates nickname for current user profile', async () => {

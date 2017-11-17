@@ -7,7 +7,7 @@ const
 //  SCHEMA
 // ==============================
 // todo: added CDN object for the header
-let _siteConfigSchema       = new mongoose.Schema({
+let settingModelSchema       = new mongoose.Schema({
     title                   : { type: String, default: 'New Website' },
     description             : { type: String, default: 'n/a' },
     keywords                : { type: String, default: 'n/a' },
@@ -27,7 +27,7 @@ let _siteConfigSchema       = new mongoose.Schema({
 //  STATIC METHODS
 // ==============================
 // initialization (model)
-_siteConfigSchema.static('dbInitialize', function(next) {
+settingModelSchema.static('dbInitialize', function(next) {
     return this.findOne({}, (err, loadConfig) => {
         if (!loadConfig) return this.create({}, next);
         if (typeof next === 'function') return next();
@@ -36,11 +36,11 @@ _siteConfigSchema.static('dbInitialize', function(next) {
 
 
 // update settings (model)
-_siteConfigSchema.static('updateSettings', function(dataToBeUpdated, next) {
+settingModelSchema.static('updateSettings', function(dataToBeUpdated, next) {
     return this.findOneAndUpdate({}, dataToBeUpdated, { new: true }, next);
 });
 
 
 
 // export model
-module.exports = mongoose.model('_SITECONFIG', _siteConfigSchema);
+module.exports = mongoose.model('settings', settingModelSchema);

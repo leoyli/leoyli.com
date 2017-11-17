@@ -7,7 +7,7 @@ const
 // ==============================
 //  MODELS
 // ==============================
-const { _siteConfig, mediaModel, userModel } = require('../models');
+const { settingModel, mediaModel, userModel } = require('../models');
 
 
 
@@ -33,7 +33,7 @@ router
     .all(_pre.prependTitleTag('Website Configurations'))
     .get((req, res) => res.render('./console/setting'))
     .patch(_end.wrapAsync(async (req, res) => {
-        await _siteConfig.updateSettings(req.body.siteSetting);
+        await settingModel.updateSettings(req.body.siteSetting);
         res.redirect('back');
     }));
 

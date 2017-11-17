@@ -73,4 +73,4 @@ UserSchema.methods.changePassword = function (old_PW, new_PW, next) {
 
 
 // export model
-module.exports = mongoose.model('USER', UserSchema);
+module.exports = mongoose.model('users', UserSchema);

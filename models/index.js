@@ -1,6 +1,6 @@
 module.exports = {
-    _siteConfig: require('../models/_siteConfig'),
+    settingModel: require('./settings'),
     mediaModel: require('../models/media'),
-    postModel: require('../models/post'),
-    userModel: require('../models/user'),
+    postModel: require('./posts'),
+    userModel: require('./users'),
 };

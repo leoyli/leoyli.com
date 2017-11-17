@@ -80,4 +80,4 @@ PostSchema.pre('findOneAndUpdate', function (next) {
 
 
 // export model
-module.exports = mongoose.model('POST', PostSchema);
+module.exports = mongoose.model('posts', PostSchema);

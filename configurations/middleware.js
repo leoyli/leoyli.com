@@ -8,7 +8,7 @@ const _fn                   = require('./methods');
 // ==============================
 const _global = async (req, res, next) => {
     // website settings
-    const _config = await require('../models')._siteConfig.findOne();
+    const _config = await require('../models').settingModel.findOne();
     if (!_config) throw new Error('Database might be corrupted, please restart the server for DB initialization.');
     res.locals._site = _config._doc;
 

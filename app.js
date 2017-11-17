@@ -15,7 +15,7 @@ const
     favicon                 = require('serve-favicon'),
     app = express();
 
-const { _siteConfig, userModel } = require('./models');
+const { settingModel, userModel } = require('./models');
 
 
 
@@ -28,7 +28,7 @@ mongoose.Promise = Promise;
 
 
 // initialization
-_siteConfig.dbInitialize();
+settingModel.dbInitialize();
 
 
 // session
@@ -73,7 +73,7 @@ passport.deserializeUser(userModel.deserializeUser());
 
 // accessories
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-if (process.env.ENV === 'dev') app.use(logger('dev'));
+if (process.env.NODE_ENV === 'dev') app.use(logger('dev'));
 app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -91,4 +91,4 @@ require('./routes')(app);
 // ==============================
 //  APP EXPORTS
 // ==============================
-module.exports = (process.env.ENV === 'test') ? { app, mongoose } : app;
+module.exports = (process.env.NODE_ENV === 'test') ? { app, mongoose } : app;

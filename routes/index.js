@@ -3,7 +3,7 @@ module.exports = (app) => {
     app.use(require('../configurations/middleware')._global);
 
     // seed
-    if (process.env.ENV === 'dev' || 'test') app.use('/seed', require('../routes/seed'));
+    if (process.env.NODE_ENV === 'dev' || 'test') app.use('/seed', require('../routes/seed'));
 
     // functional
     app.use('/console', require('../routes/console'));

@@ -1,3 +1,12 @@
+### 0.3.1 / 2017-11-17
+> App
+- Used the conventional environment variable name `NODE_ENV`.
+- Renamed files.
+
+> UI
+- n/a
+
+
 ### 0.3.0 / 2017-11-17
 > App
 - Developed in the new '0.3 branch'.
