@@ -1,3 +1,14 @@
+### 0.3.2 / 2017-11-17
+> App
+- Issued the 'LICENCE' file in 'Apache License 2.0'.
+- Created MongoDB index for full text search from 'post' model.
+- Created corresponding route rules for MongoDB full text search.
+- Temporarily applied `_fn.string.HTMLEscape` method onto `req.body.post` for content escaping.
+
+> UI
+- Added 'search' template.
+
+
 ### 0.3.1 / 2017-11-17
 > App
 - Used the conventional environment variable name `NODE_ENV`.

@@ -23,6 +23,14 @@ const _global = async (req, res, next) => {
         user: req.session.user,
     };
 
+    // HTMLEscape  // tofix: apply the method into schema
+    if (req.body.post) {
+        if (req.body.post.content) req.body.post.content = _fn.string.escapeInHTML(req.body.post.content);
+        if (req.body.post.title) req.body.post.title = _fn.string.escapeInHTML(req.body.post.title);
+        if (req.body.post.class) req.body.post.class = _fn.string.escapeInHTML(req.body.post.class);
+        if (req.body.post.tag) req.body.post.tag = _fn.string.escapeInHTML(req.body.post.tag);
+    }
+
     next();
 };
 

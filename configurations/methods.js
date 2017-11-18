@@ -43,9 +43,6 @@ const _normalizeArguments = function(data, user, next) {
     if (!Array.isArray(data)) data = [data];
     if (data.length === 0 || !data[0]) return next(new ReferenceError('Nothing were provided...'), null);
 
-    // content HTMLEscape
-    data.content = _.escape(data.content);
-
     return [data, user, next];
 };
 

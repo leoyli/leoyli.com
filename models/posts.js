@@ -45,7 +45,7 @@ const PostSchema            = new mongoose.Schema({
 }, {
     timestamps              : { createdAt: '_created', updatedAt: '_updated' },
     versionKey              : '_revised',
-});
+}).index({ 'title': 'text', 'content': 'text', 'tag' : 'text' });
 
 
 

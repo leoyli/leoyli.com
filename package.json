@@ -1,6 +1,7 @@
 {
   "name": "leoyli-main",
-  "version": "0.3.0",
+  "version": "0.3.2",
+  "license": "Apache-2.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
@@ -19,7 +20,7 @@
     "marked": "^0.3.6",
     "method-override": "^2.3.10",
     "mongodb": "^2.2.33",
-    "mongoose": "^4.13.1",
+    "mongoose": "^4.13.4",
     "morgan": "~1.8.1",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
