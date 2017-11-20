@@ -1,9 +1,9 @@
 ### 0.3.5 / 2017-11-20
 > App
-- Rewired schema and 'search' controller.
+- Rewired 'search' controller for preventing memory leaking.
 
 > UI
-- Adjusted the corresponding to the change in schema.
+- n/a
 
 
 ### 0.3.4 / 2017-11-20

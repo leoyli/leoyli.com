@@ -5,13 +5,6 @@ const
 
 
 // ==============================
-//  MODELS
-// ==============================
-const { postModel }         = require('../models');
-
-
-
-// ==============================
 //  FUNCTIONS
 // ==============================
 // middleware
@@ -19,6 +12,7 @@ const { _pre, _end }        = require('../configurations/middleware');
 
 // controller
 const { search }            = require('../controllers/search');
+
 
 
 // ==============================
@@ -29,7 +23,7 @@ router.get('/', (req, res) => res.render('./theme/index'));
 
 
 // searching
-router.get('/search/:TERMS', _pre.doNotCrawled, search.find);
+router.get('/search/:TERMS', _pre.doNotCrawled, search.find, _end.next.postRender('./theme/search'));
 
 // router.get('/tag/:TAG', _end.wrapAsync(async (req, res) => {
 //     const result = await postModel.find({ tag: req.params.TAG }).sort({ _created : -1 });

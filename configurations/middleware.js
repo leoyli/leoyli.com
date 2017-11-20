@@ -122,12 +122,13 @@ _end.wrapAsync = (fn) => (req, res, next) => fn(req, res, next).catch(next);
 
 // post render handler
 _end.next.postRender = (view, doc) => async (req, res) => {
-    [view, doc] = !(view && doc) ? [req.session.view.template, req.session.view.post] : [await view, await doc];
+    const template = (view) ? await view : req.session.view.template;
+    const post = (doc) ? await doc : req.session.view.post;
     delete req.session.view;
 
-    if (doc) {
-        if (doc.title) _pre.prependTitleTag(doc.title)(req, res);
-        return res.render(view, { post: doc });
+    if (post) {
+        if (post.title) _pre.prependTitleTag(post.title)(req, res);
+        return res.render(template, {post: post});
     } else {
         req.flash('error', 'Nothing were found...');
         return res.redirect('back');

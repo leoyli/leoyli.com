@@ -71,7 +71,9 @@ router
     .get('/:KEY', (req, res) => {
         _end.next.postRender('./theme/post/post', postModel.findOne({ canonical: req.params.KEY }))(req, res);
     })
-    .get('/', _end.next.postRender('./theme/post/index', postModel.find({}).sort({ 'time.created': -1 })));
+    .get('/', (req, res) => {
+        _end.next.postRender('./theme/post/index', postModel.find({}).sort({'time.created': -1}))(req, res);
+    });
 
 
 // error handler
