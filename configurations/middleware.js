@@ -121,7 +121,7 @@ _end.wrapAsync = (fn) => (req, res, next) => fn(req, res, next).catch(next);
 
 
 // post render handler
-_end.next.postRender = (view, doc) => async (req, res) => {
+_end.next.postRender = (view, doc) => _end.wrapAsync(async (req, res) => {
     [view, doc] = !(view && doc) ? [req.session.view.template, req.session.view.post] : [await view, await doc];
     delete req.session.view;
 
@@ -132,7 +132,7 @@ _end.next.postRender = (view, doc) => async (req, res) => {
         req.flash('error', 'Nothing were found...');
         return res.redirect('back');
     }
-};
+});
 
 
 // general error handler
