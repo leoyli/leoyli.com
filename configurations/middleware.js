@@ -27,7 +27,7 @@ const _global = async (req, res, next) => {
     if (req.body.post) {
         if (req.body.post.content) req.body.post.content = _fn.string.escapeInHTML(req.body.post.content);
         if (req.body.post.title) req.body.post.title = _fn.string.escapeInHTML(req.body.post.title);
-        if (req.body.post.class) req.body.post.class = _fn.string.escapeInHTML(req.body.post.class);
+        if (req.body.post.category) req.body.post.category = _fn.string.escapeInHTML(req.body.post.category);
         if (req.body.post.tag) req.body.post.tag = _fn.string.escapeInHTML(req.body.post.tag);
     }
 
@@ -67,8 +67,8 @@ _pre.isSignedIn = [_pre.doNotCrawled, ..._pre.usePassport, (req, res, next) => {
 
 // authorization
 _pre.isAuthorized = [..._pre.isSignedIn, async (req, res, next) => {
-    const [field, val] = (req.params.KEY) ? ['canonicalKey', req.params.KEY] : ['_id', _fn.string.readObjectID(req.url)];
-    const count = await require('../models').postModel.count({ [field]: val, 'provider._id': req.user });
+    const [field, val] = (req.params.KEY) ? ['canonical', req.params.KEY] : ['_id', _fn.string.readObjectID(req.url)];
+    const count = await require('../models').postModel.count({[field]: val, 'author._id': req.user});
 
     if (count !== 1) {
         req.flash('error', 'You do not have a valid authorization...');
@@ -122,7 +122,7 @@ _end.wrapAsync = (fn) => (req, res, next) => fn(req, res, next).catch(next);
 
 // post render handler
 _end.next.postRender = (view, doc) => async (req, res) => {
-    [view, doc] = !(view && doc) ? [req.session.view.template, req.session.view.post]: [await view, await doc];
+    [view, doc] = !(view && doc) ? [req.session.view.template, req.session.view.post] : [await view, await doc];
     delete req.session.view;
 
     if (doc) {

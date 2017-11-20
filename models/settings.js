@@ -7,7 +7,7 @@ const
 //  SCHEMA
 // ==============================
 // todo: added CDN object for the header
-let settingModelSchema       = new mongoose.Schema({
+let settingModelSchema      = new mongoose.Schema({
     title                   : { type: String, default: 'New Website' },
     description             : { type: String, default: 'n/a' },
     keywords                : { type: String, default: 'n/a' },
@@ -15,9 +15,8 @@ let settingModelSchema       = new mongoose.Schema({
         timezone            : { type: String, default: '' },
         format              : { type: String, default: 'default' }
     },
-    admin                   : String,
 }, {
-    timestamps              : { createdAt: '_created', updatedAt: '_updated' },
+    timestamps              : { createdAt: 'time.created', updatedAt: 'time.updated' },
     versionKey              : false,
 });
 

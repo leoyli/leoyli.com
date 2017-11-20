@@ -55,7 +55,7 @@ schema.updateAndBind = function(data, user, next, fieldName, operator, _THIS) {
                 await _THIS.remove({ _id: data });
                 break;
             case '$push':
-                if (user) await data.map(self => self.provider = user);
+                if (user) await data.map(self => self.author = user);
                 data = await _THIS.create(data);    // note: this line reassign the following 'data'
                 break;
             default:

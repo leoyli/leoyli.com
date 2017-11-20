@@ -28,7 +28,7 @@ mongoose.Promise = Promise;
 
 
 // initialization
-settingModel.dbInitialize();
+if (process.env.NODE_ENV !== 'test') settingModel.dbInitialize();
 
 
 // session

@@ -47,7 +47,7 @@ router
     .patch(_end.wrapAsync(async (req, res) => {
         const doc = await postModel.findByIdAndUpdate(_fn.string.readObjectID(req.url), req.body.post, { new: true });
         req.flash('info', 'Post have been successfully updated!');
-        res.redirect(`/post/${doc.canonicalKey}`);
+        res.redirect(`/post/${doc.canonical}`);
     }))
     .delete(_end.wrapAsync(async (req, res) => { // todo: trash can || double check
         await postModel.postsDeleteThenDissociate(_fn.string.readObjectID(req.url), req.user);
@@ -57,7 +57,7 @@ router
 
 router
     .get('/editor/:KEY', _pre.isAuthorized, _end.wrapAsync(async (req, res) => {
-        req.session.view = { post: await postModel.findOne({ canonicalKey: req.params.KEY })};
+        req.session.view = {post: await postModel.findOne({ canonical: req.params.KEY })};
         res.redirect(`/post/editor/${req.session.view.post._id}`);
     }));
 
@@ -66,12 +66,12 @@ router
 router
     .get(/^\/[a-f\d]{24}(\/)?$/, _end.wrapAsync(async (req, res) => {
         req.session.view = { post: await postModel.findById(_fn.string.readObjectID(req.url)) };
-        res.redirect(`/post/${req.session.view.post.canonicalKey}`);
+        res.redirect(`/post/${req.session.view.post.canonical}`);
     }))
     .get('/:KEY', (req, res) => {
-        _end.next.postRender('./theme/post/post', postModel.findOne({ canonicalKey: req.params.KEY }))(req, res);
+        _end.next.postRender('./theme/post/post', postModel.findOne({ canonical: req.params.KEY }))(req, res);
     })
-    .get('/', _end.next.postRender('./theme/post/index', postModel.find({}).sort({ _created : -1 })));
+    .get('/', _end.next.postRender('./theme/post/index', postModel.find({}).sort({ 'time.created': -1 })));
 
 
 // error handler

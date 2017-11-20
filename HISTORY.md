@@ -1,3 +1,19 @@
+### 0.3.5 / 2017-11-20
+> App
+- Rewired schema and 'search' controller.
+
+> UI
+- Adjusted the corresponding to the change in schema.
+
+
+### 0.3.4 / 2017-11-20
+> App
+- Rewired schema and 'search' controller.
+
+> UI
+- Adjusted the corresponding to the change in schema.
+
+
 ### 0.3.3 / 2017-11-19
 > App
 - Added 'search' controller.

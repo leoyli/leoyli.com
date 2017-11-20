@@ -15,11 +15,10 @@ const _fn                   = require('../configurations/methods');
 //  SCHEMA
 // ==============================
 const MediaSchema           = new mongoose.Schema({
-    _status                 : { type: Number, default: 0 },
-    provider: {
+    author: {
         _id: {
             type            : mongoose.Schema.Types.ObjectId,
-            ref             : 'USER',
+            ref: 'users',
         },
         username            : { type: String },
     },
@@ -30,10 +29,10 @@ const MediaSchema           = new mongoose.Schema({
     },
     title                   : { type: String, trim: true, required: [true, 'is required'] },
     description             : { type: String, trim: true, required: [true, 'is required'] },
-    class                   : { type: String, lowercase: true },
+    category                : { type: String, lowercase: true },
     tag                     : { type: String, lowercase: true },
 }, {
-    timestamps              : { createdAt: '_uploaded', updatedAt: '_updated' },
+    timestamps              : { createdAt: 'time.uploaded', updatedAt: 'time.updated' },
     versionKey              : '_revised',
 });
 

@@ -10,15 +10,11 @@ function findPostWithQueryModifier(find, modifier) {
     let { sort, start, num } = modifier;
 
     if (typeof find === 'string') find = { $text: { $search: find }};
-    if (!sort || !sort._created) sort = Object.assign(sort || {}, { _created : -1 });
+    if (!sort || !sort['time.created']) sort = Object.assign(sort || {}, {'time.created': -1});
     start = (start > 0) ? parseInt(start) : null;
     num = (num > 0) ? parseInt(num) : null;
 
-    return postModel
-        .find(find)
-        .sort(sort)
-        .skip(start)
-        .limit(num);
+    return postModel.find(find).sort(sort).skip(start).limit(num);
 }
 
 
@@ -26,11 +22,15 @@ function findPostWithQueryModifier(find, modifier) {
 // ==============================
 //  CONTROLLERS
 // ==============================
-module.exports = _end.wrapAsync(async (req, res, next) => {
+const search = {};
+
+search.find = _end.wrapAsync(async (req, res, next) => {
     const result = await findPostWithQueryModifier(Object.values(req.params)[0], req.query);
 
-    if (typeof next === 'function') {   // note: i.e. using as a middleware
-        req.session.view = { template: './theme/search', post: result };
-        _end.next.postRender()(req,res);
-    } else return result;
+    if (typeof next === 'function') _end.next.postRender('./theme/search', result)(req, res);    // note: i.e. using as a middleware
+    else return result;
 });
+
+
+
+module.exports = { search };

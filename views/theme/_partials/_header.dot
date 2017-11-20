@@ -12,7 +12,7 @@
 
     <!-- SEO -->
     {{? typeof post !== 'undefined' }}
-        <link rel="canonical" href="/post/{{= post.canonicalKey }}" />
+    <link rel="canonical" href="/post/{{= post.canonical }}"/>
     {{?}}
 
     <!-- CDN stylesheets -->

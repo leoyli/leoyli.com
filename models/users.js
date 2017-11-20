@@ -17,8 +17,6 @@ const _fn                   = require('../configurations/methods');
 //  SCHEMA
 // ==============================
 const UserSchema            = new mongoose.Schema({
-    _role                   : { type: String, default: 'admin' },
-    _isActive               : { type: String, default: false },
     username                : { type: String, unique: true, lowercase: true },
     email                   : { type: String, unique: true, required: true,
         validate: {
@@ -30,8 +28,10 @@ const UserSchema            = new mongoose.Schema({
     firstName               : { type: String, required: true },
     lastName                : { type: String, required: true },
     picture                 : { type: String, required: true, default: '' },
+    roles                   : { type: String, default: 'admin' },
+    active                  : { type: String, default: false },
 }, {
-    timestamps              : { createdAt: '_registered', updatedAt: '_updated' },
+    timestamps              : { createdAt: 'time._registered', updatedAt: 'time._updated' },
     versionKey              : false,
 });
 

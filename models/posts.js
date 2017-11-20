@@ -22,12 +22,10 @@ function featured (value) {
 //  SCHEMA
 // ==============================
 const PostSchema            = new mongoose.Schema({
-    _status                 : { type: Number, default: 0 },
-    _pinTop                 : { type: Boolean, default: false },
-    provider: {
+    author: {
         _id: {
             type            : mongoose.Schema.Types.ObjectId,
-            ref             : 'USER',
+            ref: 'users',
         },
         username            : { type: String },
     },
@@ -35,15 +33,15 @@ const PostSchema            = new mongoose.Schema({
         validate: {
             isAsync         : false,
             validator       : featured,
-            message         : 'INVALID URL',
+            message: 'Invalid URL',
         }},
     title                   : { type: String, trim: true, required: [true, 'is required'] },
     content                 : { type: String, trim: true, required: [true, 'is required'] },
-    canonicalKey            : { type: String, lowercase: true, unique: true },
-    class                   : { type: String, lowercase: true, default: 'unclassified' }, // tofix: empty space handling
+    category                : { type: String, lowercase: true, default: 'unclassified'}, // tofix: empty space handling
     tag                     : { type: String, lowercase: true },
+    canonical               : { type: String, lowercase: true, unique: true },
 }, {
-    timestamps              : { createdAt: '_created', updatedAt: '_updated' },
+    timestamps              : { createdAt: 'time.created', updatedAt: 'time.updated' },
     versionKey              : '_revised',
 }).index({ 'title': 'text', 'content': 'text', 'tag' : 'text' });
 
@@ -66,7 +64,7 @@ PostSchema.static('postsDeleteThenDissociate', function (docsID, user, next) {
 
 // (pre-hook) canonical key evaluation
 PostSchema.pre('save', function (next) {
-    if (!this.canonicalKey) this.canonicalKey = _fn.string.canonicalize(this.title);
+    if (!this.canonical) this.canonical = _fn.string.canonicalize(this.title);
     next();
 });
 
