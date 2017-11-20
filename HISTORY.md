@@ -1,3 +1,11 @@
+### 0.3.3 / 2017-11-19
+> App
+- Added 'search' controller.
+
+> UI
+- n/a
+
+
 ### 0.3.2 / 2017-11-17
 > App
 - Issued the 'LICENCE' file in 'Apache License 2.0'.

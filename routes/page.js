@@ -27,12 +27,7 @@ router.get('/', (req, res) => res.render('./theme/index'));
 
 
 // searching
-router.get('/search/:KEYWORDS', _pre.doNotCrawled, _end.wrapAsync(async (req, res) => {
-    const keywords = req.params.KEYWORDS;
-    const query = req.query;
-    const result = await postModel.find({ $text: { $search: keywords }}).sort({ _created : -1 });
-    _end.next.postRender('./theme/search', result)(req, res);
-}));
+router.get('/search/:TERMS', _pre.doNotCrawled, require('../controllers/search'));
 
 // router.get('/tag/:TAG', _end.wrapAsync(async (req, res) => {
 //     const result = await postModel.find({ tag: req.params.TAG }).sort({ _created : -1 });
