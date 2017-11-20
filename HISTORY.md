@@ -6,6 +6,11 @@
 - n/a
 
 
+### Debugged 0.3.4 / 2017-11-20
+> Bug
+- Rejected promise catching by `_end.wrapAsync` for `_end.next.postRender`.
+
+
 ### 0.3.4 / 2017-11-20
 > App
 - Rewired schema and 'search' controller.
