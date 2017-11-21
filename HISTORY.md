@@ -1,3 +1,11 @@
+### 0.3.6 / 2017-11-21
+> App
+- Rewired 'search' controller for integrations of 'post' route. (on progress)
+
+> UI
+- n/a
+
+
 ### 0.3.5 / 2017-11-20
 > App
 - Rewired 'search' controller for preventing memory leaking.

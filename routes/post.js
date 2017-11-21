@@ -20,6 +20,8 @@ const _fn                   = require('../configurations/methods');
 // middleware
 const { _pre, _end }        = require('../configurations/middleware');
 
+// controller
+const {search} = require('../controllers/search');
 
 
 // ==============================
@@ -68,12 +70,8 @@ router
         req.session.view = { post: await postModel.findById(_fn.string.readObjectID(req.url)) };
         res.redirect(`/post/${req.session.view.post.canonical}`);
     }))
-    .get('/:KEY', (req, res) => {
-        _end.next.postRender('./theme/post/post', postModel.findOne({ canonical: req.params.KEY }))(req, res);
-    })
-    .get('/', (req, res) => {
-        _end.next.postRender('./theme/post/index', postModel.find({}).sort({'time.created': -1}))(req, res);
-    });
+    .get('/:canonical', search.find({type: 'singular'}), _end.next.postRender('./theme/post/post'))
+    .get('/', search.find({num: 10}), _end.next.postRender('./theme/post/index'));
 
 
 // error handler
