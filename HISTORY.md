@@ -1,3 +1,14 @@
+### 0.3.7 / 2017-11-22
+> App
+- Added pagination into 'search' controller.
+- Introduced mongo aggregation pipeline for more efficient db query.
+- Renamed some router params for db query integrations.
+- Rewired 'search' controller with ES6 destructuring with defaults.
+
+> UI
+- Added pagination tags into '_header' (for SEO).
+
+
 ### 0.3.6 / 2017-11-21
 > App
 - Rewired 'search' controller for integrations of 'post' route. (on progress)

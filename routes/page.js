@@ -23,7 +23,7 @@ router.get('/', (req, res) => res.render('./theme/index'));
 
 
 // searching
-router.get('/search/:keywords', _pre.doNotCrawled, search.find({num: 10}), _end.next.postRender('./theme/search'));
+router.get('/search/:search', _pre.doNotCrawled, search.find(), _end.next.postRender('./theme/search'));
 
 // router.get('/tag/:TAG', _end.wrapAsync(async (req, res) => {
 //     const result = await postModel.find({ tag: req.params.TAG }).sort({ _created : -1 });

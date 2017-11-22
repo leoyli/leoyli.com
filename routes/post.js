@@ -71,7 +71,7 @@ router
         res.redirect(`/post/${req.session.view.post.canonical}`);
     }))
     .get('/:canonical', search.find({type: 'singular'}), _end.next.postRender('./theme/post/post'))
-    .get('/', search.find({num: 10}), _end.next.postRender('./theme/post/index'));
+    .get('/', search.find(), _end.next.postRender('./theme/post/index'));
 
 
 // error handler
