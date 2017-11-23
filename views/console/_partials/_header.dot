@@ -9,10 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- internal reference -->
-    {{? _view.prev }}
-    <link rel="prev" href="{{= _view.prev }}">{{?}}
-    {{? _view.next }}
-    <link rel="next" href="{{= _view.next }}">{{?}}
+    {{? _view.prev }}<link rel="prev" href="{{= _view.prev }}">{{?}}
+    {{? _view.next }}<link rel="next" href="{{= _view.next }}">{{?}}
 
     <!-- CDN stylesheets -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"

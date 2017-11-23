@@ -1,25 +1,31 @@
 // ==============================
 //  FUNCTIONS
 // ==============================
-// middleware
-const { _end }              = require('../configurations/middleware');
-
 // extracted functions
 function searchPosts(params, modifier) {
-    let { num = 10, page = 1, sort = {} } = modifier;   // todo: read default value of num from req.locals._site
+    let { num = 5, page = 1, sort = { 'time.created': -1 }} = modifier;    // todo: set default of num from req.locals._site
 
     // modify mongo $match query
     if (typeof params === 'string') params = { $text: { $search: params }};
     if (params && params.search) params = { $text: { $search: params.search }};
 
-    // paginate
-    const skip = (page > 1) ? ((page - 1) * num) : 0;
-
     return require('../models').postModel.aggregate([
         { $match: params },
         { $sort: sort },
-        { $group: { _id: null, count: { $sum: 1 }, post: { $push: '$$ROOT' }}}, // todo: add .populate(author)
-        { $project: { _id: 0, count: 1, post: { $slice: ['$post', skip, skip + num] }}}
+        { $group: { _id: null, count: { $sum: 1 }, post: { $push: '$$ROOT' }}}, // todo: .populate(author)
+        { $project: { _id: 0, count: 1, post: 1, page: {
+            last: { $ceil: { $divide: ['$count', num] }},
+            this: { $cond: [                                                // note: construct pagination
+                { $lt: [page, { $ceil: { $divide: ['$count', num] }}]},     // condition
+                { $literal: page },                                         // truthy case
+                { $ceil: { $divide: ['$count', num] }}                      // falsey case
+            ]},
+        }}},
+        { $project: { count: 1, page: 1, post: { $slice: [                  // note: return paginated docs
+            '$post',                                                        // data-field from the last pipeline
+            { $multiply: [{ $add: ['$page.this', -1] }, num] },             // starting position
+            num                                                             // pick up number
+        ]}}}
     ]);
 }
 
@@ -30,30 +36,29 @@ function searchPosts(params, modifier) {
 // ==============================
 const search = {};
 
-search.find = modifier => _end.wrapAsync(async (req, res, next) => {
+search.find = modifier => (req, res, next) => {
     // destructure query and default
-    let { num = 10, page = 1, sort = {}, type } = modifier || {};   // todo: sorting options
+    let { num = 5, page = 1, sort = {}, type } = modifier || {};
 
     // modify mongo query
-    if (type === 'singular') req.query = {};
     if (req.query.num > 0) num = parseInt(req.query.num);
     if (req.query.page > 1) page = parseInt(req.query.page);
-    if (!sort['time.created']) sort = Object.assign(sort, { 'time.created': -1 });
+    if (!sort['time.created']) sort = Object.assign(sort, { 'time.created': -1 });     // todo: sorting options
 
     // perform mongo query
-    const result = await searchPosts(req.params, { num, page, sort });
-    const { count = 0, post = [] } = result[0];
+    return searchPosts(req.params, { num, page, sort }).then(result => {    // note: use promise.then for destructuring `page`
+        const { count = 0, post = [], page } = result[0];
 
-    // todo: redirect 404 or the 1st page if req.query.page > max page
-    // set prev/next meta tags
-    const url = req.originalUrl.split('?')[0] + '?num=' + num + '&page=';
-    if (page > 1) res.locals._view.prev = url + (page - 1);
-    if (page < Math.ceil(count / num)) res.locals._view.next = url + (page + 1);
+        // set prev/next meta tags
+        const url = req.originalUrl.split('?')[0] + '?num=' + num + '&page=';
+        if (page.this > 1) res.locals._view.prev = url + (page.this - 1);
+        if (page.this < page.last) res.locals._view.next = url + (page.this + 1);
 
-    // cache posts into user session
-    req.session.view = { count, post: (type === 'singular') ? post[0] : post };
-    next();
-});
+        // cache posts into user session
+        req.session.view = { count, page, post: (type === 'singular') ? post[0] : post };
+        return next();
+    }).catch(err => next(err));
+};
 
 
 

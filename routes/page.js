@@ -36,6 +36,10 @@ router.get('/search/:search', _pre.doNotCrawled, search.find(), _end.next.postRe
 // }));
 
 
+// error handler
+router.use(_end.error.clientError);
+
+
 
 // route exports
 module.exports = router;

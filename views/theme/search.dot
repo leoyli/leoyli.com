@@ -12,8 +12,7 @@
     <div class="col-9">
         {{? post.length === 0 }}
             <h3>NO RESULT</h3>
-        {{??}}
-            {{ post.forEach(function(post) { }}
+        {{??}}{{ post.forEach(function(post) { }}
             <article class="mb-4 pb-4" id="{{= post._id }}">
                 <h2 class="_title"><a href="/post/{{= post.canonical }}">{{= post.title }}</a></h2>
                 <header class="row">
@@ -27,15 +26,14 @@
                           datetime="{{= post.time.updated }}">{{= new Date(post.time.updated).toDateString() }}</time>
                 </header>
                 {{? post.featured }}
-                <figure class="_featured py-2">
-                    <a href="/post/{{= post.canonical }}">
-                        <img class="img-fluid" src="{{= post.featured }}" alt="{{= post.title }}" />
-                    </a>
-                </figure>
+                    <figure class="_featured py-2">
+                        <a href="/post/{{= post.canonical }}">
+                            <img class="img-fluid" src="{{= post.featured }}" alt="{{= post.title }}" />
+                        </a>
+                    </figure>
                 {{?}}
             </article>
-            {{ }); }}
-        {{?}}
+        {{ }); }}{{?}}
     </div>
 </div>
 

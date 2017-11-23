@@ -11,12 +11,11 @@
     <meta name="keywords" content="{{= _site.keywords }}">
 
     <!-- SEO -->
-    {{? typeof post !== 'undefined' }}
-    <link rel="canonical" href="/post/{{= post.canonical ? post.canonical : '' }}"/>{{?}}
-    {{? _view.prev }}
-    <link rel="prev" href="{{= _view.prev }}">{{?}}
-    {{? _view.next }}
-    <link rel="next" href="{{= _view.next }}">{{?}}
+    {{? typeof post !== 'undefined' && !Array.isArray(post) }}
+        <link rel="canonical" href="/post/{{= post.canonical ? post.canonical : '' }}"/>
+    {{?}}
+    {{? _view.prev }}<link rel="prev" href="{{= _view.prev }}">{{?}}
+    {{? _view.next }}<link rel="next" href="{{= _view.next }}">{{?}}
 
     <!-- CDN stylesheets -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"

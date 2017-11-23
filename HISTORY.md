@@ -1,3 +1,13 @@
+### 0.3.8 / 2017-11-22
+> App
+- Empowered the aggregation pipeline for calculating the pagination on the fly.
+- Simplified `search.find` in 'search'.
+- Hooked error handler middleware into 'page' route.
+
+> UI
+- Accessing a page greater than the last page now returns its last page.
+
+
 ### 0.3.7 / 2017-11-22
 > App
 - Added pagination into 'search' controller.
