@@ -15,7 +15,7 @@ const { postModel, userModel } = require('../models');
 //  FUNCTIONS
 // ==============================
 // middleware
-const { _end }              = require('../configurations/middleware');
+const { _end }              = require('../controllers/middleware');
 
 
 

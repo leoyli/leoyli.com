@@ -15,10 +15,10 @@ const { postModel }         = require('../models');
 //  FUNCTIONS
 // ==============================
 // ancillaries
-const _fn                   = require('../configurations/methods');
+const _fn                   = require('../controllers/methods');
 
 // middleware
-const { _pre, _end }        = require('../configurations/middleware');
+const { _pre, _end }        = require('../controllers/middleware');
 
 // controller
 const {search} = require('../controllers/search');

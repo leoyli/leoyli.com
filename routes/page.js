@@ -8,7 +8,7 @@ const
 //  FUNCTIONS
 // ==============================
 // middleware
-const { _pre, _end }        = require('../configurations/middleware');
+const { _pre, _end }        = require('../controllers/middleware');
 
 // controller
 const { search }            = require('../controllers/search');

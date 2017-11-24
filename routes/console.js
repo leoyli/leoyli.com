@@ -15,7 +15,7 @@ const { settingModel, mediaModel, userModel } = require('../models');
 //  FUNCTIONS
 // ==============================
 // middleware
-const { _pre, _end }        = require('../configurations/middleware');
+const { _pre, _end }        = require('../controllers/middleware');
 router.all('*', _pre.isSignedIn, _pre.prependTitleTag('Console'));
 
 

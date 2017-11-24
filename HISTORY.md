@@ -1,3 +1,13 @@
+### 0.5.0-dev.1 / 2017-11-24
+> App
+- Rearranged files into the MVC fashion.
+- Adapted 'A successful Git branching model' as the version control working flow.
+- Adapted semantic versioning with a build metadata `dev` for versioning ongoing developments.
+
+> UI
+- n/a
+
+
 ### 0.4.0 / 2017-11-24
 > App
 - Rewired 'app' for preventing static view from establishing sessions.

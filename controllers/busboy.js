@@ -8,7 +8,7 @@ const
 
 //uploader configurations
 function ImgUploadByBusboy (req, res, limits, next) {
-    const busboy = new Busboy({headers: req.headers, limits: limits});
+    const busboy = new Busboy({ headers: req.headers, limits: limits });
     const notice = [];
     const populator = {};
 
@@ -36,7 +36,7 @@ function ImgUploadByBusboy (req, res, limits, next) {
                     fileBase: branch.fileBase,
                     fullPath: branch.fullPath,
                 });
-            } else populator[_fn.string.parseNestKey(fieldName)[0]] = {isSkipped: true};
+            } else populator[_fn.string.parseNestKey(fieldName)[0]] = { isSkipped: true };
 
             // exception handler
             if (branch.isAttached && !branch.isAccepted) return notice.push(`${fileName} is in unaccepted file types!`);
