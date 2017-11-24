@@ -1,0 +1,7 @@
+{{= _fn.loadPartial('_header') }}
+
+<h1 class="container mb-4">{{= message }}</h1>
+<h2 class="container mb-4">{{= error.status }}</h2>
+<pre class="container">{{= error.stack }}</pre>
+
+{{= _fn.loadPartial('_footer') }}

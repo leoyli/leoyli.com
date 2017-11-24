@@ -1,0 +1,5 @@
+{{= _fn.loadPartial('_header') }}
+
+<h1 class="container mb-4">DASHBOARD</h1>
+
+{{= _fn.loadPartial('_footer') }}
