@@ -58,8 +58,8 @@ router
     }));
 
 router
-    .get('/editor/:KEY', _pre.isAuthorized, _end.wrapAsync(async (req, res) => {
-        req.session.view = {post: await postModel.findOne({ canonical: req.params.KEY })};
+    .get('/editor/:canonical', _pre.isAuthorized, _end.wrapAsync(async (req, res) => {
+        req.session.view = { post: await postModel.findOne(req.params) };
         res.redirect(`/post/editor/${req.session.view.post._id}`);
     }));
 

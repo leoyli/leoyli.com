@@ -2,13 +2,12 @@
 //  FUNCTIONS
 // ==============================
 // extracted functions
-function searchPosts(params, modifier) {
-    let { num = 5, page = 1, sort = { 'time.created': -1 }} = modifier;    // todo: set default of num from req.locals._site
-
-    // modify mongo $match query
+function searchPosts(params, { num = 5, page = 1, sort = { 'time.created': -1 }} = {}) {
+    // modify mongo query
     if (typeof params === 'string') params = { $text: { $search: params }};
     if (params && params.search) params = { $text: { $search: params.search }};
 
+    // perform mongo query
     return require('../models').postModel.aggregate([
         { $match: params },
         { $sort: sort },
@@ -36,9 +35,8 @@ function searchPosts(params, modifier) {
 // ==============================
 const search = {};
 
-search.find = modifier => (req, res, next) => {
-    // destructure query and default
-    let { num = 5, page = 1, sort = {}, type } = modifier || {};
+search.find = ({ num = 5, page = 1, sort = {}, type } = {}) => (req, res, next) => {
+    // todo: reset default of num from req.locals._site
 
     // modify mongo query
     if (req.query.num > 0) num = parseInt(req.query.num);

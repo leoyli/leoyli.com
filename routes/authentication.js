@@ -62,7 +62,7 @@ router
                 if (err) return next(err);
 
                 // session
-                req.session.cookie.expires = (req.body.isPersisted)
+                req.session.cookie.expires = req.body.isPersisted
                     ? new Date(Date.now() + 14 * 24 * 3600 * 1000)
                     : false;
                 req.session.user = {

@@ -67,9 +67,10 @@ _pre.isSignedIn = [_pre.doNotCrawled, ..._pre.usePassport, (req, res, next) => {
 
 // authorization
 _pre.isAuthorized = [..._pre.isSignedIn, async (req, res, next) => {
-    const [field, val] = (req.params.KEY) ? ['canonical', req.params.KEY] : ['_id', _fn.string.readObjectID(req.url)];
-    const count = await require('../models').postModel.count({[field]: val, 'author._id': req.user});
-
+    const [field, val] = req.params.canonical
+        ? ['canonical', req.params.canonical]
+        : ['_id', _fn.string.readObjectID(req.url)];
+    const count = await require('../models').postModel.count({ [field]: val, 'author._id': req.user });
     if (count !== 1) {
         req.flash('error', 'You do not have a valid authorization...');
         return res.redirect('/');
@@ -94,15 +95,13 @@ _pre.passwordValidation = (req, res, next) => {
 
 // section title handler
 _pre.prependTitleTag = (title) => (req, res, next) => {
-    if (!next) next = () => {};
     res.locals._view.title = `${title} - ${res.locals._view.title}`;
-    next();
+    if (typeof next === 'function') return next();
 };
 
 _pre.appendTitleTag = (title) => (req, res, next) => {
-    if (!next) next = () => {};
     res.locals._view.title = `${res.locals._view.title} - ${title}`;
-    next();
+    if (typeof next === 'function') return next();
 };
 
 
@@ -122,8 +121,8 @@ _end.wrapAsync = (fn) => (req, res, next) => fn(req, res, next).catch(next);
 
 // post render handler
 _end.next.postRender = (view, doc) => _end.wrapAsync(async (req, res) => {
-    const template = (view) ? await view : req.session.view.template;
-    const post = (doc) ? await doc : req.session.view.post;
+    const template = view ? await view : req.session.view.template;
+    const post = doc ? await doc : req.session.view.post;
     delete req.session.view;
 
     if (post) {

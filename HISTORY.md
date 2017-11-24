@@ -1,3 +1,14 @@
+### 0.4.0 / 2017-11-24
+> App
+- Rewired 'app' for preventing static view from establishing sessions.
+- Enhanced the code manageability in routing rules and used middleware.
+- Adapted more to ES6 syntax in setting function default arguments with destructuring.
+- Completed and closed '0.4' subversion branch.
+
+> UI
+- n/a
+
+
 ### 0.3.8 / 2017-11-22
 > App
 - Empowered the aggregation pipeline for calculating the pagination on the fly.

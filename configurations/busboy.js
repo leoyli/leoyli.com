@@ -79,8 +79,7 @@ function FileStreamBranch(fileName, MIMEType) {
 
 
 // ancillary functions
-function _assignInNest(obj, referenceKeys, bottomValue, index) {
-    if (!index) index = 0;
+function _assignInNest(obj, referenceKeys, bottomValue, index = 0) {
     if (index < referenceKeys.length-1) {
         const _extendedObj = obj[referenceKeys[index]] ? obj[referenceKeys[index]] : (obj[referenceKeys[index]] = {});
         return _assignInNest(_extendedObj, referenceKeys, bottomValue, ++index);

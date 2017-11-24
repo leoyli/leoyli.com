@@ -7,7 +7,7 @@ const
 //  SCHEMA
 // ==============================
 // todo: added CDN object for the header
-let settingModelSchema      = new mongoose.Schema({
+const settingModelSchema      = new mongoose.Schema({
     title                   : { type: String, default: 'New Website' },
     description             : { type: String, default: 'n/a' },
     keywords                : { type: String, default: 'n/a' },
@@ -26,7 +26,7 @@ let settingModelSchema      = new mongoose.Schema({
 //  STATIC METHODS
 // ==============================
 // initialization (model)
-settingModelSchema.static('dbInitialize', function(next) {
+settingModelSchema.static('init', function(next) {
     return this.findOne({}, (err, loadConfig) => {
         if (!loadConfig) return this.create({}, next);
         if (typeof next === 'function') return next();
