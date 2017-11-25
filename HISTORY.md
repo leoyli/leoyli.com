@@ -1,3 +1,11 @@
+### 0.5.0-dev.2 / 2017-11-24
+> App
+- Extracted routing rules from 'page' into a controller module 'router''.
+
+> UI
+- n/a
+
+
 ### 0.5.0-dev.1 / 2017-11-24
 > App
 - Rearranged files into the MVC fashion.

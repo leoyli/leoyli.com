@@ -1,45 +1,25 @@
 const
-    express                 = require('express'),
-    router                  = express.Router();
+    routerHub = require('../controllers/router');
 
 
 
 // ==============================
-//  FUNCTIONS
+//  ROUTER HUB
 // ==============================
-// middleware
-const { _pre, _end }        = require('../controllers/middleware');
-
-// controller
-const { search }            = require('../controllers/search');
-
-
-
-// ==============================
-//  ROUTE RULES
-// ==============================
-// landing
-router.get('/', (req, res) => res.render('./theme/index'));
-
-
-// searching
-router.get('/search/:search', _pre.doNotCrawled, search.find(), _end.next.postRender('./theme/search'));
-
-// router.get('/tag/:TAG', _end.wrapAsync(async (req, res) => {
-//     const result = await postModel.find({ tag: req.params.TAG }).sort({ _created : -1 });
-//     _end.next.postRender('./theme/search', result)(req, res);
-// }));
-
-// router.get('/:CLASS', _end.wrapAsync(async (req, res) => {
-//     const result = await postModel.find({ category: req.params.CLASS }).sort({ _created : -1 });
-//     _end.next.postRender('./theme/search', result)(req, res);
-// }));
-
-
-// error handler
-router.use(_end.error.clientError);
+const PageRouter = new routerHub.Rule([{
+    path:           '/',
+    method:         'get',
+    controller:     [(req, res) => res.render('./theme')],
+    template:       null,
+}, {
+    path:           '/search/:search',
+    method:         'get',
+    controller:     require('../controllers/search').search.find(),
+    template:       './theme/search',
+    option:         { crawl: false },
+}]);
 
 
 
 // route exports
-module.exports = router;
+module.exports = PageRouter;
