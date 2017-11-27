@@ -7,12 +7,12 @@ const
 //  ROUTER HUB
 // ==============================
 const PageRouter = new routerHub.Rule([{
-    path:           '/',
+    route:          '/',
     method:         'get',
-    controller:     [(req, res) => res.render('./theme')],
-    template:       null,
+    controller:     (req, res) => res.render('./theme'),
+    template:       './theme',
 }, {
-    path:           '/search/:search',
+    route:          '/search/:search',
     method:         'get',
     controller:     require('../controllers/search').search.find(),
     template:       './theme/search',

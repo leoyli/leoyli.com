@@ -1,6 +1,14 @@
-### 0.5.0-dev.2 / 2017-11-24
+### 0.5.0-dev.3 / 2017-11-26
 > App
-- Extracted routing rules from 'page' into a controller module 'router''.
+- Restructured 'post' route with 'router' controller.
+
+> UI
+- n/a
+
+
+### 0.5.0-dev.2 / 2017-11-25
+> App
+- Extracted routing rules from 'page' into a controller module 'router'.
 
 > UI
 - n/a
