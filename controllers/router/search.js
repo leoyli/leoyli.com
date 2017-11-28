@@ -8,7 +8,7 @@ function searchPosts(params, { num = 5, page = 1, sort = { 'time.created': -1 }}
     if (params && params.search) params = { $text: { $search: params.search }};
 
     // perform mongo query
-    return require('../models').postModel.aggregate([
+    return require('../../models').postModel.aggregate([
         { $match: params },
         { $sort: sort },
         { $group: { _id: null, count: { $sum: 1 }, post: { $push: '$$ROOT' }}}, // todo: .populate(author)
@@ -60,4 +60,5 @@ search.find = ({ num = 5, page = 1, sort = {}, type } = {}) => (req, res, next) 
 
 
 
-module.exports = { search };
+// controller export
+module.exports = search;

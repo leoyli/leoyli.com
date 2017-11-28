@@ -50,7 +50,7 @@ describe('Route - Seed', () => {
 
 describe('Route - Authentication', () => {
     test('Should be able to sign-in by email or username and move', async () => {
-        const req = (doc) => request(app).patch('/signin').send(doc);
+        const req = (doc) => request(app).post('/signin').send(doc);
         const doc = [{ email: 'leo@leoyli.com', password: 'leo' }, { email: 'leo', password: 'leo' }];
         const res = await Promise.all([req(doc[0]), req(doc[1])]);
         //
@@ -62,7 +62,7 @@ describe('Route - Authentication', () => {
 
     test('Should persists session by cookie', async () => {
         await request(app)
-            .patch('/signin')
+            .post('/signin')
             .send({ email: 'leo@leoyli.com', password: 'leo' })
             .then(res => cookiesJar.push(res.headers['set-cookie'].pop().split(';')[0]));
         const res = await request(app)
@@ -75,7 +75,7 @@ describe('Route - Authentication', () => {
 
     test('Should persists session by agent', async () => {
         await agent
-            .patch('/signin')
+            .post('/signin')
             .send({ email: 'leo@leoyli.com', password: 'leo' });
         const res = await agent.get('/console/dashboard');
         //
@@ -112,7 +112,7 @@ describe('Route - Console', () => {
         await agent
             .patch('/console/security')
             .send({ password: { old: 'leo', new: 'test', confirmed: 'test' }});
-        const req = (doc) => request(app).patch('/signin').send(doc);
+        const req = (doc) => request(app).post('/signin').send(doc);
         const doc = [{ email: 'leo@leoyli.com', password: 'test' }, { email: 'leo@leoyli.com', password: 'leo' }];
         const res = await Promise.all([req(doc[0]), req(doc[1])]);
         //

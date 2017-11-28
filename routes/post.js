@@ -1,91 +1,53 @@
-// ==============================
-//  MODELS
-// ==============================
-const { postModel } = require('../models');
+const RouterHub = require('../controllers/router');
+const editor = require('../controllers/router/editor');
+const search = require('../controllers/router/search');
 
 
 
 // ==============================
 //  FUNCTIONS
 // ==============================
-// ancillaries
 const _fn = require('../controllers/methods');
-
-// middleware
 const { _md } = require('../controllers/middleware');
-
-// controller
-const { search } = require('../controllers/search');
-const editor = {
-    post: {
-        get: require('../controllers/render').post('./console/editor', {}),
-        post: _md.wrapAsync(async (req, res) => {
-            await postModel.postsCreateThenAssociate(req.body.post, req.user);
-            req.flash('info', 'Post have been successfully posted!');
-            res.redirect('/post');
-        }),
-    },
-    edit: {
-        get: (req, res) => {
-            require('../controllers/render').post('./console/editor', postModel.findById(_fn.string.readObjectID(req.url)))(req, res);
-        },
-        patch: _md.wrapAsync(async (req, res) => {
-            const doc = await postModel.findByIdAndUpdate(_fn.string.readObjectID(req.url), req.body.post, { new: true });
-            req.flash('info', 'Post have been successfully updated!');
-            res.redirect(`/post/${doc.canonical}`);
-        }),
-        delete: _md.wrapAsync(async (req, res) => { // todo: trash can || double check
-            await postModel.postsDeleteThenDissociate(_fn.string.readObjectID(req.url), req.user);
-            req.flash('info', 'Post have been successfully deleted!');
-            res.redirect(`/post/`);
-        }),
-    }
-};
+const { postModel } = require('../models');
 
 
 
 // ==============================
 //  ROUTER HUB
 // ==============================
-const routerHub = require('../controllers/router');
-const PostRouter = new routerHub.Rule([{
+const PostRouter = new RouterHub([{
     route:          ['/editor', '/editor/new'],
-    method:         ['get', 'post'],
     controller:     editor.post,
-    options:        { title: 'New Post', authentication: true },
+    settings:       { title: 'New post', authentication: true },
 }, {
     route:          /^\/editor\/[a-f\d]{24}(\/)?$/,
-    method:         ['get', 'patch', 'delete'],
     controller:     editor.edit,
-    options:        { title: 'Post Editor', authorization: true },
+    settings:       { title: 'post Editor', authorization: true },
 }, {
     route:          '/editor/:canonical',
-    method:         'get',
     controller:     _md.wrapAsync(async (req, res) => {
                         req.session.view = { post: await postModel.findOne(req.params) };
                         res.redirect(`/post/editor/${req.session.view.post._id}`);
                     }),
-    options:        { authorization: true },
+    settings:       { authorization: true },
 }, {
     route:          /^\/[a-f\d]{24}(\/)?$/,
-    method:         'get',
     controller:     _md.wrapAsync(async (req, res) => {
                         req.session.view = { post: await postModel.findById(_fn.string.readObjectID(req.url)) };
                         res.redirect(`/post/${req.session.view.post.canonical}`);
                     }),
 }, {
     route:          '/:canonical',
-    method:         'get',
     controller:     search.find({type: 'singular'}),
-    template:       './theme/post/post',
+    settings:       { template: './theme/post/post' },
 }, {
     route:          '/',
-    method:         'get',
     controller:     search.find(),
-    template:       './theme/post/index',
+    settings:       { template: './theme/post' },
 }]);
 
 
 
-// route exports
-module.exports = PostRouter;
+// router exports
+module.exports = PostRouter.activate();

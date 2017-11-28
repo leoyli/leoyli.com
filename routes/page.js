@@ -1,24 +1,21 @@
-const routerHub = require('../controllers/router');
+const RouterHub = require('../controllers/router');
+const search = require('../controllers/router/search');
 
 
 
 // ==============================
 //  ROUTER HUB
 // ==============================
-const PageRouter = new routerHub.Rule([{
+const PageRouter = new RouterHub([{
     route:          '/',
-    method:         'get',
     controller:     (req, res) => res.render('./theme'),
-    template:       './theme',
 }, {
     route:          '/search/:search',
-    method:         'get',
-    controller:     require('../controllers/search').search.find(),
-    template:       './theme/search',
-    option:         { crawl: false },
+    controller:     search.find(),
+    settings:       { crawler: false, template: './theme/search' },
 }]);
 
 
 
-// route exports
-module.exports = PageRouter;
+// router exports
+module.exports = PageRouter.activate();

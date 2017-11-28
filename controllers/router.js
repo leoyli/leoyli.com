@@ -1,35 +1,35 @@
-const { _md } = require('../controllers/middleware');
+function RouterHub(rules, option) {
+    this.rules = rules;
+    this.router = require('express').Router(option);
+    this.use = (middleware) => this.router.use(middleware);
+}
 
+RouterHub.prototype.activate = function() {
+    const render = require('./render');
 
+    this.rules.forEach(({ route, controller, method, settings = {} }) => {  // todo: type -> control return data type; auth -> use authentication
+        if (typeof controller === 'function') controller = [controller];
+        if (!method) method = (Array.isArray(controller)) ? ['get'] : Object.keys(controller);
+        if (method instanceof String) method = [method];
 
-const routerHub = {
-    Rule: function(file) {
-        const router = require('express').Router();
-        const render = require('./render');
+        method.forEach(method => {
+            const { _md } = require('./middleware');
+            const sequence = [route];
+            if (settings.crawler === false) sequence.push(_md.doNotCrawled);
+            if (settings.authentication === true) sequence.push(_md.isSignedIn);
+            if (settings.authorization === true) sequence.push(_md.isAuthorized);
+            if (settings.title) sequence.push(_md.setTitleTag(settings.title, settings.setTitle));
 
-        file.forEach(({ route, method, controller, template, option = {} }) => {  // todo: type -> control return data type; auth -> use authentication
-            const { setHeader = [] } = option;
-            if (option.crawl === false) setHeader.push(_md.doNotCrawled);
+            sequence.push(Array.isArray(controller) ? controller : controller[method]); // tofix: test if CURD method existed
+            if (method === 'get' && settings.template) sequence.push(render.post(settings.template));
+            this.router[method](...sequence);
+        })
+    });
 
-            if (!(method instanceof Array)) method = [method];
-            if (typeof controller === 'function') controller = [controller];
-            method.forEach(method => {
-                const rule = [route];
-                if (option.authentication === true) rule.push(_md.isSignedIn);
-                if (option.authorization === true) rule.push(_md.isAuthorized);
-                if (option.title) rule.push(_md.setTitleTag(option.title, option.setTitle));
-                if (controller) rule.push(Array.isArray(controller) ? controller : controller[method]);
-                if (setHeader.length > 0) rule.push(setHeader);
-                if (method === 'get' && template) rule.push(render.post(template));
-                router[method](...rule);
-            })
-        });
-
-        router.use(render.errorHandler);
-        return router;
-    },
+    this.use(render.errorHandler);
+    return this.router;
 };
 
 
 
-module.exports = routerHub;
+module.exports = RouterHub;

@@ -1,3 +1,15 @@
+### 0.5.0-dev.5 / 2017-11-28
+> App
+- Separated most controller logic from router files.
+- Enhanced `RouterHub` with a feature of automatic http method selection.
+- Provided `RouterHub.use` as a short cut to wire pre-used middleware.
+- Changed the login http method from 'patch' to 'post'.
+- Set in correspondence with the http method change in the test mode.
+
+> UI
+- Set in correspondence with the http method change in 'signin' template.
+
+
 ### 0.5.0-dev.4 / 2017-11-27
 > App
 - Split 'middleware' files: removed `_end`, renamed `_pre` into `_md`.
