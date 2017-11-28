@@ -15,8 +15,8 @@ const { settingModel, mediaModel, userModel } = require('../models');
 //  FUNCTIONS
 // ==============================
 // middleware
-const { _pre, _end }        = require('../controllers/middleware');
-router.all('*', _pre.isSignedIn, _pre.prependTitleTag('Console'));
+const { _md } = require('../controllers/middleware');
+router.all('*', _md.isSignedIn, _md.setTitleTag('Console'));
 
 
 
@@ -24,15 +24,15 @@ router.all('*', _pre.isSignedIn, _pre.prependTitleTag('Console'));
 //  ROUTE RULES
 // ==============================
 // dashboard
-router.get(/^\/(dashboard)?(\/)?$/, _pre.prependTitleTag('Dashboard'), (req, res) => res.render('./console/dashboard'));
+router.get(/^\/(dashboard)?(\/)?$/, _md.setTitleTag('Dashboard'), (req, res) => res.render('./console/dashboard'));
 
 
 // site setting
 router
     .route('/setting')
-    .all(_pre.prependTitleTag('Website Configurations'))
+    .all(_md.setTitleTag('Website Configurations'))
     .get((req, res) => res.render('./console/setting'))
-    .patch(_end.wrapAsync(async (req, res) => {
+    .patch(_md.wrapAsync(async (req, res) => {
         await settingModel.updateSettings(req.body.siteSetting);
         res.redirect('back');
     }));
@@ -41,9 +41,9 @@ router
 // user profile
 router
     .route('/profile')
-    .all(_pre.prependTitleTag('Profile'))
+    .all(_md.setTitleTag('Profile'))
     .get((req, res) => res.render('./console/account/profile'))
-    .patch(_end.wrapAsync(async (req, res) => {
+    .patch(_md.wrapAsync(async (req, res) => {
         await userModel.update({ _id: req.user._id }, { $set: req.body.profile });
         res.redirect('back');
     }));
@@ -52,9 +52,9 @@ router
 // account security (password changing)
 router
     .route('/security')
-    .all(_pre.prependTitleTag('Account Settings'))
+    .all(_md.setTitleTag('Account Settings'))
     .get((req, res) => res.render('./console/account/security'))
-    .patch(_pre.passwordValidation, _end.wrapAsync(async (req, res) => {
+    .patch(_md.passwordValidation, _md.wrapAsync(async (req, res) => {
         await req.user.changePassword(req.body.password.old, req.body.password.new);
         req.flash('info', 'Password have been successfully changed.');
         res.redirect('back');
@@ -64,9 +64,9 @@ router
 // media uploader  // todo: to be integrated in profile and media manager
 router
     .route('/upload') // todo: redirect back to media manager
-    .all(_pre.prependTitleTag('Media Uploader'))
+    .all(_md.setTitleTag('Media Uploader'))
     .get((req, res) => res.render('./console/upload'))
-    .post(_pre.hireBusboy({ fileSize: 3*1048576, files: 2 }), _end.wrapAsync(async (req, res) => { // todo: will be responsible for all media uploading event and redirect user back
+    .post(_md.hireBusboy({ fileSize: 3*1048576, files: 2 }), _md.wrapAsync(async (req, res) => { // todo: will be responsible for all media uploading event and redirect user back
         if (req.body.busboySlip.notice[0]) {
             req.body.busboySlip.notice.forEach(notice => req.flash('error', notice));
             if (req.body.busboySlip.raw[0]) return res.redirect('back');
@@ -78,7 +78,7 @@ router
 
 
 // error handler
-router.use(_end.error.clientError);
+router.use(require('../controllers/render').errorHandler);
 
 
 

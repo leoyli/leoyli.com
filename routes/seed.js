@@ -15,7 +15,7 @@ const { postModel, userModel } = require('../models');
 //  FUNCTIONS
 // ==============================
 // middleware
-const { _end }              = require('../controllers/middleware');
+const { _md } = require('../controllers/middleware');
 
 
 
@@ -41,7 +41,7 @@ const SEEDPOST = {
 
 
 // seed plant
-router.get("/", _end.wrapAsync(async (req, res) => {
+router.get("/", _md.wrapAsync(async (req, res) => {
     const newUser = await userModel.register(new userModel(SEEDUSER), SEEDUSER.password);
     await postModel.postsCreateThenAssociate(SEEDPOST, newUser);
     req.flash('info', 'Successfully seeded.');
@@ -50,10 +50,7 @@ router.get("/", _end.wrapAsync(async (req, res) => {
 
 
 // error handler
-router.use((err, req, res, next) => {
-    req.flash('error', err.toString());
-    res.redirect('back');
-});
+router.use(require('../controllers/render').errorHandler);
 
 
 

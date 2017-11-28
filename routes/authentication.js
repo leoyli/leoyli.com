@@ -16,8 +16,8 @@ const { userModel }         = require('../models');
 //  FUNCTIONS
 // ==============================
 // middleware
-const { _pre, _end }        = require('../controllers/middleware');
-router.all('*', _pre.usePassport);
+const { _md } = require('../controllers/middleware');
+router.all('*', _md.usePassport);
 
 
 
@@ -27,12 +27,12 @@ router.all('*', _pre.usePassport);
 // sign-up
 router
     .route('/signup')
-    .all(_pre.prependTitleTag('Sign Up'))
+    .all(_md.setTitleTag('Sign Up'))
     .get((req, res) => {
         if (req.isAuthenticated()) return res.redirect('/console/dashboard');
         res.render('./console/account/signup')
     })
-    .post(_pre.passwordValidation, _end.wrapAsync(async (req, res) => {
+    .post(_md.passwordValidation, _md.wrapAsync(async (req, res) => {
         const newUser = await userModel.register(new userModel(req.body), req.body.password.new);
         req.logIn(newUser, err => {
             if (err) throw err;
@@ -45,7 +45,7 @@ router
 // sign-in
 router
     .route('/signin')
-    .all(_pre.prependTitleTag('Sign In'))
+    .all(_md.setTitleTag('Sign In'))
     .get((req, res) => {
         if (req.isAuthenticated()) return res.redirect('/console');
         res.render('./console/account/signin');
@@ -96,7 +96,7 @@ router
 
 
 // error handler
-router.use(_end.error.clientError);
+router.use(require('../controllers/render').errorHandler);
 
 
 

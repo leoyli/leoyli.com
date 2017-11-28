@@ -1,7 +1,7 @@
 // ==============================
 //  MODELS
 // ==============================
-const { postModel }         = require('../models');
+const { postModel } = require('../models');
 
 
 
@@ -9,17 +9,17 @@ const { postModel }         = require('../models');
 //  FUNCTIONS
 // ==============================
 // ancillaries
-const _fn                   = require('../controllers/methods');
+const _fn = require('../controllers/methods');
 
 // middleware
-const { _end }              = require('../controllers/middleware');
+const { _md } = require('../controllers/middleware');
 
 // controller
-const { search }            = require('../controllers/search');
+const { search } = require('../controllers/search');
 const editor = {
     post: {
-        get: _end.next.postRender('./console/editor', {}),
-        post: _end.wrapAsync(async (req, res) => {
+        get: require('../controllers/render').post('./console/editor', {}),
+        post: _md.wrapAsync(async (req, res) => {
             await postModel.postsCreateThenAssociate(req.body.post, req.user);
             req.flash('info', 'Post have been successfully posted!');
             res.redirect('/post');
@@ -27,14 +27,14 @@ const editor = {
     },
     edit: {
         get: (req, res) => {
-            _end.next.postRender('./console/editor', postModel.findById(_fn.string.readObjectID(req.url)))(req, res);
+            require('../controllers/render').post('./console/editor', postModel.findById(_fn.string.readObjectID(req.url)))(req, res);
         },
-        patch: _end.wrapAsync(async (req, res) => {
+        patch: _md.wrapAsync(async (req, res) => {
             const doc = await postModel.findByIdAndUpdate(_fn.string.readObjectID(req.url), req.body.post, { new: true });
             req.flash('info', 'Post have been successfully updated!');
             res.redirect(`/post/${doc.canonical}`);
         }),
-        delete: _end.wrapAsync(async (req, res) => { // todo: trash can || double check
+        delete: _md.wrapAsync(async (req, res) => { // todo: trash can || double check
             await postModel.postsDeleteThenDissociate(_fn.string.readObjectID(req.url), req.user);
             req.flash('info', 'Post have been successfully deleted!');
             res.redirect(`/post/`);
@@ -47,7 +47,8 @@ const editor = {
 // ==============================
 //  ROUTER HUB
 // ==============================
-const PostRouter = new require('../controllers/router').Rule([{
+const routerHub = require('../controllers/router');
+const PostRouter = new routerHub.Rule([{
     route:          ['/editor', '/editor/new'],
     method:         ['get', 'post'],
     controller:     editor.post,
@@ -60,7 +61,7 @@ const PostRouter = new require('../controllers/router').Rule([{
 }, {
     route:          '/editor/:canonical',
     method:         'get',
-    controller:     _end.wrapAsync(async (req, res) => {
+    controller:     _md.wrapAsync(async (req, res) => {
                         req.session.view = { post: await postModel.findOne(req.params) };
                         res.redirect(`/post/editor/${req.session.view.post._id}`);
                     }),
@@ -68,7 +69,7 @@ const PostRouter = new require('../controllers/router').Rule([{
 }, {
     route:          /^\/[a-f\d]{24}(\/)?$/,
     method:         'get',
-    controller:     _end.wrapAsync(async (req, res) => {
+    controller:     _md.wrapAsync(async (req, res) => {
                         req.session.view = { post: await postModel.findById(_fn.string.readObjectID(req.url)) };
                         res.redirect(`/post/${req.session.view.post.canonical}`);
                     }),

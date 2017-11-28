@@ -1,3 +1,13 @@
+### 0.5.0-dev.4 / 2017-11-27
+> App
+- Split 'middleware' files: removed `_end`, renamed `_pre` into `_md`.
+- Combined two section title handlers into one `.setTitleTag` with options.
+- Added controller 'render' as a communicator of view.
+
+> UI
+- n/a
+
+
 ### 0.5.0-dev.3 / 2017-11-26
 > App
 - Restructured 'post' route with 'router' controller.

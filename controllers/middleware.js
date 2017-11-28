@@ -1,5 +1,5 @@
 // ancillaries
-const _fn                   = require('./methods');
+const _fn = require('./methods');
 
 
 
@@ -37,12 +37,15 @@ const _global = async (req, res, next) => {
 
 
 // ==============================
-//  _pre
+//  _md
 // ==============================
-const _pre = {};
+const _md = {};
+// async handler
+_md.wrapAsync = (fn) => (req, res, next) => fn(req, res, next).catch(next);
+
 
 // http header for stopping crawlers
-_pre.doNotCrawled = (req, res, next) => {
+_md.doNotCrawled = (req, res, next) => {
     res.set('x-robots-tag', 'none');
     next();
 };
@@ -50,11 +53,11 @@ _pre.doNotCrawled = (req, res, next) => {
 
 // passport
 const passport = require('passport');
-_pre.usePassport = [passport.initialize(), passport.session()];
+_md.usePassport = [passport.initialize(), passport.session()];
 
 
 // authentication
-_pre.isSignedIn = [_pre.doNotCrawled, ..._pre.usePassport, (req, res, next) => {
+_md.isSignedIn = [_md.doNotCrawled, ..._md.usePassport, (req, res, next) => {
     if (req.isAuthenticated()) return next();
     if (res.locals._view.flash.pass[0]) {
         req.flash('error', String(res.locals._view.flash.error));
@@ -66,7 +69,7 @@ _pre.isSignedIn = [_pre.doNotCrawled, ..._pre.usePassport, (req, res, next) => {
 
 
 // authorization
-_pre.isAuthorized = [..._pre.isSignedIn, async (req, res, next) => {
+_md.isAuthorized = [..._md.isSignedIn, async (req, res, next) => {
     const [field, val] = req.params.canonical
         ? ['canonical', req.params.canonical]
         : ['_id', _fn.string.readObjectID(req.url)];
@@ -79,7 +82,7 @@ _pre.isAuthorized = [..._pre.isSignedIn, async (req, res, next) => {
 
 
 // password validations
-_pre.passwordValidation = (req, res, next) => {
+_md.passwordValidation = (req, res, next) => {
     if (!req.body.password.new || !req.body.password.confirmed) {
         req.flash('error', 'Please fill all required fields.');
     } else if (req.body.password.new !== req.body.password.confirmed) {
@@ -93,62 +96,18 @@ _pre.passwordValidation = (req, res, next) => {
 };
 
 
-// section title handler
-_pre.prependTitleTag = (title) => (req, res, next) => {
-    res.locals._view.title = `${title} - ${res.locals._view.title}`;
-    if (typeof next === 'function') return next();
-};
-
-_pre.appendTitleTag = (title) => (req, res, next) => {
-    res.locals._view.title = `${res.locals._view.title} - ${title}`;
+// set title tag
+_md.setTitleTag = (title, { append, root, sequence = [] } = {}) => (req, res, next) => {
+    if (root === true) sequence.push(res.locals._view.title);
+    if (append === true) sequence.push(title);
+    else sequence.unshift(title);
+    res.locals._view.title = sequence.join(' - ');
     if (typeof next === 'function') return next();
 };
 
 
 // busboy for multipart form parsing
-_pre.hireBusboy = (limits) => (req, res, next) => require('./busboy')(req, res, limits, next);
+_md.hireBusboy = (limits) => (req, res, next) => require('./busboy')(req, res, limits, next);
 
 
-
-// ==============================
-//  _end
-// ==============================
-const _end = { next: {}, error: {} };
-
-// async wrapper for error catching
-_end.wrapAsync = (fn) => (req, res, next) => fn(req, res, next).catch(next);
-
-
-// post render handler
-_end.next.postRender = (view, doc) => _end.wrapAsync(async (req, res) => {
-    const template = view ? await view : req.session.view.template;
-    const post = doc ? await doc : req.session.view.post;
-    delete req.session.view;
-
-    if (post) {
-        if (post.title) _pre.prependTitleTag(post.title)(req, res);
-        return res.render(template, {post: post});
-    } else {
-        req.flash('error', 'Nothing were found...');
-        return res.redirect('back');
-    }
-});
-
-
-// general error handler
-_end.error.clientError = (err, req, res, next) => {     // todo: error handler separations
-    if (err.name === 'MongoError' && err.code === 11000) {
-        req.flash('error', 'This username is not available.');
-        return res.redirect('back');
-    }
-    if (err.name === 'UserExistsError') {
-        req.flash('error', 'This email have been registered.');
-        return res.redirect('back');
-    }
-    req.flash('error', err.toString());
-    res.redirect('/');
-};
-
-
-
-module.exports = { _pre, _end, _global };
+module.exports = { _md, _global };
