@@ -1,3 +1,12 @@
+### 0.5.0-dev.6 / 2017-11-29
+> App
+- Removed all `.wrapAsync` for its no needs.
+- Rewired 'router' for enhancements and readability.
+
+> UI
+- n/a
+
+
 ### 0.5.0-dev.5 / 2017-11-28
 > App
 - Separated most controller logic from router files.

@@ -37,4 +37,4 @@ ConsoleRouter.use(_md.setTitleTag('Console'));
 
 
 // router exports
-module.exports  = ConsoleRouter.activate();
+module.exports = ConsoleRouter.activate();

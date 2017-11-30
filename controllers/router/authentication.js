@@ -5,7 +5,7 @@ const authentication = {
             if (req.isAuthenticated()) return res.redirect('/console/dashboard');
             res.render('./console/account/signup')
         },
-        post: [_md.passwordValidation, _md.wrapAsync(async (req, res) => {
+        post: [_md.passwordValidation, async (req, res) => {
             const { userModel } = require('../../models');
             const newUser = await userModel.register(new userModel(req.body), req.body.password.new);
             req.logIn(newUser, err => {
@@ -13,7 +13,7 @@ const authentication = {
                 req.flash('info', `Welcome new user: ${req.body.username}`);
                 res.redirect('/console');
             });
-        })],
+        }],
     },
     signin: {
         get: (req, res) => {

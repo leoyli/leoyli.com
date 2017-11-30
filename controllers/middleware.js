@@ -40,8 +40,6 @@ const _global = async (req, res, next) => {
 //  _md
 // ==============================
 const _md = {};
-// async handler
-_md.wrapAsync = (fn) => (req, res, next) => fn(req, res, next).catch(next);
 
 
 // http header for stopping crawlers
