@@ -99,3 +99,11 @@ function onListening() {
         : 'port ' + addr.port;
     debug('Listening on ' + bind);
 }
+
+/**
+ * Event listener for 'unhandledRejection' event.
+ */
+
+process.on('unhandledRejection', (reason, p) => {
+    console.log('Unhandled Rejection at:', p, 'reason:', reason);
+});

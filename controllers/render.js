@@ -6,15 +6,15 @@ module.exports = exports = {};
 // render post
 exports.post = (view, doc) => async (req, res) => {
     const template = view ? await view : req.session.view.template;
-    const post = doc ? await doc : req.session.view.post;
+    const post = doc ? await doc : (req.session.view ? req.session.view.post || [] : []);
     delete req.session.view;
 
-    if (post) {
-        if (post.title) _md.setTitleTag(post.title, { root: true })(req, res);
-        return res.render(template || './theme/post/post', { post: post });
-    } else {
+    if (post.length === 0) {
         req.flash('error', 'Nothing were found...');
         return res.redirect('back');
+    } else {
+        if (post.title) _md.setTitleTag(post.title, { root: true })(req, res);
+        return res.render(template || './theme/post/post', { post: post });
     }
 };
 

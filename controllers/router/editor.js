@@ -2,7 +2,7 @@ const _fn = require('../methods');
 const { postModel } = require('../../models');
 const editor = {
     post: {
-        get: require('../render').post('./console/editor', {}),
+        get: [],
         post: async (req, res) => {
             await postModel.postsCreateThenAssociate(req.body.post, req.user);
             req.flash('info', 'post have been successfully posted!');
@@ -10,8 +10,9 @@ const editor = {
         },
     },
     edit: {
-        get: (req, res) => {
-            require('../render').post('./console/editor', postModel.findById(_fn.string.readObjectID(req.url)))(req, res);
+        get: async (req, res, next) => {
+            res.session.view = { post: await postModel.findById(_fn.string.readObjectID(req.url))};
+            next();
         },
         patch: async (req, res) => {
             const doc = await postModel.findByIdAndUpdate(_fn.string.readObjectID(req.url), req.body.post, { new: true });

@@ -30,12 +30,11 @@ RouterHub.prototype.activate = function() {
             if (settings.title) queueStack.push(_md.setTitleTag(settings.title, settings.setTitle));
 
             // normalize controller into a queue array
-            let queue = controller;
-            if (queue[method]) queue = queue[method];
-            if (queue instanceof Function) queue = [queue];
+            let queue = controller[method] ? controller[method] : controller;
+            if (checkNativeBrand(queue) !== 'Array') queue = [queue];
 
             // check if need `wrapAsync` and stack the queue
-            queueStack.push(...queue.map(fn => {
+            if (queue.length > 0) queueStack.push(...queue.map(fn => {
                 return (checkNativeBrand(fn) === 'AsyncFunction') ? wrapAsync(fn) : fn;
             }));
 

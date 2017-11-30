@@ -1,3 +1,13 @@
+### 0.5.0-dev.7 / 2017-11-30
+> App
+- Generalized 'router' for some usage scenario.
+- Mounted `unhandledRejection` event for error locating.
+- Improved 'post' router, 'editor' controller, and `render.post`.
+
+> UI
+- n/a
+
+
 ### 0.5.0-dev.6 / 2017-11-29
 > App
 - Removed all `.wrapAsync` for its no needs.

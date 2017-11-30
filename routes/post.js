@@ -18,7 +18,7 @@ const { postModel } = require('../models');
 const PostRouter = new RouterHub([{
     route:          ['/editor', '/editor/new'],
     controller:     editor.post,
-    settings:       { title: 'New post', authentication: true },
+    settings:       { title: 'New post', template: './console/editor', authentication: true },
 }, {
     route:          /^\/editor\/[a-f\d]{24}(\/)?$/,
     controller:     editor.edit,
@@ -38,7 +38,7 @@ const PostRouter = new RouterHub([{
                     },
 }, {
     route:          '/:canonical',
-    controller:     search.find({type: 'singular'}),
+    controller:     search.find({ type: 'singular' }),
     settings:       { template: './theme/post/post' },
 }, {
     route:          '/',
