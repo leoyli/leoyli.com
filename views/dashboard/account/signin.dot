@@ -3,7 +3,7 @@
 <h1 class="container mb-4">SIGN IN</h1>
 
 <div class="container">
-    <form class="col-lg-9" action="/signin?_method=PATCH" method="POST">
+    <form class="col-lg-9" action="/signin" method="POST">
         <div class="form-group">
             <label class="font-weight-bold" for="username">Email / Username</label>
             <input class="form-control" id="email" name="email" placeholder="Email / Username" />

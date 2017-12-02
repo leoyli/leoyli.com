@@ -7,7 +7,7 @@ const
 //  FUNCTIONS
 // ==============================
 // ancillaries
-const _fn                   = require('../configurations/methods');
+const { _fn }               = require('../controllers/modules/methods');
 
 
 
@@ -56,7 +56,7 @@ MediaSchema.static('mediaDeleteThenDissociate', function (docsID, user, next) {
 // (pre-hook) version counter
 MediaSchema.pre('findOneAndUpdate', function (next) {
     this.findOneAndUpdate({}, { $inc: { _revised: 1 }});
-    next();
+    return next();
 });
 
 

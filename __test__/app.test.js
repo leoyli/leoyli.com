@@ -50,23 +50,23 @@ describe('Route - Seed', () => {
 
 describe('Route - Authentication', () => {
     test('Should be able to sign-in by email or username and move', async () => {
-        const req = (doc) => request(app).patch('/signin').send(doc);
+        const req = (doc) => request(app).post('/signin').send(doc);
         const doc = [{ email: 'leo@leoyli.com', password: 'leo' }, { email: 'leo', password: 'leo' }];
         const res = await Promise.all([req(doc[0]), req(doc[1])]);
         //
         res.forEach(res => {
-            expect(res.headers.location).toBe('/console/dashboard');
+            expect(res.headers.location).toBe('/dashboard');
             expect(res.statusCode).toBe(302);
         });
     });
 
     test('Should persists session by cookie', async () => {
         await request(app)
-            .patch('/signin')
+            .post('/signin')
             .send({ email: 'leo@leoyli.com', password: 'leo' })
             .then(res => cookiesJar.push(res.headers['set-cookie'].pop().split(';')[0]));
         const res = await request(app)
-            .get('/console/dashboard')
+            .get('/dashboard')
             .set('Cookie', cookiesJar[0]);
         //
         expect(res.statusCode).toBe(200);
@@ -75,26 +75,26 @@ describe('Route - Authentication', () => {
 
     test('Should persists session by agent', async () => {
         await agent
-            .patch('/signin')
+            .post('/signin')
             .send({ email: 'leo@leoyli.com', password: 'leo' });
-        const res = await agent.get('/console/dashboard');
+        const res = await agent.get('/dashboard');
         //
         expect(res.statusCode).toBe(200);
     });
 });
 
 
-describe('Route - Console', () => {
+describe('Route - Dashboard', () => {
     test('Should have "x-robots-tag" header set to "none"', async () => {
         const res = await agent
-            .get('/console/dashboard');
+            .get('/dashboard');
         //
         expect(res.headers['x-robots-tag']).toBe('none');
     });
 
     test('Should updates configs of the site', async () => {
         await agent
-            .patch('/console/setting')
+            .patch('/dashboard/setting')
             .send({ siteSetting: { title: 'Testing Website' }});
         //
         expect((await settingModel.findOne({})).title).toContain('Testing Website');
@@ -102,7 +102,7 @@ describe('Route - Console', () => {
 
     test('Should updates nickname for current user profile', async () => {
         await agent
-            .patch('/console/profile')
+            .patch('/dashboard/profile')
             .send({ profile: { nickname: 'test' }});
         //
         expect((await userModel.findOne({ email: 'leo@leoyli.com' })).nickname).toContain('test');
@@ -110,19 +110,19 @@ describe('Route - Console', () => {
 
     test('Should updates password of the user', async () => {
         await agent
-            .patch('/console/security')
+            .patch('/dashboard/security')
             .send({ password: { old: 'leo', new: 'test', confirmed: 'test' }});
-        const req = (doc) => request(app).patch('/signin').send(doc);
+        const req = (doc) => request(app).post('/signin').send(doc);
         const doc = [{ email: 'leo@leoyli.com', password: 'test' }, { email: 'leo@leoyli.com', password: 'leo' }];
         const res = await Promise.all([req(doc[0]), req(doc[1])]);
         //
-        expect(res[0].headers.location).toBe('/console/dashboard');
-        expect(res[1].headers.location).not.toBe('/console/dashboard');
+        expect(res[0].headers.location).toBe('/dashboard');
+        expect(res[1].headers.location).not.toBe('/dashboard');
     });
 
     test('Should upload test file and move', async () => {
         const res = await agent
-            .post('/console/upload')
+            .post('/dashboard/upload')
             .attach('media[file]', path.join(__dirname, 'test.png'))
             .field('media[title]', 'test')
             .field('media[description]', 'user profile picture for the test');

@@ -1,3 +1,94 @@
+### 0.5.0 / 2017-12-02
+> App
+- Added `alias(get)` routing method into `router`.
+- Integrated controller functions in 'post' route into 'post' controller.
+- Enhanced 'search' controller for being called without `next`.
+- Fixed $match query for `ObjectId` in `search` controller.
+- Error handled by `errorHandler` now prints in console in dev mode.
+- Completed and closed '0.5' subversion branch.
+
+> UI
+- n/a
+
+
+### 0.5.0-dev.8 / 2017-12-01
+> App
+- Restructured the file paths.
+- Renamed 'console' files, folders, variable names for avoiding conflicts of JS `console` object.
+- Renamed 'middleware' as 'modules' controller.
+- Improved the readability of router controllers.
+
+> UI
+- n/a
+
+
+### 0.5.0-dev.7 / 2017-11-30
+> App
+- Generalized 'router' for some usage scenario.
+- Mounted `unhandledRejection` event for error locating.
+- Improved 'post' router, 'editor' controller, and `render.post`.
+
+> UI
+- n/a
+
+
+### 0.5.0-dev.6 / 2017-11-29
+> App
+- Removed all `.wrapAsync` for its no needs.
+- Rewired 'router' for enhancements and readability.
+
+> UI
+- n/a
+
+
+### 0.5.0-dev.5 / 2017-11-28
+> App
+- Separated most controller logic from router files.
+- Enhanced `RouterHub` with a feature of automatic http method selection.
+- Provided `RouterHub.use` as a short cut to wire pre-used middleware.
+- Changed the login http method from 'patch' to 'post'.
+- Set in correspondence with the http method change in the test mode.
+
+> UI
+- Set in correspondence with the http method change in 'signin' template.
+
+
+### 0.5.0-dev.4 / 2017-11-27
+> App
+- Split 'middleware' files: removed `_end`, renamed `_pre` into `_md`.
+- Combined two section title handlers into one `.setTitleTag` with options.
+- Added controller 'render' as a communicator of view.
+
+> UI
+- n/a
+
+
+### 0.5.0-dev.3 / 2017-11-26
+> App
+- Restructured 'post' route with 'router' controller.
+
+> UI
+- n/a
+
+
+### 0.5.0-dev.2 / 2017-11-25
+> App
+- Extracted routing rules from 'page' into a controller module 'router'.
+
+> UI
+- n/a
+
+
+### 0.5.0-dev.1 / 2017-11-24
+> App
+- Rearranged files into the MVC fashion.
+- Adapted 'A successful Git branching model' as the version control working flow.
+- Adapted semantic versioning with a build metadata `dev` for versioning ongoing developments.
+
+> UI
+- n/a
+
+
 ### 0.4.0 / 2017-11-24
 > App
 - Rewired 'app' for preventing static view from establishing sessions.
@@ -158,7 +249,7 @@
 > App
 - Rewired 'passport' configs so only pages needed authentications will use the passport to generate `req.user` object.
 - After a successful authentications, the required user info will be populated into `req.session.user` object.
-- Used `req.flash('pass')` for replacing `res.session.justSignOut`.
+- Used `req.flash('pass')` for replacing `req.session.justSignOut`.
 
 > UI
 - n/a

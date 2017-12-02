@@ -1,14 +1,45 @@
 const
     fs                      = require('fs'),
     path                    = require('path'),
-    Busboy                  = require('busboy'),
-    _fn                     = require('./methods');
+    Busboy                  = require('busboy');
 
 
 
-//uploader configurations
+// ==============================
+//  FUNCTIONS
+// ==============================
+const { _fn } = require('./methods');
+
+
+function _assignInNest(obj, referenceKeys, bottomValue, index = 0) {
+    if (index < referenceKeys.length-1) {
+        const _extendedObj = obj[referenceKeys[index]] ? obj[referenceKeys[index]] : (obj[referenceKeys[index]] = {});
+        return _assignInNest(_extendedObj, referenceKeys, bottomValue, ++index);
+    } else obj[referenceKeys[index]] = bottomValue ? bottomValue : {};
+}
+
+
+// constructor
+function FileStreamBranch(fileName, MIMEType) {
+    // structure
+    this.saveTime = new Date();
+    this.pathName = this.saveTime.getUTCFullYear() + `0${this.saveTime.getUTCMonth()+1}`.slice(-2);
+    this.fileBase = this.saveTime.getTime() + path.extname(fileName);
+    this.fullPath = path.join(__dirname + '/../..', 'public', 'media', this.pathName, this.fileBase);
+
+    // validation
+    const acceptedTypes = ['image/png', 'image/gif', 'image/jpeg', 'image/svg+xml', 'image/x-icon'];    // todo: customize in accepting file types
+    this.isAttached = !!fileName;
+    this.isAccepted = acceptedTypes.indexOf(MIMEType) !== -1;
+}
+
+
+
+// ==============================
+//  MODULES (affiliate)
+// ==============================
 function ImgUploadByBusboy (req, res, limits, next) {
-    const busboy = new Busboy({headers: req.headers, limits: limits});
+    const busboy = new Busboy({ headers: req.headers, limits: limits });
     const notice = [];
     const populator = {};
 
@@ -36,7 +67,7 @@ function ImgUploadByBusboy (req, res, limits, next) {
                     fileBase: branch.fileBase,
                     fullPath: branch.fullPath,
                 });
-            } else populator[_fn.string.parseNestKey(fieldName)[0]] = {isSkipped: true};
+            } else populator[_fn.string.parseNestKey(fieldName)[0]] = { isSkipped: true };
 
             // exception handler
             if (branch.isAttached && !branch.isAccepted) return notice.push(`${fileName} is in unaccepted file types!`);
@@ -55,35 +86,11 @@ function ImgUploadByBusboy (req, res, limits, next) {
     // BUSBOY-LISTENER: after all streams resolved
     busboy.on('finish', () => {
         req.body.busboySlip = { raw: Object.values(populator).filter(obj => obj.isSkipped !== true), notice };
-        next();
+        return next();
     });
 
     // ACTIVATION: pipe busboy
-    req.pipe(busboy);
-}
-
-
-// constructor
-function FileStreamBranch(fileName, MIMEType) {
-    // structure
-    this.saveTime = new Date();
-    this.pathName = this.saveTime.getUTCFullYear() + `0${this.saveTime.getUTCMonth()+1}`.slice(-2);
-    this.fileBase = this.saveTime.getTime() + path.extname(fileName);
-    this.fullPath = path.join(__dirname + '/..', 'public', 'media', this.pathName, this.fileBase);
-
-    // validation   // todo: customize in accepting file types
-    const acceptedTypes = ['image/png', 'image/gif', 'image/jpeg', 'image/svg+xml', 'image/x-icon'];
-    this.isAttached = !!fileName;
-    this.isAccepted = acceptedTypes.indexOf(MIMEType) !== -1;
-}
-
-
-// ancillary functions
-function _assignInNest(obj, referenceKeys, bottomValue, index = 0) {
-    if (index < referenceKeys.length-1) {
-        const _extendedObj = obj[referenceKeys[index]] ? obj[referenceKeys[index]] : (obj[referenceKeys[index]] = {});
-        return _assignInNest(_extendedObj, referenceKeys, bottomValue, ++index);
-    } else obj[referenceKeys[index]] = bottomValue ? bottomValue : {};
+    return req.pipe(busboy);
 }
 
 
