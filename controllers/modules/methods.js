@@ -56,7 +56,7 @@ exports._fn.schema.updateAndBind = function(data, user, next, fieldName, operato
                 data = await _THIS.create(data);    // note: this line reassign the following 'data'
                 break;
             default:
-                next(new ReferenceError('Operator must be either \'$push\' (create) or \'$pullAll\' (delete)'), null);
+                return next(new ReferenceError('Operator must be either \'$push\' or \'$pullAll\''), null);
         } return next(null, data);
     })(..._normalizeArguments(data, user, next));
 };
@@ -67,6 +67,6 @@ exports._fn.schema.promisify = (fn, arg, THIS) => {     // note: fn have to be p
     if (typeof arg[arg.length-1] === 'function') return fn.call(THIS, ...arg);
     return new Promise((resolve, reject) => fn.call(THIS, ...arg, (err, result) => {
         if (err) return reject(err);
-        resolve(result);
+        else return resolve(result);
     }));
 };

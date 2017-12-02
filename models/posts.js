@@ -65,14 +65,14 @@ PostSchema.static('postsDeleteThenDissociate', function (docsID, user, next) {
 // (pre-hook) canonical key evaluation
 PostSchema.pre('save', function (next) {
     if (!this.canonical) this.canonical = _fn.string.canonicalize(this.title);  // tofix: unavailable if pre-existed
-    next();
+    return next();
 });
 
 
 // (pre-hook) version counter
 PostSchema.pre('findOneAndUpdate', function (next) {
     this.findOneAndUpdate({}, { $inc: { _revised: 1 }});
-    next();
+    return next();
 });
 
 

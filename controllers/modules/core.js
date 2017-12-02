@@ -15,7 +15,7 @@ const { _fn } = require('./methods');
 // http header for stopping crawlers
 exports._md.doNotCrawled = (req, res, next) => {
     res.set('x-robots-tag', 'none');
-    next();
+    return next();
 };
 
 
@@ -46,7 +46,7 @@ exports._md.isSignedIn = [exports._md.doNotCrawled, ...exports._md.usePassport, 
         req.flash('info', String(res.locals._view.flash.info));
     } else req.flash('error', 'Please sign in first!');
     req.session.returnTo = req.originalUrl;
-    res.redirect('/signin');
+    return res.redirect('/signin');
 }];
 
 
@@ -59,7 +59,7 @@ exports._md.isAuthorized = [...exports._md.isSignedIn, async (req, res, next) =>
     if (count !== 1) {
         req.flash('error', 'You do not have a valid authorization...');
         return res.redirect('/');
-    } else next();
+    } else return next();
 }];
 
 
@@ -72,5 +72,5 @@ exports._md.passwordValidation = (req, res, next) => {
     } else if (req.body.password.old.toString() === req.body.password.new.toString()) {
         req.flash('error', 'Password cannot be the same as the old one.');
     } else return next();
-    res.redirect('back');
+    return res.redirect('back');
 };

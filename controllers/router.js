@@ -2,6 +2,14 @@ const Router = require('express').Router;
 
 
 
+// functions
+const { _md } = require('./modules/core');
+const render = require('./render');
+const checkNativeBrand = (obj) => Object.prototype.toString.call(obj).slice(8, -1);
+const wrapAsync = fn => (req, res, next) => fn(req, res, next).catch(next);
+
+
+
 // constructor
 function RouterHub(rules, option) {
     this.rules = rules;
@@ -10,20 +18,19 @@ function RouterHub(rules, option) {
 
 
 RouterHub.prototype.activate = function() {
-    const checkNativeBrand = (obj) => Object.prototype.toString.call(obj).slice(8, -1);
-    const wrapAsync = fn => (req, res, next) => fn(req, res, next).catch(next);
-    const render = require('./render');
-
-    this.rules.forEach(({ route, controller, method, settings = {} }) => {
-        // normalize into a method array
-        if (!method) method = (checkNativeBrand(controller) === 'Object') ? Object.keys(controller) : ['get'];
+    this.rules.forEach(({ route, alias, controller, method, settings = {} }) => {
+        // normalize into a method array sorted anti-alphabetically
+        if (!method) method = (checkNativeBrand(controller) === 'Object')
+            ? Object.keys(controller).sort().reverse()      // note: .sort().revers() guarantee 'alias' will only be set after 'get'
+            : alias ? ['get', 'alias'] : ['get'];
         if (checkNativeBrand(method) === 'String') method = [method];
 
+        // populate the router for each method
         method.forEach(method => {
-            const queueStack = [route];
+            const isAlias = (method === 'alias');
+            const queueStack = [isAlias ? alias : route];
 
             // stack queues by settings
-            const { _md } = require('./modules/core');
             if (settings.crawler === false) queueStack.push(_md.doNotCrawled);
             if (settings.authentication === true) queueStack.push(_md.isSignedIn);
             if (settings.authorization === true) queueStack.push(_md.isAuthorized);
@@ -39,8 +46,8 @@ RouterHub.prototype.activate = function() {
             }));
 
             // stack the view renderer
-            if (method === 'get' && settings.template) queueStack.push(render.post(settings.template));
-            this.router[method](...queueStack);
+            if ((method === 'get' || isAlias) && settings.template) queueStack.push(render.post(settings.template));
+            this.router[isAlias ? 'get' : method](...queueStack);
         });
     });
 

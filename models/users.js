@@ -43,7 +43,7 @@ const UserSchema            = new mongoose.Schema({
 // nickname assignment (pre-hook)
 UserSchema.pre('save', function (next) {
     if (!this.nickname) this.nickname = `${this.firstName} ${this.lastName}`;
-    next();
+    return next();
 });
 
 

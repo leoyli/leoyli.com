@@ -16,14 +16,14 @@ const { userModel } = require('../../models');
 dashboard.signup = {
     get: (req, res) => {
         if (req.isAuthenticated()) return res.redirect('/dashboard');
-        res.render('./dashboard/account/signup');
+        return res.render('./dashboard/account/signup');
     },
     post: [_md.passwordValidation, async (req, res) => {
         const newUser = await userModel.register(new userModel(req.body), req.body.password.new);
         req.logIn(newUser, err => {
             if (err) throw err;
             req.flash('info', `Welcome new user: ${req.body.username}`);
-            res.redirect('/dashboard');
+            return res.redirect('/dashboard');
         });
     }],
 };
@@ -31,15 +31,15 @@ dashboard.signup = {
 dashboard.signin = {
     get: (req, res) => {
         if (req.isAuthenticated()) return res.redirect('/dashboard');
-        res.render('./dashboard/account/signin');
+        return res.render('./dashboard/account/signin');
     },
     post: (req, res, next) => {
         if (req.isAuthenticated()) return res.redirect('/dashboard');
         const passport = require('passport');
-        passport.authenticate('local', (err, authUser) => {
+        return passport.authenticate('local', (err, authUser) => {
             if (err) return next(err);
             if (!authUser) return next(new Error('Wrong email/username or password!'));
-            req.logIn(authUser, err => {
+            return req.logIn(authUser, err => {
                 if (err) return next(err);
                 req.session.cookie.expires = req.body.isPersisted ? new Date(Date.now() + 14 * 24 * 3600000) : false;
                 req.session.user = { _id: authUser._id, picture: authUser.picture, nickname: authUser.nickname };
@@ -60,6 +60,6 @@ dashboard.signout = {
             req.flash('info', 'See you next time!');
         }
         delete req.session.user;
-        res.redirect('back');
+        return res.redirect('back');
     },
 };

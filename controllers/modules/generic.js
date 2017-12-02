@@ -33,7 +33,7 @@ const generic = async (req, res, next) => {
         if (req.body.post.tag) req.body.post.tag = _fn.string.escapeInHTML(req.body.post.tag);
     }
 
-    next();
+    return next();
 };
 
 

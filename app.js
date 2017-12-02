@@ -72,7 +72,7 @@ passport.deserializeUser(userModel.deserializeUser());
 // ==============================
 //  ROUTES
 // ==============================
-require('./routes').init(app);
+require('./routers').init(app);
 
 
 

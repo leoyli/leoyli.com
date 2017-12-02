@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 module.exports = search = {};
 
 
@@ -9,6 +10,7 @@ function searchPosts(params, { num = 5, page = 1, sort = { 'time.created': -1 }}
     // modify mongo query
     if (typeof params === 'string') params = { $text: { $search: params }};
     if (params && params.search) params = { $text: { $search: params.search }};
+    if (params && params._id) params._id = ObjectId(params._id);
 
     // perform mongo query
     return require('../../models').postModel.aggregate([
@@ -46,7 +48,7 @@ search.find = ({ num = 5, page = 1, sort = {}, type } = {}) => (req, res, next) 
 
     // perform mongo query
     return searchPosts(req.params, { num, page, sort }).then(result => {    // note: use promise.then for destructuring `page`
-        const { count = 0, post = [], page } = result[0];
+        const { count = 0, post = [], page = {} } = result[0] || {};
 
         // set prev/next meta tags
         const url = req.originalUrl.split('?')[0] + '?num=' + num + '&page=';
@@ -55,6 +57,9 @@ search.find = ({ num = 5, page = 1, sort = {}, type } = {}) => (req, res, next) 
 
         // cache posts into user session
         req.session.view = { count, page, post: (type === 'singular') ? post[0] : post };
-        return next();
-    }).catch(err => next(err));
+        if (typeof next === 'function') return next();
+    }).catch(err => {
+        if (typeof next === 'function') return next(err);
+        throw err;
+    });
 };

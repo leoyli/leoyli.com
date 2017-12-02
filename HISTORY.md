@@ -1,3 +1,16 @@
+### 0.5.0 / 2017-12-02
+> App
+- Added `alias(get)` routing method into `router`.
+- Integrated controller functions in 'post' route into 'post' controller.
+- Enhanced 'search' controller for being called without `next`.
+- Fixed $match query for `ObjectId` in `search` controller.
+- Error handled by `errorHandler` now prints in console in dev mode.
+- Completed and closed '0.5' subversion branch.
+
+> UI
+- n/a
+
+
 ### 0.5.0-dev.8 / 2017-12-01
 > App
 - Restructured the file paths.
@@ -236,7 +249,7 @@
 > App
 - Rewired 'passport' configs so only pages needed authentications will use the passport to generate `req.user` object.
 - After a successful authentications, the required user info will be populated into `req.session.user` object.
-- Used `req.flash('pass')` for replacing `res.session.justSignOut`.
+- Used `req.flash('pass')` for replacing `req.session.justSignOut`.
 
 > UI
 - n/a
