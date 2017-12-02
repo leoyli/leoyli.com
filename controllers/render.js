@@ -1,4 +1,4 @@
-const { _md } = require('./middleware');
+const { _md } = require('./modules/core');
 module.exports = exports = {};
 
 
@@ -6,7 +6,7 @@ module.exports = exports = {};
 // render post
 exports.post = (view, doc) => async (req, res) => {
     const template = view ? await view : req.session.view.template;
-    const post = doc ? await doc : (req.session.view ? req.session.view.post || [] : []);
+    const post = doc ? await doc : (req.session.view ? req.session.view.post || {} : {});
     delete req.session.view;
 
     if (post.length === 0) {

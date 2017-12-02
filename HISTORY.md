@@ -1,3 +1,14 @@
+### 0.5.0-dev.8 / 2017-12-01
+> App
+- Restructured the file paths.
+- Renamed 'console' files, folders, variable names for avoiding conflicts of JS `console` object.
+- Renamed 'middleware' as 'modules' controller.
+- Improved the readability of router controllers.
+
+> UI
+- n/a
+
+
 ### 0.5.0-dev.7 / 2017-11-30
 > App
 - Generalized 'router' for some usage scenario.

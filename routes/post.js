@@ -7,7 +7,7 @@ const search = require('../controllers/router/search');
 // ==============================
 //  FUNCTIONS
 // ==============================
-const _fn = require('../controllers/methods');
+const { _fn } = require('../controllers/modules/methods');
 const { postModel } = require('../models');
 
 
@@ -18,7 +18,7 @@ const { postModel } = require('../models');
 const PostRouter = new RouterHub([{
     route:          ['/editor', '/editor/new'],
     controller:     editor.post,
-    settings:       { title: 'New post', template: './console/editor', authentication: true },
+    settings:       { title: 'New post', template: './dashboard/editor', authentication: true },
 }, {
     route:          /^\/editor\/[a-f\d]{24}(\/)?$/,
     controller:     editor.edit,

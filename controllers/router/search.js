@@ -1,7 +1,10 @@
+module.exports = search = {};
+
+
+
 // ==============================
 //  FUNCTIONS
 // ==============================
-// extracted functions
 function searchPosts(params, { num = 5, page = 1, sort = { 'time.created': -1 }} = {}) {
     // modify mongo query
     if (typeof params === 'string') params = { $text: { $search: params }};
@@ -33,8 +36,6 @@ function searchPosts(params, { num = 5, page = 1, sort = { 'time.created': -1 }}
 // ==============================
 //  CONTROLLERS
 // ==============================
-const search = {};
-
 search.find = ({ num = 5, page = 1, sort = {}, type } = {}) => (req, res, next) => {
     // todo: reset default of num from req.locals._site
 
@@ -57,8 +58,3 @@ search.find = ({ num = 5, page = 1, sort = {}, type } = {}) => (req, res, next) 
         return next();
     }).catch(err => next(err));
 };
-
-
-
-// controller export
-module.exports = search;

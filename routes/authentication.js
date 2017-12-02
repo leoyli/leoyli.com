@@ -21,7 +21,7 @@ const AuthenticationRouter = new RouterHub([{
 
 
 // pre-used middleware
-AuthenticationRouter.use(require('../controllers/middleware')._md.usePassport);
+AuthenticationRouter.use(require('../controllers/modules/core')._md.usePassport);
 
 
 

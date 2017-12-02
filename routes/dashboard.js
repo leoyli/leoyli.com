@@ -1,40 +1,40 @@
 const RouterHub = require('../controllers/router');
-const { _md } = require('../controllers/middleware');
-const consoleControl = require('../controllers/router/console');
+const { _md } = require('../controllers/modules/core');
+const dashboard = require('../controllers/router/dashboard');
 
 
 
 // ==============================
 //  ROUTE HUB
 // ==============================
-const ConsoleRouter = new RouterHub([{
-    route:          /^\/(dashboard)?(\/)?$/,
-    controller:     consoleControl.dashboard,
+const DashboardRouter = new RouterHub([{
+    route:          '/',
+    controller:     dashboard.main,
     settings:       { title: 'Dashboard' },
 }, {
     route:          '/setting',
-    controller:     consoleControl.setting,
+    controller:     dashboard.setting,
     settings:       { title: 'Website Configurations' },
 }, {
     route:          '/profile',
-    controller:     consoleControl.profile,
+    controller:     dashboard.profile,
     settings:       { title: 'Profile' },
 }, {
     route:          '/security',
-    controller:     consoleControl.security,
+    controller:     dashboard.security,
     settings:       { title: 'Account Settings' },
 }, {
     route:          '/upload',
-    controller:     consoleControl.upload,
+    controller:     dashboard.upload,
     settings:       { title: 'Media Uploader' },
 }]);
 
 
 // pre-used middleware
-ConsoleRouter.use(_md.isSignedIn);
-ConsoleRouter.use(_md.setTitleTag('Console'));
+DashboardRouter.use(_md.isSignedIn);
+DashboardRouter.use(_md.setTitleTag('Console'));
 
 
 
 // router exports
-module.exports = ConsoleRouter.activate();
+module.exports = DashboardRouter.activate();

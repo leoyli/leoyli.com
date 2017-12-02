@@ -23,7 +23,7 @@ RouterHub.prototype.activate = function() {
             const queueStack = [route];
 
             // stack queues by settings
-            const { _md } = require('./middleware');
+            const { _md } = require('./modules/core');
             if (settings.crawler === false) queueStack.push(_md.doNotCrawled);
             if (settings.authentication === true) queueStack.push(_md.isSignedIn);
             if (settings.authorization === true) queueStack.push(_md.isAuthorized);
@@ -56,5 +56,5 @@ RouterHub.prototype.use = function(middleware) {
 
 
 
-// lib export
+// module export
 module.exports = RouterHub;

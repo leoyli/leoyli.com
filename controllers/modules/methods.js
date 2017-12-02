@@ -1,12 +1,12 @@
-// ancillaries
-const _ = require('lodash');
+module.exports = exports = { _fn: { string: {}, schema: {} }};
 
 
 
 // ==============================
 //  STRING METHODS
 // ==============================
-const string = {
+const _ = require('lodash');
+exports._fn.string = {
     escapeInHTML: (str) =>_.escape(str),
     canonicalize: (str) =>_.kebabCase(str),
     readObjectID: (str) => {
@@ -25,9 +25,6 @@ const string = {
 // ==============================
 //  SCHEMA METHODS
 // ==============================
-const schema = {};
-
-
 // arguments normalization
 const _normalizeArguments = function(data, user, next) {
     // correction  // note: i.e. 'user' is misplaced as in `fn(data, callback)`
@@ -48,7 +45,7 @@ const _normalizeArguments = function(data, user, next) {
 
 
 // doc correlations
-schema.updateAndBind = function(data, user, next, fieldName, operator, _THIS) {
+exports._fn.schema.updateAndBind = function(data, user, next, fieldName, operator, _THIS) {
     return (async (data, user, next) => {
         switch (operator) {
             case '$pullAll':
@@ -66,14 +63,10 @@ schema.updateAndBind = function(data, user, next, fieldName, operator, _THIS) {
 
 
 // promisification
-schema.promisify = (fn, arg, THIS) => {     // note: fn have to be pre-assigned as anther variable if replacing itself
+exports._fn.schema.promisify = (fn, arg, THIS) => {     // note: fn have to be pre-assigned as anther variable if replacing itself
     if (typeof arg[arg.length-1] === 'function') return fn.call(THIS, ...arg);
     return new Promise((resolve, reject) => fn.call(THIS, ...arg, (err, result) => {
         if (err) return reject(err);
         resolve(result);
     }));
 };
-
-
-
-module.exports = { string, schema };

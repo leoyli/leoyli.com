@@ -17,7 +17,7 @@ function _useMiddleware(app) {
     app.use(flash());
 
     // internal
-    app.use(require('../controllers/middleware')._global);
+    app.use(require('../controllers/modules/generic'));
 }
 
 
@@ -26,7 +26,7 @@ function _useRoutes(app) {
     if (process.env.NODE_ENV === 'dev' || 'test') app.use('/seed', require('../routes/seed'));
 
     // units
-    app.use('/console', require('../routes/console'));
+    app.use('/dashboard', require('../routes/dashboard'));
     app.use('/post', require('../routes/post'));
     app.use('/', require('../routes/authentication'));
     app.use('/', require('../routes/page'));

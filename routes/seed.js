@@ -3,7 +3,7 @@ const RouterHub = require('../controllers/router');
 
 
 // ==============================
-//  CONTROLLER
+//  CONTROLLERS
 // ==============================
 const moc = {
     user: {

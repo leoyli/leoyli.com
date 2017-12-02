@@ -3,7 +3,7 @@
 <h1 class="container mb-4">Change Password</h1>
 
 <div class="container">
-    <form class="col-lg-9" action="/console/security/?_method=PATCH" method="POST">
+    <form class="col-lg-9" action="/dashboard/security/?_method=PATCH" method="POST">
         <div class="form-group">
             <label class="font-weight-bold" for="username">Old password</label>
             <input class="form-control" name="password[old]" type="password" />
