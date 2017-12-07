@@ -41,5 +41,6 @@ exports.errorHandler = (err, req, res, next) => {     // todo: error handler sep
 
     req.flash('error', err.toString());
     if (process.env.NODE_ENV === 'dev') console.log(err);
+    if (process.env.NODE_ENV === 'test' && err) debugger;
     return res.redirect('/');
 };

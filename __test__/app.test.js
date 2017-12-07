@@ -35,15 +35,15 @@ describe('Server Initialization', () => {
 });
 
 
-describe('Route - Seed', () => {
+describe('Router - Seed', () => {
     test('Should seeds data and move', async () => {
         const res = await request(app)
             .get('/seed');
         //
-        expect(res.headers.location).toBe('/post');
         expect(res.statusCode).toBe(302);
-        await expect(userModel.count({})).resolves.toBe(1);
-        await expect(postModel.count({})).resolves.toBe(1);
+        expect(res.headers.location).toBe('/post');
+        expect(await userModel.count({})).toBe(1);
+        expect(await postModel.count({})).toBe(1);
     });
 });
 
@@ -55,8 +55,8 @@ describe('Route - Authentication', () => {
         const res = await Promise.all([req(doc[0]), req(doc[1])]);
         //
         res.forEach(res => {
-            expect(res.headers.location).toBe('/dashboard');
             expect(res.statusCode).toBe(302);
+            expect(res.headers.location).toBe('/dashboard');
         });
     });
 
@@ -84,7 +84,7 @@ describe('Route - Authentication', () => {
 });
 
 
-describe('Route - Dashboard', () => {
+describe('Router - Dashboard', () => {
     test('Should have "x-robots-tag" header set to "none"', async () => {
         const res = await agent
             .get('/dashboard');
@@ -127,8 +127,51 @@ describe('Route - Dashboard', () => {
             .field('media[title]', 'test')
             .field('media[description]', 'user profile picture for the test');
         //
-        expect(res.headers.location).toBe('/');
         expect(res.statusCode).toBe(302);
-        await expect(mediaModel.count({})).resolves.toBe(1);
+        expect(res.headers.location).toBe('/');
+        expect(await mediaModel.count({})).toBe(1);
+    });
+});
+
+
+describe('Router - post', () => {
+    test('Should POST a new post', async () => {
+        const mockNewPost = { post: { title: 'TEST POST', category: 'test', featured: '', content: 'TEST CONTENT' }};
+        const res = await agent
+            .post('/post/editor')
+            .send(mockNewPost);
+        //
+        expect(res.statusCode).toBe(302);
+        expect(res.headers.location).toBe('/post');
+        expect(await postModel.count(mockNewPost.post)).toBe(1);
+    });
+
+    test('Should GET the created post', async () => {
+        const res = await agent
+            .get('/post/test-post');
+        //
+        expect(res.statusCode).toBe(200);
+    });
+
+    test('Should PATCH the created post', async () => {
+        const mockEditedPost = { post: { title: 'EDITED', category: 'test', featured: '', content: 'CONTENT EDITED' }};
+        const post = await postModel.findOne({ canonical: 'test-post' });
+        const res = await agent
+            .patch(`/post/editor/${post._doc._id}`)
+            .send(mockEditedPost);
+        //
+        expect(res.statusCode).toBe(302);
+        expect(res.headers.location).toBe('/post/test-post');
+        expect(await postModel.count(mockEditedPost.post)).toBe(1);
+    });
+
+    test('Should DELETE the created new post', async () => {
+        const post = await postModel.findOne({ canonical: 'test-post' });
+        const res = await agent
+            .delete(`/post/editor/${post._doc._id}`);
+        //
+        expect(res.statusCode).toBe(302);
+        expect(res.headers.location).toBe('/post/');
+        expect(await postModel.count({ canonical: 'test-post' })).not.toBe(1);
     });
 });
