@@ -1,3 +1,11 @@
+### 0.6.0-dev.2 / 2017-12-07
+> App
+- Simplified part of test descriptions.
+- Added additional tests, resulted in a 91%(+6%) code coverage.
+- Updated the password validation middleware module.
+- Simplified some minor codes.
+
+
 ### 0.6.0-dev.1 / 2017-12-07
 > App
 - Added 'post' route test, resulted in a 85%(+10%) code coverage.

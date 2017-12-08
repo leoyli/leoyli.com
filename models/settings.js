@@ -26,10 +26,9 @@ const settingModelSchema      = new mongoose.Schema({
 //  STATIC METHODS
 // ==============================
 // initialization (model)
-settingModelSchema.static('init', function(next) {
-    return this.findOne({}, (err, loadConfig) => {
-        if (!loadConfig) return this.create({}, next);
-        if (typeof next === 'function') return next();
+settingModelSchema.static('init', function() {
+    return this.findOne({}).then((err, loadConfig) => {
+        if (!loadConfig) return this.create({});
     });
 });
 

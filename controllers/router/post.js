@@ -51,8 +51,8 @@ exports.post.show = {
     },
     get: async (req, res, next) => {
         req.params = { canonical: req.params[0] };
-        if (!req.session.view) return search.find({ type: 'singular' })(req, res, next);
-        return next();
+        if (req.session.view) return next();
+        else return search.find({ type: 'singular' })(req, res, next);
     },
 };
 

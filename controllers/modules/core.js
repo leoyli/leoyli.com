@@ -69,7 +69,7 @@ exports._md.passwordValidation = (req, res, next) => {
         req.flash('error', 'Please fill all required fields.');
     } else if (req.body.password.new.toString() !== req.body.password.confirmed.toString()) {
         req.flash('error', 'Two new password does not the same.');
-    } else if (req.body.password.old.toString() === req.body.password.new.toString()) {
+    } else if (req.body.password.old && (req.body.password.old.toString() === req.body.password.new.toString())) {
         req.flash('error', 'Password cannot be the same as the old one.');
     } else return next();
     return res.redirect('back');
