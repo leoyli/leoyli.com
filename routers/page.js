@@ -18,4 +18,4 @@ const PageRouter = new RouterHub([{
 
 
 // router exports
-module.exports = PageRouter.activate();
+module.exports = PageRouter.run();

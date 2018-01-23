@@ -44,4 +44,4 @@ const SeedRouter = new RouterHub([{
 
 
 // router exports
-module.exports = SeedRouter.activate();
+module.exports = SeedRouter.run();

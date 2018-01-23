@@ -9,12 +9,12 @@ const { editor, post } = require('../controllers/router/post');
 const PostRouter = new RouterHub([{
     route:          ['/editor', '/editor/new'],
     controller:     editor.post,
-    settings:       { title: 'New post', template: './dashboard/editor', authentication: true },
+    settings:       { title: 'New post', template: './home/editor', authentication: true },
 }, {
     route:          /^\/editor\/[a-f\d]{24}(\/)?$/i,
     alias:          '/editor/:canonical',
     controller:     editor.edit,
-    settings:       { title: 'post Editor', template: './dashboard/editor', authorization: true },
+    settings:       { title: 'post Editor', template: './home/editor', authorization: true },
 }, {
     route:          /^\/(?![a-f\d]{24}\/?$)(.+?)(?:\/(?=$))?$/i,
     alias:          '/:_id',
@@ -29,4 +29,4 @@ const PostRouter = new RouterHub([{
 
 
 // router exports
-module.exports = PostRouter.activate();
+module.exports = PostRouter.run();

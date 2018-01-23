@@ -26,4 +26,4 @@ AuthenticationRouter.use(require('../controllers/modules/core')._md.usePassport)
 
 
 // router exports
-module.exports = AuthenticationRouter.activate();
+module.exports = AuthenticationRouter.run();

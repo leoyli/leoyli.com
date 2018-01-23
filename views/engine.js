@@ -26,7 +26,7 @@ function getReference(locals) { // todo: allows the user to added customized run
         useMarkdown : (markdown, option) => marked(markdown.replace(/&gt;|&#62;/g, '>')),
         loadPartial : (filePath, option) => {
             const partialsPath = ((option && option.isConsole) || reference._view.isConsole)
-                ? reference.set.partials.dashboard
+                ? reference.set.partials.panel
                 : reference.set.partials.theme;
             filePath = path.join(partialsPath, `${filePath}.${reference.set.extName}`);
             return getTemplate(filePath, reference, true).render();},

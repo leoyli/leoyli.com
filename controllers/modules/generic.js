@@ -19,7 +19,7 @@ const generic = async (req, res, next) => {
 
     // template variables
     res.locals._view = {
-        isConsole: (req.url.includes('/dashboard')),
+        isConsole: (req.url.includes('/home')),
         flash: { error: req.flash('error'), info: req.flash('info'), pass: req.flash('pass') },
         title: res.locals._site.title,
         user: req.session.user,

@@ -12,7 +12,7 @@ const cookiesJar = [];
 
 beforeAll(async (done) => {
     if (process.env.NODE_ENV === 'test') await mongoose.connection.dropDatabase();
-    else throw new Error('run in test mode!');
+    else throw new Error('Should run in the test mode!');
     return settingModel.init().then(() => done());
 });
 
@@ -56,7 +56,7 @@ describe('Router - Authentication', () => {
         //
         res.forEach(res => {
             expect(res.statusCode).toBe(302);
-            expect(res.headers.location).toBe('/dashboard');
+            expect(res.headers.location).toBe('/home');
         });
     });
 
@@ -66,7 +66,7 @@ describe('Router - Authentication', () => {
             .send({ email: 'leo@leoyli.com', password: 'leo' })
             .then(res => cookiesJar.push(res.headers['set-cookie'].pop().split(';')[0]));
         const res = await request(app)
-            .get('/dashboard')
+            .get('/home')
             .set('Cookie', cookiesJar[0]);
         //
         expect(res.statusCode).toBe(200);
@@ -77,7 +77,7 @@ describe('Router - Authentication', () => {
         await agent
             .post('/signin')
             .send({ email: 'leo@leoyli.com', password: 'leo' });
-        const res = await agent.get('/dashboard');
+        const res = await agent.get('/home');
         //
         expect(res.statusCode).toBe(200);
     });
@@ -110,7 +110,7 @@ describe('Router - Authentication', () => {
             .send(mocUserInput);
         //
         expect(res.statusCode).toBe(302);
-        expect(res.headers.location).toBe('/dashboard');
+        expect(res.headers.location).toBe('/home');
         expect(await userModel.count({})).toBe(2);
     });
 
@@ -120,7 +120,7 @@ describe('Router - Authentication', () => {
                 .get('/signout')
                 .set('Cookie', cookiesJar[0]),
             accessAuthPage: await request(app)
-                .get('/dashboard')
+                .get('/home')
                 .set('Cookie', cookiesJar[0]),
         };
         //
@@ -131,10 +131,10 @@ describe('Router - Authentication', () => {
 });
 
 
-describe('Router - Dashboard', () => {
+describe('Router - Home', () => {
     test('GET and have "x-robots-tag" header set to "none"', async () => {
         const res = await agent
-            .get('/dashboard');
+            .get('/home');
         //
         expect(res.statusCode).toBe(200);
         expect(res.headers['x-robots-tag']).toBe('none');
@@ -142,7 +142,7 @@ describe('Router - Dashboard', () => {
 
     test('PATCH configs of the site', async () => {
         await agent
-            .patch('/dashboard/setting')
+            .patch('/home/setting')
             .send({ siteSetting: { title: 'Testing Website' }});
         //
         expect((await settingModel.findOne({})).title).toContain('Testing Website');
@@ -150,7 +150,7 @@ describe('Router - Dashboard', () => {
 
     test('PATCH user nickname', async () => {
         await agent
-            .patch('/dashboard/profile')
+            .patch('/home/profile')
             .send({ profile: { nickname: 'test' }});
         //
         expect((await userModel.findOne({ email: 'leo@leoyli.com' })).nickname).toContain('test');
@@ -158,19 +158,19 @@ describe('Router - Dashboard', () => {
 
     test('PATCH user password', async () => {
         await agent
-            .patch('/dashboard/security')
+            .patch('/home/security')
             .send({ password: { old: 'leo', new: 'test', confirmed: 'test' }});
         const req = (doc) => request(app).post('/signin').send(doc);
         const doc = [{ email: 'leo@leoyli.com', password: 'test' }, { email: 'leo@leoyli.com', password: 'leo' }];
         const res = await Promise.all([req(doc[0]), req(doc[1])]);
         //
-        expect(res[0].headers.location).toBe('/dashboard');
-        expect(res[1].headers.location).not.toBe('/dashboard');
+        expect(res[0].headers.location).toBe('/home');
+        expect(res[1].headers.location).not.toBe('/home');
     });
 
     test('POST to upload a test file', async () => {
         const res = await agent
-            .post('/dashboard/upload')
+            .post('/home/upload')
             .attach('media[file]', path.join(__dirname, 'test.png'))
             .field('media[title]', 'test')
             .field('media[description]', 'user profile picture for the test');

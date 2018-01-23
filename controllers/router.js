@@ -17,7 +17,7 @@ function RouterHub(rules, option) {
 }
 
 
-RouterHub.prototype.activate = function() {
+RouterHub.prototype.run = function() {
     this.rules.forEach(({ route, alias, controller, method, settings = {} }) => {
         // normalize into a method array sorted anti-alphabetically
         if (!method) method = (checkNativeBrand(controller) === 'Object')

@@ -26,7 +26,7 @@ function _useRoutes(app) {
     if (process.env.NODE_ENV === 'dev' || 'test') app.use('/seed', require('./seed'));
 
     // units
-    app.use('/dashboard', require('./dashboard'));
+    app.use('/home', require('./admin'));
     app.use('/post', require('./post'));
     app.use('/', require('./authentication'));
     app.use('/', require('./page'));
