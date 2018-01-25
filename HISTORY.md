@@ -1,3 +1,15 @@
+### 0.6.0-dev.4 / 2018-01-25
+> App
+- fragmented router controller so that it could be unit-tested.
+
+
+### 0.6.0-dev.3 / 2018-01-22
+> App
+- Renamed backend dashboard as 'home' (for path) or 'admin' (for controller).
+- Renamed method .activate as to be .run.
+- Updated dependencies.
+
+
 ### 0.6.0-dev.2 / 2017-12-07
 > App
 - Simplified part of test descriptions.
