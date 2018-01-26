@@ -32,14 +32,14 @@ function asyncWrapper(fn) {
  * @param {(object|function)} controller    - controller may be extracted
  * @param {(string|regex)} [alias=null]     - alias to be watched
  * @param {(string|array)} [method]         - default: keys of controller{object} || `get`
- * @return {array}                          - ordering of the result is important ('alias' have to sit behind 'get')
+ * @return {array}                          - ordering of the result is important ('alias' must be met after 'get')
  */
 function getMethods({ controller, alias, method }) {
     method = method
         ? checkNativeBrand(method, 'String') ? [method] : method
         : checkNativeBrand(controller, 'Object') ? Object.keys(controller) : ['get'];
-    if (alias) method.push('alias');
-    return method;
+    if (alias && method.indexOf('alias') === -1) method.push('alias');
+    return method.sort().reverse();
 }
 
 

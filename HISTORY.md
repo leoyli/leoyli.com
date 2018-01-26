@@ -1,3 +1,8 @@
+### 0.6.0-dev.5.1 / 2018-01-26
+> App
+- Bugs patched.
+
+
 ### 0.6.0-dev.5 / 2018-01-26
 > App
 - Added router.test.js for unit testing.

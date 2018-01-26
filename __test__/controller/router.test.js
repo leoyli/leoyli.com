@@ -46,7 +46,7 @@ describe('Bundle: router.js', () => {
             const test = [{ controller: mocController1 }, { controller: mocController1, method: ['pull'], alias: '/' }];
             const result = test.map(obj => getMethods(obj));
             //
-            expect(result[0]).toEqual(['get', 'pull']);
+            expect(result[0]).toEqual(['pull', 'get']);
             expect(result[1]).toEqual(['pull', 'alias']);
         });
     });
