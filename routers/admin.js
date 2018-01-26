@@ -1,4 +1,4 @@
-const RouterHub = require('../controllers/router');
+const { RouterHub } = require('../controllers/router');
 const { _md } = require('../controllers/modules/core');
 const home = require('../controllers/router/admin');
 

@@ -1,6 +1,14 @@
+### 0.6.0-dev.5 / 2018-01-26
+> App
+- Added router.test.js for unit testing.
+- Polished the JSDoc descriptions in router.js.
+- Extended the functionality of checkNativeBrand{fn}.
+- Avoided repeated stacking in middlewareQueue{fn}.
+- Fixed bugs in getViewRenderQueue{fn}.
+
 ### 0.6.0-dev.4 / 2018-01-25
 > App
-- fragmented router controller so that it could be unit-tested.
+- Fragmented router controller so that it could be unit-tested.
 
 
 ### 0.6.0-dev.3 / 2018-01-22

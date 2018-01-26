@@ -4,92 +4,94 @@ const render = require('./render');
 
 
 /**
- * check the type of the object by its native brand
- * @param {object} obj
- * @param {string} checkValue
- * @return {boolean}
+ * check the native brand(type) of objects
+ * @param {object} obj                      - object to be checked
+ * @param {string} [name=null]              - name to be matched (case insensitive)
+ * @return {(boolean|string)}               - if no name given, the brand name of the object would be returned
  */
-function checkNativeBrand(obj, checkValue) {
-    checkValue = checkValue[0].toUpperCase() + checkValue.slice(1);
-    return Object.prototype.toString.call(obj).slice(8, -1) === checkValue;
+function checkNativeBrand(obj, name) {
+    if (name) return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase() === name.toLowerCase();
+    else return Object.prototype.toString.call(obj).slice(8, -1);
 }
 
 
 /**
- * wrap async-functions with error catcher
- * @param {array||function} queue
- * @return {array}
+ * wrap asyncfunctions with an error catcher
+ * @param {(array|function)} fn             - fn may be wrapped
+ * @return {array}                          - task is triggered only when keyword 'async' is met
  */
-function asyncWrapper(queue) {
+function asyncWrapper(fn) {
     const wrapAsync = fn => (req, res, next) => fn(req, res, next).catch(next);
-    if (!checkNativeBrand(queue, 'Array')) queue = [queue];
-    return queue.map(fn => checkNativeBrand(fn, 'AsyncFunction') ? wrapAsync(fn) : fn);
+    if (!checkNativeBrand(fn, 'Array')) fn = [fn];
+    return fn.map(fn => checkNativeBrand(fn, 'AsyncFunction') ? wrapAsync(fn) : fn);
 }
 
 
 /**
- * normalize into a method array sorted anti-alphabetically
- * @param {string||regex} alias         - (optional) alternative routing path; default: `null`
- * @param {string||array} method        - (optional) HTTP methods; default: keys of controller{object} || `get`
- * @param {object||function} controller - controller function or functions collection
- * @return {array}
+ * normalize into a method array in the anti-alphabetical order
+ * @param {(object|function)} controller    - controller may be extracted
+ * @param {(string|regex)} [alias=null]     - alias to be watched
+ * @param {(string|array)} [method]         - default: keys of controller{object} || `get`
+ * @return {array}                          - ordering of the result is important ('alias' have to sit behind 'get')
  */
-function getMethods({ alias, method, controller }) {
+function getMethods({ controller, alias, method }) {
     method = method
         ? checkNativeBrand(method, 'String') ? [method] : method
         : checkNativeBrand(controller, 'Object') ? Object.keys(controller) : ['get'];
     if (alias) method.push('alias');
-    return method.sort().reverse();     // note: .sort().revers() so 'alias' is placed behind 'get'
+    return method;
 }
 
 
 /**
- * stack queues from settings
- * @param {string} title                - (optional) title tag name; default: `null`
- * @param {object} titleOption          - (optional) title tagging options (see _md.setTitleTag()); default: `null`
- * @param {boolean} crawler             - (optional) crawlers?; default: `false`
- * @param {boolean} authentication      - (optional) authorization?; default: `false`
- * @param {boolean} authorization       - (optional) authentication?; default: `false`
- * @return {Array}
+ * stack a queue from settings
+ * @param {boolean} [authentication=false]  - accept only authorized? (load 5 fns)
+ * @param {boolean} [authorization=false]   - accept only authenticated? (load 4 fns)
+ * @param {boolean} [crawler=false]         - accept crawlers? (load 1 fn)
+ * @param {string} [title=null]             - title tag name
+ * @param {object} [titleOption=null]       - title tagging options (see _md.setTitleTag())
+ * @param {string} [method=null]            - method to be watched
+ * @return {Array}                          - ordering of the result is important
  */
-function middlewareQueue({ title, titleOption, crawler, authentication, authorization } = {}) {
+function getMiddlewareQueue({ authorization, authentication, crawler, title, titleOption } = {}, method) {
     const queue = [];
+    if (authorization === true) queue.push(..._md.isAuthorized);
+    else if (authentication === true) queue.push(..._md.isSignedIn);
+    else if (crawler === false) queue.push(_md.doNotCrawled);
     if (title) queue.push(_md.setTitleTag(title, titleOption));
-    if (crawler === false) queue.push(_md.doNotCrawled);
-    if (authorization === true) queue.push(_md.isAuthorized);
-    if (authorization !== true && authentication === true) queue.push(_md.isSignedIn);
     return queue;
 }
 
 
 /**
- * stack queues from controllers with normalization
- * @param {array||function} controller
- * @param {string} method
- * @return {array}
+ * stack a queue from controllers with normalization
+ * @param {(array|function)} controller     - controller to be stacked
+ * @param {string} [method=null]            - method to be used to extract property of the controller
+ * @return {array}                          - if no matched method, the controller would just be normalized to an array
  */
-function controllerQueue(controller, method) {
+function getControllerQueue(controller, method) {
     if (controller[method]) controller = controller[method];
     return checkNativeBrand(controller, 'Array') ? controller : [controller];
 }
 
 
 /**
- * stack queues if giving template and HTTP method is 'get'
- * @param {string} template
- * @param {string} method
- * @return {array}
+ * stack a queue with a given template when HTTP method is 'get'
+ * @param {string} [template]               - template file path
+ * @param {string} method                   - method to be watched
+ * @return {array}                          - task is triggered only when the method is 'alias' or 'get'
  */
-function viewRenderQueue({ template } = {}, method) {
-    return (method === 'get' || 'alias') && template ? [render.post(template)] : [];
+function getViewRenderQueue({ template } = {}, method) {
+    return (['get', 'alias'].indexOf(method) > -1) && template ? [render.post(template)] : [];
 }
+
 
 /**
  * schematize for assigning routing rules
  * @constructor
- * @param {array} rules             - array contains routing rule objects
- * @param {object} option           - (see express.Router() API)
- * @return this.router
+ * @param {array} rules                     - an array that contains routing rule objects
+ * @param {object} [option]                 - (see express.Router() API)
+ * @return this.router                      -
  */
 function RouterHub(rules, option) {
     this.rules = rules;
@@ -104,14 +106,14 @@ RouterHub.prototype.run = function() {
     this.rules.forEach(({ route, alias, controller, method, settings }) => {
         getMethods({ alias, controller, method }).forEach(method => {
             this.router[(method === 'alias') ? 'get' : method](...asyncWrapper([
-                (method === 'alias') ? alias : route,
-                ...middlewareQueue(settings),
-                ...controllerQueue(controller, method),
-                ...viewRenderQueue(settings, method)
+                (method === 'alias') ? alias : route,           // path
+                ...getMiddlewareQueue(settings, method),        // middleware(plug-ins)
+                ...getControllerQueue(controller, method),      // controller
+                ...getViewRenderQueue(settings, method)         // view
             ]));
         });
     });
-    debugger;
+
     // post-attached handler
     this.use(render.errorHandler);
     return this.router;
@@ -120,4 +122,5 @@ RouterHub.prototype.run = function() {
 
 
 // module export
-module.exports = RouterHub;
+module.exports = { RouterHub, checkNativeBrand, asyncWrapper,
+    getMethods, getMiddlewareQueue, getControllerQueue, getViewRenderQueue };

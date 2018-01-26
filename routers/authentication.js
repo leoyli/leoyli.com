@@ -1,4 +1,4 @@
-const RouterHub = require('../controllers/router');
+const { RouterHub } = require('../controllers/router');
 const authentication = require('../controllers/router/authentication');
 
 

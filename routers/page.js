@@ -1,4 +1,4 @@
-const RouterHub = require('../controllers/router');
+const { RouterHub } = require('../controllers/router');
 const search = require('../controllers/router/search');
 
 
