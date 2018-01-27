@@ -1,3 +1,9 @@
+### 0.6.0-dev.6 / 2018-01-27
+> App
+- Rearranged the viewEngine so that it could be unit-tested.
+- Added the JSDoc descriptions in the viewEngine.
+
+
 ### 0.6.0-dev.5.1 / 2018-01-26
 > App
 - Bugs patched.
@@ -10,6 +16,7 @@
 - Extended the functionality of checkNativeBrand{fn}.
 - Avoided repeated stacking in middlewareQueue{fn}.
 - Fixed bugs in getViewRenderQueue{fn}.
+
 
 ### 0.6.0-dev.4 / 2018-01-25
 > App

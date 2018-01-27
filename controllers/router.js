@@ -91,7 +91,6 @@ function getViewRenderQueue({ template } = {}, method) {
  * @constructor
  * @param {array} rules                     - an array that contains routing rule objects
  * @param {object} [option]                 - (see express.Router() API)
- * @return this.router                      -
  */
 function RouterHub(rules, option) {
     this.rules = rules;

@@ -6,107 +6,27 @@ const
     marked                  = require('marked');
 
 
-
-// render function
+/**
+ * view engine renderer
+ * @param {string} filePath                 - template file path to be passed
+ * @param {object} locals                   - local populations from the Express.js object
+ * @param {function} next                   - callback function
+ * @return {Promise}                        - return the executable HTML string
+ */
 function render(filePath, locals, next) {
-    return getTemplate(filePath, getReference(locals))
+    return getTemplate(filePath, getBlueprint(locals))
         .then(Template => next(null, Template.render()))
         .catch(err => next(err, null));
 }
 
 
-// access functions
-function getReference(locals) { // todo: allows the user to added customized runtime function
-    // load express configs by restricting `locals`
-    const reference = _.omit(locals, ['settings', 'cache', '_locals']);
-    reference.set = { partials: locals.settings['partials'], extName: locals.settings['view engine'] };
-
-    // populate the run-time available functions
-    reference._fn = {   // note: runtime functions
-        useMarkdown : (markdown, option) => marked(markdown.replace(/&gt;|&#62;/g, '>')),
-        loadPartial : (filePath, option) => {
-            const partialsPath = ((option && option.isConsole) || reference._view.isConsole)
-                ? reference.set.partials.panel
-                : reference.set.partials.theme;
-            filePath = path.join(partialsPath, `${filePath}.${reference.set.extName}`);
-            return getTemplate(filePath, reference, true).render();},
-    };
-
-    return reference;
-}
-
-
-function getTemplate(filePath, reference, _SYNC) {
-    if (_SYNC === true) return buildTemplateFromFile(getFileContent(filePath, true), filePath, reference);
-
-    return getFileContent(filePath)
-        .then(templateString => buildTemplateFromFile(templateString, filePath, reference));
-}
-
-
-function getFileContent(filePath, _SYNC) {
-    if (_SYNC === true) return fs.readFileSync(filePath, 'utf8');
-
-    return new Promise((resolve, reject) => {
-        fs.readFile(filePath, 'utf8', (err, templateString) => {
-            if (err) return reject(new Error(`Failed to read the file: (${filePath})`));
-            return resolve(templateString);
-        });
-    });
-}
-
-
-// read function
-function buildTemplateFromFile(templateString, filePath, reference) {
-    const sections = { main : templateString };   // todo: added multiple sections support
-
-    try {
-        return new Template(filePath, reference, sections);
-    } catch (err) {
-        throw new Error(`Failed to build a Template: ('${filePath}'):\n${err.toString()}`);
-    }
-}
-
-
-// constructors
-function Template(filePath, reference, sections) {
-    // reserved for error handler
-    this.filePath = filePath;
-
-    // reference for template functions
-    this.varNames = Object.keys(_.omit(reference, 'set'));
-    this.varValue = Object.values(_.omit(reference, 'set'));
-
-    // template text (tmpl)
-    this.sections = sections;
-    // compilation settings (c)
-    this.configs = new Settings(this.varNames.toString()).doTConfig;
-
-    // templateFn assemble
-    this.templateFnSet = {};
-    // templateFn compilation
-    for (const item in this.sections) {
-        if (this.sections.hasOwnProperty(item)) {
-            // comments stripping (defaulted in HTML)
-            if (this.configs.stripComment) this.sections[item] = this.sections[item].replace(this.configs.comment, '');
-            // doT compilation
-            this.templateFnSet[item] = doT.template(this.sections[item], this.configs);
-        }
-    }
-}
-
-
-Template.prototype.render = function() {
-    try {
-        return this.templateFnSet.main(...this.varValue);
-    } catch (err) {
-        throw new Error(`Failed to render: ('${this.filePath}'):\n${err.toString()}`);
-    }
-};
-
-
-function Settings(varNames) {   // todo: allows the user to customized the delimiters
-    this.doTConfig = {
+/**
+ * generate doT configs on-the-fly          // todo: allows the user to customized the delimiters
+ * @param {string} varNames                 - names to be registered into the runtime scope
+ * @return {object}                         - return doT.js compilation configs
+ */
+function getCompilationConfigs(varNames) {
+    return {
         comment:            /<!--([\s\S]+?)-->/g,
         evaluate:           /\{\{([\s\S]+?)\}\}/g,
         interpolate:        /\{\{=([\s\S]+?)\}\}/g,
@@ -116,7 +36,7 @@ function Settings(varNames) {   // todo: allows the user to customized the delim
         conditional:        /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
         iterate:            /\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
         varname:            varNames,
-        stripComment:       true,
+        stripHTMLComment:   true,
         strip:              true,
         append:             true,
         selfcontained:      false,
@@ -124,9 +44,113 @@ function Settings(varNames) {   // todo: allows the user to customized the delim
 }
 
 
+/**
+ * transpile Express.js meta into the blueprint of Template{object}
+ * @param {object} locals                   - local populations from the Express.js object
+ * @return {object}                         - return a transipiled blueprint
+ */
+function getBlueprint(locals) {
+    const blueprint = _.omit(locals, ['settings', 'cache', '_locals']);
+    blueprint.set = { partials: locals.settings['partials'], extName: locals.settings['view engine'] };
+    blueprint._fn = getRuntimeMethods(blueprint);
+    return blueprint;
+}
+
+
+/**
+ * get runtime methods
+ * @param {object} blueprint                - raw blueprint{object}
+ * @return {object}                         - return a object contains runtime template functions
+ */
+function getRuntimeMethods (blueprint) {
+    function useMarkdown (context, option, next) {
+        return marked(context.replace(/&gt;|&#62;/g, '>', option, next));
+    }
+
+    function loadPartial (filePath, option) {
+        const partialsPath = ((option && option.isOnPanel) || blueprint._view.isOnPanel)
+            ? blueprint.set.partials.panel || __dirname
+            : blueprint.set.partials.theme || blueprint.set.partials.panel || __dirname;
+        return getTemplate(path.join(partialsPath, `${filePath}.${blueprint.set.extName}`), blueprint, true).render();
+    }
+
+    return { useMarkdown, loadPartial };
+}
+
+
+/**
+ * get the compiled template
+ * @param {string} filePath                 - template file path to be passed
+ * @param {object} blueprint                - runtime objects to be passed
+ * @param {boolean} [_SYNC=null]            - change the state of the function to be sync
+ * @return {(Promise|Template)}             - return a Promise(async) or object(sync)
+ */
+function getTemplate(filePath, blueprint, _SYNC) {
+    if (_SYNC === true) return buildTemplate(getFileString(filePath, true), filePath, blueprint);
+    else return getFileString(filePath).then(templateString => buildTemplate(templateString, filePath, blueprint));
+}
+
+
+/**
+ * get string from template file
+ * @param {string} filePath                 - template file path
+ * @param {boolean} [_SYNC=null]            - change the state of the function to be sync
+ * @return {(Promise|string)}               - return a Promise(async) or string(sync)
+ */
+function getFileString(filePath, _SYNC) {
+    if (_SYNC === true) return fs.readFileSync(filePath, 'utf8');
+    else return new Promise((resolve, reject) => fs.readFile(filePath, 'utf8', (err, templateString) => {
+        if (err) return reject(new Error(`Failed to read the file: (${filePath})`));
+        else return resolve(templateString);
+    }));
+}
+
+
+/**
+ * construct a new Template{object}         // todo: added multiple sections support
+ * @param {string} fileString               - raw template context
+ * @param {string} filePath                 - template file path to be passed
+ * @param {object} blueprint                - runtime objects to be passed
+ * @return {Template}                       - return a new Template{object}
+ */
+function buildTemplate(fileString, filePath, blueprint) {
+    const sections = { main : fileString };
+    return new Template(filePath, blueprint, sections);
+}
+
+
+/**
+ * define the scheme of Template{object}
+ * @constructor
+ * @param {string} filePath                 - reserved for error messaging
+ * @param {object} blueprint                - blueprint to be decoded
+ * @param {object} sections                 - section to be complied by `doT.template`
+ */
+function Template(filePath, blueprint, sections) {
+    this.filePath   = filePath;
+    this.settings   = getCompilationConfigs(Object.keys(_.omit(blueprint, 'set')).toString());
+    this.arguement  = Object.values(_.omit(blueprint, 'set'));
+    this.runtimeFn  = this.compile(sections, this.settings);
+}
+
+Template.prototype.compile = function (sections, settings) {
+    const compiledStack = {};
+    Object.keys(sections).forEach(item => {
+        if (settings.stripHTMLComment) sections[item] = sections[item].replace(settings.comment, '');
+        compiledStack[item] = doT.template(sections[item], settings);
+    });
+    return compiledStack;
+};
+
+Template.prototype.render = function() {
+    try {
+        return this.runtimeFn.main(...this.arguement);
+    } catch (err) {
+        throw new Error(`Failed to render: ('${this.filePath}'):\n${err.toString()}`);
+    }
+};
+
+
 
 // view engine export
-module.exports = {
-    __express:              render,
-    render:                 render,
-};
+module.exports = { __express: render, render };
