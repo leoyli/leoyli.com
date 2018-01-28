@@ -1,15 +1,20 @@
 ### 0.6.0-dev.6 / 2018-01-27
 > App
+- Rearranged the viewEngine and fixed `loadPartials` bugs.
+
+
+### 0.6.0-dev.6 / 2018-01-25
+> App
 - Rearranged the viewEngine so that it could be unit-tested.
 - Added the JSDoc descriptions in the viewEngine.
 
 
-### 0.6.0-dev.5.1 / 2018-01-26
+### 0.6.0-dev.5.1 / 2018-01-25
 > App
 - Bugs patched.
 
 
-### 0.6.0-dev.5 / 2018-01-26
+### 0.6.0-dev.5 / 2018-01-25
 > App
 - Added router.test.js for unit testing.
 - Polished the JSDoc descriptions in router.js.
@@ -18,7 +23,7 @@
 - Fixed bugs in getViewRenderQueue{fn}.
 
 
-### 0.6.0-dev.4 / 2018-01-25
+### 0.6.0-dev.4 / 2018-01-24
 > App
 - Fragmented router controller so that it could be unit-tested.
 

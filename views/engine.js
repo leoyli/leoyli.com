@@ -22,10 +22,10 @@ function render(filePath, locals, next) {
 
 /**
  * generate doT configs on-the-fly          // todo: allows the user to customized the delimiters
- * @param {string} varNames                 - names to be registered into the runtime scope
+ * @param {string} variables                - names to be registered into the runtime scope
  * @return {object}                         - return doT.js compilation configs
  */
-function getCompilationConfigs(varNames) {
+function getCompilationConfigs(variables) {
     return {
         comment:            /<!--([\s\S]+?)-->/g,
         evaluate:           /\{\{([\s\S]+?)\}\}/g,
@@ -35,7 +35,7 @@ function getCompilationConfigs(varNames) {
         define:             /\{\{##\s*([\w\.$]+)\s*(\:|=)([\s\S]+?)#\}\}/g,
         conditional:        /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
         iterate:            /\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
-        varname:            varNames,
+        varname:            variables,
         stripHTMLComment:   true,
         strip:              true,
         append:             true,
@@ -46,32 +46,34 @@ function getCompilationConfigs(varNames) {
 
 /**
  * transpile Express.js meta into the blueprint of Template{object}
- * @param {object} locals                   - local populations from the Express.js object
+ * @param {object} {*}                      - local populations from the Express.js object
+ * @param {object} settings                 - destructed parameters from locals{object}
  * @return {object}                         - return a transipiled blueprint
  */
-function getBlueprint(locals) {
+function getBlueprint({ settings, ...locals }) {
     const blueprint = _.omit(locals, ['settings', 'cache', '_locals']);
-    blueprint.set = { partials: locals.settings['partials'], extName: locals.settings['view engine'] };
-    blueprint._fn = getRuntimeMethods(blueprint);
+    blueprint._fn = getRuntimeMethods(blueprint, settings);
     return blueprint;
 }
 
 
 /**
- * get runtime methods
- * @param {object} blueprint                - raw blueprint{object}
+ * get runtime template methods             // todo: added more methods
+ * @param {object} blueprint                - raw blueprint{object} that has no `._fn` methods
+ * @param {object} settings                 - view settings extracted from locals{object}
  * @return {object}                         - return a object contains runtime template functions
  */
-function getRuntimeMethods (blueprint) {
+function getRuntimeMethods (blueprint, settings) {
     function useMarkdown (context, option, next) {
         return marked(context.replace(/&gt;|&#62;/g, '>', option, next));
     }
 
-    function loadPartial (filePath, option) {
-        const partialsPath = ((option && option.isOnPanel) || blueprint._view.isOnPanel)
-            ? blueprint.set.partials.panel || __dirname
-            : blueprint.set.partials.theme || blueprint.set.partials.panel || __dirname;
-        return getTemplate(path.join(partialsPath, `${filePath}.${blueprint.set.extName}`), blueprint, true).render();
+    function loadPartial (fileName, option = {}) {
+        const pathBase = option.isPanel === true || blueprint._view._status.isPanel === true
+            ? settings['partials'].panel
+            : settings['partials'].theme || settings['partials'].panel;
+        const filePath = path.join(pathBase || __dirname, `${fileName}.${settings['view engine'] || 'dot'}`);
+        return getTemplate(filePath, getBlueprint({ settings, ...blueprint }), true).render();
     }
 
     return { useMarkdown, loadPartial };
@@ -129,14 +131,14 @@ function buildTemplate(fileString, filePath, blueprint) {
 function Template(filePath, blueprint, sections) {
     this.filePath   = filePath;
     this.settings   = getCompilationConfigs(Object.keys(_.omit(blueprint, 'set')).toString());
-    this.arguement  = Object.values(_.omit(blueprint, 'set'));
-    this.runtimeFn  = this.compile(sections, this.settings);
+    this.arguement  = Object.values(blueprint);
+    this.compileFn  = this.compile(sections, this.settings);
 }
 
 Template.prototype.compile = function (sections, settings) {
     const compiledStack = {};
     Object.keys(sections).forEach(item => {
-        if (settings.stripHTMLComment) sections[item] = sections[item].replace(settings.comment, '');
+        if (settings.stripHTMLComment === true) sections[item] = sections[item].replace(settings.comment, '');
         compiledStack[item] = doT.template(sections[item], settings);
     });
     return compiledStack;
@@ -144,7 +146,7 @@ Template.prototype.compile = function (sections, settings) {
 
 Template.prototype.render = function() {
     try {
-        return this.runtimeFn.main(...this.arguement);
+        return this.compileFn.main(...this.arguement);
     } catch (err) {
         throw new Error(`Failed to render: ('${this.filePath}'):\n${err.toString()}`);
     }
@@ -153,4 +155,6 @@ Template.prototype.render = function() {
 
 
 // view engine export
-module.exports = { __express: render, render };
+module.exports = { __express: render, render, _test: {
+    getCompilationConfigs, getBlueprint, getRuntimeMethods, getTemplate, getFileString, buildTemplate }};
+

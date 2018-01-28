@@ -121,5 +121,5 @@ RouterHub.prototype.run = function() {
 
 
 // module export
-module.exports = { RouterHub, checkNativeBrand, asyncWrapper,
-    getMethods, getMiddlewareQueue, getControllerQueue, getViewRenderQueue };
+module.exports = { RouterHub, _test: {
+    checkNativeBrand, asyncWrapper, getMethods, getMiddlewareQueue, getControllerQueue, getViewRenderQueue }};
