@@ -121,7 +121,6 @@ function getFileString(filePath, _SYNC) {
     }
 
     if (_SYNC === true) return fs.readFileSync(filePath, 'utf8');
-    else if (typeof fs.readFileAsync === 'function') return fs.readFileAsync(filePath, 'utf8');   // note: for unit testing
     else return readFileAsync(filePath, 'utf8');
 }
 

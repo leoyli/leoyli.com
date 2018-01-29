@@ -1,7 +1,7 @@
 // mock
 jest.mock('fs', () => ({
-    readFileAsync : jest.fn(),
     readFileSync : jest.fn(),
+    readFile : jest.fn(),
 }));
 const fs = require('fs');
 
@@ -23,8 +23,8 @@ describe('Check the ENV', () => {
 describe('Bundle: engine.js', () => {
     const mockLocals = { settings: {}, cache: false, _locals: {}, test: {} };
     const mockContent = '<a>Hello World</a>';
-    fs.readFileAsync.mockReturnValue(Promise.resolve(mockContent));
     fs.readFileSync.mockReturnValue(mockContent);
+    fs.readFile.mockImplementation((file, option, next) => next(null, mockContent));
 
     test('Fn: getCompilationConfigs: Should generate doT configs on-the-fly', () => {
         const result = getCompilationConfigs('a, b, c');

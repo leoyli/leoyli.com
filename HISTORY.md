@@ -1,4 +1,9 @@
-### 0.6.0-dev.7.1 / 2018-01-28
+### 0.6.0-dev.7.2 / 2018-01-29
+> App
+- Corrected the testing scheme by using `.mockImplementation` method.
+
+
+### 0.6.0-dev.7.1 / 2018-01-29
 > App
 - Resolved `engine.test.js` skipped tests.
 - Added a line of code so that `fs.readFileAsync` can be mocked.
