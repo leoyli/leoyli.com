@@ -1,9 +1,15 @@
-### 0.6.0-dev.6 / 2018-01-27
+### 0.6.0-dev.7 / 2018-01-28
+> App
+- Rearranged the viewEngine and made it more readable.
+- Added `engine.test.js` for unit testing. (failed in checking async functions due to an unresolved Promise.)
+
+
+### 0.6.0-dev.6.1 / 2018-01-27
 > App
 - Rearranged the viewEngine and fixed `loadPartials` bugs.
 
 
-### 0.6.0-dev.6 / 2018-01-25
+### 0.6.0-dev.6 / 2018-01-26
 > App
 - Rearranged the viewEngine so that it could be unit-tested.
 - Added the JSDoc descriptions in the viewEngine.

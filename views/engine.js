@@ -7,7 +7,7 @@ const
 
 
 /**
- * view engine renderer
+ * Should return the requested content in HTML
  * @param {string} filePath                 - template file path to be passed
  * @param {object} locals                   - local populations from the Express.js object
  * @param {function} next                   - callback function
@@ -81,43 +81,47 @@ function getRuntimeMethods (blueprint, settings) {
 
 
 /**
- * get the compiled template
+ * get a compiled Template{object}
  * @param {string} filePath                 - template file path to be passed
  * @param {object} blueprint                - runtime objects to be passed
  * @param {boolean} [_SYNC=null]            - change the state of the function to be sync
  * @return {(Promise|Template)}             - return a Promise(async) or object(sync)
  */
 function getTemplate(filePath, blueprint, _SYNC) {
-    if (_SYNC === true) return buildTemplate(getFileString(filePath, true), filePath, blueprint);
-    else return getFileString(filePath).then(templateString => buildTemplate(templateString, filePath, blueprint));
-}
-
-
-/**
- * get string from template file
- * @param {string} filePath                 - template file path
- * @param {boolean} [_SYNC=null]            - change the state of the function to be sync
- * @return {(Promise|string)}               - return a Promise(async) or string(sync)
- */
-function getFileString(filePath, _SYNC) {
-    if (_SYNC === true) return fs.readFileSync(filePath, 'utf8');
-    else return new Promise((resolve, reject) => fs.readFile(filePath, 'utf8', (err, templateString) => {
-        if (err) return reject(new Error(`Failed to read the file: (${filePath})`));
-        else return resolve(templateString);
-    }));
+    if (_SYNC === true) return buildTemplate(filePath, blueprint, getFileString(filePath, true));
+    else return getFileString(filePath).then(templateString => buildTemplate(filePath, blueprint, templateString));
 }
 
 
 /**
  * construct a new Template{object}         // todo: added multiple sections support
- * @param {string} fileString               - raw template context
  * @param {string} filePath                 - template file path to be passed
  * @param {object} blueprint                - runtime objects to be passed
+ * @param {string} fileString               - raw template context
  * @return {Template}                       - return a new Template{object}
  */
-function buildTemplate(fileString, filePath, blueprint) {
+function buildTemplate(filePath, blueprint, fileString) {
     const sections = { main : fileString };
     return new Template(filePath, blueprint, sections);
+}
+
+
+/**
+ * get context as string from a template file
+ * @param {string} filePath                 - template file path
+ * @param {boolean} [_SYNC=null]            - change the state of the function to be sync
+ * @return {(Promise|string)}               - return a Promise(async) or string(sync)
+ */
+function getFileString(filePath, _SYNC) {
+    function readFileAsync (file, option) {
+        return new Promise((resolve, reject) => fs.readFile(file, option, (err, content) => {
+            if (err) return reject(new Error(`Failed to read the file: (${filePath})`));
+            else return resolve(content);
+        }));
+    }
+
+    if (_SYNC === true) return fs.readFileSync(filePath, 'utf8');
+    else return readFileAsync(filePath, 'utf8');
 }
 
 
@@ -156,5 +160,5 @@ Template.prototype.render = function() {
 
 // view engine export
 module.exports = { __express: render, render, _test: {
-    getCompilationConfigs, getBlueprint, getRuntimeMethods, getTemplate, getFileString, buildTemplate }};
-
+    getCompilationConfigs, getBlueprint, getRuntimeMethods,
+    getTemplate, getFileString, buildTemplate, render, Template }};
