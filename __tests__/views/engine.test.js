@@ -1,15 +1,14 @@
 // mock
 jest.mock('fs', () => ({
+    readFileAsync : jest.fn(),
     readFileSync : jest.fn(),
-    readFile : jest.fn(),
 }));
 const fs = require('fs');
 
 
-
 // module
 const { getCompilationConfigs, getBlueprint, getRuntimeMethods,
-    getTemplate, getFileString, buildTemplate, render, Template } = require('../../views/engine')._test;
+    getTemplate, buildTemplate, getFileString, render, Template } = require('../../views/engine')._test;
 
 
 
@@ -24,8 +23,8 @@ describe('Check the ENV', () => {
 describe('Bundle: engine.js', () => {
     const mockLocals = { settings: {}, cache: false, _locals: {}, test: {} };
     const mockContent = '<a>Hello World</a>';
+    fs.readFileAsync.mockReturnValue(Promise.resolve(mockContent));
     fs.readFileSync.mockReturnValue(mockContent);
-    // fs.readFile.mockReturnValue(mockContent);
 
     test('Fn: getCompilationConfigs: Should generate doT configs on-the-fly', () => {
         const result = getCompilationConfigs('a, b, c');
@@ -50,18 +49,11 @@ describe('Bundle: engine.js', () => {
         expect(result).toHaveProperty('loadPartial');
     });
 
-    test.skip('Fn: getTemplate: Should get a compiled Template{object}', async () => {
+    test('Fn: getTemplate: Should get a compiled Template{object}', async () => {
         const result = [getTemplate('test', {}, true), await getTemplate('test', {})];
         //
         expect(result[0] instanceof Template).toBeTruthy();
         expect(result[1] instanceof Template).toBeTruthy();
-    });
-
-    test.skip('Fn: getFileString: Should get context as string from the template file', async () => {
-        const result = [getFileString('test', true), (await getFileString('test')).then(() => 0)];
-        //
-        expect(result[0]).toEqual(mockContent);
-        expect(result[1]).toEqual(0);
     });
 
     test('Fn: buildTemplate: Should construct a new Template{object}', () => {
@@ -72,12 +64,19 @@ describe('Bundle: engine.js', () => {
         expect(result.render()).toBe(mockContent);
     });
 
-    test.skip('Fn: render: Should return the requested content in HTML', async () => {
+    test('Fn: getFileString: Should get context as string from the template file', async () => {
+        const result = [getFileString('test', true), await getFileString('test').then(() => 0)];
+        //
+        expect(result[0]).toEqual(mockContent);
+        expect(result[1]).toEqual(0);
+    });
+
+    test('Fn: render: Should return the requested content in HTML', async () => {
         const result = await (render( '', mockLocals, (err, context) => {
             if (err) throw err;
-            else return context
-        })).then( string => {
-            return string instanceof String;
+            else return context;
+        })).then(string => {
+            return typeof string === 'string';
         });
         //
         expect(result).toBeTruthy();

@@ -1,3 +1,9 @@
+### 0.6.0-dev.7.1 / 2018-01-28
+> App
+- Resolved `engine.test.js` skipped tests.
+- Added a line of code so that `fs.readFileAsync` can be mocked.
+
+
 ### 0.6.0-dev.7 / 2018-01-28
 > App
 - Rearranged the viewEngine and made it more readable.

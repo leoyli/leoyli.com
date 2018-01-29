@@ -121,6 +121,7 @@ function getFileString(filePath, _SYNC) {
     }
 
     if (_SYNC === true) return fs.readFileSync(filePath, 'utf8');
+    else if (typeof fs.readFileAsync === 'function') return fs.readFileAsync(filePath, 'utf8');   // note: for unit testing
     else return readFileAsync(filePath, 'utf8');
 }
 
@@ -161,4 +162,4 @@ Template.prototype.render = function() {
 // view engine export
 module.exports = { __express: render, render, _test: {
     getCompilationConfigs, getBlueprint, getRuntimeMethods,
-    getTemplate, getFileString, buildTemplate, render, Template }};
+    getTemplate, buildTemplate, getFileString, render, Template }};
