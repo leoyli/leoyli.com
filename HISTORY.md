@@ -1,3 +1,11 @@
+### 0.6.0-dev.8.1 / 2018-02-01
+> App
+- Suspended some test tasks in 'router.test'
+- Extracted recyclable methods from 'busboy' to 'method'.
+- Added JSDoc in 'busboy'.
+- Shorten some variables.
+
+
 ### 0.6.0-dev.8 / 2018-02-01
 > App
 - Rewrote file uploading parser (busboy controller & middleware) so that it can be unit tested and more readable.

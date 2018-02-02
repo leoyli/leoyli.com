@@ -1,29 +1,19 @@
 const Router = require('express').Router;
 const { _md } = require('./modules/core');
+const { _fn } = require('./modules/methods');
 const render = require('./render');
 
 
-/**
- * check the native brand(type) of objects  // note: `checkNativeBrand` can be generalized
- * @param {object} obj                      - object to be checked
- * @param {string} [name=null]              - name to be matched (case insensitive)
- * @return {(boolean|string)}               - if no name given, the brand name of the object would be returned
- */
-function checkNativeBrand(obj, name) {
-    if (name) return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase() === name.toLowerCase();
-    else return Object.prototype.toString.call(obj).slice(8, -1);
-}
-
 
 /**
- * wrap asyncfunctions with an error catcher// note: `asyncWrapper` can be generalized
+ * wrap asyncfunctions with an error catcher// note: `asyncWrapper` may be generalized
  * @param {(array|function)} fn             - fn may be wrapped
  * @return {array}                          - task is triggered only when keyword 'async' is met
  */
 function asyncWrapper(fn) {
     const wrapAsync = fn => (req, res, next) => fn(req, res, next).catch(next);
-    if (!checkNativeBrand(fn, 'Array')) fn = [fn];
-    return fn.map(fn => checkNativeBrand(fn, 'AsyncFunction') ? wrapAsync(fn) : fn);
+    if (!_fn.object.checkNativeBrand(fn, 'Array')) fn = [fn];
+    return fn.map(fn => _fn.object.checkNativeBrand(fn, 'AsyncFunction') ? wrapAsync(fn) : fn);
 }
 
 
@@ -36,8 +26,8 @@ function asyncWrapper(fn) {
  */
 function getMethods({ controller, alias, method }) {
     method = method
-        ? checkNativeBrand(method, 'String') ? [method] : method
-        : checkNativeBrand(controller, 'Object') ? Object.keys(controller) : ['get'];
+        ? _fn.object.checkNativeBrand(method, 'String') ? [method] : method
+        : _fn.object.checkNativeBrand(controller, 'Object') ? Object.keys(controller) : ['get'];
     if (alias && method.indexOf('alias') === -1) method.push('alias');
     return method.sort().reverse();
 }
@@ -71,7 +61,7 @@ function getMiddlewareQueue({ authorization, authentication, crawler, title, tit
  */
 function getControllerQueue(controller, method) {
     if (controller[method]) controller = controller[method];
-    return checkNativeBrand(controller, 'Array') ? controller : [controller];
+    return _fn.object.checkNativeBrand(controller, 'Array') ? controller : [controller];
 }
 
 
@@ -122,4 +112,4 @@ RouterHub.prototype.run = function() {
 
 // module export
 module.exports = { RouterHub, _test: {
-    checkNativeBrand, asyncWrapper, getMethods, getMiddlewareQueue, getControllerQueue, getViewRenderQueue, RouterHub }};
+    asyncWrapper, getMethods, getMiddlewareQueue, getControllerQueue, getViewRenderQueue, RouterHub }};

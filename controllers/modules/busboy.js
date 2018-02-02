@@ -5,46 +5,12 @@ const
     Busboy                  = require('busboy');
 
 
-
-function checkNativeBrand(obj, name) {
-    if (name) return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase() === name.toLowerCase();
-    else return Object.prototype.toString.call(obj).slice(8, -1);
-}
-
-
-function cloneDeepObject(obj) {
-    return mergeDeepObject({}, obj, { mutate: true });
-}
-
-
-function mergeDeepObject(target, source, { mutate } = {}) {
-    function mergeRecursion(obj, source) {
-        for(const key in source) if (source.hasOwnProperty(key) && checkNativeBrand(source[key], 'object')) {
-            if (!obj.hasOwnProperty(key)) obj[key] = {};
-            mergeRecursion(obj[key], source[key]);
-        } else obj[key] = source[key];
-    }
-
-    const obj = ( mutate === true ) ? target : cloneDeepObject(target);
-    mergeRecursion(obj, source);
-    return obj;
-}
-
-
-function assignDeepObject(target, path, value, { mutate } = {}) {
-    function assignRecursion(obj, path, value) {
-        const keys = checkNativeBrand(path, 'string') ? _fn.string.parseNestKey(path) : path;
-        if (keys.length !== 1) assignRecursion(obj[keys[0]] ? obj[keys[0]] : (obj[keys[0]] = {}), keys.slice(1), value);
-        else obj[keys[0]] = value ? value : {};
-    }
-
-    const obj = ( mutate === true ) ? target : cloneDeepObject(target);
-    assignRecursion(obj, path, value);
-    return obj;
-}
-
-
-function getUploadPath(parser) {                // note: this function can only be called once in a stream
+/**
+ * generate an path from the executing time // note: can only be called once in a stream
+ * @param {object} parser                   - busboy emitted referencing object from a file listener
+ * @return {string}                         - upload path
+ */
+function getUploadPath(parser) {
     const fireTime = new Date();
     const dirIndex = fireTime.getUTCFullYear() + `0${fireTime.getUTCMonth()+1}`.slice(-2);
     const fileBase = fireTime.getTime() + path.extname(parser.fileName);
@@ -52,6 +18,11 @@ function getUploadPath(parser) {                // note: this function can only 
 }
 
 
+/**
+ * pipe the writable stream to upload the file
+ * @param {object} parser                   - busboy emitted referencing object from a file listener
+ * @return {undefined}                      - the uploaded file is not returned
+ */
 function uploadFile(parser) {
     parser.stream.pipe(fs.createWriteStream(parser.filePath).on('error', err => {
         if (err && !(err.code === 'ENOENT')) throw err;
@@ -63,19 +34,37 @@ function uploadFile(parser) {
 }
 
 
-function checkPermission(parser, configs) {
+/**
+ * check the current status of permission/condition
+ * @param {object} parser                   - busboy emitted referencing object from a file listener
+ * @param {object} configs                  - object contains the key as criteria
+ * @return {boolean}                        - action passed(true) / blocked(false)
+ */
+function checkStatus(parser, configs) {
     return !(!parser.fileName || configs.MIME.indexOf(parser.MIME) === -1 || parser.stream.truncated);
 }
 
 
-function getRawDoc(parser, configs) {
-    if (checkPermission(parser, configs)) return assignDeepObject({}, parser.fieldName,
+/**
+ * transpile the raw document of media from parser
+ * @param {object} parser                   - busboy emitted referencing object from a file listener
+ * @param {object} configs                  - configurations for passing
+ * @return {object}                         - data to be populated later
+ */
+function transpileRaw(parser, configs) {
+    if (checkStatus(parser, configs)) return _fn.object.assignDeep({}, parser.fieldName,
         { fileType: path.extname(parser.fileName), filePath: parser.filePath });
-    else return assignDeepObject({}, _fn.string.parseNestKey(parser.fieldName)[0], { isSkipped: true });
+    else return _fn.object.assignDeep({}, _fn.string.parseNestKey(parser.fieldName)[0], { isSkipped: true });
 }
 
 
-function getNotice(parser, configs) {
+/**
+ * transpile the raw document of media from parser
+ * @param {object} parser                   - busboy emitted referencing object from a file listener
+ * @param {object} configs                  - object contains the key as criteria
+ * @return {object}                         - data to be populated later
+ */
+function transpileMes(parser, configs) {
     const messenger = [];
     if (!parser.fileName) {
         messenger.push(`No Files was found on ${parser.fieldName}...`);
@@ -96,34 +85,34 @@ function fileParser(req, res, configs, args) {
     parser.filePath = getUploadPath(parser);
     parser.settings = configs;
     parser.stream.on('end', () => {
-        mergeDeepObject(req.body.busboySlip.rawDoc, getRawDoc(parser, configs));
-        req.body.busboySlip.notice.push(...getNotice(parser, configs));
+        _fn.object.mergeDeep(req.body.busboySlip.raw, transpileRaw(parser, configs));
+        req.body.busboySlip.mes.push(...transpileMes(parser, configs));
     });
-    checkPermission(parser, configs) ? uploadFile(parser) : parser.stream.resume();
+    checkStatus(parser, configs) ? uploadFile(parser) : parser.stream.resume();
 }
 
 
 function fieldParser(req, res, configs, args) {
     const parser = { fieldName: args[0], value: _fn.string.escapeInHTML(args[1]), truncatedName: args[2],
         truncatedValue: args[3], encoding: args[4], MIME: args[5] };
-    if (parser.value) assignDeepObject(req.body.busboySlip.rawDoc, parser.fieldName, parser.value, { mutate: true });
+    if (parser.value) _fn.object.assignDeep(req.body.busboySlip.raw, parser.fieldName, parser.value, { mutate: true });
 }
 
 
-function finishUpload(req, res, next) {
-    req.body.busboySlip.rawDoc = Object.values(req.body.busboySlip.rawDoc).filter(obj => obj.isSkipped !== true);
+function finishUpload(req, res, configs, next) {
+    req.body.busboySlip.raw = Object.values(req.body.busboySlip.raw).filter(obj => obj.isSkipped !== true);
     return next();
 }
 
 
 function uploadController(req, res, configs, next) {
-    req.body.busboySlip = { rawDoc: {}, notice: [] };
+    req.body.busboySlip = { raw: {}, mes: [] };
     if (!configs.fileSize) configs.fileSize = 25 * 1048576;
     if (!configs.MIME) configs.MIME = ['image/png', 'image/gif', 'image/jpeg', 'image/svg+xml', 'image/x-icon'];
     return req.pipe(new Busboy({ headers: req.headers, limits: configs })
         .on('file'  , (...args) => fileParser(req, res, configs, args))
         .on('field' , (...args) => fieldParser(req, res, configs, args))
-        .on('finish', ()        => finishUpload(req, res, next)));
+        .on('finish', ()        => finishUpload(req, res, configs, next)));
 }
 
 
