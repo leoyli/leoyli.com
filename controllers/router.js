@@ -4,7 +4,7 @@ const render = require('./render');
 
 
 /**
- * check the native brand(type) of objects
+ * check the native brand(type) of objects  // note: `checkNativeBrand` can be generalized
  * @param {object} obj                      - object to be checked
  * @param {string} [name=null]              - name to be matched (case insensitive)
  * @return {(boolean|string)}               - if no name given, the brand name of the object would be returned
@@ -16,7 +16,7 @@ function checkNativeBrand(obj, name) {
 
 
 /**
- * wrap asyncfunctions with an error catcher
+ * wrap asyncfunctions with an error catcher// note: `asyncWrapper` can be generalized
  * @param {(array|function)} fn             - fn may be wrapped
  * @return {array}                          - task is triggered only when keyword 'async' is met
  */
@@ -122,4 +122,4 @@ RouterHub.prototype.run = function() {
 
 // module export
 module.exports = { RouterHub, _test: {
-    checkNativeBrand, asyncWrapper, getMethods, getMiddlewareQueue, getControllerQueue, getViewRenderQueue }};
+    checkNativeBrand, asyncWrapper, getMethods, getMiddlewareQueue, getControllerQueue, getViewRenderQueue, RouterHub }};

@@ -1,3 +1,10 @@
+### 0.6.0-dev.8 / 2018-02-01
+> App
+- Rewrote file uploading parser (busboy controller & middleware) so that it can be unit tested and more readable.
+- Most mutations in `Object/Array` were avoided in the newly written busboy controller.
+- Adapted 'admin' router controller as a response of changing in busboy controller.
+
+
 ### 0.6.0-dev.7.2 / 2018-01-29
 > App
 - Corrected the testing scheme by using `.mockImplementation` method.

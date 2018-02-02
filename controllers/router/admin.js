@@ -44,13 +44,12 @@ home.security = {
 
 home.upload = {   // todo: to be integrated in profile and media manager
     get: (req, res) => res.render('./home/upload'),
-    post: [_md.hireBusboy({ fileSize: 3*1048576, files: 2 }), async (req, res) => { // todo: will be responsible for all media uploading event and redirect user back
-        if (req.body.busboySlip.notice[0]) {
-            req.body.busboySlip.notice.forEach(notice => req.flash('error', notice));
-            if (req.body.busboySlip.raw[0]) return res.redirect('back');
+    post: [_md.hireBusboy({ fileSize: 25*1048576 }), async (req, res) => { // todo: will be responsible for all media uploading event and redirect user back
+        if (req.body.busboySlip.notice.length > 0) req.body.busboySlip.notice.forEach(mes => req.flash('error', mes));
+        if (req.body.busboySlip.rawDoc.length > 0) {
+            const docs = await mediaModel.mediaCreateThenAssociate(req.body.busboySlip.rawDoc, req.user);
+            if (docs.length > 0) req.flash('info', `${docs.length} file(s) successfully uploaded!`);
         }
-        const doc = await mediaModel.mediaCreateThenAssociate(req.body.busboySlip.raw, req.user);
-        if (doc.length > 0) req.flash('info', `${doc.length} file(s) successfully uploaded!`);
         return res.redirect('back');
     }],
 };

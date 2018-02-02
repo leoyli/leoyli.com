@@ -1,3 +1,4 @@
+const { _fn } = require('./methods');
 const
     fs                      = require('fs'),
     path                    = require('path'),
@@ -5,95 +6,127 @@ const
 
 
 
-// ==============================
-//  FUNCTIONS
-// ==============================
-const { _fn } = require('./methods');
-
-
-function _assignInNest(obj, referenceKeys, bottomValue, index = 0) {
-    if (index < referenceKeys.length-1) {
-        const _extendedObj = obj[referenceKeys[index]] ? obj[referenceKeys[index]] : (obj[referenceKeys[index]] = {});
-        return _assignInNest(_extendedObj, referenceKeys, bottomValue, ++index);
-    } else obj[referenceKeys[index]] = bottomValue ? bottomValue : {};
+function checkNativeBrand(obj, name) {
+    if (name) return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase() === name.toLowerCase();
+    else return Object.prototype.toString.call(obj).slice(8, -1);
 }
 
 
-// constructor
-function FileStreamBranch(fileName, MIMEType) {
-    // structure
-    this.saveTime = new Date();
-    this.pathName = this.saveTime.getUTCFullYear() + `0${this.saveTime.getUTCMonth()+1}`.slice(-2);
-    this.fileBase = this.saveTime.getTime() + path.extname(fileName);
-    this.fullPath = path.join(__dirname + '/../..', 'public', 'media', this.pathName, this.fileBase);
-
-    // validation
-    const acceptedTypes = ['image/png', 'image/gif', 'image/jpeg', 'image/svg+xml', 'image/x-icon'];    // todo: customize in accepting file types
-    this.isAttached = !!fileName;
-    this.isAccepted = acceptedTypes.indexOf(MIMEType) !== -1;
+function cloneDeepObject(obj) {
+    return mergeDeepObject({}, obj, { mutate: true });
 }
 
 
+function mergeDeepObject(target, source, { mutate } = {}) {
+    function mergeRecursion(obj, source) {
+        for(const key in source) if (source.hasOwnProperty(key) && checkNativeBrand(source[key], 'object')) {
+            if (!obj.hasOwnProperty(key)) obj[key] = {};
+            mergeRecursion(obj[key], source[key]);
+        } else obj[key] = source[key];
+    }
 
-// ==============================
-//  MODULES (affiliate)
-// ==============================
-function ImgUploadByBusboy (req, res, limits, next) {
-    const busboy = new Busboy({ headers: req.headers, limits: limits });
-    const notice = [];
-    const populator = {};
+    const obj = ( mutate === true ) ? target : cloneDeepObject(target);
+    mergeRecursion(obj, source);
+    return obj;
+}
 
-    // BUSBOY-LISTENER: 'file' as in inputs
-    busboy.on('file', (fieldName, file, fileName, encoding, MIMEType) => {
-        const branch = new FileStreamBranch(fileName, MIMEType);
 
-        if (branch.isAttached && branch.isAccepted) {
-            file.pipe(fs.createWriteStream(branch.fullPath).on('error', err => {
-                if (err && !(err.code === 'ENOENT')) throw err;
+function assignDeepObject(target, path, value, { mutate } = {}) {
+    function assignRecursion(obj, path, value) {
+        const keys = checkNativeBrand(path, 'string') ? _fn.string.parseNestKey(path) : path;
+        if (keys.length !== 1) assignRecursion(obj[keys[0]] ? obj[keys[0]] : (obj[keys[0]] = {}), keys.slice(1), value);
+        else obj[keys[0]] = value ? value : {};
+    }
 
-                // if 'ENOENT': create the folder then fire the stream again
-                fs.mkdir(path.dirname(branch.fullPath), err => {
-                    if (err) throw Error(`Errors fin creating ${path.dirname(branch.fullPath)}:\n${err.toString()}`);
-                    file.pipe(fs.createWriteStream(branch.fullPath));
-                });
-            }));
-        } else file.resume();
+    const obj = ( mutate === true ) ? target : cloneDeepObject(target);
+    assignRecursion(obj, path, value);
+    return obj;
+}
 
-        // FILE-LISTENER: after file uploaded
-        file.on('end', () => {
-            if (branch.isAttached && branch.isAccepted && !file.truncated) {
-                return _assignInNest(populator, _fn.string.parseNestKey(fieldName), {
-                    fileType: path.extname(branch.fileBase),
-                    fileBase: branch.fileBase,
-                    fullPath: branch.fullPath,
-                });
-            } else populator[_fn.string.parseNestKey(fieldName)[0]] = { isSkipped: true };
 
-            // exception handler
-            if (branch.isAttached && !branch.isAccepted) return notice.push(`${fileName} is in unaccepted file types!`);
-            if (file.truncated) return fs.unlink(branch.fullPath, err => {
-                if (err) throw new Error(`Errors in deleting: ('${branch.fullPath}', truncated):\n${err.toString()}`);
-                notice.push(`${fileName} is too large! (> ${limits.limits.fileSize / 1048576} MB)`);
-            });
+function getUploadPath(parser) {                // note: this function can only be called once in a stream
+    const fireTime = new Date();
+    const dirIndex = fireTime.getUTCFullYear() + `0${fireTime.getUTCMonth()+1}`.slice(-2);
+    const fileBase = fireTime.getTime() + path.extname(parser.fileName);
+    return path.join(__dirname + '/../..', 'public', 'media', dirIndex, fileBase);
+}
+
+
+function uploadFile(parser) {
+    parser.stream.pipe(fs.createWriteStream(parser.filePath).on('error', err => {
+        if (err && !(err.code === 'ENOENT')) throw err;
+        fs.mkdir(path.dirname(parser.filePath), err => {
+            if (err) throw Error(`Errors in creating ${path.dirname(parser.filePath)}:\n${err.toString()}`);
+            parser.stream.pipe(fs.createWriteStream(parser.filePath));
         });
-    });
+    }));
+}
 
-    // BUSBOY-LISTENER: 'field' as in inputs
-    busboy.on('field', (fieldName, val) => {
-            if (val) _assignInNest(populator, _fn.string.parseNestKey(fieldName), _fn.string.escapeInHTML(val));
+
+function checkPermission(parser, configs) {
+    return !(!parser.fileName || configs.MIME.indexOf(parser.MIME) === -1 || parser.stream.truncated);
+}
+
+
+function getRawDoc(parser, configs) {
+    if (checkPermission(parser, configs)) return assignDeepObject({}, parser.fieldName,
+        { fileType: path.extname(parser.fileName), filePath: parser.filePath });
+    else return assignDeepObject({}, _fn.string.parseNestKey(parser.fieldName)[0], { isSkipped: true });
+}
+
+
+function getNotice(parser, configs) {
+    const messenger = [];
+    if (!parser.fileName) {
+        messenger.push(`No Files was found on ${parser.fieldName}...`);
+    } else if (configs.MIME.indexOf(parser.MIME) === -1) {
+        messenger.push(`${parser.fileName} is an unsupported file types...`);
+    } else if (parser.stream.truncated) {
+        messenger.push(`${parser.fileName} is too large (> ${configs.fileSize/1048576})...`);
+        fs.unlink(parser.filePath, err => {
+            if (err) throw new Error(`Failed to clean up the truncated file...\n${err.toString()}`);
         });
+    } return messenger;
+}
 
-    // BUSBOY-LISTENER: after all streams resolved
-    busboy.on('finish', () => {
-        req.body.busboySlip = { raw: Object.values(populator).filter(obj => obj.isSkipped !== true), notice };
-        return next();
+
+// middleware
+function fileParser(req, res, configs, args) {
+    const parser = { fieldName: args[0], stream: args[1], fileName: args[2], encoding: args[3], MIME: args[4] };
+    parser.filePath = getUploadPath(parser);
+    parser.settings = configs;
+    parser.stream.on('end', () => {
+        mergeDeepObject(req.body.busboySlip.rawDoc, getRawDoc(parser, configs));
+        req.body.busboySlip.notice.push(...getNotice(parser, configs));
     });
+    checkPermission(parser, configs) ? uploadFile(parser) : parser.stream.resume();
+}
 
-    // ACTIVATION: pipe busboy
-    return req.pipe(busboy);
+
+function fieldParser(req, res, configs, args) {
+    const parser = { fieldName: args[0], value: _fn.string.escapeInHTML(args[1]), truncatedName: args[2],
+        truncatedValue: args[3], encoding: args[4], MIME: args[5] };
+    if (parser.value) assignDeepObject(req.body.busboySlip.rawDoc, parser.fieldName, parser.value, { mutate: true });
+}
+
+
+function finishUpload(req, res, next) {
+    req.body.busboySlip.rawDoc = Object.values(req.body.busboySlip.rawDoc).filter(obj => obj.isSkipped !== true);
+    return next();
+}
+
+
+function uploadController(req, res, configs, next) {
+    req.body.busboySlip = { rawDoc: {}, notice: [] };
+    if (!configs.fileSize) configs.fileSize = 25 * 1048576;
+    if (!configs.MIME) configs.MIME = ['image/png', 'image/gif', 'image/jpeg', 'image/svg+xml', 'image/x-icon'];
+    return req.pipe(new Busboy({ headers: req.headers, limits: configs })
+        .on('file'  , (...args) => fileParser(req, res, configs, args))
+        .on('field' , (...args) => fieldParser(req, res, configs, args))
+        .on('finish', ()        => finishUpload(req, res, next)));
 }
 
 
 
 // exports
-module.exports = ImgUploadByBusboy;
+module.exports = uploadController;
