@@ -8,7 +8,7 @@ const fs = require('fs');
 
 // module
 const { getCompilationConfigs, getBlueprint, getRuntimeMethods,
-    getTemplate, buildTemplate, getFileString, render, Template } = require('../../views/engine')._test;
+    getTemplate, buildTemplate, getFileString, render, Template } = require('../../../controllers/views/engine')._test;
 
 
 

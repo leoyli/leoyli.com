@@ -1,4 +1,4 @@
-const { _md } = require('./modules/core');
+const { _md } = require('../middleware/modules');
 module.exports = exports = {};
 
 

@@ -1,7 +1,7 @@
 const Router = require('express').Router;
-const { _md } = require('./modules/core');
-const { _fn } = require('./modules/methods');
-const render = require('./render');
+const { _md } = require('../middleware/modules');
+const { _fn } = require('../helpers');
+const render = require('../views/template');
 
 
 

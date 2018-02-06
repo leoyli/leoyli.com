@@ -5,8 +5,8 @@ module.exports = exports = { editor: {}, post: {} };
 // ==============================
 //  FUNCTIONS
 // ==============================
-const { _fn } = require('../modules/methods');
-const { postModel } = require('../../models');
+const { _fn } = require('../../helpers');
+const { postModel } = require('../../../models/index');
 const search = require('./search');
 
 

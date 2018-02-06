@@ -5,7 +5,7 @@ module.exports = exports = { _md: {} };
 // ==============================
 //  FUNCTIONS
 // ==============================
-const { _fn } = require('./methods');
+const { _fn } = require('../helpers');
 
 
 
@@ -20,7 +20,7 @@ exports._md.doNotCrawled = (req, res, next) => {
 
 
 // busboy for multipart form parsing
-exports._md.hireBusboy = (limits) => (req, res, next) => require('./busboy')(req, res, limits, next);
+exports._md.hireBusboy = (limits) => (req, res, next) => require('./upload')(req, res, limits, next);
 
 
 // set title tag

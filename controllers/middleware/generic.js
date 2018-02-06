@@ -1,7 +1,7 @@
 // ==============================
 //  FUNCTIONS
 // ==============================
-const { _fn } = require('./methods');
+const { _fn } = require('../helpers');
 
 
 

@@ -17,7 +17,7 @@ function _useMiddleware(app) {
     app.use(flash());
 
     // internal
-    app.use(require('../controllers/modules/generic'));
+    app.use(require('../controllers/middleware/generic'));
 }
 
 
@@ -32,7 +32,7 @@ function _useRoutes(app) {
     app.use('/', require('./page'));
 
     // error
-    app.use('/', require('../controllers/render').errorHandler);
+    app.use('/', require('../controllers/views/template').errorHandler);
 }
 
 

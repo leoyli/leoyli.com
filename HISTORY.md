@@ -1,3 +1,8 @@
+### 0.6.0-dev.8.2 / 2018-02-04
+> App
+- Restructured the directories.
+
+
 ### 0.6.0-dev.8.1 / 2018-02-01
 > App
 - Suspended some test tasks in 'router.test'

@@ -5,8 +5,8 @@ module.exports = home = {};
 // ==============================
 //  FUNCTIONS
 // ==============================
-const { _md } = require('../modules/core');
-const { settingModel, mediaModel, userModel } = require('../../models');
+const { _md } = require('../../middleware/modules');
+const { settingModel, mediaModel, userModel } = require('../../../models/index');
 
 
 

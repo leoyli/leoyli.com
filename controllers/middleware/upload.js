@@ -1,4 +1,4 @@
-const { _fn } = require('./methods');
+const { _fn } = require('../helpers');
 const
     fs                      = require('fs'),
     path                    = require('path'),

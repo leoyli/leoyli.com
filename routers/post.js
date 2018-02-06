@@ -1,5 +1,5 @@
-const { RouterHub } = require('../controllers/router');
-const { editor, post } = require('../controllers/router/post');
+const { RouterHub } = require('../controllers/routers/driver');
+const { editor, post } = require('../controllers/routers/rules/post');
 
 
 

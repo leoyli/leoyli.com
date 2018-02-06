@@ -13,7 +13,7 @@ function searchPosts(params, { num = 5, page = 1, sort = { 'time.created': -1 }}
     if (params && params._id) params._id = ObjectId(params._id);
 
     // perform mongo query
-    return require('../../models').postModel.aggregate([
+    return require('../../../models/index').postModel.aggregate([
         { $match: params },
         { $sort: sort },
         { $group: { _id: null, count: { $sum: 1 }, post: { $push: '$$ROOT' }}}, // todo: .populate(author)

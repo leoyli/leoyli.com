@@ -1,6 +1,6 @@
-const { RouterHub } = require('../controllers/router');
-const { _md } = require('../controllers/modules/core');
-const home = require('../controllers/router/admin');
+const { RouterHub } = require('../controllers/routers/driver');
+const { _md } = require('../controllers/middleware/modules');
+const home = require('../controllers/routers/rules/admin');
 
 
 

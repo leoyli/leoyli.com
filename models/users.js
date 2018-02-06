@@ -9,7 +9,7 @@ const
 //  FUNCTIONS
 // ==============================
 // ancillaries
-const { _fn }               = require('../controllers/modules/methods');
+const { _fn }               = require('../controllers/helpers');
 
 
 
