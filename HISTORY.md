@@ -1,3 +1,10 @@
+### 0.6.0-dev.8.3 / 2018-02-04
+> App
+- Added `upload.test.js` for unit testing on functions.
+- Removed unnecessary describe grouping in `driver.test.js`.
+- Simplified the name of properties in media model.
+
+
 ### 0.6.0-dev.8.2 / 2018-02-04
 > App
 - Restructured the directories.

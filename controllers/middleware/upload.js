@@ -6,6 +6,17 @@ const
 
 
 /**
+ * check the current status of permission/condition
+ * @param {object} parser                   - busboy emitted referencing object from a file listener
+ * @param {object} configs                  - object contains the key as criteria
+ * @return {boolean}                        - action passed(true) / blocked(false)
+ */
+function checkStatus(parser, configs) {
+    return !(!parser.fileName || configs.MIME.indexOf(parser.MIME) === -1 || parser.stream.truncated);
+}
+
+
+/**
  * generate an path from the executing time // note: can only be called once in a stream
  * @param {object} parser                   - busboy emitted referencing object from a file listener
  * @return {string}                         - upload path
@@ -35,17 +46,6 @@ function uploadFile(parser) {
 
 
 /**
- * check the current status of permission/condition
- * @param {object} parser                   - busboy emitted referencing object from a file listener
- * @param {object} configs                  - object contains the key as criteria
- * @return {boolean}                        - action passed(true) / blocked(false)
- */
-function checkStatus(parser, configs) {
-    return !(!parser.fileName || configs.MIME.indexOf(parser.MIME) === -1 || parser.stream.truncated);
-}
-
-
-/**
  * transpile the raw document of media from parser
  * @param {object} parser                   - busboy emitted referencing object from a file listener
  * @param {object} configs                  - configurations for passing
@@ -53,7 +53,7 @@ function checkStatus(parser, configs) {
  */
 function transpileRaw(parser, configs) {
     if (checkStatus(parser, configs)) return _fn.object.assignDeep({}, parser.fieldName,
-        { fileType: path.extname(parser.fileName), filePath: parser.filePath });
+        { type: path.extname(parser.fileName), path: parser.filePath, name: path.basename(parser.filePath) });
     else return _fn.object.assignDeep({}, _fn.string.parseNestKey(parser.fieldName)[0], { isSkipped: true });
 }
 
@@ -71,7 +71,7 @@ function transpileMes(parser, configs) {
     } else if (configs.MIME.indexOf(parser.MIME) === -1) {
         messenger.push(`${parser.fileName} is an unsupported file types...`);
     } else if (parser.stream.truncated) {
-        messenger.push(`${parser.fileName} is too large (> ${configs.fileSize/1048576})...`);
+        messenger.push(`${parser.fileName} is too large (> ${configs.fileSize/1048576} MB)...`);
         fs.unlink(parser.filePath, err => {
             if (err) throw new Error(`Failed to clean up the truncated file...\n${err.toString()}`);
         });
@@ -118,4 +118,4 @@ function uploadController(req, res, configs, next) {
 
 
 // exports
-module.exports = uploadController;
+module.exports = { uploadController, _test: { checkStatus, getUploadPath, uploadFile, transpileRaw ,transpileMes }};

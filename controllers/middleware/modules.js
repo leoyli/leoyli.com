@@ -20,7 +20,7 @@ exports._md.doNotCrawled = (req, res, next) => {
 
 
 // busboy for multipart form parsing
-exports._md.hireBusboy = (limits) => (req, res, next) => require('./upload')(req, res, limits, next);
+exports._md.hireBusboy = (limits) => (req, res, next) => require('./upload').uploadController(req, res, limits, next);
 
 
 // set title tag
