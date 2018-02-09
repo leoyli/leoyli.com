@@ -1,3 +1,13 @@
+### 0.6.0-dev.9 / 2018-02-08
+> App
+- Rearranged 'helpers' controller so that it can be unit tested.
+- Removed the dependency of the 'lodash' lib in helper functions.
+- Renamed some helper functions.
+- Fixed testing errors in `upload.test.js` with a mock function.
+- Corrected `app.test.js` due to HTML-escaping-related issues.
+- Corrected RegExp in 'post' router.
+
+
 ### 0.6.0-dev.8.3 / 2018-02-04
 > App
 - Added `upload.test.js` for unit testing on functions.
@@ -60,7 +70,7 @@
 
 ### 0.6.0-dev.5 / 2018-01-25
 > App
-- Added router.test.js for unit testing.
+- Added `router.test.js` for unit testing.
 - Polished the JSDoc descriptions in router.js.
 - Extended the functionality of checkNativeBrand{fn}.
 - Avoided repeated stacking in middlewareQueue{fn}.

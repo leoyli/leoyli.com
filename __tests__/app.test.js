@@ -191,7 +191,7 @@ describe('Router - Post', () => {
         //
         expect(res.statusCode).toBe(302);
         expect(res.headers.location).toBe('/post');
-        expect(await postModel.count(mockNewPost.post)).toBe(1);
+        expect(await postModel.count({ canonical: 'test-post' })).toBe(1);
     });
 
     test('GET access to the editor', async () => {
@@ -228,7 +228,7 @@ describe('Router - Post', () => {
         //
         expect(res.statusCode).toBe(302);
         expect(res.headers.location).toBe('/post/test-post');
-        expect(await postModel.count(mockEditedPost.post)).toBe(1);
+        expect(await postModel.count({ title: 'EDITED' })).toBe(1);
     });
 
     test('DELETE the created new post', async () => {

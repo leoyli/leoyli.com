@@ -27,10 +27,10 @@ const generic = async (req, res, next) => {
 
     // HTMLEscape  // tofix: apply the method into post schema
     if (req.body.post) {
-        if (req.body.post.content) req.body.post.content = _fn.string.escapeInHTML(req.body.post.content);
-        if (req.body.post.title) req.body.post.title = _fn.string.escapeInHTML(req.body.post.title);
-        if (req.body.post.category) req.body.post.category = _fn.string.escapeInHTML(req.body.post.category);
-        if (req.body.post.tag) req.body.post.tag = _fn.string.escapeInHTML(req.body.post.tag);
+        // if (req.body.post.title) req.body.post.title = _fn.string.escapeChars(req.body.post.title);
+        if (req.body.post.content) req.body.post.content = _fn.string.escapeChars(req.body.post.content);
+        if (req.body.post.category) req.body.post.category = _fn.string.escapeChars(req.body.post.category);
+        if (req.body.post.tag) req.body.post.tag = _fn.string.escapeChars(req.body.post.tag);
     }
 
     return next();

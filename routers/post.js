@@ -11,12 +11,12 @@ const PostRouter = new RouterHub([{
     controller:     editor.post,
     settings:       { title: 'New post', template: './home/editor', authentication: true },
 }, {
-    route:          /^\/editor\/[a-f\d]{24}(\/)?$/i,
+    route:          /^\/editor\/([a-f\d]{24})(?:\?.*|\/)?$/i,
     alias:          '/editor/:canonical',
     controller:     editor.edit,
     settings:       { title: 'post Editor', template: './home/editor', authorization: true },
 }, {
-    route:          /^\/(?![a-f\d]{24}\/?$)(.+?)(?:\/(?=$))?$/i,
+    route:          /^\/(?![a-f\d]{24})(.+)$/i,
     alias:          '/:_id',
     controller:     post.show,
     settings:       { template: './theme/post/post' },

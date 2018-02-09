@@ -1,6 +1,6 @@
 // mock
 const fs = require('fs');
-
+fs.unlink = jest.fn();
 
 
 // module
@@ -28,12 +28,13 @@ describe('Bundle: upload.js', () => {
         fileName    : 'test.png',
         encoding    : '7bit',
         MIME        : 'image/png',
-        filePath    : 'public/media/__tests__/test.streamed.png',
+        filePath    : '',
     };
     const mocParserEx1 = { ...mocParser, stream: { truncated: true }};
     const mocParserEx2 = { ...mocParser, MIME : 'unknown' };
     const mocParserEx3 = { ...mocParser, fileName : undefined };
-    const mocParserEx4 = { ...mocParser, stream: fs.createReadStream('__tests__/test.png'), time: new Date};
+    const mocParserEx4 = { ...mocParser, stream: fs.createReadStream('__tests__/test.png'),
+        time: new Date, filePath: 'public/media/__tests__/test.streamed.png' };
 
     test('Fn: checkStatus: Should check the current status of permission/condition', () => {
         const test = [mocParser, mocParserEx1, mocParserEx2];

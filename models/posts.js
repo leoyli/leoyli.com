@@ -64,7 +64,7 @@ PostSchema.static('postsDeleteThenDissociate', function (docsID, user, next) {
 
 // (pre-hook) canonical key evaluation
 PostSchema.pre('save', function (next) {
-    if (!this.canonical) this.canonical = _fn.string.canonicalize(this.title);  // tofix: unavailable if pre-existed
+    if (!this.canonical) this.canonical = _fn.string.toKebabCase(this.title);  // tofix: unavailable if pre-existed
     return next();
 });
 

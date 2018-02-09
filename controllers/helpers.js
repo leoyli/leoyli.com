@@ -3,19 +3,19 @@ module.exports = exports = { _fn: { string: {}, schema: {} }};
 
 
 // ==============================
-//  OBJECT METHODS
+//  On OBJECT
 // ==============================
 exports._fn.object = { checkNativeBrand, cloneDeep, mergeDeep, assignDeep };
 
 /**
  * check the native brand(type) of objects  // note: `checkNativeBrand` can be generalized
- * @param {object} obj                      - object to be checked
- * @param {string} [name=null]              - name to be matched (case insensitive)
+ * @param {object} target                   - object to be checked
+ * @param {string} [source=null]            - name to be matched (case insensitive)
  * @return {(boolean|string)}               - if no name given, the brand name of the object would be returned
  */
-function checkNativeBrand(obj, name) {
-    if (name) return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase() === name.toLowerCase();
-    else return Object.prototype.toString.call(obj).slice(8, -1);
+function checkNativeBrand(target, source) {
+    if (source) return Object.prototype.toString.call(target).slice(8, -1).toLowerCase() === source.toLowerCase();
+    else return Object.prototype.toString.call(target).slice(8, -1);
 }
 
 
@@ -59,7 +59,7 @@ function mergeDeep(target, source, { mutate } = {}) {
  */
 function assignDeep(target, path, value, { mutate } = {}) {
     function assignRecursion(obj, path, value) {
-        const keys = checkNativeBrand(path, 'string') ? exports._fn.string.parseNestKey(path) : path;
+        const keys = checkNativeBrand(path, 'string') ? exports._fn.string.readObjPath(path) : path;
         if (keys.length !== 1) assignRecursion(obj[keys[0]] ? obj[keys[0]] : (obj[keys[0]] = {}), keys.slice(1), value);
         else obj[keys[0]] = value ? value : {};
     }
@@ -73,20 +73,55 @@ function assignDeep(target, path, value, { mutate } = {}) {
 // ==============================
 //  STRING METHODS
 // ==============================
-const _ = require('lodash');
-exports._fn.string = {
-    escapeInHTML: (str) =>_.escape(str),
-    canonicalize: (str) =>_.kebabCase(str),
-    readObjectID: (str) => {
-        const value = /[a-f\d]{24}(\/)?/.exec(str);
-        return value ? value[0]: value;
-    },
-    parseNestKey: (str) => {
-        if (!str || /[^a-zA-Z0-9_$.\[\]]/g.test(str)) {
-            throw new SyntaxError('String cannot have special characters other than ".$[]".');
-        } else return str.match(/[a-zA-Z0-9_$]+/g);
-    }
-};
+exports._fn.string = { escapeChars, toKebabCase, readMongoID, readObjPath };
+
+/**
+ * convert string to kebabCase
+ * @param {string} str                      - any arbitrary string
+ * @return {string}                         - kebabCased string
+ */
+function toKebabCase(str) {
+    return str
+        .replace(/([a-z])([A-Z])/g, '$1-$2')                                // handle CamelCase
+        .replace(/(-([A-Z])([A-Z]))/g, '-$2-$3')                            // handle signal words in CamelCase
+        .replace(/[`'":;,.?!@#$%^&*_=~(){}<>/\\\[\]\-\+\|\s]+/g, '-')       // normalize special characters
+        .replace(/^-+|-+$/g, '')                                            // cleanup endpoints
+        .toLowerCase();
+}
+
+
+/**
+ * convert matched context to HTML entity   // tofix: may have searching problem, canonical value problem...
+ * @param {string} str                      - any arbitrary string
+ * @return {string}                         - escaped string, only key HTML entities are escaped
+ */
+function escapeChars(str) {
+    const charMap = {
+        ' ': '&#32;', '=': '&#61;', "'": '&#39;', '"': '&#34;', '`': '&#96;', '.': '&#46;',
+        ',': '&#44;', ':': '&#58;', ';': '&#59;', '<': '&#60;', '(': '&#40;', '[': '&#91;', '{': '&#123;',
+    };
+    return str.replace(/[\s='"`.,:;<([{]/g, char => charMap[char]);
+}
+
+
+/**
+ * parse Mongo ObjectID (hexadecimal)
+ * @param {string} str                      - any arbitrary string
+ * @return {string}                         - hexadecimal{string}
+ */
+function readMongoID(str) {
+    return (/(?:\=|\/|^)([a-f\d]{24})(?:\?|\/|$)/i.exec(str))[1].toLowerCase();
+}
+
+
+/**
+ * transpile string to object path array
+ * @param {string} str                      - any arbitrary string
+ * @return {array}                          - an array contains elements in ordered by nest keys (path)
+ */
+function readObjPath(str) {
+    return str.match(/[a-zA-Z0-9_$]+/g);
+}
 
 
 
@@ -138,3 +173,8 @@ exports._fn.schema.promisify = (fn, arg, THIS) => {     // note: fn have to be p
         else return resolve(result);
     }));
 };
+
+
+
+// export test
+exports._test = { ...exports._fn.string, ...exports._fn.object };

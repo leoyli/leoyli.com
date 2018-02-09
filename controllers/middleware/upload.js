@@ -54,7 +54,7 @@ function uploadFile(parser) {
 function transpileRaw(parser, configs) {
     if (checkStatus(parser, configs)) return _fn.object.assignDeep({}, parser.fieldName,
         { type: path.extname(parser.fileName), path: parser.filePath, name: path.basename(parser.filePath) });
-    else return _fn.object.assignDeep({}, _fn.string.parseNestKey(parser.fieldName)[0], { isSkipped: true });
+    else return _fn.object.assignDeep({}, _fn.string.readObjPath(parser.fieldName)[0], { isSkipped: true });
 }
 
 
@@ -93,7 +93,7 @@ function fileParser(req, res, configs, args) {
 
 
 function fieldParser(req, res, configs, args) {
-    const parser = { fieldName: args[0], value: _fn.string.escapeInHTML(args[1]), truncatedName: args[2],
+    const parser = { fieldName: args[0], value: _fn.string.escapeChars(args[1]), truncatedName: args[2],
         truncatedValue: args[3], encoding: args[4], MIME: args[5] };
     if (parser.value) _fn.object.assignDeep(req.body.busboySlip.raw, parser.fieldName, parser.value, { mutate: true });
 }
