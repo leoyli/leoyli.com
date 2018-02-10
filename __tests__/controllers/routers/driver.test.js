@@ -11,14 +11,6 @@ describe('Check the ENV', () => {
     });
 });
 
-// describe('Fn: checkNativeBrand', () => {
-//     test('Should check the native brand(type) of objects', () => {
-//         expect(checkNativeBrand(async () => {})).toBe('AsyncFunction');
-//         expect(checkNativeBrand(() => {}, 'AsyncFunction')).toBeFalsy();
-//         expect(checkNativeBrand([() => {}], 'array')).toBeTruthy();
-//     });
-// });
-
 
 // describe('Fn: asyncWrapper', () => {
 //     test('Should wrap asyncfunctions with an error catcher', () => {

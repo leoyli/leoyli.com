@@ -10,9 +10,9 @@ const
 // ancillaries
 const { _fn }               = require('../controllers/helpers');
 
-// validating functions
+// validations
 function featured (value) {
-    if (!value) return true;
+    if (value === '') return true;
     return validator.isURL(value);
 }
 
@@ -64,7 +64,7 @@ PostSchema.static('postsDeleteThenDissociate', function (docsID, user, next) {
 
 // (pre-hook) canonical key evaluation
 PostSchema.pre('save', function (next) {
-    if (!this.canonical) this.canonical = _fn.string.toKebabCase(this.title);  // tofix: unavailable if pre-existed
+    if (this.canonical === undefined) this.canonical = _fn.string.toKebabCase(this.title);  // tofix: unavailable if pre-existed
     return next();
 });
 

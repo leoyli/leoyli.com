@@ -189,6 +189,7 @@ describe('Router - Post', () => {
             .post('/post/editor')
             .send(mockNewPost);
         //
+        debugger;
         expect(res.statusCode).toBe(302);
         expect(res.headers.location).toBe('/post');
         expect(await postModel.count({ canonical: 'test-post' })).toBe(1);

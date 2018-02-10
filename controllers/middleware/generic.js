@@ -11,7 +11,7 @@ const { _fn } = require('../helpers');
 const generic = async (req, res, next) => {
     // website settings
     const _config = await require('../../models').settingModel.findOne();
-    if (!_config) throw new Error('Database might be corrupted, please restart the server for DB initialization.');
+    if (!_config) throw new Error('No website configs, please restart the server for DB initialization.');
     res.locals._site = _config._doc;
 
     // connecting session
@@ -26,11 +26,9 @@ const generic = async (req, res, next) => {
     };
 
     // HTMLEscape  // tofix: apply the method into post schema
-    if (req.body.post) {
-        // if (req.body.post.title) req.body.post.title = _fn.string.escapeChars(req.body.post.title);
-        if (req.body.post.content) req.body.post.content = _fn.string.escapeChars(req.body.post.content);
-        if (req.body.post.category) req.body.post.category = _fn.string.escapeChars(req.body.post.category);
-        if (req.body.post.tag) req.body.post.tag = _fn.string.escapeChars(req.body.post.tag);
+    if (req.body.post) for (const field in req.body.post) {
+        if (field === 'title') continue;    // tofix: temperately leave the title field unescaped
+        if (req.body.post.hasOwnProperty(field)) req.body.post[field] = _fn.string.escapeChars(req.body.post[field]);
     }
 
     return next();

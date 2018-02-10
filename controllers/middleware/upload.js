@@ -66,7 +66,7 @@ function transpileRaw(parser, configs) {
  */
 function transpileMes(parser, configs) {
     const messenger = [];
-    if (!parser.fileName) {
+    if (parser.fileName === undefined) {
         messenger.push(`No Files was found on ${parser.fieldName}...`);
     } else if (configs.MIME.indexOf(parser.MIME) === -1) {
         messenger.push(`${parser.fileName} is an unsupported file types...`);
@@ -95,7 +95,9 @@ function fileParser(req, res, configs, args) {
 function fieldParser(req, res, configs, args) {
     const parser = { fieldName: args[0], value: _fn.string.escapeChars(args[1]), truncatedName: args[2],
         truncatedValue: args[3], encoding: args[4], MIME: args[5] };
-    if (parser.value) _fn.object.assignDeep(req.body.busboySlip.raw, parser.fieldName, parser.value, { mutate: true });
+    if (parser.value !== undefined){
+        _fn.object.assignDeep(req.body.busboySlip.raw, parser.fieldName, parser.value, { mutate: true });
+    }
 }
 
 

@@ -43,27 +43,28 @@ function mergeDeep(target, source, { mutate } = {}) {
             mergeRecursion(obj[key], source[key]);
         } else obj[key] = source[key];
     }
-    const obj = ( mutate === true ) ? target : cloneDeep(target);
+    const obj = mutate === true ? target : cloneDeep(target);
     mergeRecursion(obj, source);
     return obj;
 }
 
 
 /**
- * assigned the value to an object by path  // note: can be set to mutable
+ * assigned the value to an object by path  // note: can be set to mutable      // note: value could be 0{number}
  * @param {object} target                   - target{object} to be operated
  * @param {string|array} path               - referencing path of the object
- * @param {*} value                         - value{*} to be assigned
+ * @param {*} [value]                       - value{*} to be assigned
  * @param {boolean} [mutate=false]          - allow to mutate the target object
  * @return {object}                         - the assigned object
  */
 function assignDeep(target, path, value, { mutate } = {}) {
     function assignRecursion(obj, path, value) {
         const keys = checkNativeBrand(path, 'string') ? exports._fn.string.readObjPath(path) : path;
-        if (keys.length !== 1) assignRecursion(obj[keys[0]] ? obj[keys[0]] : (obj[keys[0]] = {}), keys.slice(1), value);
-        else obj[keys[0]] = value ? value : {};
+        if (keys.length !== 1) {
+            assignRecursion(obj[keys[0]] !== undefined ? obj[keys[0]] : (obj[keys[0]] = {}), keys.slice(1), value);
+        } else obj[keys[0]] = value !== undefined ? value : {};
     }
-    const obj = ( mutate === true ) ? target : cloneDeep(target);
+    const obj = mutate === true ? target : cloneDeep(target);
     assignRecursion(obj, path, value);
     return obj;
 }
@@ -73,7 +74,7 @@ function assignDeep(target, path, value, { mutate } = {}) {
 // ==============================
 //  STRING METHODS
 // ==============================
-exports._fn.string = { escapeChars, toKebabCase, readMongoID, readObjPath };
+exports._fn.string = { escapeChars, toKebabCase, readMongoId, readObjPath };
 
 /**
  * convert string to kebabCase
@@ -90,27 +91,29 @@ function toKebabCase(str) {
 }
 
 
-/**
- * convert matched context to HTML entity   // tofix: may have searching problem, canonical value problem...
+/** // tofix: may have searching problem, canonical value problem...
+ * convert matched context to HTML entity   // note: this method allows `null` or `undefined` argument
  * @param {string} str                      - any arbitrary string
- * @return {string}                         - escaped string, only key HTML entities are escaped
+ * @return {string|undefined}               - escaped string, only key HTML entities are escaped
  */
 function escapeChars(str) {
     const charMap = {
         ' ': '&#32;', '=': '&#61;', "'": '&#39;', '"': '&#34;', '`': '&#96;', '.': '&#46;',
         ',': '&#44;', ':': '&#58;', ';': '&#59;', '<': '&#60;', '(': '&#40;', '[': '&#91;', '{': '&#123;',
     };
-    return str.replace(/[\s='"`.,:;<([{]/g, char => charMap[char]);
+    return str === undefined ? undefined : str.replace(/[\s='"`.,:;<([{]/g, char => charMap[char]);
 }
 
 
 /**
- * parse Mongo ObjectID (hexadecimal)
+ * parse Mongo ObjectId (hexadecimal)
  * @param {string} str                      - any arbitrary string
  * @return {string}                         - hexadecimal{string}
  */
-function readMongoID(str) {
-    return (/(?:\=|\/|^)([a-f\d]{24})(?:\?|\/|$)/i.exec(str))[1].toLowerCase();
+function readMongoId(str) {
+    const output = /(?:\=|\/|^)([a-f\d]{24})(?:\?|\/|$)/i.exec(str);
+    if (output === null) throw new Error(`No Mongo ObjectId in ${str} can be read.`);
+    else return output[1].toLowerCase();
 }
 
 

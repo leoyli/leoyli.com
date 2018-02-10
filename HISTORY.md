@@ -1,3 +1,13 @@
+### 0.6.0-dev.9.1 / 2018-02-09
+> App
+- Added `helper.test.js` for unit testing on string and object helper functions.
+- Fixed potential weakness in conditional express: !!0 is false, but sometime is an acceptable value.
+- Fixed unexpected behaviour in `readMongoId` if no matched value were provided.
+- Allowed `escapeChars` to accept `null` or `undefined` argument and return `undefined`.
+- Applied `escapeChars` on all properties in `req.body.post` (except for title temporarily).
+- Changed the error message in generic if no website configs were found.
+
+
 ### 0.6.0-dev.9 / 2018-02-08
 > App
 - Rearranged 'helpers' controller so that it can be unit tested.
