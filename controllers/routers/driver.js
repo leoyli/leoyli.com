@@ -25,11 +25,11 @@ function asyncWrapper(fn) {
  * @return {array}                          - ordering of the result is important ('alias' must be met after 'get')
  */
 function getMethods({ controller, alias, method }) {
-    method = method
+    const $method = method
         ? _fn.object.checkNativeBrand(method, 'String') ? [method] : method
         : _fn.object.checkNativeBrand(controller, 'Object') ? Object.keys(controller) : ['get'];
-    if (alias && method.indexOf('alias') === -1) method.push('alias');
-    return method.sort().reverse();
+    if (alias && $method.indexOf('alias') === -1) $method.push('alias');
+    return $method.sort().reverse();
 }
 
 

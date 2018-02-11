@@ -4,18 +4,20 @@ module.exports = exports = {};
 
 
 // render post
-exports.post = (view, doc) => async (req, res) => {
-    const template = view ? await view : req.session.view.template;
-    const post = doc ? await doc : (req.session.view ? req.session.view.post || {} : {});
+exports.post = (template, post, meta) => async (req, res) => {
+    const $template = await template ? template : req.session.view ? req.session.view.template : './theme/post/post';
+    const $post = await post ? post : req.session.view ? req.session.view.post : [];
+    const $meta = await meta ? meta : req.session.view ? req.session.view.meta : {};
     delete req.session.view;
 
-    if (post.length === 0) {
-        req.flash('error', 'Nothing were found...');
-        return res.redirect('back');
-    } else {
-        if (post.title) _md.setTitleTag(post.title, { root: true })(req, res);
-        return res.render(template || './theme/post/post', { post: post });
+    if ($post && $post.title !== undefined) _md.setTitleTag($post.title, { root: true })(req, res);
+    if ($meta) {
+        const urlBase = req.originalUrl.split('?')[0] + '?num=' + $meta.num + '&page=';
+        if ($meta.now)              res.locals._view.prev = urlBase + ($meta.now - 1);
+        if ($meta.now < $meta.end)  res.locals._view.next = urlBase + ($meta.now + 1);
     }
+
+    return res.render($template, { post: $post });
 };
 
 

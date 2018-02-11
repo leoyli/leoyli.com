@@ -23,7 +23,7 @@ const PostRouter = new RouterHub([{
 }, {
     route:          '/',
     controller:     post.list,
-    settings:       { template: './theme/post' },
+    settings:       { template: './theme/post/index' },
 }]);
 
 

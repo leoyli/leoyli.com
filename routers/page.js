@@ -1,5 +1,5 @@
 const { RouterHub } = require('../controllers/routers/driver');
-const search = require('../controllers/routers/rules/search');
+const search = require('../controllers/middleware/search');
 
 
 
@@ -11,7 +11,7 @@ const PageRouter = new RouterHub([{
     controller:     (req, res) => res.render('./theme'),
 }, {
     route:          '/search/:search',
-    controller:     search.find(),
+    controller:     search(),
     settings:       { crawler: false, template: './theme/search' },
 }]);
 

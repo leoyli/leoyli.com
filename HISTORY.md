@@ -1,3 +1,13 @@
+### 0.6.0-dev.10 / 2018-02-11
+> App
+- Moved and rewired 'search' controller so that it can be more readable and maintainable.
+- Moved pagination-related codes from 'search' to 'template' controller.
+- Removed `type` argument in 'search' controller, where only returns `meta` and `post{array}`.
+- Renamed `res` to `result` in `app.test.js` to avoid misunderstanding.
+- Adapted 'post' routing rules with changes in 'search' controller.
+- Changed 'driver' controller for a better scope management.
+
+
 ### 0.6.0-dev.9.1 / 2018-02-09
 > App
 - Added `helper.test.js` for unit testing on string and object helper functions.

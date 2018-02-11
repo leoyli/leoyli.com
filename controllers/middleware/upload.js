@@ -23,7 +23,7 @@ function checkStatus(parser, configs) {
  */
 function getUploadPath(parser) {
     const fireTime = new Date();
-    const dirIndex = fireTime.getUTCFullYear() + `0${fireTime.getUTCMonth()+1}`.slice(-2);
+    const dirIndex = fireTime.getUTCFullYear() + `0${fireTime.getUTCMonth() + 1}`.slice(-2);
     const fileBase = fireTime.getTime() + path.extname(parser.fileName);
     return path.join(__dirname + '/../..', 'public', 'media', dirIndex, fileBase);
 }

@@ -7,7 +7,7 @@ module.exports = exports = { editor: {}, post: {} };
 // ==============================
 const { _fn } = require('../../helpers');
 const { postModel } = require('../../../models/index');
-const search = require('./search');
+const search = require('../../middleware/search');
 
 
 
@@ -46,14 +46,17 @@ exports.editor.edit = {
 
 exports.post.show = {
     alias: async (req, res) => {
-        await search.find({ type: 'singular' })(req, res);
-        res.redirect(`/post/${req.session.view.post.canonical}`);
+        req.session.view = { post : await postModel.findOne(req.params)};
+        return res.redirect(`/post/${req.session.view.post.canonical}`);
     },
     get: async (req, res, next) => {
-        req.params = { canonical: req.params[0] };
-        if (req.session.view) return next();
-        else return search.find({ type: 'singular' })(req, res, next);
+        if (!req.session.view) req.session.view = { post : await postModel.findOne({ canonical: req.params[0] })};
+        return next();
     },
 };
 
-exports.post.list = search.find();
+exports.post.list = {
+    get: async (req, res, next) => {
+        return search()(req, res, next);
+    },
+};
