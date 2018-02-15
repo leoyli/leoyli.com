@@ -1,3 +1,8 @@
+### 0.6.0 / 2018-02-15
+> App
+- Completed v0.6: 'unit-testing' development.
+
+
 ### 0.6.0-dev.12 / 2018-02-15
 > App
 - Updated packages.
