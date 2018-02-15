@@ -1,5 +1,5 @@
-const RouterHub = require('../controllers/router');
-const { editor, post } = require('../controllers/router/post');
+const { RouterHub } = require('../controllers/routers/driver');
+const { editor, post } = require('../controllers/routers/rules/post');
 
 
 
@@ -9,24 +9,24 @@ const { editor, post } = require('../controllers/router/post');
 const PostRouter = new RouterHub([{
     route:          ['/editor', '/editor/new'],
     controller:     editor.post,
-    settings:       { title: 'New post', template: './dashboard/editor', authentication: true },
+    settings:       { title: 'New post', template: './home/editor', authenticated: true },
 }, {
-    route:          /^\/editor\/[a-f\d]{24}(\/)?$/i,
+    route:          /^\/editor\/([a-f\d]{24})(?:\?.*|\/)?$/i,
     alias:          '/editor/:canonical',
     controller:     editor.edit,
-    settings:       { title: 'post Editor', template: './dashboard/editor', authorization: true },
+    settings:       { title: 'post Editor', template: './home/editor', authorized: true },
 }, {
-    route:          /^\/(?![a-f\d]{24}\/?$)(.+?)(?:\/(?=$))?$/i,
+    route:          /^\/(?![a-f\d]{24})(.+)$/i,
     alias:          '/:_id',
     controller:     post.show,
     settings:       { template: './theme/post/post' },
 }, {
     route:          '/',
     controller:     post.list,
-    settings:       { template: './theme/post' },
+    settings:       { template: './theme/post/index' },
 }]);
 
 
 
 // router exports
-module.exports = PostRouter.activate();
+module.exports = PostRouter.run();

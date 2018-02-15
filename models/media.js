@@ -7,7 +7,7 @@ const
 //  FUNCTIONS
 // ==============================
 // ancillaries
-const { _fn }               = require('../controllers/modules/methods');
+const { _fn }               = require('../controllers/helpers');
 
 
 
@@ -23,9 +23,9 @@ const MediaSchema           = new mongoose.Schema({
         username            : { type: String },
     },
     file: {
-        fullPath            : { type: String },
-        fileBase            : { type: String },
-        fileType            : { type: String },
+        type                : { type: String },
+        path                : { type: String },
+        name                : { type: String },
     },
     title                   : { type: String, trim: true, required: [true, 'is required'] },
     description             : { type: String, trim: true, required: [true, 'is required'] },

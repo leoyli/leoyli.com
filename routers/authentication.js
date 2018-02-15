@@ -1,5 +1,5 @@
-const RouterHub = require('../controllers/router');
-const authentication = require('../controllers/router/authentication');
+const { RouterHub } = require('../controllers/routers/driver');
+const authentication = require('../controllers/routers/rules/authentication');
 
 
 
@@ -21,9 +21,9 @@ const AuthenticationRouter = new RouterHub([{
 
 
 // pre-used middleware
-AuthenticationRouter.use(require('../controllers/modules/core')._md.usePassport);
+AuthenticationRouter.use(require('../controllers/middleware/plugins')._md.usePassport);
 
 
 
 // router exports
-module.exports = AuthenticationRouter.activate();
+module.exports = AuthenticationRouter.run();

@@ -8,6 +8,7 @@ const
 // ==============================
 // todo: added CDN object for the header
 const settingModelSchema      = new mongoose.Schema({
+    active                  : { type: Boolean, default: false, unique: true },
     title                   : { type: String, default: 'New Website' },
     description             : { type: String, default: 'n/a' },
     keywords                : { type: String, default: 'n/a' },
@@ -26,11 +27,8 @@ const settingModelSchema      = new mongoose.Schema({
 //  STATIC METHODS
 // ==============================
 // initialization (model)
-settingModelSchema.static('init', function(next) {
-    return this.findOne({}, (err, loadConfig) => {
-        if (!loadConfig) return this.create({}, next);
-        if (typeof next === 'function') return next();
-    });
+settingModelSchema.static('initialize', async function(done) {
+    return await this.findOne({ active: true }) ? done() : await this.create({ active: true }) ? done() : null;
 });
 
 

@@ -1,5 +1,5 @@
-const RouterHub = require('../controllers/router');
-const search = require('../controllers/router/search');
+const { RouterHub } = require('../controllers/routers/driver');
+const search = require('../controllers/middleware/search');
 
 
 
@@ -18,4 +18,4 @@ const PageRouter = new RouterHub([{
 
 
 // router exports
-module.exports = PageRouter.activate();
+module.exports = PageRouter.run();

@@ -17,22 +17,22 @@ function _useMiddleware(app) {
     app.use(flash());
 
     // internal
-    app.use(require('../controllers/modules/generic'));
+    app.use(require('../controllers/middleware/initial'));
 }
 
 
 function _useRoutes(app) {
     // seed
-    if (process.env.NODE_ENV === 'dev' || 'test') app.use('/seed', require('.//seed'));
+    if (process.env.NODE_ENV === 'dev' || 'test') app.use('/seed', require('./seed'));
 
     // units
-    app.use('/dashboard', require('.//dashboard'));
-    app.use('/post', require('.//post'));
-    app.use('/', require('.//authentication'));
-    app.use('/', require('.//page'));
+    app.use('/home', require('./admin'));
+    app.use('/post', require('./post'));
+    app.use('/', require('./authentication'));
+    app.use('/', require('./page'));
 
     // error
-    app.use('/', require('.//error'));
+    app.use('/', require('../controllers/views/template').errorHandler);
 }
 
 

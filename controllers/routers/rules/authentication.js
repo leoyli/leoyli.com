@@ -1,40 +1,40 @@
-module.exports = dashboard = {};
+module.exports = authentication = {};
 
 
 
 // ==============================
 //  FUNCTIONS
 // ==============================
-const { _md } = require('../modules/core');
-const { userModel } = require('../../models');
+const { _md } = require('../../middleware/plugins');
+const { userModel } = require('../../../models/index');
 
 
 
 // ==============================
 //  CONTROLLERS
 // ==============================
-dashboard.signup = {
+authentication.signup = {
     get: (req, res) => {
-        if (req.isAuthenticated()) return res.redirect('/dashboard');
-        return res.render('./dashboard/account/signup');
+        if (req.isAuthenticated()) return res.redirect('/home');
+        return res.render('./home/account/signup');
     },
     post: [_md.passwordValidation, async (req, res) => {
         const newUser = await userModel.register(new userModel(req.body), req.body.password.new);
         req.logIn(newUser, err => {
             if (err) throw err;
             req.flash('info', `Welcome new user: ${req.body.username}`);
-            return res.redirect('/dashboard');
+            return res.redirect('/home');
         });
     }],
 };
 
-dashboard.signin = {
+authentication.signin = {
     get: (req, res) => {
-        if (req.isAuthenticated()) return res.redirect('/dashboard');
-        return res.render('./dashboard/account/signin');
+        if (req.isAuthenticated()) return res.redirect('/home');
+        return res.render('./home/account/signin');
     },
     post: (req, res, next) => {
-        if (req.isAuthenticated()) return res.redirect('/dashboard');
+        if (req.isAuthenticated()) return res.redirect('/home');
         const passport = require('passport');
         return passport.authenticate('local', (err, authUser) => {
             if (err) return next(err);
@@ -46,13 +46,13 @@ dashboard.signin = {
                 req.flash('info', `Welcome back ${authUser.username}`);
                 const returnTo = req.session.returnTo;
                 delete req.session.returnTo;
-                return res.redirect(returnTo || '/dashboard');
+                return res.redirect(returnTo || '/home');
             });
         })(req, res);
     },
 };
 
-dashboard.signout = {
+authentication.signout = {
     get: (req, res) => {
         if (req.isAuthenticated()) {
             req.logout();

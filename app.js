@@ -26,11 +26,11 @@ app.use(express.static(path.join(__dirname, './public'), {
 
 
 // dynamic
-app.engine('dot', require('./views/engine').__express);
+app.engine('dot', require('./controllers/views/engine').__express);
 app.set('view engine', 'dot');
 app.set('views', path.join(__dirname, './views'));
 app.set('partials', {
-    dashboard: path.join(__dirname, './views/dashboard/_partials'),
+    panel: path.join(__dirname, './views/home/_partials'),
     theme: path.join(__dirname, './views/theme/_partials'),
 });
 
@@ -40,13 +40,13 @@ app.set('partials', {
 //  DATABASE
 // ==============================
 // connection
-mongoose.connect(process.env.DB, { useMongoClient: true });
+mongoose.connect(process.env.DB);
 
 
 // initialization
 mongoose.Promise = Promise;
 const { settingModel, userModel } = require('./models');
-if (process.env.NODE_ENV !== 'test') settingModel.init();
+if (process.env.NODE_ENV !== 'test') settingModel.initialize();
 
 
 // session

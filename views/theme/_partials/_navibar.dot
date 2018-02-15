@@ -37,12 +37,12 @@
                         <div class="dropdown-menu dropdown-menu-right py-2" aria-labelledby="navbarDropdown">
                             <span class="dropdown-header text-truncate px-3 py-0 mb-2">Hi, {{= _view.user.nickname }}!</span>
                             <div class="dropdown-divider my-1"></div>
-                            <a class="dropdown-item px-3" href="/dashboard">Dashboard</a>
+                            <a class="dropdown-item px-3" href="/home">Dashboard</a>
                             <div class="dropdown-divider my-1"></div>
                             <a class="dropdown-item px-3" href="/post/editor">New Post</a>
-                            <a class="dropdown-item px-3" href="/dashboard/upload">Media Uploader</a>
+                            <a class="dropdown-item px-3" href="/home/upload">Media Uploader</a>
                             <div class="dropdown-divider my-1"></div>
-                            <a class="dropdown-item px-3" href="/dashboard/security">Account Settings</a>
+                            <a class="dropdown-item px-3" href="/home/security">Account Settings</a>
                             <a class="dropdown-item px-3" href="/signout">Sign Out</a>
                         </div>
                     </li>

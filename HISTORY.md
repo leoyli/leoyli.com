@@ -1,3 +1,150 @@
+### 0.6.0-dev.12 / 2018-02-15
+> App
+- Updated packages.
+- Renamed file names for a better readability.
+- Fixed the double loading issue in `settingModel.init()` by renamed as `settingModel.initialize()`.
+- Improved settingModel.
+
+### 0.6.0-dev.11 / 2018-02-14
+> App
+- Recovered `asyncWrapper` test in `driver.test.js`.
+- Added `search.test.js`.
+- Added `caseInsensitiveQuery` middleware(proxy) for allowing case insensitive access to `req.query`. (hooked by default)
+- Added 'date' searching parameters.
+- Added new Mongo indexes 'category' and 'time.updated' for indexing query.
+- Fixed prev HTML meta-tag controlled by 'template' view controller.
+- Simplified names of optional parameters in 'router' view controller.
+
+
+### 0.6.0-dev.10 / 2018-02-11
+> App
+- Moved and rewired 'search' controller so that it can be more readable and maintainable.
+- Moved pagination-related codes from 'search' to 'template' controller.
+- Removed `type` argument in 'search' controller, where only returns `meta` and `post{array}`.
+- Renamed `res` to `result` in `app.test.js` to avoid misunderstanding.
+- Adapted 'post' routing rules with changes in 'search' controller.
+- Changed 'driver' controller for a better scope management.
+
+
+### 0.6.0-dev.9.1 / 2018-02-09
+> App
+- Added `helper.test.js` for unit testing on string and object helper functions.
+- Fixed potential weakness in conditional express: !!0 is false, but sometime is an acceptable value.
+- Fixed unexpected behaviour in `readMongoId` if no matched value were provided.
+- Allowed `escapeChars` to accept `null` or `undefined` argument and return `undefined`.
+- Applied `escapeChars` on all properties in `req.body.post` (except for title temporarily).
+- Changed the error message in generic if no website configs were found.
+
+
+### 0.6.0-dev.9 / 2018-02-08
+> App
+- Rearranged 'helpers' controller so that it can be unit tested.
+- Removed the dependency of the 'lodash' lib in helper functions.
+- Renamed some helper functions.
+- Fixed testing errors in `upload.test.js` with a mock function.
+- Corrected `app.test.js` due to HTML-escaping-related issues.
+- Corrected RegExp in 'post' router.
+
+
+### 0.6.0-dev.8.3 / 2018-02-04
+> App
+- Added `upload.test.js` for unit testing on functions.
+- Removed unnecessary describe grouping in `driver.test.js`.
+- Simplified the name of properties in media model.
+
+
+### 0.6.0-dev.8.2 / 2018-02-04
+> App
+- Restructured the directories.
+
+
+### 0.6.0-dev.8.1 / 2018-02-01
+> App
+- Suspended some test tasks in 'router.test'
+- Extracted recyclable methods from 'busboy' to 'method'.
+- Added JSDoc in 'busboy'.
+- Shorten some variables.
+
+
+### 0.6.0-dev.8 / 2018-02-01
+> App
+- Rewrote file uploading parser (busboy controller & middleware) so that it can be unit tested and more readable.
+- Most mutations in `Object/Array` were avoided in the newly written busboy controller.
+- Adapted 'admin' router controller as a response of changing in busboy controller.
+
+
+### 0.6.0-dev.7.2 / 2018-01-29
+> App
+- Corrected the testing scheme by using `.mockImplementation` method.
+
+
+### 0.6.0-dev.7.1 / 2018-01-29
+> App
+- Resolved `engine.test.js` skipped tests.
+- Added a line of code so that `fs.readFileAsync` can be mocked.
+
+
+### 0.6.0-dev.7 / 2018-01-28
+> App
+- Rearranged the viewEngine and made it more readable.
+- Added `engine.test.js` for unit testing. (failed in checking async functions due to an unresolved Promise.)
+
+
+### 0.6.0-dev.6.1 / 2018-01-27
+> App
+- Rearranged the viewEngine and fixed `loadPartials` bugs.
+
+
+### 0.6.0-dev.6 / 2018-01-26
+> App
+- Rearranged the viewEngine so that it could be unit-tested.
+- Added the JSDoc descriptions in the viewEngine.
+
+
+### 0.6.0-dev.5.1 / 2018-01-25
+> App
+- Bugs patched.
+
+
+### 0.6.0-dev.5 / 2018-01-25
+> App
+- Added `router.test.js` for unit testing.
+- Polished the JSDoc descriptions in router.js.
+- Extended the functionality of checkNativeBrand{fn}.
+- Avoided repeated stacking in middlewareQueue{fn}.
+- Fixed bugs in getViewRenderQueue{fn}.
+
+
+### 0.6.0-dev.4 / 2018-01-24
+> App
+- Fragmented router controller so that it could be unit-tested.
+
+
+### 0.6.0-dev.3 / 2018-01-22
+> App
+- Renamed backend dashboard as 'home' (for path) or 'admin' (for controller).
+- Renamed method .activate as to be .run.
+- Updated dependencies.
+
+
+### 0.6.0-dev.2 / 2017-12-07
+> App
+- Simplified part of test descriptions.
+- Added additional tests, resulted in a 91%(+6%) code coverage.
+- Updated the password validation middleware module.
+- Simplified some minor codes.
+
+
+### 0.6.0-dev.1 / 2017-12-07
+> App
+- Added 'post' route test, resulted in a 85%(+10%) code coverage.
+- Removed unnecessary 'error' route.
+- Removed unnecessary logs in 'HISTORY.md'.
+
+> UI
+- Corrected the filed name in 'editor'.
+
+
 ### 0.5.0 / 2017-12-02
 > App
 - Added `alias(get)` routing method into `router`.
@@ -7,9 +154,6 @@
 - Error handled by `errorHandler` now prints in console in dev mode.
 - Completed and closed '0.5' subversion branch.
 
-> UI
-- n/a
-
 
 ### 0.5.0-dev.8 / 2017-12-01
 > App
@@ -18,9 +162,6 @@
 - Renamed 'middleware' as 'modules' controller.
 - Improved the readability of router controllers.
 
-> UI
-- n/a
-
 
 ### 0.5.0-dev.7 / 2017-11-30
 > App
@@ -28,17 +169,11 @@
 - Mounted `unhandledRejection` event for error locating.
 - Improved 'post' router, 'editor' controller, and `render.post`.
 
-> UI
-- n/a
-
 
 ### 0.5.0-dev.6 / 2017-11-29
 > App
 - Removed all `.wrapAsync` for its no needs.
 - Rewired 'router' for enhancements and readability.
-
-> UI
-- n/a
 
 
 ### 0.5.0-dev.5 / 2017-11-28
@@ -59,24 +194,15 @@
 - Combined two section title handlers into one `.setTitleTag` with options.
 - Added controller 'render' as a communicator of view.
 
-> UI
-- n/a
-
 
 ### 0.5.0-dev.3 / 2017-11-26
 > App
 - Restructured 'post' route with 'router' controller.
 
-> UI
-- n/a
-
 
 ### 0.5.0-dev.2 / 2017-11-25
 > App
 - Extracted routing rules from 'page' into a controller module 'router'.
-
-> UI
-- n/a
 
 
 ### 0.5.0-dev.1 / 2017-11-24
@@ -85,9 +211,6 @@
 - Adapted 'A successful Git branching model' as the version control working flow.
 - Adapted semantic versioning with a build metadata `dev` for versioning ongoing developments.
 
-> UI
-- n/a
-
 
 ### 0.4.0 / 2017-11-24
 > App
@@ -95,9 +218,6 @@
 - Enhanced the code manageability in routing rules and used middleware.
 - Adapted more to ES6 syntax in setting function default arguments with destructuring.
 - Completed and closed '0.4' subversion branch.
-
-> UI
-- n/a
 
 
 ### 0.3.8 / 2017-11-22
@@ -125,16 +245,10 @@
 > App
 - Rewired 'search' controller for integrations of 'post' route. (on progress)
 
-> UI
-- n/a
-
 
 ### 0.3.5 / 2017-11-20
 > App
 - Rewired 'search' controller for preventing memory leaking.
-
-> UI
-- n/a
 
 
 ### Debugged 0.3.4 / 2017-11-20
@@ -154,9 +268,6 @@
 > App
 - Added 'search' controller.
 
-> UI
-- n/a
-
 
 ### 0.3.2 / 2017-11-17
 > App
@@ -174,17 +285,11 @@
 - Used the conventional environment variable name `NODE_ENV`.
 - Renamed files.
 
-> UI
-- n/a
-
 
 ### 0.3.0 / 2017-11-17
 > App
 - Developed in the new '0.3 branch'.
 - Renamed and restructured files.
-
-> UI
-- n/a
 
 
 ### 0.2.7 / 2017-11-16
@@ -192,25 +297,16 @@
 - Dried up 'post' route.
 - Fixed authorization error as visiting by `canonicalKey`.
 
-> UI
-- n/a
-
 
 ### 0.2.6 / 2017-11-15
 > App
 - Customized validation error messages.
-
-> UI
-- n/a
 
 
 ### 0.2.5 / 2017-11-14
 > App
 - Fixed the sign-out flash message.
 - Rearranged 'authentication' route.
-
-> UI
-- n/a
 
 
 ### 0.2.4 / 2017-11-14
@@ -219,17 +315,11 @@
 - Authorization was replaced by `Model.count()` method due to the removal of the anti-pattern.
 - Replaced `req.locals._render` by `req.session.view` for much dryer codes.
 
-> UI
-- n/a
-
 
 ### 0.2.3 / 2017-11-14
 > App
 - Restructured 'methods'.
 - Fixed 'app.test'.
-
-> UI
-- n/a
 
 
 ### 0.2.2 / 2017-11-13
@@ -251,9 +341,6 @@
 - After a successful authentications, the required user info will be populated into `req.session.user` object.
 - Used `req.flash('pass')` for replacing `req.session.justSignOut`.
 
-> UI
-- n/a
-
 
 ### 0.2.0 / 2017-11-12
 > App
@@ -273,9 +360,6 @@
 - Separate the the default partials path between console and others.
 - Renamed some variables.
 
-> UI
-- n/a
-
 
 ### 0.1.5 / 2017-11-10
 > App
@@ -283,9 +367,6 @@
 - Renamed and rearranged some files and directories.
 - Used environment variables for pointing SSL documents.
 - Promisified `.changePassword` method in the user schema.
-
-> UI
-- n/a
 
 
 ### 0.1.4 / 2017-11-09
@@ -305,9 +386,6 @@
 - Started to use Jest as testing frameworks.
 - Adjusted `_siteConfig.siteInitialization` method.
 
-> UI
-- n/a
-
 
 ### 0.1.2 / 2017-11-06
 > App
@@ -322,9 +400,6 @@
 ### 0.1.1 / 2017-11-05
 > App
 - Simplified code structures in 'middleware' and 'authentication' route.
-
-> UI
-- n/a
 
 
 ### 0.1.0 / 2017-11-02
@@ -344,9 +419,6 @@
 - Removed the anti-pattern as adding methods into `String.prototype` and restructured the corresponding calls.
 - Replaced some methods by 'lodash'.
 
-> UI
-- n/a
-
 
 ### 0.0.57 / 2017-11-01
 > App
@@ -356,18 +428,12 @@
 - Corrected regex in '_viewEngine'.
 - Fixed typos in 'HISTORY.md'.
 
-> UI
-- n/a
-
 
 ### 0.0.56 / 2017-10-31
 > App
 - 'busboy' was transformed into a middleware.
 - `.correlateAsCreateOrDelete` was renamed as `.updateThenCorrelate`.
 - Promisified correlation methods in models.
-
-> UI
-- n/a
 
 
 ### 0.0.55 / 2017-10-30

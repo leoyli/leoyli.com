@@ -1,6 +1,6 @@
-const RouterHub = require('../controllers/router');
-const { _md } = require('../controllers/modules/core');
-const dashboard = require('../controllers/router/dashboard');
+const { RouterHub } = require('../controllers/routers/driver');
+const { _md } = require('../controllers/middleware/plugins');
+const home = require('../controllers/routers/rules/admin');
 
 
 
@@ -9,23 +9,23 @@ const dashboard = require('../controllers/router/dashboard');
 // ==============================
 const DashboardRouter = new RouterHub([{
     route:          '/',
-    controller:     dashboard.main,
+    controller:     home.main,
     settings:       { title: 'Dashboard' },
 }, {
     route:          '/setting',
-    controller:     dashboard.setting,
+    controller:     home.setting,
     settings:       { title: 'Website Configurations' },
 }, {
     route:          '/profile',
-    controller:     dashboard.profile,
+    controller:     home.profile,
     settings:       { title: 'Profile' },
 }, {
     route:          '/security',
-    controller:     dashboard.security,
+    controller:     home.security,
     settings:       { title: 'Account Settings' },
 }, {
     route:          '/upload',
-    controller:     dashboard.upload,
+    controller:     home.upload,
     settings:       { title: 'Media Uploader' },
 }]);
 
@@ -37,4 +37,4 @@ DashboardRouter.use(_md.setTitleTag('Console'));
 
 
 // router exports
-module.exports = DashboardRouter.activate();
+module.exports = DashboardRouter.run();

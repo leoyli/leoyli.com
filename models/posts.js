@@ -8,11 +8,11 @@ const
 //  FUNCTIONS
 // ==============================
 // ancillaries
-const { _fn }               = require('../controllers/modules/methods');
+const { _fn }               = require('../controllers/helpers');
 
-// validating functions
+// validations
 function featured (value) {
-    if (!value) return true;
+    if (value === '') return true;
     return validator.isURL(value);
 }
 
@@ -43,7 +43,10 @@ const PostSchema            = new mongoose.Schema({
 }, {
     timestamps              : { createdAt: 'time.created', updatedAt: 'time.updated' },
     versionKey              : '_revised',
-}).index({ 'title': 'text', 'content': 'text', 'tag' : 'text' });
+})
+    .index({ 'category' : -1 })
+    .index({ 'time.updated' : -1 })
+    .index({ 'title': 'text', 'content': 'text', 'category': 'text', 'tag' : 'text' });
 
 
 
@@ -64,7 +67,7 @@ PostSchema.static('postsDeleteThenDissociate', function (docsID, user, next) {
 
 // (pre-hook) canonical key evaluation
 PostSchema.pre('save', function (next) {
-    if (!this.canonical) this.canonical = _fn.string.canonicalize(this.title);  // tofix: unavailable if pre-existed
+    if (this.canonical === undefined) this.canonical = _fn.string.toKebabCase(this.title);  // tofix: unavailable if pre-existed
     return next();
 });
 

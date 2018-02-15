@@ -1,4 +1,4 @@
-const RouterHub = require('../controllers/router');
+const { RouterHub } = require('../controllers/routers/driver');
 
 
 
@@ -44,4 +44,4 @@ const SeedRouter = new RouterHub([{
 
 
 // router exports
-module.exports = SeedRouter.activate();
+module.exports = SeedRouter.run();
