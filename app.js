@@ -40,13 +40,13 @@ app.set('partials', {
 //  DATABASE
 // ==============================
 // connection
-mongoose.connect(process.env.DB, { useMongoClient: true });
+mongoose.connect(process.env.DB);
 
 
 // initialization
 mongoose.Promise = Promise;
 const { settingModel, userModel } = require('./models');
-if (process.env.NODE_ENV !== 'test') settingModel.init();
+if (process.env.NODE_ENV !== 'test') settingModel.initialize();
 
 
 // session

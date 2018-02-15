@@ -1,3 +1,10 @@
+### 0.6.0-dev.12 / 2018-02-15
+> App
+- Updated packages.
+- Renamed file names for a better readability.
+- Fixed the double loading issue in `settingModel.init()` by renamed as `settingModel.initialize()`.
+- Improved settingModel.
+
 ### 0.6.0-dev.11 / 2018-02-14
 > App
 - Recovered `asyncWrapper` test in `driver.test.js`.

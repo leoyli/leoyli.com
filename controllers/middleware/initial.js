@@ -10,7 +10,7 @@ const { _fn } = require('../helpers');
 // ==============================
 const generic = async (req, res, next) => {
     // website settings
-    const _config = await require('../../models').settingModel.findOne();
+    const _config = await require('../../models').settingModel.findOne({ active: true });
     if (!_config) throw new Error('No website configs, please restart the server for DB initialization.');
     res.locals._site = _config._doc;
 

@@ -1,5 +1,5 @@
 const Router = require('express').Router;
-const { _md } = require('../middleware/modules');
+const { _md } = require('../middleware/plugins');
 const { _fn } = require('../helpers');
 const render = require('../views/template');
 

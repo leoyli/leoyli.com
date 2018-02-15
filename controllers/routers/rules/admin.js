@@ -5,7 +5,7 @@ module.exports = home = {};
 // ==============================
 //  FUNCTIONS
 // ==============================
-const { _md } = require('../../middleware/modules');
+const { _md } = require('../../middleware/plugins');
 const { settingModel, mediaModel, userModel } = require('../../../models/index');
 
 

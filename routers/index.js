@@ -17,7 +17,7 @@ function _useMiddleware(app) {
     app.use(flash());
 
     // internal
-    app.use(require('../controllers/middleware/generic'));
+    app.use(require('../controllers/middleware/initial'));
 }
 
 

@@ -1,5 +1,5 @@
 const { RouterHub } = require('../controllers/routers/driver');
-const { _md } = require('../controllers/middleware/modules');
+const { _md } = require('../controllers/middleware/plugins');
 const home = require('../controllers/routers/rules/admin');
 
 

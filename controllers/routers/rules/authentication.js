@@ -5,7 +5,7 @@ module.exports = authentication = {};
 // ==============================
 //  FUNCTIONS
 // ==============================
-const { _md } = require('../../middleware/modules');
+const { _md } = require('../../middleware/plugins');
 const { userModel } = require('../../../models/index');
 
 

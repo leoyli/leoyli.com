@@ -1,6 +1,6 @@
 {
-  "name": "leoyli-main",
-  "version": "0.6.0-dev.2",
+  "name": "leoyli-com",
+  "version": "0.6.0-dev",
   "license": "Apache-2.0",
   "private": true,
   "scripts": {
@@ -8,29 +8,29 @@
     "test": "jest"
   },
   "dependencies": {
-    "body-parser": "~1.17.1",
+    "body-parser": "^1.18.2",
     "busboy": "^0.2.14",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^2.0.1",
-    "debug": "^2.6.9",
+    "debug": "^3.1.0",
     "dot": "^1.1.2",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.5",
     "marked": "^0.3.12",
     "method-override": "^2.3.10",
-    "mongodb": "^2.2.34",
-    "mongoose": "^4.13.9",
-    "morgan": "~1.8.1",
+    "mongodb": "^3.0.2",
+    "mongoose": "^5.0.5",
+    "morgan": "^1.9.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "passport-local-mongoose": "^4.4.0",
+    "passport-local-mongoose": "^4.5.0",
     "serve-favicon": "^2.4.5",
     "spdy": "^3.4.7",
-    "validator": "^9.2.0"
+    "validator": "^9.4.0"
   },
   "devDependencies": {
-    "jest": "^21.2.1",
+    "jest": "^22.3.0",
     "supertest": "^3.0.0"
   }
 }
