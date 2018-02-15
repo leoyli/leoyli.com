@@ -43,7 +43,10 @@ const PostSchema            = new mongoose.Schema({
 }, {
     timestamps              : { createdAt: 'time.created', updatedAt: 'time.updated' },
     versionKey              : '_revised',
-}).index({ 'title': 'text', 'content': 'text', 'tag' : 'text' });
+})
+    .index({ 'category' : -1 })
+    .index({ 'time.updated' : -1 })
+    .index({ 'title': 'text', 'content': 'text', 'category': 'text', 'tag' : 'text' });
 
 
 

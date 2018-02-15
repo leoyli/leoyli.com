@@ -13,7 +13,7 @@ exports.post = (template, post, meta) => async (req, res) => {
     if ($post && $post.title !== undefined) _md.setTitleTag($post.title, { root: true })(req, res);
     if ($meta) {
         const urlBase = req.originalUrl.split('?')[0] + '?num=' + $meta.num + '&page=';
-        if ($meta.now)              res.locals._view.prev = urlBase + ($meta.now - 1);
+        if ($meta.now > 1)          res.locals._view.prev = urlBase + ($meta.now - 1) ;
         if ($meta.now < $meta.end)  res.locals._view.next = urlBase + ($meta.now + 1);
     }
 

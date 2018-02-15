@@ -19,6 +19,15 @@ exports._md.doNotCrawled = (req, res, next) => {
 };
 
 
+// case insensitive to access `req.query`
+exports._md.caseInsensitiveQuery = (req, res, next) => {
+    req.query = new Proxy(req.query, {
+        get: (target, entry) => target[Object.keys(target).find(key => key.toLowerCase() === entry.toLowerCase())],
+    });
+    return next();
+};
+
+
 // busboy for multipart form parsing
 exports._md.hireBusboy = (limits) => (req, res, next) => require('./upload').uploadController(req, res, limits, next);
 

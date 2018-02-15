@@ -11,7 +11,7 @@ const PageRouter = new RouterHub([{
     controller:     (req, res) => res.render('./theme'),
 }, {
     route:          '/search/:search',
-    controller:     search(),
+    controller:     search.find(),
     settings:       { crawler: false, template: './theme/search' },
 }]);
 

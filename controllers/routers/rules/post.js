@@ -57,6 +57,6 @@ exports.post.show = {
 
 exports.post.list = {
     get: async (req, res, next) => {
-        return search()(req, res, next);
+        return search.find()(req, res, next);
     },
 };

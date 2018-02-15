@@ -20,7 +20,7 @@ function asyncWrapper(fn) {
 /**
  * normalize into a method array in the anti-alphabetical order
  * @param {(object|function)} controller    - controller may be extracted
- * @param {(string|regex)} [alias=null]     - alias to be watched
+ * @param {(string|regex)} [alias]          - alias to be watched
  * @param {(string|array)} [method]         - default: keys of controller{object} || `get`
  * @return {array}                          - ordering of the result is important ('alias' must be met after 'get')
  */
@@ -35,18 +35,21 @@ function getMethods({ controller, alias, method }) {
 
 /**
  * stack a queue from settings
- * @param {boolean} [authentication=false]  - accept only authorized? (load 5 fns)
- * @param {boolean} [authorization=false]   - accept only authenticated? (load 4 fns)
- * @param {boolean} [crawler=false]         - accept crawlers? (load 1 fn)
- * @param {string} [title=null]             - title tag name
- * @param {object} [titleOption=null]       - title tagging options (see _md.setTitleTag())
- * @param {string} [method=null]            - method to be watched
+ * @param {string} [query]                  - accept case insensitive `req.query` (by Proxy)    default: insensitive
+ * @param {boolean} [authorized]            - accept only authenticated? (load 4 fns)           default: false
+ * @param {boolean} [authenticated]         - accept only authorized? (load 5 fns)              default: false
+ * @param {boolean} [crawler]               - accept crawlers? (load 1 fn)                      default: true
+ * @param {string} [title]                  - title tag name
+ * @param {object} [titleOption]            - title tagging options (see _md.setTitleTag())
+ * @param {string} [method]                 - method to be watched
  * @return {Array}                          - ordering of the result is important
  */
-function getMiddlewareQueue({ authorization, authentication, crawler, title, titleOption } = {}, method) {
+function getMiddlewareQueue({ query, authorized, authenticated, crawler, title, titleOption } = {}, method) {
     const queue = [];
-    if (authorization === true) queue.push(..._md.isAuthorized);
-    else if (authentication === true) queue.push(..._md.isSignedIn);
+
+    if (query !== 'sensitive') queue.push(_md.caseInsensitiveQuery);
+    if (authorized === true) queue.push(..._md.isAuthorized);
+    else if (authenticated === true) queue.push(..._md.isSignedIn);
     else if (crawler === false) queue.push(_md.doNotCrawled);
     if (title) queue.push(_md.setTitleTag(title, titleOption));
     return queue;
@@ -56,7 +59,7 @@ function getMiddlewareQueue({ authorization, authentication, crawler, title, tit
 /**
  * stack a queue from controllers with normalization
  * @param {(array|function)} controller     - controller to be stacked
- * @param {string} [method=null]            - method to be used to extract property of the controller
+ * @param {string} [method]                 - method to be used to extract property of the controller
  * @return {array}                          - if no matched method, the controller would just be normalized to an array
  */
 function getControllerQueue(controller, method) {

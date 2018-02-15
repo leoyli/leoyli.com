@@ -1,3 +1,14 @@
+### 0.6.0-dev.11 / 2018-02-14
+> App
+- Recovered `asyncWrapper` test in `driver.test.js`.
+- Added `search.test.js`.
+- Added `caseInsensitiveQuery` middleware(proxy) for allowing case insensitive access to `req.query`. (hooked by default)
+- Added 'date' searching parameters.
+- Added new Mongo indexes 'category' and 'time.updated' for indexing query.
+- Fixed prev HTML meta-tag controlled by 'template' view controller.
+- Simplified names of optional parameters in 'router' view controller.
+
+
 ### 0.6.0-dev.10 / 2018-02-11
 > App
 - Moved and rewired 'search' controller so that it can be more readable and maintainable.
