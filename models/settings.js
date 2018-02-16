@@ -7,7 +7,7 @@ const
 //  SCHEMA
 // ==============================
 // todo: added CDN object for the header
-const settingModelSchema      = new mongoose.Schema({
+const settingModelSchema    = new mongoose.Schema({
     active                  : { type: Boolean, default: false, unique: true },
     title                   : { type: String, default: 'New Website' },
     description             : { type: String, default: 'n/a' },

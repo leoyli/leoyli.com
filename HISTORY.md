@@ -1,3 +1,7 @@
+### 0.7.0-dev.2 / 2018-02-16
+- Adapted and simplified codes in models and 'app' from the new ver.5 'Mongoose' lib.
+
+
 ### 0.7.0-dev.1 / 2018-02-16
 > App
 - Initiated v0.7: 'tofix-fix-up' development.

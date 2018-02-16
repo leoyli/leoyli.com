@@ -44,7 +44,6 @@ mongoose.connect(process.env.DB);
 
 
 // initialization
-mongoose.Promise = Promise;
 const { settingModel, userModel } = require('./models');
 if (process.env.NODE_ENV !== 'test') settingModel.initialize();
 

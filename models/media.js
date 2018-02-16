@@ -54,9 +54,8 @@ MediaSchema.static('mediaDeleteThenDissociate', function (docsID, user, next) {
 
 
 // (pre-hook) version counter
-MediaSchema.pre('findOneAndUpdate', function (next) {
+MediaSchema.pre('findOneAndUpdate', function () {
     this.findOneAndUpdate({}, { $inc: { _revised: 1 }});
-    return next();
 });
 
 

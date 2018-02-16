@@ -59,9 +59,8 @@ PostSchema.static('postsDeleteThenDissociate', function (docsID, user, next) {
 
 
 // (pre-hook) version counter
-PostSchema.pre('findOneAndUpdate', function (next) {
+PostSchema.pre('findOneAndUpdate', function () {
     this.findOneAndUpdate({}, { $inc: { _revised: 1 }});
-    return next();
 });
 
 
