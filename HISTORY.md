@@ -1,3 +1,12 @@
+### 0.7.0-dev.1 / 2018-02-16
+> App
+- Initiated v0.7: 'tofix-fix-up' development.
+- Fixed 'canonical' value escaping issue by added `postNormalizer` middleware.
+- Added `inspectFileURL` string helper function and its unit test.
+- Removed dependency on 'validator' lib.
+- Simplified 'setting' and 'post' model.
+
+
 ### 0.6.0 / 2018-02-15
 > App
 - Completed v0.6: 'unit-testing' development.
@@ -9,6 +18,7 @@
 - Renamed file names for a better readability.
 - Fixed the double loading issue in `settingModel.init()` by renamed as `settingModel.initialize()`.
 - Improved settingModel.
+
 
 ### 0.6.0-dev.11 / 2018-02-14
 > App
@@ -515,7 +525,7 @@
 
 ### 0.0.48 / 2017-10-25
 > App
-- Switched from HTTP1.1 to HTTP2 protocol. (currently by 'spdy' lib)
+- Switched from HTTP1.1 to HTTP2 use. (currently by 'spdy' lib)
 
 > UI
 - Introduced 'font-awesome' as the site font icons provider (from CDN).

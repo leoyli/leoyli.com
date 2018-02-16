@@ -10,12 +10,6 @@ const
 // ancillaries
 const { _fn }               = require('../controllers/helpers');
 
-// validations
-function featured (value) {
-    if (value === '') return true;
-    return validator.isURL(value);
-}
-
 
 
 // ==============================
@@ -31,15 +25,14 @@ const PostSchema            = new mongoose.Schema({
     },
     featured                : { type: String, // todo: featured by a video
         validate: {
-            isAsync         : false,
-            validator       : featured,
-            message: 'Invalid URL',
+            validator       : value => value !== undefined,
+            message         : 'Invalid image URL',
         }},
+    canonical               : { type: String, lowercase: true, unique: true },
     title                   : { type: String, trim: true, required: [true, 'is required'] },
     content                 : { type: String, trim: true, required: [true, 'is required'] },
     category                : { type: String, lowercase: true, default: 'unclassified'}, // tofix: empty space handling
     tag                     : { type: String, lowercase: true },
-    canonical               : { type: String, lowercase: true, unique: true },
 }, {
     timestamps              : { createdAt: 'time.created', updatedAt: 'time.updated' },
     versionKey              : '_revised',
@@ -62,13 +55,6 @@ PostSchema.static('postsCreateThenAssociate', function (raw, user, next) {
 // delete and dissociate (model)  // note: not workable for admin in deleting media owned by multiple users
 PostSchema.static('postsDeleteThenDissociate', function (docsID, user, next) {
     return Promise.resolve().then(() => _fn.schema.updateAndBind(docsID, user, next, 'posts', '$pullAll', this));
-});
-
-
-// (pre-hook) canonical key evaluation
-PostSchema.pre('save', function (next) {
-    if (this.canonical === undefined) this.canonical = _fn.string.toKebabCase(this.title);  // tofix: unavailable if pre-existed
-    return next();
 });
 
 

@@ -27,14 +27,14 @@ const settingModelSchema      = new mongoose.Schema({
 //  STATIC METHODS
 // ==============================
 // initialization (model)
-settingModelSchema.static('initialize', async function(done) {
-    return await this.findOne({ active: true }) ? done() : await this.create({ active: true }) ? done() : null;
+settingModelSchema.static('initialize', async function(next = () => {}) {
+    return await this.findOne({ active: true }) ? next() : await this.create({ active: true }).then(() => next());
 });
 
 
 // update settings (model)
 settingModelSchema.static('updateSettings', function(dataToBeUpdated, next) {
-    return this.findOneAndUpdate({}, dataToBeUpdated, { new: true }, next);
+    return this.findOneAndUpdate({ active: true }, dataToBeUpdated, { new: true }, next);
 });
 
 

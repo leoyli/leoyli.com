@@ -10,9 +10,9 @@ const { _fn } = require('../helpers');
 // ==============================
 const generic = async (req, res, next) => {
     // website settings
-    const _config = await require('../../models').settingModel.findOne({ active: true });
-    if (!_config) throw new Error('No website configs, please restart the server for DB initialization.');
-    res.locals._site = _config._doc;
+    const config = await require('../../models').settingModel.findOne({ active: true });
+    if (!config) throw new Error('No website configs, please restart the server for DB initialization.');
+    res.locals._site = config._doc;
 
     // connecting session
     if (!req.session.user && req.session.cookie.expires) req.session.cookie.expires = false;
@@ -25,15 +25,28 @@ const generic = async (req, res, next) => {
         user: req.session.user,
     };
 
-    // HTMLEscape  // tofix: apply the method into post schema
-    if (req.body.post) for (const field in req.body.post) {
-        if (field === 'title') continue;    // tofix: temperately leave the title field unescaped
-        if (req.body.post.hasOwnProperty(field)) req.body.post[field] = _fn.string.escapeChars(req.body.post[field]);
+    return req.body.post && ['POST', 'PATCH'].indexOf(req.method) !== -1 ? postNormalizer(req, res, next) : next();
+};
+
+
+const postNormalizer = async (req, res, next) => {
+    const post = req.body.post;
+    if (!post) return next();
+
+    if (req.method === 'POST' && !post.canonical) post.canonical = _fn.string.toKebabCase(post.title);
+    if (post.canonical !== undefined) {
+        const canonicalCounts = await require('../../models').postModel.count({ canonical: post.canonical });
+        if (canonicalCounts > 0) post.canonical = post.canonical + '-' + (canonicalCounts + 1);
     }
+    const extName = ['gif', 'jpe?g', 'png', 'svg', 'tiff', 'webp'];
+    post.featured  = _fn.string.inspectFileURL(post.featured, extName, { raw: false });                                 // todo: settable accept types
+    post.title     = _fn.string.escapeChars(post.title);
+    post.content   = _fn.string.escapeChars(post.content);                                                              // tofix: markdown undo-escape
+    post.category  = _fn.string.toKebabCase(post.category) || undefined;
+    post.tag       = _fn.string.toKebabCase(post.tag) || undefined;
 
     return next();
 };
-
 
 
 // module export

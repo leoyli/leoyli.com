@@ -13,7 +13,7 @@ describe('Check the ENV', () => {
 
 
 describe('Bundle: search.js', () => {
-    test('fn: getAggregationQuery : Should construct Mongo query expression for search operations', () => {             // tofix: throw to MongoDB for a test
+    test('Fn: getAggregationQuery : Should construct Mongo query expression for search operations', () => {             // tofix: throw to MongoDB for a test
         expect(JSON.stringify(getAggregationQuery({}, {}))).toBe('[{\"$match\":{}},{\"$sort\":{\"time.updated\":-' +
             '1}},{\"$group\":{\"_id\":null,\"count\":{\"$sum\":1},\"post\":{\"$push\":\"$$ROOT\"}}},{\"$project\"' +
             ':{\"_id\":0,\"post\":{\"$slice\":[\"$post\",{\"$multiply\":[{\"$add\":[{\"$cond\":{\"if\":{\"$lt\":[' +
@@ -24,7 +24,7 @@ describe('Bundle: search.js', () => {
             ',\"sort\":{\"$literal\":{\"time.updated\":-1}},\"date\":{\"$literal\":{}}}}}]');
     });
 
-    test('fn: getFilterExp: Should construct Mongo query expression (for $match)', () => {
+    test('Fn: getFilterExp: Should construct Mongo query expression (for $match)', () => {
         expect(getFilterExp({}, {}))
             .toEqual({});
         expect(getFilterExp({ search: {}}, {}))
@@ -35,7 +35,7 @@ describe('Bundle: search.js', () => {
             .toEqual({ '$gte': new Date('2018-05-10T00:00:00.000Z'), '$lt': new Date('2019-01-02T00:00:00.000Z') });
     });
 
-    test('fn: getDateRangeArray : Should translate into an array that contains a time range from a string', () => {
+    test('Fn: getDateRangeArray : Should translate into an array that contains a time range from a string', () => {
         expect(getDateRangeArray('')                    ).toEqual([                              ]);
         expect(getDateRangeArray('-')                   ).toEqual([                              ]);
         expect(getDateRangeArray('/')                   ).toEqual([                              ]);
@@ -58,7 +58,7 @@ describe('Bundle: search.js', () => {
         expect(getDateRangeArray('20190101-20180510')   ).toEqual([[2019, 1, 1  ], [2018, 5, 10 ]]);
     });
 
-    test('fn: getDateRangeExp : Should construct Mongo query expression based on a time range from an array', () => {
+    test('Fn: getDateRangeExp : Should construct Mongo query expression based on a time range from an array', () => {
         expect(getDateRangeExp([2018, 0, 0  ], [0   , 0, 0  ]))
             .toEqual({ '$gte': new Date('2018-01-01T00:00:00.000Z'), '$lt': new Date('2019-01-01T00:00:00.000Z') });
         expect(getDateRangeExp([2018, 5, 0  ], [0   , 0, 0  ]))
@@ -77,7 +77,7 @@ describe('Bundle: search.js', () => {
             .toEqual({ '$gte': new Date('2018-05-10T00:00:00.000Z'), '$lt': new Date('2019-01-02T00:00:00.000Z') });
     });
 
-    test('fn: getSortExp : Should construct Mongo query expression (for $sort)', () => {
+    test('Fn: getSortExp : Should construct Mongo query expression (for $sort)', () => {
         expect(getSortExp({ 'time.updated': 0 }, {})).toEqual({ 'time.updated': -1 });
         expect(getSortExp({ 'time.updated': 1 }, {})).toEqual({ 'time.updated': 1 });
         expect(getSortExp({}, {})).toEqual({ 'time.updated': -1 });

@@ -1,6 +1,6 @@
 // module
 const { checkNativeBrand, cloneDeep, mergeDeep, assignDeep,
-    toKebabCase, escapeChars, readMongoId, readObjPath } = require('../../controllers/helpers')._test;
+    toKebabCase, escapeChars, readMongoId, readObjPath, inspectFileURL } = require('../../controllers/helpers')._test;
 
 
 
@@ -83,4 +83,20 @@ describe('Bundle: String methods', () => {
         //
         expect(result).toEqual(['a', 'b', 'c', 'd', 'e', 'f']);
     });
+
+    test('Fn: inspectFileURL' , () => {
+        const mockExtName = ['png', 'gif'];
+        const test = ['http://test-domain.com/path/name/filename.png', 'test-domain.com/filename.png', 'filename.png'];
+        const result1 = inspectFileURL(test[0], mockExtName);
+        const result2 = inspectFileURL(test[1], mockExtName);
+        const result3 = inspectFileURL(test[2], mockExtName);
+        const result4 = inspectFileURL(test[0], mockExtName, { raw: false, use: 'ftp' });
+        const result5 = inspectFileURL(test[2], mockExtName, { raw: false, use: 'ftp' });
+        //
+        expect(result1.slice(0,6)).toEqual([test[0], 'http', 'test-domain.com', '/path/name/', 'filename.png']);
+        expect(result2.slice(0,6)).toEqual([test[1], undefined, 'test-domain.com', '/', 'filename.png']);
+        expect(result3).toBeNull();
+        expect(result4).toEqual('ftp://test-domain.com/path/name/filename.png');
+        expect(result5).toBeNull();
+    })
 });
