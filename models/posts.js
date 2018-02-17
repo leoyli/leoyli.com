@@ -31,7 +31,7 @@ const PostSchema            = new mongoose.Schema({
     canonical               : { type: String, lowercase: true, unique: true },
     title                   : { type: String, trim: true, required: [true, 'is required'] },
     content                 : { type: String, trim: true, required: [true, 'is required'] },
-    category                : { type: String, lowercase: true, default: 'unclassified'}, // tofix: empty space handling
+    category                : { type: String, lowercase: true, default: 'unclassified'},
     tag                     : { type: String, lowercase: true },
 }, {
     timestamps              : { createdAt: 'time.created', updatedAt: 'time.updated' },

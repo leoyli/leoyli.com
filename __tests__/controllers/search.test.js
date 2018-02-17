@@ -13,7 +13,7 @@ describe('Check the ENV', () => {
 
 
 describe('Bundle: search.js', () => {
-    test('Fn: getAggregationQuery : Should construct Mongo query expression for search operations', () => {             // tofix: throw to MongoDB for a test
+    test('Fn: getAggregationQuery : Should construct Mongo query expression for search operations', () => {             // todo: throw to MongoDB for a test
         expect(JSON.stringify(getAggregationQuery({}, {}))).toBe('[{\"$match\":{}},{\"$sort\":{\"time.updated\":-' +
             '1}},{\"$group\":{\"_id\":null,\"count\":{\"$sum\":1},\"post\":{\"$push\":\"$$ROOT\"}}},{\"$project\"' +
             ':{\"_id\":0,\"post\":{\"$slice\":[\"$post\",{\"$multiply\":[{\"$add\":[{\"$cond\":{\"if\":{\"$lt\":[' +

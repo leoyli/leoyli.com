@@ -6,15 +6,17 @@ const
 // ==============================
 //  SCHEMA
 // ==============================
-// todo: added CDN object for the header
 const settingModelSchema    = new mongoose.Schema({
     active                  : { type: Boolean, default: false, unique: true },
     title                   : { type: String, default: 'New Website' },
     description             : { type: String, default: 'n/a' },
     keywords                : { type: String, default: 'n/a' },
-    time: {
+    sets: {
+        imageTypes          : { type: [[String]], default: ['gif', 'jpe?g', 'png', 'svg', 'tiff', 'webp']},
+        timeFormat          : { type: String, default: '' },
         timezone            : { type: String, default: '' },
-        format              : { type: String, default: 'default' }
+        sort                : { type: String, default: '' },
+        num                 : { type: Number, default: 5 },
     },
 }, {
     timestamps              : { createdAt: 'time.created', updatedAt: 'time.updated' },

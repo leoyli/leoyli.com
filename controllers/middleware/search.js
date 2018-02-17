@@ -2,15 +2,15 @@
  * construct Mongo query expression for search operations
  * @param {object} params                  - Express.js `req.params` object which contains searching keywords
  * @param {object} query                   - Express.js `req.query` object which contains searching parameters
- * @param {number} num                     - pagination display unit   - todo: set default num in `req.locals._site`
+ * @param {number|*} num                   - pagination display unit
  * @param {number} page                    - pagination pin point
  * @param {object} sort                    - sorting parameters        - todo: sorting options in setting pages
  * @return {object} { post, meta }         - sorted docs and searching meta(count, num, now, end, date, sort)
  */
-function getAggregationQuery(params, query, page = 1, num = 5, sort = { 'time.updated': -1 }) {
+function getAggregationQuery(params, query, page, num, sort = { 'time.updated': -1 }) {
     const $filter = getFilterExp(params, query);
     const $sort = getSortExp(sort, query);
-    const $page = (query['page'] > 1) ? parseInt(query['page']) : page;
+    const $page = (query['page'] > 1) ? parseInt(query['page']) : page || 1;
     const $num = (query['num'] > 0) ? parseInt(query['num']) : num;
     const $end = { $ceil: { $divide: ['$count', $num] }};
     const $now = { $cond: { if: { $lt: [$page, $end] }, then: { $literal: $page }, else: $end }};
@@ -20,7 +20,7 @@ function getAggregationQuery(params, query, page = 1, num = 5, sort = { 'time.up
         { $sort: $sort },
         { $group: { _id: null, count: { $sum: 1 }, post: { $push: '$$ROOT' }}},                 // todo: author populate
         { $project: { _id: 0,
-            post: { $slice: ['$post', { $multiply: [{ $add: [$now, -1] }, $num] }, $num] },     // tofix: why first?
+            post: { $slice: ['$post', { $multiply: [{ $add: [$now, -1] }, $num] }, $num] },
             meta: { count: '$count', num: { $literal: $num }, now: $now, end: $end,
                 sort: { $literal: $sort }, date: { $literal: $filter['time.updated'] || {} }}},
         },
@@ -97,7 +97,7 @@ function getSortExp(sort, query) {
 // middleware
 function search({ page, num, sort } = {}) {
     return (req, res, next) => require('../../models/index').postModel
-        .aggregate(getAggregationQuery(req.params, req.query, page, num, sort))
+        .aggregate(getAggregationQuery(req.params, req.query, page, num || res.locals._site.sets.num, sort))
         .then(docs => docs[0])
         .then(result => {
             if (typeof next !== 'function') return result;

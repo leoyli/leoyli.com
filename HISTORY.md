@@ -1,4 +1,12 @@
+### 0.7.0-dev.3 / 2018-02-17
+> App
+- Removed some out-of-dated comments.
+- Removed escaping space characters in `escapeChars`.
+- Updated setting schema for hosting setting parameters.
+
+
 ### 0.7.0-dev.2 / 2018-02-16
+> App
 - Adapted and simplified codes in models and 'app' from the new ver.5 'Mongoose' lib.
 
 

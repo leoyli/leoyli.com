@@ -21,7 +21,7 @@ function render(filePath, locals, next) {
 
 
 /**
- * generate doT configs on-the-fly          // todo: allows the user to customized the delimiters
+ * generate doT configs on-the-fly
  * @param {string} variables                - names to be registered into the runtime scope
  * @return {object}                         - return doT.js compilation configs
  */
@@ -58,7 +58,7 @@ function getBlueprint({ settings, ...locals }) {
 
 
 /**
- * get runtime template methods             // todo: added more methods
+ * get runtime template methods
  * @param {object} blueprint                - raw blueprint{object} that has no `._fn` methods
  * @param {object} settings                 - view settings extracted from locals{object}
  * @return {object}                         - return a object contains runtime template functions

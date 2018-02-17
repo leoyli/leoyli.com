@@ -44,7 +44,7 @@ home.security = {
 
 home.upload = {   // todo: to be integrated in profile and media manager
     get: (req, res) => res.render('./home/upload'),
-    post: [_md.hireBusboy({ fileSize: 25*1048576 }), async (req, res) => { // todo: will be responsible for all media uploading event and redirect user back
+    post: [_md.hireBusboy({ fileSize: 25*1048576 }), async (req, res) => {
         if (req.body.busboySlip.mes.length > 0) req.body.busboySlip.mes.forEach(mes => req.flash('error', mes));
         if (req.body.busboySlip.raw.length > 0) {
             const docs = await mediaModel.mediaCreateThenAssociate(req.body.busboySlip.raw, req.user);

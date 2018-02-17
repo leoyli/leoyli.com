@@ -65,7 +65,7 @@ describe('Bundle: String methods', () => {
         const test = ['result- =\'"`.,:;<([{', undefined];
         const result = test.map(str => escapeChars(str));
         //
-        expect(result[0]).toBe('result-&#32;&#61;&#39;&#34;&#96;&#46;&#44;&#58;&#59;&#60;&#40;&#91;&#123;');
+        expect(result[0]).toBe('result- &#61;&#39;&#34;&#96;&#46;&#44;&#58;&#59;&#60;&#40;&#91;&#123;');
         expect(result[1]).toBe(test[1]);
     });
 
@@ -86,17 +86,19 @@ describe('Bundle: String methods', () => {
 
     test('Fn: inspectFileURL' , () => {
         const mockExtName = ['png', 'gif'];
-        const test = ['http://test-domain.com/path/name/filename.png', 'test-domain.com/filename.png', 'filename.png'];
+        const test = ['http://domain.com/path/name/file.png', 'domain.com/file.png', 'http://t.io/t.gif', 'file.png'];
         const result1 = inspectFileURL(test[0], mockExtName);
         const result2 = inspectFileURL(test[1], mockExtName);
-        const result3 = inspectFileURL(test[2], mockExtName);
-        const result4 = inspectFileURL(test[0], mockExtName, { raw: false, use: 'ftp' });
-        const result5 = inspectFileURL(test[2], mockExtName, { raw: false, use: 'ftp' });
+        const result3 = inspectFileURL(test[2], mockExtName, { raw: false, use: 'ftp' });
+        const result4 = inspectFileURL(test[2], mockExtName, { raw: false });
+        const result5 = inspectFileURL(test[3], mockExtName, { raw: false });
+        const result6 = inspectFileURL(test[4], mockExtName, { raw: false });
         //
-        expect(result1.slice(0,6)).toEqual([test[0], 'http', 'test-domain.com', '/path/name/', 'filename.png']);
-        expect(result2.slice(0,6)).toEqual([test[1], undefined, 'test-domain.com', '/', 'filename.png']);
-        expect(result3).toBeNull();
-        expect(result4).toEqual('ftp://test-domain.com/path/name/filename.png');
+        expect(result1.slice(0,6)).toEqual([test[0], 'http', 'domain.com', '/path/name/', 'file.png']);
+        expect(result2.slice(0,6)).toEqual([test[1], undefined, 'domain.com', '/', 'file.png']);
+        expect(result3).toBe('ftp://t.io/t.gif');
+        expect(result4).toBe(test[2]);
         expect(result5).toBeNull();
+        expect(result6).toBeNull();
     })
 });
