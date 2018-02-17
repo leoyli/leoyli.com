@@ -1,3 +1,13 @@
+### 0.7.0-dev.4 / 2018-02-17
+> App
+- Upgraded Bootstrap v4.0.0.
+- Added `status` and `visibility` fields in 'post' model.
+
+> UI
+- Added `status` and `visibility` selection box into 'editor'.
+- Used `formaction` attribute to supporting multiple actions in one form.
+
+
 ### 0.7.0-dev.3 / 2018-02-17
 > App
 - Removed some out-of-dated comments.

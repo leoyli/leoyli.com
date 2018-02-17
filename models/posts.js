@@ -19,7 +19,7 @@ const PostSchema            = new mongoose.Schema({
     author: {
         _id: {
             type            : mongoose.Schema.Types.ObjectId,
-            ref: 'users',
+            ref             : 'users',
         },
         username            : { type: String },
     },
@@ -29,14 +29,19 @@ const PostSchema            = new mongoose.Schema({
             message         : 'Invalid image URL',
         }},
     canonical               : { type: String, lowercase: true, unique: true },
-    title                   : { type: String, trim: true, required: [true, 'is required'] },
-    content                 : { type: String, trim: true, required: [true, 'is required'] },
+    title                   : { type: String, required: [true, 'is required'], trim: true },
+    content                 : { type: String, required: [true, 'is required'], trim: true },
     category                : { type: String, lowercase: true, default: 'unclassified'},
     tag                     : { type: String, lowercase: true },
+    status                  : { type: String, required: [true, 'is required'],
+                                enum: ['drafted','published', 'recycled'] },
+    visibility              : { type: String, required: [true, 'is required'],
+                                enum: ['normal', 'pinned', 'hided', 'protected'] },
 }, {
     timestamps              : { createdAt: 'time.created', updatedAt: 'time.updated' },
     versionKey              : '_revised',
 })
+    .index({ 'status' : 1 })
     .index({ 'category' : -1 })
     .index({ 'time.updated' : -1 })
     .index({ 'title': 'text', 'content': 'text', 'category': 'text', 'tag' : 'text' });
