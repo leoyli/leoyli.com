@@ -1,3 +1,26 @@
+### 0.7.0-dev.5 / 2018-02-18
+> App
+- New feature: added `visibility` and `status` post parameters in the model.
+  - visibility 'hidden': hide the post from the searching result, and only can be accessed by its URL.
+  - visibility 'pinned': pin the post at the top level result, but have no effects if 'hidden' to be truthy.
+  - visibility 'protected': a holder parameter for password protection feature. (to be added)
+  - status 'published': published post.
+  - status 'drafted': unpublished post that can not be accessed publicly. (auto saving to be added)
+  - status 'recycled': user deleted post that can not be accessed publicly. (recycle data damping to be added).
+- New feature: added `sets` parameters in 'settings' for hosting dynamic default parameters.
+- Added `tag` and `visibility` Mongo indexes.
+- Added `meta.baseUrl` from `req.baseUrl` in search controller.
+- Added authentication-dependent query in post controller, only status is `published` and visibility is not `hidden` are displayed.
+
+> Test
+- Updated the 'search' to cover these changes.
+
+> UI
+- Added pagination toolbar in 'index' and 'search' template.
+- Added the post-state icons and title prefix.
+- Upgraded packages with the newest CDN.
+
+
 ### 0.7.0-dev.4 / 2018-02-17
 > App
 - Upgraded Bootstrap v4.0.0.

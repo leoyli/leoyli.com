@@ -14,24 +14,26 @@ describe('Check the ENV', () => {
 
 describe('Bundle: search.js', () => {
     test('Fn: getAggregationQuery : Should construct Mongo query expression for search operations', () => {             // todo: throw to MongoDB for a test
-        expect(JSON.stringify(getAggregationQuery({}, {}))).toBe('[{\"$match\":{}},{\"$sort\":{\"time.updated\":-' +
-            '1}},{\"$group\":{\"_id\":null,\"count\":{\"$sum\":1},\"post\":{\"$push\":\"$$ROOT\"}}},{\"$project\"' +
-            ':{\"_id\":0,\"post\":{\"$slice\":[\"$post\",{\"$multiply\":[{\"$add\":[{\"$cond\":{\"if\":{\"$lt\":[' +
-            '1,{\"$ceil\":{\"$divide\":[\"$count\",5]}}]},\"then\":{\"$literal\":1},\"else\":{\"$ceil\":{\"$divid' +
-            'e\":[\"$count\",5]}}}},-1]},5]},5]},\"meta\":{\"count\":\"$count\",\"num\":{\"$literal\":5},\"now\":' +
-            '{\"$cond\":{\"if\":{\"$lt\":[1,{\"$ceil\":{\"$divide\":[\"$count\",5]}}]},\"then\":{\"$literal\":1},' +
-            '\"else\":{\"$ceil\":{\"$divide\":[\"$count\",5]}}}},\"end\":{\"$ceil\":{\"$divide\":[\"$count\",5]}}' +
-            ',\"sort\":{\"$literal\":{\"time.updated\":-1}},\"date\":{\"$literal\":{}}}}}]');
+        expect(JSON.stringify(getAggregationQuery({ params: {}, session: {}, query: { date: {} }}))).toBe('[{\"$m' +
+            'atch\":{\"status\":{\"$eq\":\"published\"},\"visibility.hidden\":false}},{\"$sort\":{\"visibility.pi' +
+            'nned\":-1,\"time.updated\":-1}},{\"$group\":{\"_id\":null,\"count\":{\"$sum\":1},\"post\":{\"$push\"' +
+            ':\"$$ROOT\"}}},{\"$project\":{\"_id\":0,\"post\":{\"$slice\":[\"$post\",{\"$multiply\":[{\"$add\":[{' +
+            '\"$cond\":{\"if\":{\"$lt\":[1,{\"$ceil\":{\"$divide\":[\"$count\",null]}}]},\"then\":{\"$literal\":1' +
+            '},\"else\":{\"$ceil\":{\"$divide\":[\"$count\",null]}}}},-1]},null]},null]},\"meta\":{\"count\":\"$c' +
+            'ount\",\"num\":{},\"now\":{\"$cond\":{\"if\":{\"$lt\":[1,{\"$ceil\":{\"$divide\":[\"$count\",null]}}' +
+            ']},\"then\":{\"$literal\":1},\"else\":{\"$ceil\":{\"$divide\":[\"$count\",null]}}}},\"end\":{\"$ceil' +
+            '\":{\"$divide\":[\"$count\",null]}},\"baseUrl\":{},\"sort\":{\"$literal\":{\"visibility.pinned\":-1,' +
+            '\"time.updated\":-1}},\"date\":{\"$literal\":{}}}}}]');
     });
 
     test('Fn: getFilterExp: Should construct Mongo query expression (for $match)', () => {
-        expect(getFilterExp({}, {}))
-            .toEqual({});
-        expect(getFilterExp({ search: {}}, {}))
-            .toEqual({ $text: { $search: {}}});
-        expect(getFilterExp({ category: 'test'}, {}))
-            .toEqual({ category: 'test'});
-        expect(getFilterExp({}, { date: '20180510-20190101/' })['time.updated'])
+        expect(getFilterExp({ session: {}, params: {}, query: {} }))
+            .toEqual({ status: { $eq: 'published'}, 'visibility.hidden': false });
+        expect(getFilterExp({ session: {}, params: { search: {} }, query: {}}))
+            .toEqual({ $text: { $search: {} }, status: { $eq: 'published'}, 'visibility.hidden': false });
+        expect(getFilterExp({ session: {}, params: { category: 'test'}, query: {} }))
+            .toEqual({ category: 'test', status: { $eq: 'published'}, 'visibility.hidden': false });
+        expect(getFilterExp({ session: {}, params: {}, query: { date: '20180510-20190101/' } })['time.updated'])
             .toEqual({ '$gte': new Date('2018-05-10T00:00:00.000Z'), '$lt': new Date('2019-01-02T00:00:00.000Z') });
     });
 
@@ -78,8 +80,8 @@ describe('Bundle: search.js', () => {
     });
 
     test('Fn: getSortExp : Should construct Mongo query expression (for $sort)', () => {
-        expect(getSortExp({ 'time.updated': 0 }, {})).toEqual({ 'time.updated': -1 });
-        expect(getSortExp({ 'time.updated': 1 }, {})).toEqual({ 'time.updated': 1 });
-        expect(getSortExp({}, {})).toEqual({ 'time.updated': -1 });
+        expect(getSortExp({ 'time.updated': 0 }, {})).toEqual({ 'time.updated': -1, 'visibility.pinned': -1 });
+        expect(getSortExp({ 'time.updated': 1 }, {})).toEqual({ 'time.updated': 1, 'visibility.pinned': -1 });
+        expect(getSortExp({}, {})).toEqual({ 'time.updated': -1, 'visibility.pinned': -1 });
     });
 });

@@ -14,13 +14,19 @@
             <h3>NO RESULT</h3>
         {{??}}{{ post.forEach(function(post) { }}
             <article class="mb-4 pb-4" id="{{= post._id }}">
-                <h2 class="_title"><a href="/post/{{= post.canonical }}">{{= post.title }}</a></h2>
+                <h2 class="_title">
+                    {{? post.visibility.pinned }} [PINNED] {{?}}
+                    {{? post.status === 'drafted' }} [DRAFT] {{?}}
+                    <a href="/post/{{= post.canonical }}">{{= post.title }}</a>
+                </h2>
                 <header class="row">
                     <div class="col-md-9">
                         {{= post.author.username }}
                         ｜<a href="/post/editor/{{= post._id }}">(edit)</a>
                         ｜<a href="/post/class/{{= post.category }}">{{= post.category }}</a>
                         ｜Revised: {{= post._revised }}
+                        {{? post.status === 'drafted' }}｜<i class="fa fa-hourglass-half"></i>{{?}}
+                        {{? post.visibility.hidden }}｜<i class="fa fa-eye-slash"></i>{{?}}
                     </div>
                     <time class="col-md-3 text-lg-right"
                           datetime="{{= post.time.updated }}">{{= new Date(post.time.updated).toDateString() }}</time>
@@ -34,6 +40,29 @@
                 {{?}}
             </article>
         {{ }); }}{{?}}
+    </div>
+</div>
+
+<!-- pagination --><!--// todo: code encapsulation -->
+<div class="container pb-4">
+    <div id="pagination" class="col-9 btn-toolbar" role="navigation" aria-label="Pagination">
+        <div class="btn-group btn-group-sm" role="group" aria-label="Page navigation">
+            {{ for(let i = 1; i < meta.now; i++) { }}
+            <a role="button" class="btn btn-dark"
+               href="{{= meta.baseUrl }}?num={{= meta.num }}&page={{= i }}">{{= i }}</a>
+            {{ }; }}
+            <a role="button" class="btn btn-outline-dark" href="#">{{= meta.now }}</a>
+            {{ for(let j = meta.now + 1, k = meta.end < 10 ? meta.end + 1 : 10; j < k; j++) { }}
+            <a role="button" class="btn btn-dark"
+               href="{{= meta.baseUrl }}?num={{= meta.num }}&page={{= j }}">{{= j }}</a>
+            {{ }; }}
+        </div>
+        {{? meta.end > 9 }}
+            <div class="btn-group btn-group-sm mr-2" aria-label="Last page">
+                <a role="button" class="btn btn-dark"
+                   href="{{= meta.baseUrl }}?num={{= meta.num }}&page={{= meta.end }}">{{= meta.end }}</a>
+            </div>
+        {{?}}
     </div>
 </div>
 

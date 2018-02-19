@@ -38,12 +38,12 @@ const postNormalizer = async (req, res, next) => {
         const canonicalCounts = await require('../../models').postModel.count({ canonical: post.canonical });
         if (canonicalCounts > 0) post.canonical = post.canonical + '-' + (canonicalCounts + 1);
     }
-    post.featured  = _fn.string.inspectFileURL(post.featured, res.locals._site.sets.imageTypes, { raw: false });
-    post.title     = _fn.string.escapeChars(post.title);
-    post.content   = _fn.string.escapeChars(post.content);  // tofix: using sanitizer
-    post.category  = _fn.string.toKebabCase(post.category) || undefined;
-    post.tag       = _fn.string.toKebabCase(post.tag) || undefined;
-
+    post.featured   = _fn.string.inspectFileURL(post.featured, res.locals._site.sets.imageTypes, { raw: false });
+    post.title      = _fn.string.escapeChars(post.title);
+    post.content    = _fn.string.escapeChars(post.content);                             // tofix: using sanitizer
+    post.category   = _fn.string.toKebabCase(post.category) || undefined;
+    post.tag        = _fn.string.toKebabCase(post.tag) || undefined;
+    post.visibility = _fn.object.assignDeep({}, post.visibility || 'normal', true);     // todo: split the assignment
     return next();
 };
 

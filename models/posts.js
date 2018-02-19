@@ -33,16 +33,21 @@ const PostSchema            = new mongoose.Schema({
     content                 : { type: String, required: [true, 'is required'], trim: true },
     category                : { type: String, lowercase: true, default: 'unclassified'},
     tag                     : { type: String, lowercase: true },
-    status                  : { type: String, required: [true, 'is required'],
+    visibility: {
+        hidden              : { type: Boolean, required: true, default: false },    // todo: add anti-robot HTML tag
+        pinned              : { type: Boolean, required: true, default: false },
+        protected           : { type: Boolean, required: true, default: false },    // todo: add pw
+    },
+    status                  : { type: String, default: 'published',
                                 enum: ['drafted','published', 'recycled'] },
-    visibility              : { type: String, required: [true, 'is required'],
-                                enum: ['normal', 'pinned', 'hided', 'protected'] },
 }, {
     timestamps              : { createdAt: 'time.created', updatedAt: 'time.updated' },
     versionKey              : '_revised',
 })
+    .index({ 'tag' : 1 })
     .index({ 'status' : 1 })
     .index({ 'category' : -1 })
+    .index({ 'visibility' : 1 })
     .index({ 'time.updated' : -1 })
     .index({ 'title': 'text', 'content': 'text', 'category': 'text', 'tag' : 'text' });
 

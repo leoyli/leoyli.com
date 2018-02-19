@@ -46,12 +46,16 @@ exports.editor.edit = {
 
 exports.post.show = {
     alias: async (req, res) => {
-        req.session.view = { post : await postModel.findOne(req.params)};
+        if (req.session.user)req.session.view = { post : await postModel.findOne(req.params) };
+        else req.session.view = { post : await postModel.findOne({ ...req.params, status: 'published' })};
         return res.redirect(`/post/${req.session.view.post.canonical}`);
     },
-    get: async (req, res, next) => {
-        if (!req.session.view) req.session.view = { post : await postModel.findOne({ canonical: req.params[0] })};
-        return next();
+    get: async (req, res, next) => {    // tofix: post not found page
+        if (!req.session.view) {
+            const query = { canonical: req.params[0] };
+            if (req.session.user) req.session.view = { post : await postModel.findOne(query)};
+            else req.session.view = { post : await postModel.findOne({ ...query, status: 'published' })};
+        } return next();
     },
 };
 
