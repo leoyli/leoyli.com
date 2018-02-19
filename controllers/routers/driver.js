@@ -1,7 +1,7 @@
 const Router = require('express').Router;
 const { _md } = require('../middleware/plugins');
 const { _fn } = require('../helpers');
-const render = require('../views/template');
+const renderer = require('../views/renderer');
 
 
 
@@ -75,7 +75,7 @@ function getControllerQueue(controller, method) {
  * @return {array}                          - task is triggered only when the method is 'alias' or 'get'
  */
 function getViewRenderQueue({ template } = {}, method) {
-    return (['get', 'alias'].indexOf(method) > -1) && template ? [render.post(template)] : [];
+    return (['get', 'alias'].indexOf(method) > -1) && template ? [renderer.postRenderer(template)] : [];
 }
 
 
@@ -107,7 +107,7 @@ RouterHub.prototype.run = function() {
     });
 
     // post-attached handler
-    this.use(render.errorHandler);
+    this.use(renderer.errorHandler);
     return this.router;
 };
 

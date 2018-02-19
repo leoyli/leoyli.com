@@ -28,11 +28,11 @@ function _useRoutes(app) {
     // units
     app.use('/home', require('./admin'));
     app.use('/post', require('./post'));
-    app.use('/', require('./authentication'));
+    app.use('/', require('./user'));
     app.use('/', require('./page'));
 
     // error
-    app.use('/', require('../controllers/views/template').errorHandler);
+    app.use('/', require('../controllers/views/renderer').errorHandler);
 }
 
 

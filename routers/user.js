@@ -1,5 +1,5 @@
 const { RouterHub } = require('../controllers/routers/driver');
-const authentication = require('../controllers/routers/rules/authentication');
+const user = require('../controllers/routers/rules/user');
 
 
 
@@ -8,15 +8,15 @@ const authentication = require('../controllers/routers/rules/authentication');
 // ==============================
 const AuthenticationRouter = new RouterHub([{
     route:          '/signup',
-    controller:     authentication.signup,
+    controller:     user.signup,
     settings:       { title: 'Sign Up' },
 }, {
     route:          '/signin',
-    controller:     authentication.signin,
+    controller:     user.signin,
     settings:       { title: 'Sign In' },
 }, {
     route:          '/signout',
-    controller:     authentication.signout,
+    controller:     user.signout,
 }]);
 
 

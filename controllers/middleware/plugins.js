@@ -64,7 +64,7 @@ exports._md.isAuthorized = [...exports._md.isSignedIn, async (req, res, next) =>
     const [field, val] = req.params.canonical !== undefined
         ? ['canonical', req.params.canonical]
         : ['_id', _fn.string.readMongoId(req.url)];
-    const count = await require('../../models').postModel.count({ [field]: val, 'author._id': req.user });
+    const count = await require('../../models/').postModel.count({ [field]: val, 'author._id': req.user });
     if (count !== 1) {
         req.flash('error', 'You do not have a valid authorization...');
         return res.redirect('/');

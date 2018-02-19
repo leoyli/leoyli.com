@@ -1,3 +1,9 @@
+### 0.7.0-dev.5.2 / 2018-02-19
+> App
+- Renamed and moved files.
+- Renamed variables.
+
+
 ### 0.7.0-dev.5.1 / 2018-02-19
 > App
 - Removed unused `visibility` Mongo index.

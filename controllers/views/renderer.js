@@ -4,7 +4,7 @@ module.exports = exports = {};
 
 
 // render post
-exports.post = (template, post, meta) => async (req, res) => {
+exports.postRenderer = (template, post, meta) => async (req, res) => {
     const $template = await template ? template : req.session.view ? req.session.view.template : './theme/post/post';
     const $post = await post ? post : req.session.view ? req.session.view.post : [];
     const $meta = await meta ? meta : req.session.view ? req.session.view.meta : {};

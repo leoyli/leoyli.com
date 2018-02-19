@@ -1,16 +1,11 @@
-// ==============================
-//  FUNCTIONS
-// ==============================
 const { _fn } = require('../helpers');
+const { settingModel, postModel } = require('../../models/');
 
 
 
-// ==============================
-//  MODULES (generic)
-// ==============================
 const generic = async (req, res, next) => {
     // website settings
-    const config = await require('../../models').settingModel.findOne({ active: true });
+    const config = await settingModel.findOne({ active: true });
     if (!config) throw new Error('No website configs, please restart the server for DB initialization.');
     res.locals._site = config._doc;
 
@@ -35,7 +30,7 @@ const postNormalizer = async (req, res, next) => {
 
     if (req.method === 'POST' && !post.canonical) post.canonical = _fn.string.toKebabCase(post.title);
     if (post.canonical !== undefined) {
-        const canonicalCounts = await require('../../models').postModel.count({ canonical: post.canonical });
+        const canonicalCounts = await postModel.count({ canonical: post.canonical });
         if (canonicalCounts > 0) post.canonical = post.canonical + '-' + (canonicalCounts + 1);
     }
     post.featured   = _fn.string.inspectFileURL(post.featured, res.locals._site.sets.imageTypes, { raw: false });
