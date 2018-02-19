@@ -1,7 +1,5 @@
 const
-    mongoose                = require('mongoose'),
-    validator               = require('validator');
-
+    mongoose                = require('mongoose');
 
 
 // ==============================
@@ -31,7 +29,7 @@ const PostSchema            = new mongoose.Schema({
     canonical               : { type: String, lowercase: true, unique: true },
     title                   : { type: String, required: [true, 'is required'], trim: true },
     content                 : { type: String, required: [true, 'is required'], trim: true },
-    category                : { type: String, lowercase: true, default: 'unclassified'},
+    category                : { type: String, lowercase: true, default: 'unclassified' },
     tag                     : { type: String, lowercase: true },
     visibility: {
         hidden              : { type: Boolean, required: true, default: false },    // todo: add anti-robot HTML tag
@@ -47,7 +45,6 @@ const PostSchema            = new mongoose.Schema({
     .index({ 'tag' : 1 })
     .index({ 'status' : 1 })
     .index({ 'category' : -1 })
-    .index({ 'visibility' : 1 })
     .index({ 'time.updated' : -1 })
     .index({ 'title': 'text', 'content': 'text', 'category': 'text', 'tag' : 'text' });
 

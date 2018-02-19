@@ -12,7 +12,7 @@ const PageRouter = new RouterHub([{
 }, {
     route:          '/search/:search',
     controller:     search.find(),
-    settings:       { crawler: false, template: './theme/search' },
+    settings:       { crawler: false, template: './theme/post/search' },
 }]);
 
 

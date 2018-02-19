@@ -1,3 +1,12 @@
+### 0.7.0-dev.5.1 / 2018-02-19
+> App
+- Removed unused `visibility` Mongo index.
+
+> UI
+- Separated pagination into `_pagination.dot` for reusing.
+- Moved `search.dot` file.
+
+
 ### 0.7.0-dev.5 / 2018-02-18
 > App
 - New feature: added `visibility` and `status` post parameters in the model.
