@@ -1,3 +1,4 @@
+const { HttpError }         = require('../controllers/errors');
 const
     methodOverride          = require('method-override'),
     bodyParser              = require('body-parser'),
@@ -32,8 +33,8 @@ function _useRoutes(app) {
     app.use('/', require('./page'));
 
     // error
-    app.get('*', (req, res, next) => next(new require('../controllers/errors').HttpError(404)));
-    app.use(require('../controllers/views/renderer').errorHandler);
+    app.get('*', (req, res, next) => next(new HttpError(404)));
+    app.use(require('../controllers/views/handler').errorHandler);
 }
 
 

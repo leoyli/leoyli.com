@@ -17,7 +17,7 @@ const { AccountError } = require('../../errors');
 exports.account.signup = {
     get: (req, res) => {
         if (req.isAuthenticated()) return res.redirect('/home');
-        return res.render('./home/account/signup');
+        return res.render('./root/account/signup');
     },
     post: [_md.passwordValidation, async (req, res) => {
         const newUser = await userModel.register(new userModel(req.body), req.body.password.new);
@@ -32,7 +32,7 @@ exports.account.signup = {
 exports.account.signin = {
     get: (req, res) => {
         if (req.isAuthenticated()) return res.redirect('/home');
-        return res.render('./home/account/signin');
+        return res.render('./root/account/signin');
     },
     post: (req, res, next) => {
         if (req.isAuthenticated()) return res.redirect('/home');

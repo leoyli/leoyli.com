@@ -1,7 +1,7 @@
 const Router = require('express').Router;
 const { _md } = require('../middleware/plugins');
 const { _fn } = require('../helpers');
-const renderer = require('../views/renderer');
+const { postHandler } = require('../views/handler');
 
 
 
@@ -75,7 +75,7 @@ function getControllerQueue(controller, method) {
  * @return {array}                          - task is triggered only when the method is 'alias' or 'get'
  */
 function getViewRenderQueue({ template } = {}, method) {
-    return (['get', 'alias'].indexOf(method) > -1) && template ? [renderer.postRenderer(template)] : [];
+    return (['get', 'alias'].indexOf(method) > -1) && template ? [postHandler(template)] : [];
 }
 
 

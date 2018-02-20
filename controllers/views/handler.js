@@ -4,8 +4,11 @@ module.exports = exports = {};
 
 
 
-// render post
-exports.postRenderer = (template, post, meta) => async (req, res, next) => {
+// ==============================
+//  TEMPLATE HANDLER
+// ==============================
+// post handler
+exports.postHandler = (template, post, meta) => async (req, res, next) => {
     const $template = await template ? template : req.session.view ? req.session.view.template : './theme/post/post';
     const $post = await post ? post : req.session.view ? req.session.view.post : [];
     const $meta = await meta ? meta : req.session.view ? req.session.view.meta : {};
@@ -24,11 +27,15 @@ exports.postRenderer = (template, post, meta) => async (req, res, next) => {
 
 
 
-// error handler
+// ==============================
+//  ERROR HANDLER
+// ==============================
 const terminal = {};
+
+// gateway
 exports.errorHandler = (err, req, res, next) => {     // todo: error handler separations
-    if (['dev', 'test'].indexOf(process.env.NODE_ENV) !== -1) console.log(err);
-    debugger;
+    if (['dev', 'test'].indexOf(process.env.NODE_ENV) !== -1) console.log(err.stack);
+
     switch (err.constructor) {
         default:
             return res.render('./theme/error', { err });
@@ -42,11 +49,11 @@ exports.errorHandler = (err, req, res, next) => {     // todo: error handler sep
 };
 
 
+// terminal
 terminal.MongoError = (err, req, res, next) => {
     if (err.code === 11000) req.flash('error', 'This username is not available.');
     return res.redirect('back');
 };
-
 
 terminal.AccountError = (err, req, res, next) => {
     if (err.name === 'UserExistsError') {
@@ -56,9 +63,8 @@ terminal.AccountError = (err, req, res, next) => {
     } return res.redirect('back');
 };
 
-
 terminal.HttpError = (err, req, res, next) => {
     return _md.doNotCrawled(req, res, () => {
-        return res.status(err.status).render('./theme/error', { err });    // todo: added http404.dot
+        return res.status(err.status).render('./theme/error', { err });
     });
 };

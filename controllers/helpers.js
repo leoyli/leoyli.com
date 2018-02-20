@@ -9,7 +9,7 @@
  * @return {(boolean|string)}               - if no name given, the brand name of the object would be returned
  */
 function checkNativeBrand(target, str) {
-    if (typeof str !== 'string') throw new TypeError(`${str} is not a string.`);
+    if (str && typeof str !== 'string') throw new TypeError(`${str} is not a string.`);
     if (str) return Object.prototype.toString.call(target).slice(8, -1).toLowerCase() === str.toLowerCase();
     else return Object.prototype.toString.call(target).slice(8, -1);
 }

@@ -27,6 +27,9 @@ class HttpError     extends ExtendableError {
     constructor(status) {
         super();
         this.status = status;
+        if (status === 400) this.message = 'HTTP 400 - Bad Request.';
+        if (status === 401) this.message = 'HTTP 401 - Unauthorized.';
+        if (status === 403) this.message = 'HTTP 403 - Forbidden.';
         if (status === 404) this.message = 'HTTP 404 - Not found.';
     }
 }

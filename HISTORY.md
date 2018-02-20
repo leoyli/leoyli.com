@@ -1,3 +1,13 @@
+### 0.7.0-dev.6.1 / 2018-02-19
+> App
+- Added supported code: 400, 401, 403 status in `HttpError` error class.
+- Fixed minor issue in `checkNativeBrand` helper function.
+- Renamed 'renderer' controller as 'handler'.
+
+> UI
+- Renamed the default view path as 'root'.
+
+
 ### 0.7.0-dev.6 / 2018-02-19
 > App
 - Added `errors.js` controller for managing all customized error objects.

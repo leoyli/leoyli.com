@@ -30,7 +30,7 @@ app.engine('dot', require('./controllers/views/engine').__express);
 app.set('view engine', 'dot');
 app.set('views', path.join(__dirname, './views'));
 app.set('partials', {
-    panel: path.join(__dirname, './views/home/_partials'),
+    panel: path.join(__dirname, './views/root/_partials'),
     theme: path.join(__dirname, './views/theme/_partials'),
 });
 
