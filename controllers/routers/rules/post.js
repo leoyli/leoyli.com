@@ -3,7 +3,7 @@ module.exports = exports = { editor: {}, post: {} };
 
 
 // ==============================
-//  FUNCTIONS
+//  DEPENDENCIES
 // ==============================
 const { _fn } = require('../../helpers');
 const { postModel } = require('../../../models/index');

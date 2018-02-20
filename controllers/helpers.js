@@ -1,20 +1,16 @@
-module.exports = exports = { _fn: { string: {}, schema: {} }};
-
-
-
+// todo: added argument checking and errors management
 // ==============================
-//  On OBJECT
+//  OBJECT
 // ==============================
-exports._fn.object = { checkNativeBrand, cloneDeep, mergeDeep, assignDeep };
-
 /**
  * check the native brand(type) of objects  // note: `checkNativeBrand` can be generalized
  * @param {object} target                   - object to be checked
- * @param {string} [source=null]            - name to be matched (case insensitive)
+ * @param {string} [str]                    - name to be matched (case insensitive)
  * @return {(boolean|string)}               - if no name given, the brand name of the object would be returned
  */
-function checkNativeBrand(target, source) {
-    if (source) return Object.prototype.toString.call(target).slice(8, -1).toLowerCase() === source.toLowerCase();
+function checkNativeBrand(target, str) {
+    if (typeof str !== 'string') throw new TypeError(`${str} is not a string.`);
+    if (str) return Object.prototype.toString.call(target).slice(8, -1).toLowerCase() === str.toLowerCase();
     else return Object.prototype.toString.call(target).slice(8, -1);
 }
 
@@ -72,10 +68,8 @@ function assignDeep(target, path, value, { mutate } = {}) {
 
 
 // ==============================
-//  STRING METHODS
+//  STRING
 // ==============================
-exports._fn.string = { escapeChars, toKebabCase, readMongoId, readObjPath, inspectFileURL };
-
 /**
  * convert string to kebabCase
  * @param {string} str                      - any arbitrary string
@@ -112,7 +106,7 @@ function escapeChars(str) {
  */
 function readMongoId(str) {
     const output = /(?:\=|\/|^)([a-f\d]{24})(?:\?|\/|$)/i.exec(str);
-    if (output === null) throw new Error(`No Mongo ObjectId in ${str} can be read.`);
+    if (output === null) throw new TypeError(`No Mongo ObjectId in ${str} can be read.`);
     else return output[1].toLowerCase();
 }
 
@@ -147,8 +141,9 @@ function inspectFileURL(str, extName, { raw = true , use } = {}) {
 }
 
 
+
 // ==============================
-//  SCHEMA METHODS
+//  SCHEMA
 // ==============================
 // arguments normalization
 const _normalizeArguments = function(data, user, next) {
@@ -170,7 +165,7 @@ const _normalizeArguments = function(data, user, next) {
 
 
 // doc correlations
-exports._fn.schema.updateAndBind = function(data, user, next, fieldName, operator, _THIS) {
+function updateAndBind(data, user, next, fieldName, operator, _THIS) {
     return (async (data, user, next) => {
         switch (operator) {
             case '$pullAll':
@@ -184,19 +179,28 @@ exports._fn.schema.updateAndBind = function(data, user, next, fieldName, operato
                 return next(new ReferenceError('Operator must be either \'$push\' or \'$pullAll\''), null);
         } return next(null, data);
     })(..._normalizeArguments(data, user, next));
-};
+}
 
 
 // promisification
-exports._fn.schema.promisify = (fn, arg, THIS) => {     // note: fn have to be pre-assigned as anther variable if replacing itself
+function promisify(fn, arg, THIS) {     // note: fn have to be pre-assigned as anther variable if replacing itself
     if (typeof arg[arg.length-1] === 'function') return fn.call(THIS, ...arg);
     return new Promise((resolve, reject) => fn.call(THIS, ...arg, (err, result) => {
         if (err) return reject(err);
         else return resolve(result);
     }));
+}
+
+
+
+// ==============================
+//  EXPORT
+// ==============================
+module.exports = exports = {
+    _fn: {
+        string: { escapeChars, toKebabCase, readMongoId, readObjPath, inspectFileURL },
+        object: { checkNativeBrand, cloneDeep, mergeDeep, assignDeep },
+        schema: { updateAndBind, promisify }
+    },
 };
-
-
-
-// export test
-exports._test = { ...exports._fn.string, ...exports._fn.object };
+exports._test = { ...exports._fn.string, ...exports._fn.object, ...exports._fn.schema };

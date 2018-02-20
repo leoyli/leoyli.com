@@ -3,7 +3,7 @@ module.exports = home = {};
 
 
 // ==============================
-//  FUNCTIONS
+//  DEPENDENCIES
 // ==============================
 const { _md } = require('../../middleware/plugins');
 const { settingModel, mediaModel, userModel } = require('../../../models/index');

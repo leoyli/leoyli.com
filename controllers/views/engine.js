@@ -1,3 +1,4 @@
+const { TemplateError }     = require('../errors');
 const
     _                       = require('lodash'),
     fs                      = require('fs'),
@@ -152,7 +153,7 @@ Template.prototype.render = function() {
     try {
         return this.compileFn.main(...this.arguement);
     } catch (err) {
-        throw new Error(`Failed to render: ('${this.filePath}'):\n${err.toString()}`);
+        throw new TemplateError(`Failed to render: ('${this.filePath}'):\n${err.toString()}`);
     }
 };
 

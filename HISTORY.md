@@ -1,3 +1,14 @@
+### 0.7.0-dev.6 / 2018-02-19
+> App
+- Added `errors.js` controller for managing all customized error objects.
+- Renamed 'user' router and rule as 'account'.
+- Restructured 'helpers' controller.
+- Added 3 terminals into error handlers.
+
+> UI
+- Updated `error.dot` template.
+
+
 ### 0.7.0-dev.5.2 / 2018-02-19
 > App
 - Renamed and moved files.

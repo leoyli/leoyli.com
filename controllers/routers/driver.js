@@ -105,9 +105,6 @@ RouterHub.prototype.run = function() {
             ]));
         });
     });
-
-    // post-attached handler
-    this.use(renderer.errorHandler);
     return this.router;
 };
 

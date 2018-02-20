@@ -1,12 +1,13 @@
 const { _fn } = require('../helpers');
 const { settingModel, postModel } = require('../../models/');
+const { ServerError } = require('../errors');
 
 
 
 const generic = async (req, res, next) => {
     // website settings
     const config = await settingModel.findOne({ active: true });
-    if (!config) throw new Error('No website configs, please restart the server for DB initialization.');
+    if (!config) throw new ServerError('No website configs, please restart the server for DB initialization.');
     res.locals._site = config._doc;
 
     // connecting session
