@@ -56,7 +56,7 @@ terminal.MongoError = (err, req, res, next) => {
 };
 
 terminal.AccountError = (err, req, res, next) => {
-    if (err.name === 'UserExistsError') {
+    if (err.code === 'UserExistsError') {
         req.flash('error', 'This email have been registered.');
     } else {
         req.flash('error', err.message);

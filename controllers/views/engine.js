@@ -133,29 +133,31 @@ function getFileString(filePath, _SYNC) {
  * @param {object} blueprint                - blueprint to be decoded
  * @param {object} sections                 - section to be complied by `doT.template`
  */
-function Template(filePath, blueprint, sections) {
-    this.filePath   = filePath;
-    this.settings   = getCompilationConfigs(Object.keys(_.omit(blueprint, 'set')).toString());
-    this.arguement  = Object.values(blueprint);
-    this.compileFn  = this.compile(sections, this.settings);
-}
-
-Template.prototype.compile = function (sections, settings) {
-    const compiledStack = {};
-    Object.keys(sections).forEach(item => {
-        if (settings.stripHTMLComment === true) sections[item] = sections[item].replace(settings.comment, '');
-        compiledStack[item] = doT.template(sections[item], settings);
-    });
-    return compiledStack;
-};
-
-Template.prototype.render = function() {
-    try {
-        return this.compileFn.main(...this.arguement);
-    } catch (err) {
-        throw new TemplateError(`Failed to render: ('${this.filePath}'):\n${err.toString()}`);
+class Template {
+    constructor(filePath, blueprint, sections) {    // todo: [private] make these private once JS supports
+        this.filePath = filePath;
+        this.settings = getCompilationConfigs(Object.keys(_.omit(blueprint, 'set')).toString());
+        this._arguement = Object.values(blueprint);
+        this._compileFn = this.compile(sections, this.settings);
     }
-};
+    
+    compile(sections, settings) {
+        const compiledStack = {};
+        Object.keys(sections).forEach(item => {
+            if (settings.stripHTMLComment === true) sections[item] = sections[item].replace(settings.comment, '');
+            compiledStack[item] = doT.template(sections[item], settings);
+        });
+        return compiledStack;
+    }
+
+    render() {
+        try {
+            return this._compileFn.main(...this._arguement);
+        } catch (err) {
+            throw new TemplateError(`Failed to render: ('${this.filePath}'):\n${err.toString()}`);
+        }
+    }
+}
 
 
 

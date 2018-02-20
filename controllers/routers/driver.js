@@ -85,28 +85,39 @@ function getViewRenderQueue({ template } = {}, method) {
  * @param {array} rules                     - an array that contains routing rule objects
  * @param {object} [option]                 - (see express.Router() API)
  */
-function RouterHub(rules, option) {
-    this.rules = rules;
-    this.router = new Router(option);
-}
+class RouterHub {
+    constructor(rules, option) {            // todo: [private] make these private once JS supports
+        this._router = new Router(option);
+        this._queue = { pre: [], post: [] };
+        this._rules = rules;
+    }
 
-RouterHub.prototype.use = function(fn) {
-    return this.router.use(fn);
-};
+    pre(fn) {
+        if(!Array.isArray(fn)) fn = [fn];
+        this._queue.pre.push(...fn);
+    }
 
-RouterHub.prototype.run = function() {
-    this.rules.forEach(({ route, alias, controller, method, settings }) => {
-        getMethods({ alias, controller, method }).forEach(method => {
-            this.router[(method === 'alias') ? 'get' : method](...asyncWrapper([
-                (method === 'alias') ? alias : route,           // path
-                ...getMiddlewareQueue(settings, method),        // middleware(plug-ins)
-                ...getControllerQueue(controller, method),      // controller
-                ...getViewRenderQueue(settings, method)         // view
-            ]));
+    post(fn) {
+        if(!Array.isArray(fn)) fn = [fn];
+        this._queue.post.push(...fn);
+    }
+
+    run() {
+        this._queue.pre.map(queue => this._router.use(queue));                          // universal pre-middleware
+        this._rules.forEach(({route, alias, controller, method, settings}) => {
+            getMethods({alias, controller, method}).forEach(method => {
+                this._router[(method === 'alias') ? 'get' : method](...asyncWrapper([
+                    (method === 'alias') ? alias : route,                               // path
+                    ...getMiddlewareQueue(settings, method),                            // middleware(plugins)
+                    ...getControllerQueue(controller, method),                          // controller
+                    ...getViewRenderQueue(settings, method)                             // view
+                ]));
+            });
         });
-    });
-    return this.router;
-};
+        this._queue.post.map(queue => this._router.use(queue));                         // universal post-middleware
+        return this._router;
+    }
+}
 
 
 

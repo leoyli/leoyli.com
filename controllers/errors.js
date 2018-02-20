@@ -21,16 +21,29 @@ class ExtendableError extends Error {
 //  ERROR CLASSES
 // ==============================
 class ServerError   extends ExtendableError {}
-class AccountError  extends ExtendableError {}
+
 class TemplateError extends ExtendableError {}
+
+class AccountError  extends ExtendableError {
+    constructor(arg) {
+        if (arg instanceof AccountError) return arg;
+        else if (arg instanceof Error) {
+            super(arg.message);
+            this.code = arg.name;
+            this.transfer = `AccountError (transferred):\n${new RegExp(/\s{4}at.+[^\n]/).exec(this.stack)[0]}\n`;
+            this.stack = this.transfer + arg.stack;
+        } else super(arg);
+    }
+}
+
 class HttpError     extends ExtendableError {
-    constructor(status) {
+    constructor(code) {
         super();
-        this.status = status;
-        if (status === 400) this.message = 'HTTP 400 - Bad Request.';
-        if (status === 401) this.message = 'HTTP 401 - Unauthorized.';
-        if (status === 403) this.message = 'HTTP 403 - Forbidden.';
-        if (status === 404) this.message = 'HTTP 404 - Not found.';
+        this.code = code;
+        if (code === 400) this.message = 'HTTP 400 - Bad Request.';
+        if (code === 401) this.message = 'HTTP 401 - Unauthorized.';
+        if (code === 403) this.message = 'HTTP 403 - Forbidden.';
+        if (code === 404) this.message = 'HTTP 404 - Not found.';
     }
 }
 

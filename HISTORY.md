@@ -1,3 +1,15 @@
+### 0.7.0-dev.7 / 2018-02-20
+> App
+- Used ES6 Class syntax for all constructors.
+- Renamed 'renderer' controller as 'handler'.
+- Split `.use` method into `.pre` and `.post` hooks in router driver.
+- Added new function into `AccountError` class, which allows to repack an error.
+- Added an anonymous post-hooked to repack errors from 'passport-local-mongoose' lib in 'account' model.
+
+> UI
+- Changed to the corrected variable name.
+
+
 ### 0.7.0-dev.6.1 / 2018-02-19
 > App
 - Added supported code: 400, 401, 403 status in `HttpError` error class.

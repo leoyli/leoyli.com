@@ -31,8 +31,7 @@ const DashboardRouter = new RouterHub([{
 
 
 // pre-used middleware
-DashboardRouter.use(_md.isSignedIn);
-DashboardRouter.use(_md.setTitleTag('Console'));
+DashboardRouter.pre([_md.isSignedIn, _md.setTitleTag('Account')]);
 
 
 

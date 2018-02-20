@@ -1,5 +1,6 @@
 const { RouterHub } = require('../controllers/routers/driver');
 const { account } = require('../controllers/routers/rules/account');
+const { AccountError } = require('../controllers/errors');
 
 
 
@@ -21,7 +22,10 @@ const UserRouter = new RouterHub([{
 
 
 // pre-used middleware
-UserRouter.use(require('../controllers/middleware/plugins')._md.usePassport);
+UserRouter.pre(require('../controllers/middleware/plugins')._md.usePassport);
+UserRouter.post(function (err, req, res, next) {
+    throw new AccountError(err);
+});
 
 
 
