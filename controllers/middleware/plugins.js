@@ -33,8 +33,9 @@ exports._md.hireBusboy = (limits) => (req, res, next) => require('./upload').upl
 
 
 // set title tag
-exports._md.setTitleTag = (title, { append, root, sequence = [] } = {}) => (req, res, next) => {
-    if (root === true) sequence.push(res.locals._view.title);
+exports._md.setTitleTag = (title, { append, root } = {}) => (req, res, next) => {
+    const sequence = [];
+    if (root !== false) sequence.push(res.locals._view.title);
     if (append === true) sequence.push(title);
     else sequence.unshift(title);
     res.locals._view.title = sequence.join(' - ');

@@ -1,3 +1,8 @@
+### 0.7.0-dev.7.1 / 2018-02-20
+> App
+- Fixed bugs in `.setTitleTag` middleware plugin.
+
+
 ### 0.7.0-dev.7 / 2018-02-20
 > App
 - Used ES6 Class syntax for all constructors.
