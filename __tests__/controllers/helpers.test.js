@@ -1,6 +1,6 @@
 // module
 const { checkNativeBrand, cloneDeep, mergeDeep, assignDeep,
-    toKebabCase, escapeChars, readMongoId, readObjPath, inspectFileURL } = require('../../controllers/helpers')._test;
+    toKebabCase, escapeChars, readMongoId, readObjPath, inspectFileURL } = require('../../controllers/module/helpers')._test;
 
 
 

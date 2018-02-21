@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, './public'), {
 
 
 // dynamic
-app.engine('dot', require('./controllers/views/engine').__express);
+app.engine('dot', require('./controllers/engine/view').__express);
 app.set('view engine', 'dot');
 app.set('views', path.join(__dirname, './views'));
 app.set('partials', {

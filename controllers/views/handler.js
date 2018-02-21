@@ -1,5 +1,5 @@
 const { _md } = require('../middleware/plugins');
-const errorClasses = require('../errors');
+const errorClasses = require('../module/errors');
 module.exports = exports = {};
 
 
@@ -64,7 +64,7 @@ terminal.MongoError = (err, req, res, next) => {
 
 terminal.HttpError = (err, req, res, next) => {
     return _md.doNotCrawled(req, res, () => {
-        return res.status(err.status).render('./theme/error', { err });
+        return res.status(err.status).render('./theme/error', {err});
     });
 };
 

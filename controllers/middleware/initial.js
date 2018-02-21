@@ -1,6 +1,6 @@
-const { _fn } = require('../helpers');
+const { _fn } = require('../module/helpers');
 const { settingModel, postModel } = require('../../models/');
-const { ServerError } = require('../errors');
+const { ServerError } = require('../module/errors');
 
 
 

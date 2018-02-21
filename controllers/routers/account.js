@@ -5,9 +5,9 @@ module.exports = exports = { account: {} };
 // ==============================
 //  DEPENDENCIES
 // ==============================
-const { _md } = require('../../middleware/plugins');
-const { userModel } = require('../../../models/index');
-const { AccountError } = require('../../errors');
+const { _md } = require('../middleware/plugins');
+const { userModel } = require('../../models/index');
+const { AccountError } = require('../module/errors');
 
 
 

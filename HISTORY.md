@@ -1,3 +1,8 @@
+### 0.7.0-dev.8 / 2018-02-21
+> App
+- Restructured the directories.
+
+
 ### 0.7.0-dev.7.3 / 2018-02-21
 > App
 - Used switch for controlling 'AccountError' terminal.

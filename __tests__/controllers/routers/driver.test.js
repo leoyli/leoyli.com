@@ -1,7 +1,7 @@
 // module
-const { _fn } = require('../../../controllers/helpers');
+const { _fn } = require('../../../controllers/module/helpers');
 const { asyncWrapper, getMethods,
-    getMiddlewareQueue, getControllerQueue, getViewRenderQueue } = require('../../../controllers/routers/driver')._test;
+    getMiddlewareQueue, getControllerQueue, getViewRenderQueue } = require('../../../controllers/engine/router')._test;
 
 
 

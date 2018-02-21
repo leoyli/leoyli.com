@@ -5,7 +5,7 @@ module.exports = exports = { _md: {} };
 // ==============================
 //  FUNCTIONS
 // ==============================
-const { _fn } = require('../helpers');
+const { _fn } = require('../module/helpers');
 
 
 

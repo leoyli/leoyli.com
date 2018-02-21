@@ -1,13 +1,13 @@
-const { RouterHub } = require('../controllers/routers/driver');
-const { account } = require('../controllers/routers/rules/account');
-const { AccountError } = require('../controllers/errors');
+const { Device } = require('../controllers/engine/router');
+const { account } = require('../controllers/routers/account');
+const { AccountError } = require('../controllers/module/errors');
 
 
 
 // ==============================
 //  ROUTER HUB
 // ==============================
-const UserRouter = new RouterHub([{
+const UserRouter = new Device([{
     route:          '/signup',
     controller:     account.signup,
     settings:       { title: 'Sign Up' },

@@ -1,5 +1,5 @@
-const { ServerError }       = require('../errors');
-const { _fn }               = require('../helpers');
+const { ServerError }       = require('../module/errors');
+const { _fn }               = require('../module/helpers');
 const
     fs                      = require('fs'),
     path                    = require('path'),

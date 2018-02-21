@@ -5,9 +5,9 @@ module.exports = exports = { editor: {}, post: {} };
 // ==============================
 //  DEPENDENCIES
 // ==============================
-const { _fn } = require('../../helpers');
-const { postModel } = require('../../../models/index');
-const search = require('../../middleware/search');
+const { _fn } = require('../module/helpers');
+const { postModel } = require('../../models/index');
+const search = require('../middleware/search');
 
 
 

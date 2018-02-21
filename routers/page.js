@@ -1,4 +1,4 @@
-const { RouterHub } = require('../controllers/routers/driver');
+const { Device } = require('../controllers/engine/router');
 const search = require('../controllers/middleware/search');
 
 
@@ -6,7 +6,7 @@ const search = require('../controllers/middleware/search');
 // ==============================
 //  ROUTER HUB
 // ==============================
-const PageRouter = new RouterHub([{
+const PageRouter = new Device([{
     route:          '/',
     controller:     (req, res) => res.render('./theme'),
 }, {

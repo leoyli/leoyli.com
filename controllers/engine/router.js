@@ -1,6 +1,6 @@
 const Router = require('express').Router;
 const { _md } = require('../middleware/plugins');
-const { _fn } = require('../helpers');
+const { _fn } = require('../module/helpers');
 const { postHandler } = require('../views/handler');
 
 
@@ -85,7 +85,7 @@ function getViewRenderQueue({ template } = {}, method) {
  * @param {array} rules                     - an array that contains routing rule objects
  * @param {object} [option]                 - (see express.Router() API)
  */
-class RouterHub {
+class Device {
     constructor(rules, option) {            // todo: [private] make these private once JS supports
         this._router = new Router(option);
         this._queue = { pre: [], post: [] };
@@ -122,5 +122,5 @@ class RouterHub {
 
 
 // module export
-module.exports = { RouterHub, _test: {
-    asyncWrapper, getMethods, getMiddlewareQueue, getControllerQueue, getViewRenderQueue, RouterHub }};
+module.exports = { Device, _test: {
+    asyncWrapper, getMethods, getMiddlewareQueue, getControllerQueue, getViewRenderQueue, Device }};

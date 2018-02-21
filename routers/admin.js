@@ -1,13 +1,13 @@
-const { RouterHub } = require('../controllers/routers/driver');
+const { Device } = require('../controllers/engine/router');
 const { _md } = require('../controllers/middleware/plugins');
-const home = require('../controllers/routers/rules/admin');
+const home = require('../controllers/routers/admin');
 
 
 
 // ==============================
 //  ROUTE HUB
 // ==============================
-const DashboardRouter = new RouterHub([{
+const DashboardRouter = new Device([{
     route:          '/',
     controller:     home.main,
     settings:       { title: 'Dashboard' },

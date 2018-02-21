@@ -5,8 +5,8 @@ module.exports = home = {};
 // ==============================
 //  DEPENDENCIES
 // ==============================
-const { _md } = require('../../middleware/plugins');
-const { settingModel, mediaModel, userModel } = require('../../../models/index');
+const { _md } = require('../middleware/plugins');
+const { settingModel, mediaModel, userModel } = require('../../models/index');
 
 
 
