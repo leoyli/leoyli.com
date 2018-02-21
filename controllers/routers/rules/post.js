@@ -17,7 +17,7 @@ const search = require('../../middleware/search');
 exports.editor.post = {
     get: [],
     post: async (req, res) => {
-        await postModel.postsCreateThenAssociate(req.body.post, req.user);
+        await postModel.postsCreateThenAssociate(req.body.post, req.user);          // tofix: ValidationError handle
         req.flash('info', 'post have been successfully posted!');
         return res.redirect('/post');
     },

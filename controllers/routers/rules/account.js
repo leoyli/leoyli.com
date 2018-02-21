@@ -20,7 +20,7 @@ exports.account.signup = {
         return res.render('./root/account/signup');
     },
     post: [_md.passwordValidation, async (req, res) => {
-        const newUser = await userModel.register(new userModel(req.body), req.body.password.new);
+        const newUser = await userModel.register(new userModel(req.body), req.body.password.new);       // tofix: handle MongoError - BulkWriteError
         req.logIn(newUser, err => {
             if (err) throw err;
             req.flash('info', `Welcome new user: ${req.body.username}`);

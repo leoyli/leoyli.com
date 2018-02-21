@@ -20,11 +20,10 @@ class ExtendableError extends Error {
 // ==============================
 //  ERROR CLASSES
 // ==============================
-class ServerError   extends ExtendableError {}
+class ServerError       extends ExtendableError {}  // note: this error can not be handled by middleware
 
-class TemplateError extends ExtendableError {}
-
-class AccountError  extends ExtendableError {
+class TemplateError     extends ExtendableError {}
+class AccountError      extends ExtendableError {
     constructor(arg) {
         if (arg instanceof AccountError) return arg;
         else if (arg instanceof Error) {
@@ -36,7 +35,7 @@ class AccountError  extends ExtendableError {
     }
 }
 
-class HttpError     extends ExtendableError {
+class HttpError         extends ExtendableError {
     constructor(code) {
         super();
         this.code = code;
@@ -44,6 +43,7 @@ class HttpError     extends ExtendableError {
         if (code === 401) this.message = 'HTTP 401 - Unauthorized.';
         if (code === 403) this.message = 'HTTP 403 - Forbidden.';
         if (code === 404) this.message = 'HTTP 404 - Not found.';
+        if (code === 500) this.message = 'HTTP 500 - Internal Server Error.';
     }
 }
 

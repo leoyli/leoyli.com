@@ -1,4 +1,5 @@
-const { _fn } = require('../helpers');
+const { ServerError }       = require('../errors');
+const { _fn }               = require('../helpers');
 const
     fs                      = require('fs'),
     path                    = require('path'),
@@ -36,9 +37,9 @@ function getUploadPath(parser) {
  */
 function uploadFile(parser) {
     parser.stream.pipe(fs.createWriteStream(parser.filePath).on('error', err => {
-        if (err && !(err.code === 'ENOENT')) throw err;
+        if (err && !(err.code === 'ENOENT')) throw new ServerError(err);
         fs.mkdir(path.dirname(parser.filePath), err => {
-            if (err) throw Error(`Errors in creating ${path.dirname(parser.filePath)}:\n${err.toString()}`);
+            if (err) throw ServerError(`Errors in creating: ${path.dirname(parser.filePath)}\n${err.toString()}`);
             parser.stream.pipe(fs.createWriteStream(parser.filePath));
         });
     }));
@@ -73,7 +74,7 @@ function transpileMes(parser, configs) {
     } else if (parser.stream.truncated) {
         messenger.push(`${parser.fileName} is too large (> ${configs.fileSize/1048576} MB)...`);
         fs.unlink(parser.filePath, err => {
-            if (err) throw new Error(`Failed to clean up the truncated file...\n${err.toString()}`);
+            if (err) throw new ServerError(`Failed to clean up the truncated file...\n${err.toString()}`);
         });
     } return messenger;
 }
@@ -120,4 +121,4 @@ function uploadController(req, res, configs, next) {
 
 
 // exports
-module.exports = { uploadController, _test: { checkStatus, getUploadPath, uploadFile, transpileRaw ,transpileMes }};
+module.exports = { uploadController, _test: { checkStatus, getUploadPath, uploadFile, transpileRaw, transpileMes }};

@@ -1,3 +1,14 @@
+### 0.7.0-dev.7.2 / 2018-02-20
+> App
+- Revised `unhandledRejection` event emitter in `app.js`.
+- Hooked ServerError around errors form 'fs' module.
+- Identified more client errors to be handled.
+- Simplified errorHandler core.
+- Simplified 'admin' router. 
+- Added 'TemplateError' terminal in error handler.
+- Added supporting of http code 500 in 'HttpError' error class.
+
+
 ### 0.7.0-dev.7.1 / 2018-02-20
 > App
 - Fixed bugs in `.setTitleTag` middleware plugin.

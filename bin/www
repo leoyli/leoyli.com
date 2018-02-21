@@ -104,6 +104,6 @@ function onListening() {
  * Event listener for 'unhandledRejection' event.
  */
 
-process.on('unhandledRejection', (reason, p) => {
-    console.log('Unhandled Rejection at:', p, 'reason:', reason);
+process.on('unhandledRejection', (err) => {
+    console.log('Unhandled Promise Rejection:\n', err.stack);
 });

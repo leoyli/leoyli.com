@@ -23,9 +23,7 @@ const UserRouter = new RouterHub([{
 
 // pre-used middleware
 UserRouter.pre(require('../controllers/middleware/plugins')._md.usePassport);
-UserRouter.post(function (err, req, res, next) {
-    throw new AccountError(err);
-});
+UserRouter.post((err, req, res, next) => next(new AccountError(err)));
 
 
 

@@ -35,26 +35,14 @@ const terminal = {};
 // gateway
 exports.errorHandler = (err, req, res, next) => {     // todo: error handler separations
     if (['dev', 'test'].indexOf(process.env.NODE_ENV) !== -1) console.log(err.stack);
-
-    switch (err.constructor) {
-        default:
-            return res.render('./theme/error', { err });
-        case errorClasses.MongoError:
-            return terminal.MongoError(err, req, res, next);
-        case errorClasses.AccountError:
-            return terminal.AccountError(err, req, res, next);
-        case errorClasses.HttpError:
-            return terminal.HttpError(err, req, res, next);
-    }
+    console.log(err.constructor);
+    if (errorClasses.hasOwnProperty(err.name) && terminal[err.name]) {
+        return terminal[err.name](err, req, res, next);
+    } else return res.render('./theme/error', { err });
 };
 
 
 // terminal
-terminal.MongoError = (err, req, res, next) => {
-    if (err.code === 11000) req.flash('error', 'This username is not available.');
-    return res.redirect('back');
-};
-
 terminal.AccountError = (err, req, res, next) => {
     if (err.code === 'UserExistsError') {
         req.flash('error', 'This email have been registered.');
@@ -63,8 +51,21 @@ terminal.AccountError = (err, req, res, next) => {
     } return res.redirect('back');
 };
 
+terminal.MongoError = (err, req, res, next) => {
+    if (err.code === 11000) req.flash('error', 'This username is not available.');
+    return res.redirect('back');
+};
+
 terminal.HttpError = (err, req, res, next) => {
     return _md.doNotCrawled(req, res, () => {
         return res.status(err.status).render('./theme/error', { err });
+    });
+};
+
+terminal.TemplateError = (err, req, res, next) => {
+    return _md.doNotCrawled(req, res, () => {
+        // todo: log the message and call the admin
+        // todo: guidance for the client
+        return res.status(500).send(`<h1>${new errorClasses.HttpError(500).message}</h1>`);
     });
 };
