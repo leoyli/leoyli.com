@@ -1,5 +1,3 @@
-const { MongoError } = require('mongodb');
-
 
 // ==============================
 //  CORE
@@ -48,5 +46,6 @@ class HttpError         extends ExtendableError {
 }
 
 
+
 // export
-module.exports = { MongoError, ServerError, AccountError, TemplateError, HttpError };
+module.exports = { ServerError, AccountError, TemplateError, HttpError };

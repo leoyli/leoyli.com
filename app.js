@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, './public'), {
 
 
 // dynamic
-app.engine('dot', require('./controllers/engine/view').__express);
+app.engine('dot', require('./controllers/engines/view').__express);
 app.set('view engine', 'dot');
 app.set('views', path.join(__dirname, './views'));
 app.set('partials', {
@@ -44,7 +44,7 @@ mongoose.connect(process.env.DB);
 
 
 // initialization
-const { settingModel, userModel } = require('./models');
+const { settingModel, userModel } = require('./models/');
 if (process.env.NODE_ENV !== 'test') settingModel.initialize();
 
 

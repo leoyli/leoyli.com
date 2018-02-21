@@ -5,7 +5,7 @@ module.exports = exports = { _md: {} };
 // ==============================
 //  FUNCTIONS
 // ==============================
-const { _fn } = require('../module/helpers');
+const { _$ } = require('../modules/');
 
 
 
@@ -64,7 +64,7 @@ exports._md.isSignedIn = [exports._md.doNotCrawled, ...exports._md.usePassport, 
 exports._md.isAuthorized = [...exports._md.isSignedIn, async (req, res, next) => {
     const [field, val] = req.params.canonical !== undefined
         ? ['canonical', req.params.canonical]
-        : ['_id', _fn.string.readMongoId(req.url)];
+        : ['_id', _$.string.readMongoId(req.url)];
     const count = await require('../../models/').postModel.count({ [field]: val, 'author._id': req.user });
     if (count !== 1) {
         req.flash('error', 'You do not have a valid authorization...');

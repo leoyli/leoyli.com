@@ -1,4 +1,4 @@
-const { TemplateError }     = require('../module/errors');
+const { TemplateError }     = require('../modules/')._$.error;
 const
     _                       = require('lodash'),
     fs                      = require('fs'),

@@ -1,4 +1,4 @@
-const { Device } = require('../controllers/engine/router');
+const { Device } = require('../controllers/engines/router');
 const { _md } = require('../controllers/middleware/plugins');
 const home = require('../controllers/routers/admin');
 

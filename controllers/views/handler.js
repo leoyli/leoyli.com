@@ -1,5 +1,5 @@
+const { _$ } = require('../modules/');
 const { _md } = require('../middleware/plugins');
-const errorClasses = require('../module/errors');
 module.exports = exports = {};
 
 
@@ -21,7 +21,7 @@ exports.postHandler = (template, post, meta) => async (req, res, next) => {
         if ($meta.now < $meta.end)  res.locals._view.next = urlBase + ($meta.now + 1);
     }
 
-    if ($post === null) throw new errorClasses.HttpError(404);
+    if ($post === null) throw new _$.error.HttpError(404);
     else return res.render($template, { meta: $meta, post: $post });
 };
 
@@ -35,7 +35,7 @@ const terminal = {};
 // gateway
 exports.errorHandler = (err, req, res, next) => {     // todo: error handler separations
     if (['dev', 'test'].indexOf(process.env.NODE_ENV) !== -1) console.log(err.stack);
-    if (errorClasses.hasOwnProperty(err.name) && terminal[err.name]) {
+    if (_$.error.hasOwnProperty(err.name) && terminal[err.name]) {
         return terminal[err.name](err, req, res, next);
     } else return res.render('./theme/error', { err });
 };
@@ -72,6 +72,6 @@ terminal.TemplateError = (err, req, res, next) => {
     return _md.doNotCrawled(req, res, () => {
         // todo: log the message and call the admin
         // todo: guidance for the client
-        return res.status(500).send(`<h1>${new errorClasses.HttpError(500).message}</h1>`);
+        return res.status(500).send(`<h1>${new _$.error.HttpError(500).message}</h1>`);
     });
 };

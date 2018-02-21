@@ -1,6 +1,6 @@
 const Router = require('express').Router;
 const { _md } = require('../middleware/plugins');
-const { _fn } = require('../module/helpers');
+const { _$ } = require('../modules/');
 const { postHandler } = require('../views/handler');
 
 
@@ -12,8 +12,8 @@ const { postHandler } = require('../views/handler');
  */
 function asyncWrapper(fn) {
     const wrapAsync = fn => (req, res, next) => fn(req, res, next).catch(next);
-    if (!_fn.object.checkNativeBrand(fn, 'Array')) fn = [fn];
-    return fn.map(fn => _fn.object.checkNativeBrand(fn, 'AsyncFunction') ? wrapAsync(fn) : fn);
+    if (!_$.object.checkNativeBrand(fn, 'Array')) fn = [fn];
+    return fn.map(fn => _$.object.checkNativeBrand(fn, 'AsyncFunction') ? wrapAsync(fn) : fn);
 }
 
 
@@ -26,8 +26,8 @@ function asyncWrapper(fn) {
  */
 function getMethods({ controller, alias, method }) {
     const $method = method
-        ? _fn.object.checkNativeBrand(method, 'String') ? [method] : method
-        : _fn.object.checkNativeBrand(controller, 'Object') ? Object.keys(controller) : ['get'];
+        ? _$.object.checkNativeBrand(method, 'String') ? [method] : method
+        : _$.object.checkNativeBrand(controller, 'Object') ? Object.keys(controller) : ['get'];
     if (alias && $method.indexOf('alias') === -1) $method.push('alias');
     return $method.sort().reverse();
 }
@@ -64,7 +64,7 @@ function getMiddlewareQueue({ query, authorized, authenticated, crawler, title, 
  */
 function getControllerQueue(controller, method) {
     if (controller[method]) controller = controller[method];
-    return _fn.object.checkNativeBrand(controller, 'Array') ? controller : [controller];
+    return _$.object.checkNativeBrand(controller, 'Array') ? controller : [controller];
 }
 
 

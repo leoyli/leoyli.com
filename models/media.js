@@ -7,7 +7,7 @@ const
 //  FUNCTIONS
 // ==============================
 // ancillaries
-const { _fn }               = require('../controllers/module/helpers');
+const { _$ }               = require('../controllers/modules/');
 
 
 
@@ -43,13 +43,13 @@ const MediaSchema           = new mongoose.Schema({
 // ==============================
 // create and associate (model)
 MediaSchema.static('mediaCreateThenAssociate', function (raw, user, next) {
-    return Promise.resolve().then(() => _fn.schema.updateAndBind(raw, user, next, 'media', '$push', this));
+    return Promise.resolve().then(() => _$.schema.updateAndBind(raw, user, next, 'media', '$push', this));
 });
 
 
 // delete and dissociate (model)  // note: not workable for admin in deleting media owned by multiple users
 MediaSchema.static('mediaDeleteThenDissociate', function (docsID, user, next) {
-    return Promise.resolve().then(() => _fn.schema.updateAndBind(docsID, user, next, 'media', '$pullAll', this));
+    return Promise.resolve().then(() => _$.schema.updateAndBind(docsID, user, next, 'media', '$pullAll', this));
 });
 
 

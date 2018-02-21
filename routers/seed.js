@@ -1,4 +1,4 @@
-const { Device } = require('../controllers/engine/router');
+const { Device } = require('../controllers/engines/router');
 
 
 
@@ -24,7 +24,7 @@ const moc = {
 
 
 const seed = async (req, res) => {
-    const { postModel, userModel } = require('../models/index');
+    const { postModel, userModel } = require('../models/');
     const newUser = await userModel.register(new userModel(moc.user), moc.user.password);
     await postModel.postsCreateThenAssociate(moc.post(newUser), newUser);
     req.flash('info', 'Successfully seeded.');

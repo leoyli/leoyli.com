@@ -1,3 +1,12 @@
+### 0.7.0-dev.8.1 / 2018-02-21
+> App
+- Split 'helper' module into 'schema', 'string', 'object' files.
+- rename `_fn` module function leading variable to be `_$`.
+
+> Test
+- Split 'helper' module test files correspondingly.
+
+
 ### 0.7.0-dev.8 / 2018-02-21
 > App
 - Restructured the directories.

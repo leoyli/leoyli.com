@@ -95,7 +95,7 @@ function getSortExp(sort, query) {
 
 // middleware
 function search({ page, num, sort } = {}) {
-    return (req, res, next) => require('../../models/index').postModel
+    return (req, res, next) => require('../../models/').postModel
         .aggregate(getAggregationQuery(req, page, num || res.locals._site.sets.num, sort))
         .then(docs => docs[0])
         .then(result => {
