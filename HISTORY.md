@@ -1,3 +1,9 @@
+### 0.7.0-dev.7.3 / 2018-02-21
+> App
+- Used switch for controlling 'AccountError' terminal.
+- Revised 'AccountError' error class.
+
+
 ### 0.7.0-dev.7.2 / 2018-02-20
 > App
 - Revised `unhandledRejection` event emitter in `app.js`.

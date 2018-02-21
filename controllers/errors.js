@@ -25,12 +25,12 @@ class ServerError       extends ExtendableError {}  // note: this error can not 
 class TemplateError     extends ExtendableError {}
 class AccountError      extends ExtendableError {
     constructor(arg) {
-        if (arg instanceof AccountError) return arg;
+        if (arg instanceof ExtendableError) return arg;
         else if (arg instanceof Error) {
             super(arg.message);
-            this.code = arg.name;
-            this.transfer = `AccountError (transferred):\n${new RegExp(/\s{4}at.+[^\n]/).exec(this.stack)[0]}\n`;
-            this.stack = this.transfer + arg.stack;
+            this.code = arg.code;
+            this.from = arg.name;
+            this.stack = `AccountError (transferred):${new RegExp(/\s+at.+[^\n]/).exec(this.stack)[0]}\n${arg.stack}`;
         } else super(arg);
     }
 }

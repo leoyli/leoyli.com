@@ -35,7 +35,6 @@ const terminal = {};
 // gateway
 exports.errorHandler = (err, req, res, next) => {     // todo: error handler separations
     if (['dev', 'test'].indexOf(process.env.NODE_ENV) !== -1) console.log(err.stack);
-    console.log(err.constructor);
     if (errorClasses.hasOwnProperty(err.name) && terminal[err.name]) {
         return terminal[err.name](err, req, res, next);
     } else return res.render('./theme/error', { err });
@@ -44,11 +43,18 @@ exports.errorHandler = (err, req, res, next) => {     // todo: error handler sep
 
 // terminal
 terminal.AccountError = (err, req, res, next) => {
-    if (err.code === 'UserExistsError') {
-        req.flash('error', 'This email have been registered.');
-    } else {
-        req.flash('error', err.message);
-    } return res.redirect('back');
+    switch (err.from) {
+        case 'UserExistsError':
+            req.flash('error', 'This email have been used.');
+            break;
+        case 'ValidationError':
+            req.flash('error', err.message);
+            break;
+        default:
+            req.flash('error', err.message);
+    }
+
+    return res.redirect('back');
 };
 
 terminal.MongoError = (err, req, res, next) => {
