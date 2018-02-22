@@ -41,5 +41,5 @@ settingModelSchema.static('updateSettings', function(dataToBeUpdated, next) {
 
 
 
-// export model
+// exports
 module.exports = mongoose.model('settings', settingModelSchema);

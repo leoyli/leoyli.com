@@ -1,3 +1,26 @@
+
+
+
+function search({ page, num, sort } = {}) {
+    return (req, res, next) => require('../../models/').postModel
+        .aggregate(getAggregationQuery(req, page, num || res.locals._site.sets.num, sort))
+        .then(docs => docs[0])
+        .then(result => {
+            if (typeof next !== 'function') return result;
+            req.session.view = result;
+            return next();
+        })
+        .catch(err => {
+            if (typeof next !== 'function') throw err;
+            else return next(err);
+        });
+}
+
+
+
+// ==============================
+//  COMPONENTS
+// ==============================
 /**
  * construct Mongo query expression for search operations
  * @param {object} req                     - Express.js request object which contains searching parameters
@@ -90,23 +113,6 @@ function getSortExp(sort, query) {
     const $sort = Object.assign({ 'visibility.pinned': -1 }, sort);
     if ($sort['time.updated'] !== 1) $sort['time.updated'] = -1;
     return $sort;
-}
-
-
-// middleware
-function search({ page, num, sort } = {}) {
-    return (req, res, next) => require('../../models/').postModel
-        .aggregate(getAggregationQuery(req, page, num || res.locals._site.sets.num, sort))
-        .then(docs => docs[0])
-        .then(result => {
-            if (typeof next !== 'function') return result;
-            req.session.view = result;
-            return next();
-        })
-        .catch(err => {
-            if (typeof next !== 'function') throw err;
-            else return next(err);
-        });
 }
 
 

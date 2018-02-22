@@ -60,5 +60,5 @@ MediaSchema.pre('findOneAndUpdate', function () {
 
 
 
-// export model
+// exports
 module.exports = mongoose.model('media', MediaSchema);

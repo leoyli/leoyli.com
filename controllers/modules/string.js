@@ -70,5 +70,5 @@ function inspectFileURL(str, extName, { raw = true , use } = {}) {
 
 
 
-// export
+// exports
 module.exports = { escapeChars, toKebabCase, readMongoId, readObjPath, inspectFileURL };

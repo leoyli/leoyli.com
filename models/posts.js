@@ -72,5 +72,5 @@ PostSchema.pre('findOneAndUpdate', function () {
 
 
 
-// export model
+// exports
 module.exports = mongoose.model('posts', PostSchema);

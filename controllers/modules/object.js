@@ -63,5 +63,5 @@ function assignDeep(target, path, value, { mutate } = {}) {
 
 
 
-// export
+// exports
 module.exports = { checkNativeBrand, cloneDeep, mergeDeep, assignDeep };

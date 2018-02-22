@@ -47,5 +47,5 @@ class HttpError         extends ExtendableError {
 
 
 
-// export
+// exports
 module.exports = { ServerError, AccountError, TemplateError, HttpError };

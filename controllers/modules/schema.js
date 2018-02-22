@@ -46,5 +46,5 @@ function promisify(fn, arg, THIS) {     // note: fn have to be pre-assigned as a
 
 
 
-// export
+// exports
 module.exports = { updateAndBind, promisify };

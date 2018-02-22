@@ -43,5 +43,5 @@ const postNormalizer = async (req, res, next) => {
 };
 
 
-// module export
+// exports
 module.exports = generic;

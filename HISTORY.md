@@ -1,3 +1,8 @@
+### 0.7.0-dev.8.2 / 2018-02-22
+> App
+- Rearranged codes for better readability and consistency.
+
+
 ### 0.7.0-dev.8.1 / 2018-02-21
 > App
 - Split 'helper' module into 'schema', 'string', 'object' files.

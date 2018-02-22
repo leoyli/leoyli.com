@@ -7,6 +7,41 @@ const
     marked                  = require('marked');
 
 
+
+/**
+ * define the scheme of Template{object}
+ * @constructor
+ * @param {string} filePath                 - reserved for error messaging
+ * @param {object} blueprint                - blueprint to be decoded
+ * @param {object} sections                 - section to be complied by `doT.template`
+ */
+class Template {
+    constructor(filePath, blueprint, sections) {    // todo: [private] make these private once JS supports
+        this.filePath = filePath;
+        this.settings = getCompilationConfigs(Object.keys(_.omit(blueprint, 'set')).toString());
+        this._arguement = Object.values(blueprint);
+        this._compileFn = this.compile(sections, this.settings);
+    }
+
+    compile(sections, settings) {
+        const compiledStack = {};
+        Object.keys(sections).forEach(item => {
+            if (settings.stripHTMLComment === true) sections[item] = sections[item].replace(settings.comment, '');
+            compiledStack[item] = doT.template(sections[item], settings);
+        });
+        return compiledStack;
+    }
+
+    render() {
+        try {
+            return this._compileFn.main(...this._arguement);
+        } catch (err) {
+            throw new TemplateError(`Failed to render: ('${this.filePath}'):\n${err.toString()}`);
+        }
+    }
+}
+
+
 /**
  * Should return the requested content in HTML
  * @param {string} filePath                 - template file path to be passed
@@ -21,6 +56,10 @@ function render(filePath, locals, next) {
 }
 
 
+
+// ==============================
+//  COMPONENTS
+// ==============================
 /**
  * generate doT configs on-the-fly
  * @param {string} variables                - names to be registered into the runtime scope
@@ -126,42 +165,8 @@ function getFileString(filePath, _SYNC) {
 }
 
 
-/**
- * define the scheme of Template{object}
- * @constructor
- * @param {string} filePath                 - reserved for error messaging
- * @param {object} blueprint                - blueprint to be decoded
- * @param {object} sections                 - section to be complied by `doT.template`
- */
-class Template {
-    constructor(filePath, blueprint, sections) {    // todo: [private] make these private once JS supports
-        this.filePath = filePath;
-        this.settings = getCompilationConfigs(Object.keys(_.omit(blueprint, 'set')).toString());
-        this._arguement = Object.values(blueprint);
-        this._compileFn = this.compile(sections, this.settings);
-    }
-    
-    compile(sections, settings) {
-        const compiledStack = {};
-        Object.keys(sections).forEach(item => {
-            if (settings.stripHTMLComment === true) sections[item] = sections[item].replace(settings.comment, '');
-            compiledStack[item] = doT.template(sections[item], settings);
-        });
-        return compiledStack;
-    }
 
-    render() {
-        try {
-            return this._compileFn.main(...this._arguement);
-        } catch (err) {
-            throw new TemplateError(`Failed to render: ('${this.filePath}'):\n${err.toString()}`);
-        }
-    }
-}
-
-
-
-// view engine export
-module.exports = { __express: render, render, _test: {
-    getCompilationConfigs, getBlueprint, getRuntimeMethods,
-    getTemplate, buildTemplate, getFileString, render, Template }};
+// exports
+module.exports = { __express: render, render, _test: { Template,
+        render, getCompilationConfigs, getBlueprint, getRuntimeMethods,
+        getTemplate, buildTemplate, getFileString }};

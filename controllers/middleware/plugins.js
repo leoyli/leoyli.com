@@ -1,16 +1,11 @@
+const { _$ } = require('../modules/');
+const passport = require('passport');
 module.exports = exports = { _md: {} };
 
 
 
 // ==============================
-//  FUNCTIONS
-// ==============================
-const { _$ } = require('../modules/');
-
-
-
-// ==============================
-//  MODULES (add-on)
+//  MIDDLEWARE PLUGINS
 // ==============================
 // http header for stopping crawlers
 exports._md.doNotCrawled = (req, res, next) => {
@@ -44,7 +39,6 @@ exports._md.setTitleTag = (title, { append, root } = {}) => (req, res, next) => 
 
 
 // passport
-const passport = require('passport');
 exports._md.usePassport = [passport.initialize(), passport.session()];
 
 
@@ -74,6 +68,7 @@ exports._md.isAuthorized = [...exports._md.isSignedIn, async (req, res, next) =>
 
 
 // password validations
+// todo: throw AccountError objects
 exports._md.passwordValidation = (req, res, next) => {
     if (!req.body.password.new || !req.body.password.confirmed) {
         req.flash('error', 'Please fill all required fields.');

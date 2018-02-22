@@ -5,6 +5,53 @@ const
     Busboy                  = require('busboy');
 
 
+
+function uploadController(req, res, configs, next) {
+    req.body.busboySlip = { raw: {}, mes: [] };
+    if (!configs.fileSize) configs.fileSize = 25 * 1048576;
+    if (!configs.MIME) configs.MIME = ['image/png', 'image/gif', 'image/jpeg', 'image/svg+xml', 'image/x-icon'];
+    return req.pipe(new Busboy({ headers: req.headers, limits: configs })
+        .on('file'  , (...args) => fileParser(req, res, configs, args))
+        .on('field' , (...args) => fieldParser(req, res, configs, args))
+        .on('finish', ()        => finishExport(req, res, configs, next)));
+}
+
+
+
+// ==============================
+//  EMITTED WORKERS
+// ==============================
+function fileParser(req, res, configs, args) {
+    const parser = { fieldName: args[0], stream: args[1], fileName: args[2], encoding: args[3], MIME: args[4] };
+    parser.filePath = getUploadPath(parser);
+    parser.settings = configs;
+    parser.stream.on('end', () => {
+        _$.object.mergeDeep(req.body.busboySlip.raw, transpileRaw(parser, configs));
+        req.body.busboySlip.mes.push(...transpileMes(parser, configs));
+    });
+    checkStatus(parser, configs) ? uploadFile(parser) : parser.stream.resume();
+}
+
+
+function fieldParser(req, res, configs, args) {
+    const parser = { fieldName: args[0], value: _$.string.escapeChars(args[1]), truncatedName: args[2],
+        truncatedValue: args[3], encoding: args[4], MIME: args[5] };
+    if (parser.value !== undefined){
+        _$.object.assignDeep(req.body.busboySlip.raw, parser.fieldName, parser.value, { mutate: true });
+    }
+}
+
+
+function finishExport(req, res, configs, next) {
+    req.body.busboySlip.raw = Object.values(req.body.busboySlip.raw).filter(obj => obj.isSkipped !== true);
+    return next();
+}
+
+
+
+// ==============================
+//  COMPONENTS
+// ==============================
 /**
  * check the current status of permission/condition
  * @param {object} parser                   - busboy emitted referencing object from a file listener
@@ -79,45 +126,7 @@ function transpileMes(parser, configs) {
 }
 
 
-// middleware
-function fileParser(req, res, configs, args) {
-    const parser = { fieldName: args[0], stream: args[1], fileName: args[2], encoding: args[3], MIME: args[4] };
-    parser.filePath = getUploadPath(parser);
-    parser.settings = configs;
-    parser.stream.on('end', () => {
-        _$.object.mergeDeep(req.body.busboySlip.raw, transpileRaw(parser, configs));
-        req.body.busboySlip.mes.push(...transpileMes(parser, configs));
-    });
-    checkStatus(parser, configs) ? uploadFile(parser) : parser.stream.resume();
-}
-
-
-function fieldParser(req, res, configs, args) {
-    const parser = { fieldName: args[0], value: _$.string.escapeChars(args[1]), truncatedName: args[2],
-        truncatedValue: args[3], encoding: args[4], MIME: args[5] };
-    if (parser.value !== undefined){
-        _$.object.assignDeep(req.body.busboySlip.raw, parser.fieldName, parser.value, { mutate: true });
-    }
-}
-
-
-function finishUpload(req, res, configs, next) {
-    req.body.busboySlip.raw = Object.values(req.body.busboySlip.raw).filter(obj => obj.isSkipped !== true);
-    return next();
-}
-
-
-function uploadController(req, res, configs, next) {
-    req.body.busboySlip = { raw: {}, mes: [] };
-    if (!configs.fileSize) configs.fileSize = 25 * 1048576;
-    if (!configs.MIME) configs.MIME = ['image/png', 'image/gif', 'image/jpeg', 'image/svg+xml', 'image/x-icon'];
-    return req.pipe(new Busboy({ headers: req.headers, limits: configs })
-        .on('file'  , (...args) => fileParser(req, res, configs, args))
-        .on('field' , (...args) => fieldParser(req, res, configs, args))
-        .on('finish', ()        => finishUpload(req, res, configs, next)));
-}
-
-
 
 // exports
-module.exports = { uploadController, _test: { checkStatus, getUploadPath, uploadFile, transpileRaw, transpileMes }};
+module.exports = { uploadController, _test: {
+        checkStatus, getUploadPath, uploadFile, transpileRaw, transpileMes }};
