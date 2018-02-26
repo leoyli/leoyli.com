@@ -5,7 +5,7 @@ module.exports = exports = { editor: {}, post: {} };
 // ==============================
 //  DEPENDENCIES
 // ==============================
-const { _$ } = require('../modules/');
+const { _U_ } = require('../utilities/');
 const { postModel } = require('../../models/');
 const search = require('../middleware/search');
 
@@ -29,16 +29,16 @@ exports.editor.edit = {
         return res.redirect(`/post/editor/${req.session.view.post._id}`);
     },
     get: async (req, res, next) => {
-        if (!req.session.view) req.session.view = { post: await postModel.findById(_$.string.readMongoId(req.url)) };
+        if (!req.session.view) req.session.view = { post: await postModel.findById(_U_.string.readMongoId(req.url)) };
         return next();
     },
     patch: async (req, res) => {
-        const doc = await postModel.findByIdAndUpdate(_$.string.readMongoId(req.url), req.body.post, { new: true });
+        const doc = await postModel.findByIdAndUpdate(_U_.string.readMongoId(req.url), req.body.post, { new: true });
         req.flash('info', 'post have been successfully updated!');
         return res.redirect(`/post/${doc.canonical}`);
     },
     delete: async (req, res) => { // todo: trash can || double check
-        await postModel.postsDeleteThenDissociate(_$.string.readMongoId(req.url), req.user);
+        await postModel.postsDeleteThenDissociate(_U_.string.readMongoId(req.url), req.user);
         req.flash('info', 'post have been successfully deleted!');
         return res.redirect('/post/');
     },

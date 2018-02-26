@@ -1,6 +1,6 @@
 const Router = require('express').Router;
-const { _md } = require('../middleware/plugins');
-const { _$ } = require('../modules/');
+const { _M_ } = require('../middleware/plugins');
+const { _U_ } = require('../utilities/');
 const { postHandler } = require('../views/handler');
 
 
@@ -57,8 +57,8 @@ class Device {
  */
 function asyncWrapper(fn) {
     const wrapAsync = fn => (req, res, next) => fn(req, res, next).catch(next);
-    if (!_$.object.checkNativeBrand(fn, 'Array')) fn = [fn];
-    return fn.map(fn => _$.object.checkNativeBrand(fn, 'AsyncFunction') ? wrapAsync(fn) : fn);
+    if (!_U_.object.checkNativeBrand(fn, 'Array')) fn = [fn];
+    return fn.map(fn => _U_.object.checkNativeBrand(fn, 'AsyncFunction') ? wrapAsync(fn) : fn);
 }
 
 
@@ -71,8 +71,8 @@ function asyncWrapper(fn) {
  */
 function stackHttpMethods({ controller, alias, method }) {
     const $method = method
-        ? _$.object.checkNativeBrand(method, 'String') ? [method] : method
-        : _$.object.checkNativeBrand(controller, 'Object') ? Object.keys(controller) : ['get'];
+        ? _U_.object.checkNativeBrand(method, 'String') ? [method] : method
+        : _U_.object.checkNativeBrand(controller, 'Object') ? Object.keys(controller) : ['get'];
     if (alias && $method.indexOf('alias') === -1) $method.push('alias');
     return $method.sort().reverse();
 }
@@ -85,17 +85,17 @@ function stackHttpMethods({ controller, alias, method }) {
  * @param {boolean} [authenticated]         - accept only authorized? (load 5 fns)              default: false
  * @param {boolean} [crawler]               - accept crawlers? (load 1 fn)                      default: true
  * @param {string} [title]                  - title tag name
- * @param {object} [titleOption]            - title tagging options (see _md.setTitleTag())
+ * @param {object} [titleOption]            - title tagging options (see _M_.setTitleTag())
  * @param {string} [method]                 - method to be watched
  * @return {Array}                          - ordering of the result is important
  */
 function loadRoutePlugins({ query, authorized, authenticated, crawler, title, titleOption } = {}, method) {
     const queue = [];
-    if (query !== 'sensitive') queue.push(_md.caseInsensitiveQuery);
-    if (authorized === true) queue.push(..._md.isAuthorized);
-    else if (authenticated === true) queue.push(..._md.isSignedIn);
-    else if (crawler === false) queue.push(_md.doNotCrawled);
-    if (title) queue.push(_md.setTitleTag(title, titleOption));
+    if (query !== 'sensitive') queue.push(_M_.caseInsensitiveQuery);
+    if (authorized === true) queue.push(..._M_.isAuthorized);
+    else if (authenticated === true) queue.push(..._M_.isSignedIn);
+    else if (crawler === false) queue.push(_M_.doNotCrawled);
+    if (title) queue.push(_M_.setTitleTag(title, titleOption));
     return queue;
 }
 
@@ -108,7 +108,7 @@ function loadRoutePlugins({ query, authorized, authenticated, crawler, title, ti
  */
 function loadMainControls(controller, method) {
     if (controller[method]) controller = controller[method];
-    return _$.object.checkNativeBrand(controller, 'Array') ? controller : [controller];
+    return _U_.object.checkNativeBrand(controller, 'Array') ? controller : [controller];
 }
 
 

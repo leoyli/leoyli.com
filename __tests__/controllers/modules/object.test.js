@@ -1,5 +1,5 @@
 // module
-const { checkNativeBrand, cloneDeep, mergeDeep, assignDeep } = require('../../../controllers/modules/')._test;
+const { checkNativeBrand, cloneDeep, mergeDeep, assignDeep } = require('../../../controllers/utilities/')._test;
 
 
 

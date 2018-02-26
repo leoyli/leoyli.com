@@ -9,7 +9,7 @@ const
 //  FUNCTIONS
 // ==============================
 // ancillaries
-const { _$ }               = require('../controllers/modules/');
+const { _U_ }               = require('../controllers/utilities/');
 
 
 
@@ -56,17 +56,17 @@ UserSchema.plugin(passportLocalMongoose, {
 //// rewrite plugin methods as promises
 const _register = UserSchema.statics.register;
 UserSchema.statics.register = function (doc, pw, next) {
-    return _$.schema.promisify(_register, arguments, this);
+    return _U_.schema.promisify(_register, arguments, this);
 };
 
 const _authenticate = UserSchema.methods.authenticate;
 UserSchema.methods.authenticate = function (pw, next) {
-    return _$.schema.promisify(_authenticate, arguments, this);
+    return _U_.schema.promisify(_authenticate, arguments, this);
 };
 
 const _changePassword = UserSchema.methods.changePassword;
 UserSchema.methods.changePassword = function (old_PW, new_PW, next) {
-    return _$.schema.promisify(_changePassword, arguments, this);
+    return _U_.schema.promisify(_changePassword, arguments, this);
 };
 
 

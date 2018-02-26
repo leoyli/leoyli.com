@@ -1,4 +1,4 @@
-const { HttpError }         = require('../controllers/modules/')._$.error;
+const { HttpError }         = require('../controllers/utilities/')._U_.error;
 const
     methodOverride          = require('method-override'),
     bodyParser              = require('body-parser'),

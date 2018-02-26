@@ -1,5 +1,5 @@
 // module
-const { _$ } = require('../../../controllers/modules/');
+const { _U_ } = require('../../../controllers/utilities/');
 const { asyncWrapper, stackHttpMethods,
     loadRoutePlugins, loadMainControls, loadViewRenderer } = require('../../../controllers/engines/router')._test;
 
@@ -17,8 +17,8 @@ describe('Fn: asyncWrapper', () => {
         const mockInput = [async (req, res, next) => {}, (req, res, next) => {}];
         const result = mockInput.map(fn => asyncWrapper(fn));
         //
-        expect(_$.object.checkNativeBrand(result[0], 'array')).toBeTruthy();
-        expect(_$.object.checkNativeBrand(result[1], 'array')).toBeTruthy();
+        expect(_U_.object.checkNativeBrand(result[0], 'array')).toBeTruthy();
+        expect(_U_.object.checkNativeBrand(result[1], 'array')).toBeTruthy();
         expect(result[0].toString()).toBe('(req, res, next) => fn(req, res, next).catch(next)');
         expect(result[1].toString()).toBe('(req, res, next) => {}');
     });

@@ -1,3 +1,10 @@
+### 0.7.0-dev.8.4 / 2018-02-26
+> App
+- Renamed 'modules' folder as 'utilities'.
+- Renamed `_$` module function leading variable to be `_U_` in utilities.
+- Renamed `_md` leading variable to be `_M_` in middleware.
+
+
 ### 0.7.0-dev.8.3 / 2018-02-25
 > App
 - Rearranged codes for better error handling.
@@ -11,7 +18,7 @@
 ### 0.7.0-dev.8.1 / 2018-02-21
 > App
 - Split 'helper' module into 'schema', 'string', 'object' files.
-- rename `_fn` module function leading variable to be `_$`.
+- Renamed `_fn` module function leading variable to be `_$`.
 
 > Test
 - Split 'helper' module test files correspondingly.

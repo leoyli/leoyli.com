@@ -1,7 +1,7 @@
-const { AccountError } = require('../modules/')._$.error;
-const { _$ } = require('../modules/');
+const { AccountError } = require('../utilities/')._U_.error;
+const { _U_ } = require('../utilities/');
 const passport = require('passport');
-module.exports = exports = { _md: {} };
+module.exports = exports = { _M_: {} };
 
 
 
@@ -9,14 +9,14 @@ module.exports = exports = { _md: {} };
 //  MIDDLEWARE PLUGINS
 // ==============================
 // http header for stopping crawlers
-exports._md.doNotCrawled = (req, res, next) => {
+exports._M_.doNotCrawled = (req, res, next) => {
     res.set('x-robots-tag', 'none');
     return next();
 };
 
 
 // case insensitive to access `req.query`
-exports._md.caseInsensitiveQuery = (req, res, next) => {
+exports._M_.caseInsensitiveQuery = (req, res, next) => {
     req.query = new Proxy(req.query, {
         get: (target, entry) => target[Object.keys(target).find(key => key.toLowerCase() === entry.toLowerCase())],
     });
@@ -25,11 +25,11 @@ exports._md.caseInsensitiveQuery = (req, res, next) => {
 
 
 // busboy for multipart form parsing
-exports._md.hireBusboy = (limits) => (req, res, next) => require('./upload').uploadController(req, res, limits, next);
+exports._M_.hireBusboy = (limits) => (req, res, next) => require('./upload').uploadController(req, res, limits, next);
 
 
 // set title tag
-exports._md.setTitleTag = (title, { append, root } = {}) => (req, res, next) => {
+exports._M_.setTitleTag = (title, { append, root } = {}) => (req, res, next) => {
     const sequence = [];
     if (root !== false) sequence.push(res.locals._view.title);
     if (append === true) sequence.push(title);
@@ -40,11 +40,11 @@ exports._md.setTitleTag = (title, { append, root } = {}) => (req, res, next) => 
 
 
 // passport
-exports._md.usePassport = [passport.initialize(), passport.session()];
+exports._M_.usePassport = [passport.initialize(), passport.session()];
 
 
 // authentication   // tofix: change to error handling scheme
-exports._md.isSignedIn = [exports._md.doNotCrawled, ...exports._md.usePassport, (req, res, next) => {
+exports._M_.isSignedIn = [exports._M_.doNotCrawled, ...exports._M_.usePassport, (req, res, next) => {
     if (req.isAuthenticated()) return next();
     if (res.locals._view.flash.pass[0] === undefined) {
         req.flash('error', String(res.locals._view.flash.error));
@@ -56,10 +56,10 @@ exports._md.isSignedIn = [exports._md.doNotCrawled, ...exports._md.usePassport, 
 
 
 // authorization
-exports._md.isAuthorized = [...exports._md.isSignedIn, async (req, res, next) => {
+exports._M_.isAuthorized = [...exports._M_.isSignedIn, async (req, res, next) => {
     const [field, val] = req.params.canonical !== undefined
         ? ['canonical', req.params.canonical]
-        : ['_id', _$.string.readMongoId(req.url)];
+        : ['_id', _U_.string.readMongoId(req.url)];
     if (await require('../../models/').postModel.count({ [field]: val, 'author._id': req.user }) !== 1) {
         throw new AccountError('You do not have a valid authorization...');
     } else return next();
@@ -67,7 +67,7 @@ exports._md.isAuthorized = [...exports._md.isSignedIn, async (req, res, next) =>
 
 
 // password validations
-exports._md.passwordValidation = (req, res, next) => {
+exports._M_.passwordValidation = (req, res, next) => {
     if (!req.body.password.new || !req.body.password.confirmed) {
         throw new AccountError('Please fill all required fields.');
     } else if (req.body.password.new.toString() !== req.body.password.confirmed.toString()) {

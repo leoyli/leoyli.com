@@ -1,4 +1,4 @@
-const { _$ } = require('../modules/');
+const { _U_ } = require('../utilities/');
 const { settingModel, postModel } = require('../../models/');
 
 
@@ -6,7 +6,7 @@ const { settingModel, postModel } = require('../../models/');
 const generic = async (req, res, next) => {
     // website settings
     const config = await settingModel.findOne({ active: true });
-    if (!config) throw new _$.error.ServerError('No website configs, please restart the server for DB initialization.');
+    if (!config) throw new _U_.error.ServerError('No website configs, please restart the app for DB initialization.');   // todo: retry first
     res.locals._site = config._doc;
 
     // connecting session
@@ -28,17 +28,17 @@ const postNormalizer = async (req, res, next) => {
     const post = req.body.post;
     if (!post) return next();
 
-    if (req.method === 'POST' && !post.canonical) post.canonical = _$.string.toKebabCase(post.title);
+    if (req.method === 'POST' && !post.canonical) post.canonical = _U_.string.toKebabCase(post.title);
     if (post.canonical !== undefined) {
         const canonicalCounts = await postModel.count({ canonical: post.canonical });
         if (canonicalCounts > 0) post.canonical = post.canonical + '-' + (canonicalCounts + 1);
     }
-    post.featured   = _$.string.inspectFileURL(post.featured, res.locals._site.sets.imageTypes, { raw: false });
-    post.title      = _$.string.escapeChars(post.title);
-    post.content    = _$.string.escapeChars(post.content);                             // tofix: using sanitizer
-    post.category   = _$.string.toKebabCase(post.category) || undefined;
-    post.tag        = _$.string.toKebabCase(post.tag) || undefined;
-    post.visibility = _$.object.assignDeep({}, post.visibility || 'normal', true);     // todo: split the assignment
+    post.featured   = _U_.string.inspectFileURL(post.featured, res.locals._site.sets.imageTypes, { raw: false });
+    post.title      = _U_.string.escapeChars(post.title);
+    post.content    = _U_.string.escapeChars(post.content);                             // tofix: using sanitizer
+    post.category   = _U_.string.toKebabCase(post.category) || undefined;
+    post.tag        = _U_.string.toKebabCase(post.tag) || undefined;
+    post.visibility = _U_.object.assignDeep({}, post.visibility || 'normal', true);     // todo: split the assignment
     return next();
 };
 

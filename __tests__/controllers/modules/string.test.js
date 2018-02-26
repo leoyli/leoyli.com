@@ -1,6 +1,6 @@
 // module
 const { toKebabCase, escapeChars,
-    readMongoId, readObjPath, inspectFileURL } = require('../../../controllers/modules/')._test;
+    readMongoId, readObjPath, inspectFileURL } = require('../../../controllers/utilities/')._test;
 
 
 

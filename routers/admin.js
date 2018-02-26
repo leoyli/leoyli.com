@@ -1,5 +1,5 @@
 const { Device } = require('../controllers/engines/router');
-const { _md } = require('../controllers/middleware/plugins');
+const { _M_ } = require('../controllers/middleware/plugins');
 const home = require('../controllers/routers/admin');
 
 
@@ -31,7 +31,7 @@ const DashboardRouter = new Device([{
 
 
 // pre-used middleware
-DashboardRouter.pre([_md.isSignedIn, _md.setTitleTag('Account')]);
+DashboardRouter.pre([_M_.isSignedIn, _M_.setTitleTag('Account')]);
 
 
 

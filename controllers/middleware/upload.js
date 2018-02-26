@@ -1,4 +1,4 @@
-const { _$ }               = require('../modules/');
+const { _U_ }               = require('../utilities/');
 const
     fs                      = require('fs'),
     path                    = require('path'),
@@ -26,7 +26,7 @@ function fileParser(req, res, configs, args) {
     parser.filePath = getUploadPath(parser);
     parser.settings = configs;
     parser.stream.on('end', () => {
-        _$.object.mergeDeep(req.body.busboySlip.raw, transpileRaw(parser, configs));
+        _U_.object.mergeDeep(req.body.busboySlip.raw, transpileRaw(parser, configs));
         req.body.busboySlip.mes.push(...transpileMes(parser, configs));
     });
     checkStatus(parser, configs) ? uploadFile(parser) : parser.stream.resume();
@@ -34,10 +34,10 @@ function fileParser(req, res, configs, args) {
 
 
 function fieldParser(req, res, configs, args) {
-    const parser = { fieldName: args[0], value: _$.string.escapeChars(args[1]), truncatedName: args[2],
+    const parser = { fieldName: args[0], value: _U_.string.escapeChars(args[1]), truncatedName: args[2],
         truncatedValue: args[3], encoding: args[4], MIME: args[5] };
     if (parser.value !== undefined){
-        _$.object.assignDeep(req.body.busboySlip.raw, parser.fieldName, parser.value, { mutate: true });
+        _U_.object.assignDeep(req.body.busboySlip.raw, parser.fieldName, parser.value, { mutate: true });
     }
 }
 
@@ -83,9 +83,9 @@ function getUploadPath(parser) {
  */
 function uploadFile(parser) {
     parser.stream.pipe(fs.createWriteStream(parser.filePath).on('error', err => {
-        if (err && !(err.code === 'ENOENT')) throw new _$.error.ServerError(err);
+        if (err && !(err.code === 'ENOENT')) throw new _U_.error.ServerError(err);
         fs.mkdir(path.dirname(parser.filePath), err => {
-            if (err) throw _$.error.ServerError(`Errors in creating: ${path.dirname(parser.filePath)}\n${err.toString()}`);
+            if (err) throw _U_.error.ServerError(`Cannot mkdir: ${path.dirname(parser.filePath)}\n${err.toString()}`);
             parser.stream.pipe(fs.createWriteStream(parser.filePath));
         });
     }));
@@ -99,9 +99,9 @@ function uploadFile(parser) {
  * @return {object}                         - data to be populated later
  */
 function transpileRaw(parser, configs) {
-    if (checkStatus(parser, configs)) return _$.object.assignDeep({}, parser.fieldName,
+    if (checkStatus(parser, configs)) return _U_.object.assignDeep({}, parser.fieldName,
         { type: path.extname(parser.fileName), path: parser.filePath, name: path.basename(parser.filePath) });
-    else return _$.object.assignDeep({}, _$.string.readObjPath(parser.fieldName)[0], { isSkipped: true });
+    else return _U_.object.assignDeep({}, _U_.string.readObjPath(parser.fieldName)[0], { isSkipped: true });
 }
 
 
@@ -120,7 +120,7 @@ function transpileMes(parser, configs) {
     } else if (parser.stream.truncated) {
         messenger.push(`${parser.fileName} is too large (> ${configs.fileSize/1048576} MB)...`);
         fs.unlink(parser.filePath, err => {
-            if (err) throw new _$.error.ServerError(`Failed to clean up the truncated file...\n${err.toString()}`);
+            if (err) throw new _U_.error.ServerError(`Failed to clean up the truncated file...\n${err.toString()}`);
         });
     } return messenger;
 }

@@ -5,7 +5,7 @@ module.exports = home = {};
 // ==============================
 //  DEPENDENCIES
 // ==============================
-const { _md } = require('../middleware/plugins');
+const { _M_ } = require('../middleware/plugins');
 const { settingModel, mediaModel, userModel } = require('../../models/');
 
 
@@ -35,7 +35,7 @@ home.profile = {
 
 home.security = {
     get: (req, res) => res.render('./root/account/security'),
-    patch: [_md.passwordValidation, async (req, res) => {
+    patch: [_M_.passwordValidation, async (req, res) => {
         await req.user.changePassword(req.body.password.old, req.body.password.new);
         req.flash('info', 'Password have been successfully changed.');
         return res.redirect('back');
@@ -44,7 +44,7 @@ home.security = {
 
 home.upload = {   // todo: to be integrated in profile and media manager
     get: (req, res) => res.render('./root/upload'),
-    post: [_md.hireBusboy({ fileSize: 25*1048576 }), async (req, res) => {
+    post: [_M_.hireBusboy({ fileSize: 25*1048576 }), async (req, res) => {
         if (req.body.busboySlip.mes.length > 0) req.body.busboySlip.mes.forEach(mes => req.flash('error', mes));
         if (req.body.busboySlip.raw.length > 0) {
             const docs = await mediaModel.mediaCreateThenAssociate(req.body.busboySlip.raw, req.user);  // tofix: handle ValidationError

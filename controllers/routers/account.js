@@ -5,8 +5,8 @@ module.exports = exports = { account: {} };
 // ==============================
 //  DEPENDENCIES
 // ==============================
-const { AccountError } = require('../modules/')._$.error;
-const { _md } = require('../middleware/plugins');
+const { AccountError } = require('../utilities/')._U_.error;
+const { _M_ } = require('../middleware/plugins');
 const { userModel } = require('../../models/');
 
 
@@ -19,7 +19,7 @@ exports.account.signup = {
         if (req.isAuthenticated()) return res.redirect('/home');
         return res.render('./root/account/signup');
     },
-    post: [_md.passwordValidation, async (req, res) => {
+    post: [_M_.passwordValidation, async (req, res) => {
         const newUser = await userModel.register(new userModel(req.body), req.body.password.new);
         req.logIn(newUser, err => {
             if (err) throw err;
