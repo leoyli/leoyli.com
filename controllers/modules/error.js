@@ -21,7 +21,7 @@ class ExtendableError extends Error {
 class ServerError       extends ExtendableError {}  // note: this error can not be handled by middleware
 
 class TemplateError     extends ExtendableError {}
-class AccountError      extends ExtendableError {
+class AccountError      extends ExtendableError {   // tofix: mongo error handler redirecting
     constructor(arg) {
         if (arg instanceof ExtendableError) return arg;
         else if (arg instanceof Error) {

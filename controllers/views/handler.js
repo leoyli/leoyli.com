@@ -50,6 +50,8 @@ terminal.AccountError = (err, req, res, next) => {
         case 'ValidationError':
             req.flash('error', err.message);
             break;
+        case 'BulkWriteError':
+            return terminal.MongoError(err, req, res, next);
         default:
             req.flash('error', err.message);
     }

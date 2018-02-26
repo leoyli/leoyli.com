@@ -1,3 +1,8 @@
+### 0.7.0-dev.8.3 / 2018-02-25
+> App
+- Rearranged codes for better error handling.
+
+
 ### 0.7.0-dev.8.2 / 2018-02-22
 > App
 - Rearranged codes for better readability and consistency.

@@ -1,10 +1,10 @@
-const { TemplateError }     = require('../modules/')._$.error;
+const { ServerError, TemplateError } = require('../modules/')._$.error;
 const
-    _                       = require('lodash'),
-    fs                      = require('fs'),
-    doT                     = require('dot'),
-    path                    = require('path'),
-    marked                  = require('marked');
+    _       = require('lodash'),
+    fs      = require('fs'),
+    doT     = require('dot'),
+    path    = require('path'),
+    marked  = require('marked');
 
 
 
@@ -155,7 +155,7 @@ function buildTemplate(filePath, blueprint, fileString) {
 function getFileString(filePath, _SYNC) {
     function readFileAsync (file, option) {
         return new Promise((resolve, reject) => fs.readFile(file, option, (err, content) => {
-            if (err) return reject(new Error(`Failed to read the file: (${filePath})`));
+            if (err) return reject(new ServerError(`(ViewEngine) Failed to read the file: (${filePath})`));
             else return resolve(content);
         }));
     }
@@ -168,5 +168,4 @@ function getFileString(filePath, _SYNC) {
 
 // exports
 module.exports = { __express: render, render, _test: { Template,
-        render, getCompilationConfigs, getBlueprint, getRuntimeMethods,
-        getTemplate, buildTemplate, getFileString }};
+        render, getCompilationConfigs, getBlueprint, getRuntimeMethods, getTemplate, buildTemplate, getFileString }};

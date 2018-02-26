@@ -1,3 +1,4 @@
+const { AccountError } = require('../modules/')._$.error;
 const { _$ } = require('../modules/');
 const passport = require('passport');
 module.exports = exports = { _md: {} };
@@ -42,7 +43,7 @@ exports._md.setTitleTag = (title, { append, root } = {}) => (req, res, next) => 
 exports._md.usePassport = [passport.initialize(), passport.session()];
 
 
-// authentication
+// authentication   // tofix: change to error handling scheme
 exports._md.isSignedIn = [exports._md.doNotCrawled, ...exports._md.usePassport, (req, res, next) => {
     if (req.isAuthenticated()) return next();
     if (res.locals._view.flash.pass[0] === undefined) {
@@ -59,23 +60,19 @@ exports._md.isAuthorized = [...exports._md.isSignedIn, async (req, res, next) =>
     const [field, val] = req.params.canonical !== undefined
         ? ['canonical', req.params.canonical]
         : ['_id', _$.string.readMongoId(req.url)];
-    const count = await require('../../models/').postModel.count({ [field]: val, 'author._id': req.user });
-    if (count !== 1) {
-        req.flash('error', 'You do not have a valid authorization...');
-        return res.redirect('/');
+    if (await require('../../models/').postModel.count({ [field]: val, 'author._id': req.user }) !== 1) {
+        throw new AccountError('You do not have a valid authorization...');
     } else return next();
 }];
 
 
 // password validations
-// todo: throw AccountError objects
 exports._md.passwordValidation = (req, res, next) => {
     if (!req.body.password.new || !req.body.password.confirmed) {
-        req.flash('error', 'Please fill all required fields.');
+        throw new AccountError('Please fill all required fields.');
     } else if (req.body.password.new.toString() !== req.body.password.confirmed.toString()) {
-        req.flash('error', 'Two new password does not the same.');
+        throw new AccountError('Two new password does not the same.');
     } else if (req.body.password.old && (req.body.password.old.toString() === req.body.password.new.toString())) {
-        req.flash('error', 'Password cannot be the same as the old one.');
+        throw new AccountError('Password cannot be the same as the old one.');
     } else return next();
-    return res.redirect('back');
 };

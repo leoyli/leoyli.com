@@ -10,10 +10,6 @@ function search({ page, num, sort } = {}) {
             req.session.view = result;
             return next();
         })
-        .catch(err => {
-            if (typeof next !== 'function') throw err;
-            else return next(err);
-        });
 }
 
 
@@ -52,12 +48,12 @@ function getAggregationQuery(req, page, num, sort = { 'time.updated': -1 }) {
 
 /**
  * construct Mongo query expression (for $match)
- * @param {object} user                     - Passport.js log-in `user` object populated in Express.js `session` object // option: authenticated dependent query?!
+ * @param {object} user                     - Passport.js log-in `user` object populated in Express.js `session` object
  * @param {object} params                   - Express.js `req.params` object which contains searching keywords
  * @param {object} query                    - Express.js `req.query` object which contains searching parameters
  * @return {object}                         - full expression in $match stage
  */
-function getFilterExp({ session: { user }, params, query } = { session: {} }) {
+function getFilterExp({ session: { user }, params, query } = { session: {} }) {                                         // option: authenticated dependent query?!
     const $filter = params.hasOwnProperty('search')
         ? { $text : { $search: params.search }} : params.hasOwnProperty('category')
             ? { category : params.category } : {};
