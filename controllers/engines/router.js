@@ -1,7 +1,7 @@
-const Router = require('express').Router;
+const { postHandler } = require('../views/handler');
 const { _M_ } = require('../middleware/plugins');
 const { _U_ } = require('../utilities/');
-const { postHandler } = require('../views/handler');
+const Router = require('express').Router;
 
 
 

@@ -1,3 +1,10 @@
+### 0.7.0-dev.9 / 2018-02-27
+> App
+- Codified AccountError messages.
+- Extracted HttpError code-message mapping into the 'dictionary' utility.
+- Used dictionaryProxy as an agent to do message assignment in the 'dictionary' utility'.
+
+
 ### 0.7.0-dev.8.4 / 2018-02-26
 > App
 - Renamed 'modules' folder as 'utilities'.
