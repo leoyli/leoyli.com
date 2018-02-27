@@ -42,7 +42,7 @@ exports.errorHandler = (err, req, res, next) => {     // todo: error handler sep
 
 
 // terminal
-terminal.AccountError = (err, req, res, next) => {
+terminal.ClientError = (err, req, res, next) => {
     switch (err.from) {
         case 'UserExistsError':
             req.flash('error', 'This email have been used.');

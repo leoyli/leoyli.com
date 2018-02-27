@@ -5,7 +5,7 @@ module.exports = exports = { account: {} };
 // ==============================
 //  DEPENDENCIES
 // ==============================
-const { AccountError } = require('../utilities/')._U_.error;
+const { ClientError } = require('../utilities/')._U_.error;
 const { _M_ } = require('../middleware/plugins');
 const { userModel } = require('../../models/');
 
@@ -38,7 +38,7 @@ exports.account.signin = {
         if (req.isAuthenticated()) return res.redirect('/home');
         return require('passport').authenticate('local', (err, authUser) => {
             if (err) return next(err);
-            if (!authUser) return next(new AccountError(20002));
+            if (!authUser) return next(new ClientError(20002));
             return req.logIn(authUser, err => {
                 if (err) return next(err);
                 req.session.cookie.expires = req.body.isPersisted ? new Date(Date.now() + 14 * 24 * 3600000) : false;

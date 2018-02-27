@@ -85,7 +85,7 @@ function uploadFile(parser) {
     parser.stream.pipe(fs.createWriteStream(parser.filePath).on('error', err => {
         if (err && !(err.code === 'ENOENT')) throw new _U_.error.ServerError(err);
         fs.mkdir(path.dirname(parser.filePath), err => {
-            if (err) throw _U_.error.ServerError(`Cannot mkdir: ${path.dirname(parser.filePath)}\n${err.toString()}`);
+            if (err) throw _U_.error.ServerError(92001, `${path.dirname(parser.filePath)}\n${err.toString()}`);
             parser.stream.pipe(fs.createWriteStream(parser.filePath));
         });
     }));
@@ -120,7 +120,7 @@ function transpileMes(parser, configs) {
     } else if (parser.stream.truncated) {
         messenger.push(`${parser.fileName} is too large (> ${configs.fileSize/1048576} MB)...`);
         fs.unlink(parser.filePath, err => {
-            if (err) throw new _U_.error.ServerError(`Failed to clean up the truncated file...\n${err.toString()}`);
+            if (err) throw new _U_.error.ServerError(92002, err.toString());
         });
     } return messenger;
 }

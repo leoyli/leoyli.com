@@ -1,4 +1,4 @@
-const { AccountError } = require('../controllers/utilities/')._U_.error;
+const { ClientError } = require('../controllers/utilities/')._U_.error;
 const { Device } = require('../controllers/engines/router');
 const { account } = require('../controllers/routers/account');
 
@@ -23,7 +23,7 @@ const UserRouter = new Device([{
 
 // pre-used middleware
 UserRouter.pre(require('../controllers/middleware/plugins')._M_.usePassport);
-UserRouter.post((err, req, res, next) => next(new AccountError(err)));
+UserRouter.post((err, req, res, next) => next(new ClientError(err)));
 
 
 

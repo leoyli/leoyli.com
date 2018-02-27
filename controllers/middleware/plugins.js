@@ -1,4 +1,4 @@
-const { AccountError } = require('../utilities/')._U_.error;
+const { ClientError } = require('../utilities/')._U_.error;
 const { _U_ } = require('../utilities/');
 const passport = require('passport');
 module.exports = exports = { _M_: {} };
@@ -61,7 +61,7 @@ exports._M_.isAuthorized = [...exports._M_.isSignedIn, async (req, res, next) =>
         ? ['canonical', req.params.canonical]
         : ['_id', _U_.string.readMongoId(req.url)];
     if (await require('../../models/').postModel.count({ [field]: val, 'author._id': req.user }) !== 1) {
-        throw new AccountError(20001);
+        throw new ClientError(20001);
     } else return next();
 }];
 
@@ -69,10 +69,10 @@ exports._M_.isAuthorized = [...exports._M_.isSignedIn, async (req, res, next) =>
 // password validations
 exports._M_.passwordValidation = (req, res, next) => {
     if (!req.body.password.new || !req.body.password.confirmed) {
-        throw new AccountError(10001);
+        throw new ClientError(10001);
     } else if (req.body.password.new.toString() !== req.body.password.confirmed.toString()) {
-        throw new AccountError(10002);
+        throw new ClientError(10002);
     } else if (req.body.password.old && (req.body.password.old.toString() === req.body.password.new.toString())) {
-        throw new AccountError(10003);
+        throw new ClientError(10003);
     } else return next();
 };

@@ -155,7 +155,7 @@ function buildTemplate(filePath, blueprint, fileString) {
 function getFileString(filePath, _SYNC) {
     function readFileAsync (file, option) {
         return new Promise((resolve, reject) => fs.readFile(file, option, (err, content) => {
-            if (err) return reject(new ServerError(`(ViewEngine) Failed to read the file: (${filePath})`));
+            if (err) return reject(new ServerError(91001, filePath));
             else return resolve(content);
         }));
     }

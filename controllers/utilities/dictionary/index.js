@@ -1,18 +1,25 @@
 class ErrorDictionary {
-    constructor(reference) {
-        this.index = reference;
+    constructor(dictionary) {
+        this.index = dictionary;
     }
 
-    lookup(code, meta) {                        // todo: allow placeholder to be converted to the value of meta
-        return this.index[code];
+    lookup(code, ref) {
+        if (ref !== 0 && !ref) return this.index[code];
+        return this.index[code].replace(/\${([^}]*)}/g, (match, capture) => {
+            return (typeof ref === 'string' || typeof ref === 'number' ? ref.toString() : ref[capture]) || match;
+        });
     }
 }
 
+
 const ServerErrorDictionary_en = new ErrorDictionary({
     90001:  'Failed to load website configs, please contact the admin.',
+    91001:  '[ViewEngine] Failed to lookup file path (fs.readFile): ${filePath}',
+    92001:  '[MultiPartUpload] Cannot create the folder (fs.mkdir, missing parent folder?): ${dirPath}',
+    92002:  '[MultiPartUpload] Failed to clean up the truncated file...\n ${errString}'
 });
 
-const AccountErrorDictionary_en = new ErrorDictionary({
+const ClientErrorDictionary_en = new ErrorDictionary({
     10001:  'Please fill all required fields.',
     10002:  'Two new password does not the same.',
     10003:  'Password cannot be set to the same as the current.',
@@ -31,11 +38,11 @@ const HttpErrorDictionary_en = new ErrorDictionary({
 
 
 // export
-const dictionary = { AccountErrorDictionary_en, HttpErrorDictionary_en };
+const dictionary = { ClientErrorDictionary_en, HttpErrorDictionary_en, ServerErrorDictionary_en };
 module.exports = new Proxy(dictionary, {
     get: (target, name) => {
         const x = `${name}Dictionary_${process.env['$WEBSITE_CONFIGS'].language || 'en'}`;
-        if (target.hasOwnProperty(x)) return (...arg) => target[x].lookup(...arg) || arg;
+        if (target.hasOwnProperty(x)) return (...arg) => target[x].lookup(...arg) || arg[0];
         else return arg => arg;
     }
 });

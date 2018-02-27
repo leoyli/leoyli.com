@@ -1,3 +1,10 @@
+### 0.7.0-dev.11 / 2018-02-27
+> App
+- Renamed `AccountError` as `ClientError`.
+- Centralized all `ServerError` messages in 'ServerError' dictionary.
+- Enhanced `ErrorDictionary.find()` class method to map string placeholders with reference.
+
+
 ### 0.7.0-dev.10 / 2018-02-27
 > App
 - Changed to dynamic env-variables to populate website configs. (performance improvement)
