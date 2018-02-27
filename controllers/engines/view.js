@@ -24,19 +24,23 @@ class Template {
     }
 
     compile(sections, settings) {
-        const compiledStack = {};
-        Object.keys(sections).forEach(item => {
-            if (settings.stripHTMLComment === true) sections[item] = sections[item].replace(settings.comment, '');
-            compiledStack[item] = doT.template(sections[item], settings);
-        });
-        return compiledStack;
+        try {
+            const compiledStack = {};
+            Object.keys(sections).forEach(item => {
+                if (settings.stripHTMLComment === true) sections[item] = sections[item].replace(settings.comment, '');
+                compiledStack[item] = doT.template(sections[item], settings);
+            });
+            return compiledStack;
+        } catch (err) {
+            throw new TemplateError(91001, { filePath: this.filePath, err });
+        }
     }
 
     render() {
         try {
             return this._compileFn.main(...this._arguement);
         } catch (err) {
-            throw new TemplateError(`Failed to render: ('${this.filePath}'):\n${err.toString()}`);
+            throw new TemplateError(91002, { filePath: this.filePath, err });
         }
     }
 }
@@ -52,7 +56,7 @@ class Template {
 function render(filePath, locals, next) {
     return getTemplate(filePath, getBlueprint(locals))
         .then(Template => next(null, Template.render()))
-        .catch(err => next(err, null));
+        .catch(err => next(new TemplateError(err)));
 }
 
 
@@ -155,13 +159,16 @@ function buildTemplate(filePath, blueprint, fileString) {
 function getFileString(filePath, _SYNC) {
     function readFileAsync (file, option) {
         return new Promise((resolve, reject) => fs.readFile(file, option, (err, content) => {
-            if (err) return reject(new ServerError(91001, filePath));
+            if (err) return reject(new TemplateError(91003, filePath));
             else return resolve(content);
         }));
     }
 
-    if (_SYNC === true) return fs.readFileSync(filePath, 'utf8');
-    else return readFileAsync(filePath, 'utf8');
+    try {
+        return _SYNC !== true ? readFileAsync(filePath, 'utf8') : fs.readFileSync(filePath, 'utf8');
+    } catch (err) {
+        throw new TemplateError(91004, filePath);
+    }
 }
 
 

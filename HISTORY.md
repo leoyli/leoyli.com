@@ -1,3 +1,11 @@
+### 0.7.0-dev.12 / 2018-02-27
+> App
+- Handled most of potential error source in view engine.
+- Added `TransferableError` proto-error class.
+- Limited `ExtendableError` only to `TransferableError`.
+- Renamed 'dictionary' utilities as 'error-code'.
+
+
 ### 0.7.0-dev.11 / 2018-02-27
 > App
 - Renamed `AccountError` as `ClientError`.

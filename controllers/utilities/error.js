@@ -1,4 +1,4 @@
-const dictionaryProxy = require('./dictionary/');
+const errorCodeProxyAgent = require('./error-code/');
 
 
 
@@ -7,14 +7,26 @@ const dictionaryProxy = require('./dictionary/');
 // ==============================
 class ExtendableError extends Error {
     constructor(...arg) {
-        if (new.target !== ExtendableError) {                                                                           // note: ensure this class cannot be instancified
+        if (new.target.__proto__.name === 'TransferableError') {
             super();
             this.name = this.constructor.name;
-            this.message = dictionaryProxy[this.name](...arg);                                                          // note: the proxy agent first try to map the arg with the dictionary of the error, if not found, return arg
-            if (typeof arg === 'number') this.code = arg[0];
-            if (Error.captureStackTrace) Error.captureStackTrace(this, this.constructor);                               // note: only available on V8
-            else this.stack = (new Error(message)).stack;                                                               // note: used if expose in client browser that not based on V8
+            this.message = errorCodeProxyAgent[this.name](...arg);
+            if (typeof arg[0] === 'number') this.code = arg[0];
+            if (Error.captureStackTrace) Error.captureStackTrace(this, this.constructor);                               // note: V8 JS-engine only
+            else this.stack = (new Error(message)).stack;                                                               // note: non-V8 browser only
         }
+    }
+}
+
+class TransferableError extends ExtendableError {
+    constructor(arg, ...ref) {
+        if (new.target !== TransferableError) if (arg instanceof ExtendableError) return arg;
+        else if (arg instanceof Error) {
+            super(arg.message);
+            this.code = arg.code;
+            this.from = arg.name;
+            this.stack = `${this.name} (transferred):${new RegExp(/\s+at.+[^\n]/).exec(this.stack)[0]}\n${arg.stack}`;
+        } else super(arg, ...ref);
     }
 }
 
@@ -23,20 +35,10 @@ class ExtendableError extends Error {
 // ==============================
 //  ERROR CLASSES
 // ==============================
-class ServerError       extends ExtendableError {}  // note: this error can not be handled by middleware
-class TemplateError     extends ExtendableError {}
-class HttpError         extends ExtendableError {}
-class ClientError       extends ExtendableError {   // tofix: mongo error handler redirecting
-    constructor(arg) {
-        if (arg instanceof ExtendableError) return arg;
-        else if (arg instanceof Error) {
-            super(arg.message);
-            this.code = arg.code;
-            this.from = arg.name;
-            this.stack = `ClientError (transferred):${new RegExp(/\s+at.+[^\n]/).exec(this.stack)[0]}\n${arg.stack}`;
-        } else super(arg);
-    }
-}
+class ServerError       extends TransferableError {}    // note: this error cannot be handled by middleware
+class TemplateError     extends TransferableError {}
+class ClientError       extends TransferableError {}    // tofix: mongo error handler redirecting
+class HttpError         extends TransferableError {}
 
 
 
