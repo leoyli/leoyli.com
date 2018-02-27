@@ -6,7 +6,7 @@ module.exports = home = {};
 //  DEPENDENCIES
 // ==============================
 const { _M_ } = require('../middleware/plugins');
-const { settingModel, mediaModel, userModel } = require('../../models/');
+const { configModel, mediaModel, userModel } = require('../../models/');
 
 
 
@@ -20,7 +20,7 @@ home.main = {
 home.setting = {
     get: (req, res) => res.render('./root/setting'),
     patch: async (req, res) => {
-        await settingModel.updateSettings(req.body.siteSetting);
+        await configModel.updateSettings(req.body.configs);
         return res.redirect('back');
     },
 };

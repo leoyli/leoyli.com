@@ -15,15 +15,15 @@ const
  */
 
 const options = {
-    key         : fs.readFileSync(process.env.SSL_KEY, 'utf8'),
-    cert        : fs.readFileSync(process.env.SSL_CRT, 'utf8'),
+    key         : fs.readFileSync(process.env['SSL_KEY'], 'utf8'),
+    cert        : fs.readFileSync(process.env['SSL_CRT'], 'utf8'),
 };
 
 /**
  * Get port from environment and store in Express.
  */
 
-const port      = normalizePort(process.env.PORT || '3443');
+const port      = normalizePort(process.env['PORT'] || '3443');
 app.set('port', port);
 
 /**

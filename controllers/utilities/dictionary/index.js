@@ -8,6 +8,9 @@ class ErrorDictionary {
     }
 }
 
+const ServerErrorDictionary_en = new ErrorDictionary({
+    90001:  'Failed to load website configs, please contact the admin.',
+});
 
 const AccountErrorDictionary_en = new ErrorDictionary({
     10001:  'Please fill all required fields.',
@@ -31,7 +34,7 @@ const HttpErrorDictionary_en = new ErrorDictionary({
 const dictionary = { AccountErrorDictionary_en, HttpErrorDictionary_en };
 module.exports = new Proxy(dictionary, {
     get: (target, name) => {
-        const x = `${name}Dictionary_${process.env.LANG || 'en'}`;
+        const x = `${name}Dictionary_${process.env['$WEBSITE_CONFIGS'].language || 'en'}`;
         if (target.hasOwnProperty(x)) return (...arg) => target[x].lookup(...arg) || arg;
         else return arg => arg;
     }

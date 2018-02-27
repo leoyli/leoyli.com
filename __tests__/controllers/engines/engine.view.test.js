@@ -16,7 +16,7 @@ const { getCompilationConfigs, getBlueprint, getRuntimeMethods,
 // test
 describe('Check the ENV', () => {
     test('Should run in test mode', () => {
-        expect(process.env.NODE_ENV).toEqual('test');
+        expect(process.env['NODE_ENV']).toEqual('test');
     });
 });
 

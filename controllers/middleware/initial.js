@@ -1,13 +1,14 @@
 const { _U_ } = require('../utilities/');
-const { settingModel, postModel } = require('../../models/');
+const { configModel, postModel } = require('../../models/');
 
 
 
 const generic = async (req, res, next) => {
     // website settings
-    const config = await settingModel.findOne({ active: true });
-    if (!config) throw new _U_.error.ServerError('No website configs, please restart the app for DB initialization.');   // todo: retry first
-    res.locals._site = config._doc;
+    if (!process.env['$WEBSITE_CONFIGS']) configModel.initialize(() => {
+        if(!process.env['$WEBSITE_CONFIGS']) throw new _U_.error.ServerError(90001);
+    });
+    res.locals._site = JSON.parse(process.env['$WEBSITE_CONFIGS']);
 
     // connecting session
     if (!req.session.user && req.session.cookie.expires) req.session.cookie.expires = false;

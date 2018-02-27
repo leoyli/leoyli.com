@@ -1,3 +1,15 @@
+### 0.7.0-dev.10 / 2018-02-27
+> App
+- Changed to dynamic env-variables to populate website configs. (performance improvement)
+- Renamed 'settings' to 'configs' model, 'settingModel' to 'configModel'.
+- Added `language` website-config parameter.
+- Fixed bugs: malfunctioned pagination url.
+- Added `serverErrorDictionary`.
+
+> Test
+- Adapted to the changes.
+
+
 ### 0.7.0-dev.9 / 2018-02-27
 > App
 - Codified AccountError messages.

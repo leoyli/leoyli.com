@@ -16,7 +16,7 @@ exports.postHandler = (template, post, meta) => async (req, res, next) => {
 
     if ($post && $post.title !== undefined) _M_.setTitleTag($post.title, { root: true })(req, res);
     if ($meta) {
-        const urlBase = res.baseUrl + `?num=' + ${$meta.num} + '&page='`;
+        const urlBase = `${req.baseUrl}?num=${$meta.num}&page='`;
         if ($meta.now > 1)          res.locals._view.prev = urlBase + ($meta.now - 1);
         if ($meta.now < $meta.end)  res.locals._view.next = urlBase + ($meta.now + 1);
     }
@@ -34,7 +34,7 @@ const terminal = {};
 
 // gateway
 exports.errorHandler = (err, req, res, next) => {     // todo: error handler separations
-    if (['dev', 'test'].indexOf(process.env.NODE_ENV) !== -1) console.log(err.stack);
+    if (['dev', 'test'].indexOf(process.env['NODE_ENV']) !== -1) console.log(err.stack);
     if (_U_.error.hasOwnProperty(err.name) && terminal[err.name]) {
         return terminal[err.name](err, req, res, next);
     } else return res.render('./theme/error', { err });

@@ -40,17 +40,17 @@ app.set('partials', {
 //  DATABASE
 // ==============================
 // connection
-mongoose.connect(process.env.DB);
+mongoose.connect(process.env['DB']);
 
 
 // initialization
-const { settingModel, userModel } = require('./models/');
-if (process.env.NODE_ENV !== 'test') settingModel.initialize();
+const { configModel, userModel } = require('./models/');
+if (process.env['NODE_ENV'] !== 'test') configModel.initialize();
 
 
 // session
 app.use(session({
-    secret: process.env.SECRET,
+    secret: process.env['SECRET'],
     saveUninitialized: false,
     resave: false,
     // cookie: { secure: true },
@@ -78,4 +78,4 @@ require('./routers').init(app);
 // ==============================
 //  APP EXPORTS
 // ==============================
-module.exports = (process.env.NODE_ENV === 'test') ? { app, mongoose } : app;
+module.exports = (process.env['NODE_ENV'] === 'test') ? { app, mongoose } : app;
