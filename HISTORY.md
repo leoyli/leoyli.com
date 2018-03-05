@@ -1,4 +1,13 @@
-### 0.7.0-dev.12 / 2018-03-04
+### 0.8.0-dev.0 / 2018-03-04
+- Initiated v0.8: 'CMS-Panel' development.
+- Fixed typos in HISTORY.
+
+
+### 0.7.0 / 2018-03-04
+- Completed v0.7: 'tofix-fix-up' & 'error-handling' development.
+
+
+### 0.7.0-dev.13 / 2018-03-04
 > App
 - Added [eCODE: 20003] into ClientError dictionary.
 - Fixed `_M_.isSignedIn` message display bug.
@@ -187,8 +196,9 @@
 
 
 ### 0.7.0-dev.1 / 2018-02-16
-> App
 - Initiated v0.7: 'tofix-fix-up' development.
+
+> App
 - Fixed 'canonical' value escaping issue by added `postNormalizer` middleware.
 - Added `inspectFileURL` string helper function and its unit test.
 - Removed dependency on 'validator' lib.
@@ -196,7 +206,6 @@
 
 
 ### 0.6.0 / 2018-02-15
-> App
 - Completed v0.6: 'unit-testing' development.
 
 
