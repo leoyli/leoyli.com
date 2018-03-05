@@ -26,7 +26,7 @@ function fileParser(req, res, configs, args) {
     parser.filePath = getUploadPath(parser);
     parser.settings = configs;
     parser.stream.on('end', () => {
-        _U_.object.mergeDeep(req.body.busboySlip.raw, transpileRaw(parser, configs));
+        _U_.object.mergeDeep(req.body.busboySlip.raw, transpileRaw(parser, configs), { mutate: true });
         req.body.busboySlip.mes.push(...transpileMes(parser, configs));
     });
     checkStatus(parser, configs) ? uploadFile(parser) : parser.stream.resume();
@@ -113,8 +113,8 @@ function transpileRaw(parser, configs) {
  */
 function transpileMes(parser, configs) {
     const messenger = [];
-    if (parser.fileName === undefined) {
-        messenger.push(`No Files was found on ${parser.fieldName}...`);
+    if (!parser.fileName) {
+        messenger.push(`No Files was found on ${parser.fieldName}...`);     // tofix: centralized message; only display when upload = 0
     } else if (configs.MIME.indexOf(parser.MIME) === -1) {
         messenger.push(`${parser.fileName} is an unsupported file types...`);
     } else if (parser.stream.truncated) {

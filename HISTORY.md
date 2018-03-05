@@ -1,3 +1,11 @@
+### 0.7.0-dev.12 / 2018-03-04
+> App
+- Added [eCODE: 20003] into ClientError dictionary.
+- Fixed `_M_.isSignedIn` message display bug.
+- Fixed 'upload' controller bugs.
+- Identified multiple place to be fixed.
+
+
 ### 0.7.0-dev.12 / 2018-02-27
 > App
 - Handled most of potential error source in view engine.

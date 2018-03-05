@@ -37,7 +37,7 @@ class TransferableError extends ExtendableError {
 // ==============================
 class ServerError       extends TransferableError {}    // note: this error cannot be handled by middleware
 class TemplateError     extends TransferableError {}
-class ClientError       extends TransferableError {}    // tofix: mongo error handler redirecting
+class ClientError       extends TransferableError {}
 class HttpError         extends TransferableError {}
 
 
