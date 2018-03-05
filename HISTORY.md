@@ -1,3 +1,200 @@
+### 0.7.0-dev.12 / 2018-03-04
+> App
+- Added [eCODE: 20003] into ClientError dictionary.
+- Fixed `_M_.isSignedIn` message display bug.
+- Fixed 'upload' controller bugs.
+- Identified multiple place to be fixed.
+
+
+### 0.7.0-dev.12 / 2018-02-27
+> App
+- Handled most of potential error source in view engine.
+- Added `TransferableError` proto-error class.
+- Limited `ExtendableError` only to `TransferableError`.
+- Renamed 'dictionary' utilities as 'error-code'.
+
+
+### 0.7.0-dev.11 / 2018-02-27
+> App
+- Renamed `AccountError` as `ClientError`.
+- Centralized all `ServerError` messages in 'ServerError' dictionary.
+- Enhanced `ErrorDictionary.find()` class method to map string placeholders with reference.
+
+
+### 0.7.0-dev.10 / 2018-02-27
+> App
+- Changed to dynamic env-variables to populate website configs. (performance improvement)
+- Renamed 'settings' to 'configs' model, 'settingModel' to 'configModel'.
+- Added `language` website-config parameter.
+- Fixed bugs: malfunctioned pagination url.
+- Added `serverErrorDictionary`.
+
+> Test
+- Adapted to the changes.
+
+
+### 0.7.0-dev.9 / 2018-02-27
+> App
+- Codified AccountError messages.
+- Extracted HttpError code-message mapping into the 'dictionary' utility.
+- Used dictionaryProxy as an agent to do message assignment in the 'dictionary' utility'.
+
+
+### 0.7.0-dev.8.4 / 2018-02-26
+> App
+- Renamed 'modules' folder as 'utilities'.
+- Renamed `_$` module function leading variable to be `_U_` in utilities.
+- Renamed `_md` leading variable to be `_M_` in middleware.
+
+
+### 0.7.0-dev.8.3 / 2018-02-25
+> App
+- Rearranged codes for better error handling.
+
+
+### 0.7.0-dev.8.2 / 2018-02-22
+> App
+- Rearranged codes for better readability and consistency.
+
+
+### 0.7.0-dev.8.1 / 2018-02-21
+> App
+- Split 'helper' module into 'schema', 'string', 'object' files.
+- Renamed `_fn` module function leading variable to be `_$`.
+
+> Test
+- Split 'helper' module test files correspondingly.
+
+
+### 0.7.0-dev.8 / 2018-02-21
+> App
+- Restructured the directories.
+
+
+### 0.7.0-dev.7.3 / 2018-02-21
+> App
+- Used switch for controlling 'AccountError' terminal.
+- Revised 'AccountError' error class.
+
+
+### 0.7.0-dev.7.2 / 2018-02-20
+> App
+- Revised `unhandledRejection` event emitter in `app.js`.
+- Hooked ServerError around errors form 'fs' module.
+- Identified more client errors to be handled.
+- Simplified errorHandler core.
+- Simplified 'admin' router. 
+- Added 'TemplateError' terminal in error handler.
+- Added supporting of http code 500 in 'HttpError' error class.
+
+
+### 0.7.0-dev.7.1 / 2018-02-20
+> App
+- Fixed bugs in `.setTitleTag` middleware plugin.
+
+
+### 0.7.0-dev.7 / 2018-02-20
+> App
+- Used ES6 Class syntax for all constructors.
+- Renamed 'renderer' controller as 'handler'.
+- Split `.use` method into `.pre` and `.post` hooks in router driver.
+- Added new function into `AccountError` class, which allows to repack an error.
+- Added an anonymous post-hooked to repack errors from 'passport-local-mongoose' lib in 'account' model.
+
+> UI
+- Changed to the corrected variable name.
+
+
+### 0.7.0-dev.6.1 / 2018-02-19
+> App
+- Added supported code: 400, 401, 403 status in `HttpError` error class.
+- Fixed minor issue in `checkNativeBrand` helper function.
+- Renamed 'renderer' controller as 'handler'.
+
+> UI
+- Renamed the default view path as 'root'.
+
+
+### 0.7.0-dev.6 / 2018-02-19
+> App
+- Added `errors.js` controller for managing all customized error objects.
+- Renamed 'user' router and rule as 'account'.
+- Restructured 'helpers' controller.
+- Added 3 terminals into error handlers.
+
+> UI
+- Updated `error.dot` template.
+
+
+### 0.7.0-dev.5.2 / 2018-02-19
+> App
+- Renamed and moved files.
+- Renamed variables.
+
+
+### 0.7.0-dev.5.1 / 2018-02-19
+> App
+- Removed unused `visibility` Mongo index.
+
+> UI
+- Separated pagination into `_pagination.dot` for reusing.
+- Moved `search.dot` file.
+
+
+### 0.7.0-dev.5 / 2018-02-18
+> App
+- New feature: added `visibility` and `status` post parameters in the model.
+  - visibility 'hidden': hide the post from the searching result, and only can be accessed by its URL.
+  - visibility 'pinned': pin the post at the top level result, but have no effects if 'hidden' to be truthy.
+  - visibility 'protected': a holder parameter for password protection feature. (to be added)
+  - status 'published': published post.
+  - status 'drafted': unpublished post that can not be accessed publicly. (auto saving to be added)
+  - status 'recycled': user deleted post that can not be accessed publicly. (recycle data damping to be added).
+- New feature: added `sets` parameters in 'settings' for hosting dynamic default parameters.
+- Added `tag` and `visibility` Mongo indexes.
+- Added `meta.baseUrl` from `req.baseUrl` in search controller.
+- Added authentication-dependent query in post controller, only status is `published` and visibility is not `hidden` are displayed.
+
+> Test
+- Updated the 'search' to cover these changes.
+
+> UI
+- Added pagination toolbar in 'index' and 'search' template.
+- Added the post-state icons and title prefix.
+- Upgraded packages with the newest CDN.
+
+
+### 0.7.0-dev.4 / 2018-02-17
+> App
+- Upgraded Bootstrap v4.0.0.
+- Added `status` and `visibility` fields in 'post' model.
+
+> UI
+- Added `status` and `visibility` selection box into 'editor'.
+- Used `formaction` attribute to supporting multiple actions in one form.
+
+
+### 0.7.0-dev.3 / 2018-02-17
+> App
+- Removed some out-of-dated comments.
+- Removed escaping space characters in `escapeChars`.
+- Updated setting schema for hosting setting parameters.
+
+
+### 0.7.0-dev.2 / 2018-02-16
+> App
+- Adapted and simplified codes in models and 'app' from the new ver.5 'Mongoose' lib.
+
+
+### 0.7.0-dev.1 / 2018-02-16
+> App
+- Initiated v0.7: 'tofix-fix-up' development.
+- Fixed 'canonical' value escaping issue by added `postNormalizer` middleware.
+- Added `inspectFileURL` string helper function and its unit test.
+- Removed dependency on 'validator' lib.
+- Simplified 'setting' and 'post' model.
+
+
 ### 0.6.0 / 2018-02-15
 > App
 - Completed v0.6: 'unit-testing' development.
@@ -9,6 +206,7 @@
 - Renamed file names for a better readability.
 - Fixed the double loading issue in `settingModel.init()` by renamed as `settingModel.initialize()`.
 - Improved settingModel.
+
 
 ### 0.6.0-dev.11 / 2018-02-14
 > App
@@ -515,7 +713,7 @@
 
 ### 0.0.48 / 2017-10-25
 > App
-- Switched from HTTP1.1 to HTTP2 protocol. (currently by 'spdy' lib)
+- Switched from HTTP1.1 to HTTP2 use. (currently by 'spdy' lib)
 
 > UI
 - Introduced 'font-awesome' as the site font icons provider (from CDN).

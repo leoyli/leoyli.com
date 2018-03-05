@@ -1,20 +1,12 @@
 const
-    mongoose                = require('mongoose'),
-    validator               = require('validator');
-
+    mongoose                = require('mongoose');
 
 
 // ==============================
 //  FUNCTIONS
 // ==============================
 // ancillaries
-const { _fn }               = require('../controllers/helpers');
-
-// validations
-function featured (value) {
-    if (value === '') return true;
-    return validator.isURL(value);
-}
+const { _U_ }               = require('../controllers/utilities/');
 
 
 
@@ -25,25 +17,33 @@ const PostSchema            = new mongoose.Schema({
     author: {
         _id: {
             type            : mongoose.Schema.Types.ObjectId,
-            ref: 'users',
+            ref             : 'users',
         },
         username            : { type: String },
     },
     featured                : { type: String, // todo: featured by a video
         validate: {
-            isAsync         : false,
-            validator       : featured,
-            message: 'Invalid URL',
+            validator       : value => value !== undefined,
+            message         : 'Invalid image URL',
         }},
-    title                   : { type: String, trim: true, required: [true, 'is required'] },
-    content                 : { type: String, trim: true, required: [true, 'is required'] },
-    category                : { type: String, lowercase: true, default: 'unclassified'}, // tofix: empty space handling
-    tag                     : { type: String, lowercase: true },
     canonical               : { type: String, lowercase: true, unique: true },
+    title                   : { type: String, required: [true, 'is required'], trim: true },
+    content                 : { type: String, required: [true, 'is required'], trim: true },
+    category                : { type: String, lowercase: true, default: 'unclassified' },
+    tag                     : { type: String, lowercase: true },
+    visibility: {
+        hidden              : { type: Boolean, required: true, default: false },    // todo: add anti-robot HTML tag
+        pinned              : { type: Boolean, required: true, default: false },
+        protected           : { type: Boolean, required: true, default: false },    // todo: add pw
+    },
+    status                  : { type: String, default: 'published',
+                                enum: ['drafted','published', 'recycled'] },
 }, {
     timestamps              : { createdAt: 'time.created', updatedAt: 'time.updated' },
     versionKey              : '_revised',
 })
+    .index({ 'tag' : 1 })
+    .index({ 'status' : 1 })
     .index({ 'category' : -1 })
     .index({ 'time.updated' : -1 })
     .index({ 'title': 'text', 'content': 'text', 'category': 'text', 'tag' : 'text' });
@@ -55,30 +55,22 @@ const PostSchema            = new mongoose.Schema({
 // ==============================
 // create and associate (model)
 PostSchema.static('postsCreateThenAssociate', function (raw, user, next) {
-    return Promise.resolve().then(() => _fn.schema.updateAndBind(raw, user, next, 'posts', '$push', this));
+    return Promise.resolve().then(() => _U_.schema.updateAndBind(raw, user, next, 'posts', '$push', this));
 });
 
 
 // delete and dissociate (model)  // note: not workable for admin in deleting media owned by multiple users
 PostSchema.static('postsDeleteThenDissociate', function (docsID, user, next) {
-    return Promise.resolve().then(() => _fn.schema.updateAndBind(docsID, user, next, 'posts', '$pullAll', this));
-});
-
-
-// (pre-hook) canonical key evaluation
-PostSchema.pre('save', function (next) {
-    if (this.canonical === undefined) this.canonical = _fn.string.toKebabCase(this.title);  // tofix: unavailable if pre-existed
-    return next();
+    return Promise.resolve().then(() => _U_.schema.updateAndBind(docsID, user, next, 'posts', '$pullAll', this));
 });
 
 
 // (pre-hook) version counter
-PostSchema.pre('findOneAndUpdate', function (next) {
+PostSchema.pre('findOneAndUpdate', function () {
     this.findOneAndUpdate({}, { $inc: { _revised: 1 }});
-    return next();
 });
 
 
 
-// export model
+// exports
 module.exports = mongoose.model('posts', PostSchema);

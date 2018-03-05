@@ -1,13 +1,13 @@
-const { RouterHub } = require('../controllers/routers/driver');
-const { _md } = require('../controllers/middleware/plugins');
-const home = require('../controllers/routers/rules/admin');
+const { Device } = require('../controllers/engines/router');
+const { _M_ } = require('../controllers/middleware/plugins');
+const home = require('../controllers/routers/admin');
 
 
 
 // ==============================
 //  ROUTE HUB
 // ==============================
-const DashboardRouter = new RouterHub([{
+const DashboardRouter = new Device([{
     route:          '/',
     controller:     home.main,
     settings:       { title: 'Dashboard' },
@@ -31,8 +31,7 @@ const DashboardRouter = new RouterHub([{
 
 
 // pre-used middleware
-DashboardRouter.use(_md.isSignedIn);
-DashboardRouter.use(_md.setTitleTag('Console'));
+DashboardRouter.pre([_M_.isSignedIn, _M_.setTitleTag('Account')]);
 
 
 

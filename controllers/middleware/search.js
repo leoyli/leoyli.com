@@ -1,17 +1,35 @@
+
+
+
+function search({ page, num, sort } = {}) {
+    return (req, res, next) => require('../../models/').postModel
+        .aggregate(getAggregationQuery(req, page, num || res.locals._site.sets.num, sort))
+        .then(docs => docs[0])
+        .then(result => {
+            if (typeof next !== 'function') return result;
+            req.session.view = result;
+            return next();
+        })
+}
+
+
+
+// ==============================
+//  COMPONENTS
+// ==============================
 /**
  * construct Mongo query expression for search operations
- * @param {object} params                  - Express.js `req.params` object which contains searching keywords
- * @param {object} query                   - Express.js `req.query` object which contains searching parameters
- * @param {number} num                     - pagination display unit   - todo: set default num in `req.locals._site`
+ * @param {object} req                     - Express.js request object which contains searching parameters
+ * @param {number|*} num                   - pagination display unit
  * @param {number} page                    - pagination pin point
  * @param {object} sort                    - sorting parameters        - todo: sorting options in setting pages
  * @return {object} { post, meta }         - sorted docs and searching meta(count, num, now, end, date, sort)
  */
-function getAggregationQuery(params, query, page = 1, num = 5, sort = { 'time.updated': -1 }) {
-    const $filter = getFilterExp(params, query);
-    const $sort = getSortExp(sort, query);
-    const $page = (query['page'] > 1) ? parseInt(query['page']) : page;
-    const $num = (query['num'] > 0) ? parseInt(query['num']) : num;
+function getAggregationQuery(req, page, num, sort = { 'time.updated': -1 }) {
+    const $filter = getFilterExp(req);
+    const $sort = getSortExp(sort, req.query);
+    const $page = (req.query['page'] > 1) ? parseInt(req.query['page']) : page || 1;
+    const $num = (req.query['num'] > 0) ? parseInt(req.query['num']) : num;
     const $end = { $ceil: { $divide: ['$count', $num] }};
     const $now = { $cond: { if: { $lt: [$page, $end] }, then: { $literal: $page }, else: $end }};
 
@@ -20,8 +38,8 @@ function getAggregationQuery(params, query, page = 1, num = 5, sort = { 'time.up
         { $sort: $sort },
         { $group: { _id: null, count: { $sum: 1 }, post: { $push: '$$ROOT' }}},                 // todo: author populate
         { $project: { _id: 0,
-            post: { $slice: ['$post', { $multiply: [{ $add: [$now, -1] }, $num] }, $num] },     // tofix: why first?
-            meta: { count: '$count', num: { $literal: $num }, now: $now, end: $end,
+            post: { $slice: ['$post', { $multiply: [{ $add: [$now, -1] }, $num] }, $num] },
+            meta: { count: '$count', num: { $literal: $num }, now: $now, end: $end, baseUrl: { $literal: req.baseUrl },
                 sort: { $literal: $sort }, date: { $literal: $filter['time.updated'] || {} }}},
         },
     ];
@@ -30,12 +48,12 @@ function getAggregationQuery(params, query, page = 1, num = 5, sort = { 'time.up
 
 /**
  * construct Mongo query expression (for $match)
+ * @param {object} user                     - Passport.js log-in `user` object populated in Express.js `session` object
  * @param {object} params                   - Express.js `req.params` object which contains searching keywords
  * @param {object} query                    - Express.js `req.query` object which contains searching parameters
  * @return {object}                         - full expression in $match stage
  */
-function getFilterExp(params, query) {
-    debugger;
+function getFilterExp({ session: { user }, params, query } = { session: {} }) {                                         // option: authenticated dependent query?!
     const $filter = params.hasOwnProperty('search')
         ? { $text : { $search: params.search }} : params.hasOwnProperty('category')
             ? { category : params.category } : {};
@@ -43,7 +61,7 @@ function getFilterExp(params, query) {
     const range = getDateRangeArray(query.date);
     if (range.length === 2) $filter['time.updated'] = getDateRangeExp(range[0], range[1]);
 
-    return $filter;
+    return { ...$filter, status: { $eq: 'published' }, 'visibility.hidden': false }
 }
 
 
@@ -88,26 +106,9 @@ function getDateRangeExp(A, Z) {
  * @return {object}                         - part-of expression in $match stage
  */
 function getSortExp(sort, query) {
-    const $sort = Object.assign({}, sort);
+    const $sort = Object.assign({ 'visibility.pinned': -1 }, sort);
     if ($sort['time.updated'] !== 1) $sort['time.updated'] = -1;
     return $sort;
-}
-
-
-// middleware
-function search({ page, num, sort } = {}) {
-    return (req, res, next) => require('../../models/index').postModel
-        .aggregate(getAggregationQuery(req.params, req.query, page, num, sort))
-        .then(docs => docs[0])
-        .then(result => {
-            if (typeof next !== 'function') return result;
-            req.session.view = result;
-            return next();
-        })
-        .catch(err => {
-            if (typeof next !== 'function') throw err;
-            else return next(err);
-        });
 }
 
 

@@ -14,13 +14,19 @@
             <h3>NO RESULT</h3>
         {{??}}{{ post.forEach(function(post) { }}
             <article class="mb-4 pb-4" id="{{= post._id }}">
-                <h2 class="_title"><a href="/post/{{= post.canonical }}">{{= post.title }}</a></h2>
+                <h2 class="_title">
+                    {{? post.visibility.pinned }} [PINNED] {{?}}
+                    {{? post.status === 'drafted' }} [DRAFT] {{?}}
+                    <a href="/post/{{= post.canonical }}">{{= post.title }}</a>
+                </h2>
                 <header class="row">
                     <div class="col-md-9">
                         {{= post.author.username }}
                         ｜<a href="/post/editor/{{= post._id }}">(edit)</a>
                         ｜<a href="/post/class/{{= post.category }}">{{= post.category }}</a>
                         ｜Revised: {{= post._revised }}
+                        {{? post.status === 'drafted' }}｜<i class="fa fa-hourglass-half"></i>{{?}}
+                        {{? post.visibility.hidden }}｜<i class="fa fa-eye-slash"></i>{{?}}
                     </div>
                     <time class="col-md-3 text-lg-right"
                           datetime="{{= post.time.updated }}">{{= new Date(post.time.updated).toDateString() }}</time>
@@ -37,4 +43,5 @@
     </div>
 </div>
 
+{{= _fn.loadPartial('_pagination') }}
 {{= _fn.loadPartial('_footer') }}

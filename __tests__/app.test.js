@@ -1,7 +1,7 @@
 const path = require('path');
 const request = require('supertest');
 const { app, mongoose } = require('../app');
-const { settingModel, userModel, mediaModel, postModel } = require('../models');
+const { configModel, userModel, mediaModel, postModel } = require('../models');
 
 
 
@@ -10,20 +10,19 @@ const agent = request.agent(app);
 const cookiesJar = [];
 
 
-beforeAll(async (done) => {
-    if (process.env.NODE_ENV === 'test') await mongoose.connection.dropDatabase();
-    else throw new Error('Should run in the test mode!');
-    return await settingModel.initialize(done);
+beforeAll(done => {
+    if (process.env['NODE_ENV'] !== 'test') throw new Error('Should run in the test mode!');
+    return mongoose.connection.dropDatabase(configModel.initialize(done));
 });
 
-afterAll((done) => mongoose.disconnect(done));
+afterAll(done => mongoose.disconnect(done));
 
 
 
 // test
 describe('Server Initialization', () => {
     test('Should run in test mode', () => {
-        expect(process.env.NODE_ENV).toEqual('test');
+        expect(process.env['NODE_ENV']).toEqual('test');
     });
 
     test('GET the root', async() => {
@@ -143,9 +142,9 @@ describe('Router - Home', () => {
     test('PATCH configs of the site', async () => {
         await agent
             .patch('/home/setting')
-            .send({ siteSetting: { title: 'Testing Website' }});
+            .send({ configs: { title: 'Testing Website' }});
         //
-        expect((await settingModel.findOne({})).title).toContain('Testing Website');
+        expect((await configModel.findOne({})).title).toEqual('Testing Website');
     });
 
     test('PATCH user nickname', async () => {

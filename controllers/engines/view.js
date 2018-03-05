@@ -1,9 +1,49 @@
+const { ServerError, TemplateError } = require('../utilities/')._U_.error;
 const
-    _                       = require('lodash'),
-    fs                      = require('fs'),
-    doT                     = require('dot'),
-    path                    = require('path'),
-    marked                  = require('marked');
+    _       = require('lodash'),
+    fs      = require('fs'),
+    doT     = require('dot'),
+    path    = require('path'),
+    marked  = require('marked');
+
+
+
+/**
+ * define the scheme of Template{object}
+ * @constructor
+ * @param {string} filePath                 - reserved for error messaging
+ * @param {object} blueprint                - blueprint to be decoded
+ * @param {object} sections                 - section to be complied by `doT.template`
+ */
+class Template {
+    constructor(filePath, blueprint, sections) {    // todo: [private] make these private once JS supports
+        this.filePath = filePath;
+        this.settings = getCompilationConfigs(Object.keys(_.omit(blueprint, 'set')).toString());
+        this._arguement = Object.values(blueprint);
+        this._compileFn = this.compile(sections, this.settings);
+    }
+
+    compile(sections, settings) {
+        try {
+            const compiledStack = {};
+            Object.keys(sections).forEach(item => {
+                if (settings.stripHTMLComment === true) sections[item] = sections[item].replace(settings.comment, '');
+                compiledStack[item] = doT.template(sections[item], settings);
+            });
+            return compiledStack;
+        } catch (err) {
+            throw new TemplateError(91001, { filePath: this.filePath, err });
+        }
+    }
+
+    render() {
+        try {
+            return this._compileFn.main(...this._arguement);
+        } catch (err) {
+            throw new TemplateError(91002, { filePath: this.filePath, err });
+        }
+    }
+}
 
 
 /**
@@ -16,12 +56,16 @@ const
 function render(filePath, locals, next) {
     return getTemplate(filePath, getBlueprint(locals))
         .then(Template => next(null, Template.render()))
-        .catch(err => next(err, null));
+        .catch(err => next(new TemplateError(err)));
 }
 
 
+
+// ==============================
+//  COMPONENTS
+// ==============================
 /**
- * generate doT configs on-the-fly          // todo: allows the user to customized the delimiters
+ * generate doT configs on-the-fly
  * @param {string} variables                - names to be registered into the runtime scope
  * @return {object}                         - return doT.js compilation configs
  */
@@ -58,7 +102,7 @@ function getBlueprint({ settings, ...locals }) {
 
 
 /**
- * get runtime template methods             // todo: added more methods
+ * get runtime template methods
  * @param {object} blueprint                - raw blueprint{object} that has no `._fn` methods
  * @param {object} settings                 - view settings extracted from locals{object}
  * @return {object}                         - return a object contains runtime template functions
@@ -115,50 +159,20 @@ function buildTemplate(filePath, blueprint, fileString) {
 function getFileString(filePath, _SYNC) {
     function readFileAsync (file, option) {
         return new Promise((resolve, reject) => fs.readFile(file, option, (err, content) => {
-            if (err) return reject(new Error(`Failed to read the file: (${filePath})`));
+            if (err) return reject(new TemplateError(91003, filePath));
             else return resolve(content);
         }));
     }
 
-    if (_SYNC === true) return fs.readFileSync(filePath, 'utf8');
-    else return readFileAsync(filePath, 'utf8');
-}
-
-
-/**
- * define the scheme of Template{object}
- * @constructor
- * @param {string} filePath                 - reserved for error messaging
- * @param {object} blueprint                - blueprint to be decoded
- * @param {object} sections                 - section to be complied by `doT.template`
- */
-function Template(filePath, blueprint, sections) {
-    this.filePath   = filePath;
-    this.settings   = getCompilationConfigs(Object.keys(_.omit(blueprint, 'set')).toString());
-    this.arguement  = Object.values(blueprint);
-    this.compileFn  = this.compile(sections, this.settings);
-}
-
-Template.prototype.compile = function (sections, settings) {
-    const compiledStack = {};
-    Object.keys(sections).forEach(item => {
-        if (settings.stripHTMLComment === true) sections[item] = sections[item].replace(settings.comment, '');
-        compiledStack[item] = doT.template(sections[item], settings);
-    });
-    return compiledStack;
-};
-
-Template.prototype.render = function() {
     try {
-        return this.compileFn.main(...this.arguement);
+        return _SYNC !== true ? readFileAsync(filePath, 'utf8') : fs.readFileSync(filePath, 'utf8');
     } catch (err) {
-        throw new Error(`Failed to render: ('${this.filePath}'):\n${err.toString()}`);
+        throw new TemplateError(91004, filePath);
     }
-};
+}
 
 
 
-// view engine export
-module.exports = { __express: render, render, _test: {
-    getCompilationConfigs, getBlueprint, getRuntimeMethods,
-    getTemplate, buildTemplate, getFileString, render, Template }};
+// exports
+module.exports = { __express: render, render, _test: { Template,
+        render, getCompilationConfigs, getBlueprint, getRuntimeMethods, getTemplate, buildTemplate, getFileString }};

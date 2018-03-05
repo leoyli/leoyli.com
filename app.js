@@ -26,11 +26,11 @@ app.use(express.static(path.join(__dirname, './public'), {
 
 
 // dynamic
-app.engine('dot', require('./controllers/views/engine').__express);
+app.engine('dot', require('./controllers/engines/view').__express);
 app.set('view engine', 'dot');
 app.set('views', path.join(__dirname, './views'));
 app.set('partials', {
-    panel: path.join(__dirname, './views/home/_partials'),
+    panel: path.join(__dirname, './views/root/_partials'),
     theme: path.join(__dirname, './views/theme/_partials'),
 });
 
@@ -40,18 +40,17 @@ app.set('partials', {
 //  DATABASE
 // ==============================
 // connection
-mongoose.connect(process.env.DB);
+mongoose.connect(process.env['DB']);
 
 
 // initialization
-mongoose.Promise = Promise;
-const { settingModel, userModel } = require('./models');
-if (process.env.NODE_ENV !== 'test') settingModel.initialize();
+const { configModel, userModel } = require('./models/');
+if (process.env['NODE_ENV'] !== 'test') configModel.initialize();
 
 
 // session
 app.use(session({
-    secret: process.env.SECRET,
+    secret: process.env['SECRET'],
     saveUninitialized: false,
     resave: false,
     // cookie: { secure: true },
@@ -79,4 +78,4 @@ require('./routers').init(app);
 // ==============================
 //  APP EXPORTS
 // ==============================
-module.exports = (process.env.NODE_ENV === 'test') ? { app, mongoose } : app;
+module.exports = (process.env['NODE_ENV'] === 'test') ? { app, mongoose } : app;

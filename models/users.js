@@ -9,7 +9,7 @@ const
 //  FUNCTIONS
 // ==============================
 // ancillaries
-const { _fn }               = require('../controllers/helpers');
+const { _U_ }               = require('../controllers/utilities/');
 
 
 
@@ -41,9 +41,8 @@ const UserSchema            = new mongoose.Schema({
 //  STATIC METHODS
 // ==============================
 // nickname assignment (pre-hook)
-UserSchema.pre('save', function (next) {
+UserSchema.pre('save', function () {
     if (this.nickname === undefined) this.nickname = `${this.firstName} ${this.lastName}`;
-    return next();
 });
 
 
@@ -57,20 +56,20 @@ UserSchema.plugin(passportLocalMongoose, {
 //// rewrite plugin methods as promises
 const _register = UserSchema.statics.register;
 UserSchema.statics.register = function (doc, pw, next) {
-    return _fn.schema.promisify(_register, arguments, this);
+    return _U_.schema.promisify(_register, arguments, this);
 };
 
 const _authenticate = UserSchema.methods.authenticate;
 UserSchema.methods.authenticate = function (pw, next) {
-    return _fn.schema.promisify(_authenticate, arguments, this);
+    return _U_.schema.promisify(_authenticate, arguments, this);
 };
 
 const _changePassword = UserSchema.methods.changePassword;
 UserSchema.methods.changePassword = function (old_PW, new_PW, next) {
-    return _fn.schema.promisify(_changePassword, arguments, this);
+    return _U_.schema.promisify(_changePassword, arguments, this);
 };
 
 
 
-// export model
+// exports
 module.exports = mongoose.model('users', UserSchema);

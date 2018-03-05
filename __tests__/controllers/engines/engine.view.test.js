@@ -9,14 +9,14 @@ const fs = require('fs');
 
 // module
 const { getCompilationConfigs, getBlueprint, getRuntimeMethods,
-    getTemplate, buildTemplate, getFileString, render, Template } = require('../../../controllers/views/engine')._test;
+    getTemplate, buildTemplate, getFileString, render, Template } = require('../../../controllers/engines/view')._test;
 
 
 
 // test
 describe('Check the ENV', () => {
     test('Should run in test mode', () => {
-        expect(process.env.NODE_ENV).toEqual('test');
+        expect(process.env['NODE_ENV']).toEqual('test');
     });
 });
 

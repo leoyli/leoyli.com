@@ -1,4 +1,4 @@
-const { RouterHub } = require('../controllers/routers/driver');
+const { Device } = require('../controllers/engines/router');
 
 
 
@@ -24,7 +24,7 @@ const moc = {
 
 
 const seed = async (req, res) => {
-    const { postModel, userModel } = require('../models');
+    const { postModel, userModel } = require('../models/');
     const newUser = await userModel.register(new userModel(moc.user), moc.user.password);
     await postModel.postsCreateThenAssociate(moc.post(newUser), newUser);
     req.flash('info', 'Successfully seeded.');
@@ -36,7 +36,7 @@ const seed = async (req, res) => {
 // ==============================
 //  ROUTER HUB
 // ==============================
-const SeedRouter = new RouterHub([{
+const SeedRouter = new Device([{
     route: '/',
     controller: seed,
 }]);

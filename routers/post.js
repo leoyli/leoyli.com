@@ -1,20 +1,20 @@
-const { RouterHub } = require('../controllers/routers/driver');
-const { editor, post } = require('../controllers/routers/rules/post');
+const { Device } = require('../controllers/engines/router');
+const { editor, post } = require('../controllers/routers/post');
 
 
 
 // ==============================
 //  ROUTER HUB
 // ==============================
-const PostRouter = new RouterHub([{
+const PostRouter = new Device([{
     route:          ['/editor', '/editor/new'],
     controller:     editor.post,
-    settings:       { title: 'New post', template: './home/editor', authenticated: true },
+    settings:       { title: 'New post', template: './root/editor', authenticated: true },
 }, {
     route:          /^\/editor\/([a-f\d]{24})(?:\?.*|\/)?$/i,
     alias:          '/editor/:canonical',
     controller:     editor.edit,
-    settings:       { title: 'post Editor', template: './home/editor', authorized: true },
+    settings:       { title: 'post Editor', template: './root/editor', authorized: true },
 }, {
     route:          /^\/(?![a-f\d]{24})(.+)$/i,
     alias:          '/:_id',

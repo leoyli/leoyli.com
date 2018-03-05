@@ -1,26 +1,22 @@
-module.exports = exports = { _md: {} };
+const { ClientError } = require('../utilities/')._U_.error;
+const { _U_ } = require('../utilities/');
+const passport = require('passport');
+module.exports = exports = { _M_: {} };
 
 
 
 // ==============================
-//  FUNCTIONS
-// ==============================
-const { _fn } = require('../helpers');
-
-
-
-// ==============================
-//  MODULES (add-on)
+//  MIDDLEWARE PLUGINS
 // ==============================
 // http header for stopping crawlers
-exports._md.doNotCrawled = (req, res, next) => {
+exports._M_.doNotCrawled = (req, res, next) => {
     res.set('x-robots-tag', 'none');
     return next();
 };
 
 
 // case insensitive to access `req.query`
-exports._md.caseInsensitiveQuery = (req, res, next) => {
+exports._M_.caseInsensitiveQuery = (req, res, next) => {
     req.query = new Proxy(req.query, {
         get: (target, entry) => target[Object.keys(target).find(key => key.toLowerCase() === entry.toLowerCase())],
     });
@@ -29,12 +25,13 @@ exports._md.caseInsensitiveQuery = (req, res, next) => {
 
 
 // busboy for multipart form parsing
-exports._md.hireBusboy = (limits) => (req, res, next) => require('./upload').uploadController(req, res, limits, next);
+exports._M_.hireBusboy = (limits) => (req, res, next) => require('./upload').uploadController(req, res, limits, next);
 
 
 // set title tag
-exports._md.setTitleTag = (title, { append, root, sequence = [] } = {}) => (req, res, next) => {
-    if (root === true) sequence.push(res.locals._view.title);
+exports._M_.setTitleTag = (title, { append, root } = {}) => (req, res, next) => {
+    const sequence = [];
+    if (root !== false) sequence.push(res.locals._view.title);
     if (append === true) sequence.push(title);
     else sequence.unshift(title);
     res.locals._view.title = sequence.join(' - ');
@@ -43,43 +40,39 @@ exports._md.setTitleTag = (title, { append, root, sequence = [] } = {}) => (req,
 
 
 // passport
-const passport = require('passport');
-exports._md.usePassport = [passport.initialize(), passport.session()];
+exports._M_.usePassport = [passport.initialize(), passport.session()];
 
 
 // authentication
-exports._md.isSignedIn = [exports._md.doNotCrawled, ...exports._md.usePassport, (req, res, next) => {
+exports._M_.isSignedIn = [exports._M_.doNotCrawled, ...exports._M_.usePassport, (req, res, next) => {
     if (req.isAuthenticated()) return next();
-    if (res.locals._view.flash.pass[0] === undefined) {
-        req.flash('error', String(res.locals._view.flash.error));
-        req.flash('info', String(res.locals._view.flash.info));
-    } else req.flash('error', 'Please sign in first!');
+    if (res.locals._view.flash.pass[0] === true) {
+        req.flash('error', res.locals._view.flash.error.toString());
+        req.flash('info', res.locals._view.flash.info.toString());
+    } else req.flash('error', 'Please sign in first!');     // tofix: to be centralized
     req.session.returnTo = req.originalUrl;
     return res.redirect('/signin');
 }];
 
 
 // authorization
-exports._md.isAuthorized = [...exports._md.isSignedIn, async (req, res, next) => {
+exports._M_.isAuthorized = [...exports._M_.isSignedIn, async (req, res, next) => {
     const [field, val] = req.params.canonical !== undefined
         ? ['canonical', req.params.canonical]
-        : ['_id', _fn.string.readMongoId(req.url)];
-    const count = await require('../../models').postModel.count({ [field]: val, 'author._id': req.user });
-    if (count !== 1) {
-        req.flash('error', 'You do not have a valid authorization...');
-        return res.redirect('/');
+        : ['_id', _U_.string.readMongoId(req.url)];
+    if (await require('../../models/').postModel.count({ [field]: val, 'author._id': req.user }) !== 1) {   // tofix: find the post first then decide to give or not
+        throw new ClientError(20001);
     } else return next();
 }];
 
 
 // password validations
-exports._md.passwordValidation = (req, res, next) => {
+exports._M_.passwordValidation = (req, res, next) => {
     if (!req.body.password.new || !req.body.password.confirmed) {
-        req.flash('error', 'Please fill all required fields.');
+        throw new ClientError(10001);
     } else if (req.body.password.new.toString() !== req.body.password.confirmed.toString()) {
-        req.flash('error', 'Two new password does not the same.');
+        throw new ClientError(10002);
     } else if (req.body.password.old && (req.body.password.old.toString() === req.body.password.new.toString())) {
-        req.flash('error', 'Password cannot be the same as the old one.');
+        throw new ClientError(10003);
     } else return next();
-    return res.redirect('back');
 };

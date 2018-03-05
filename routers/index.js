@@ -1,3 +1,4 @@
+const { HttpError }         = require('../controllers/utilities/')._U_.error;
 const
     methodOverride          = require('method-override'),
     bodyParser              = require('body-parser'),
@@ -10,7 +11,7 @@ const
 function _useMiddleware(app) {
     // external
     //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-    if (process.env.NODE_ENV === 'dev') app.use(logger('dev'));
+    if (process.env['NODE_ENV'] === 'dev') app.use(logger('dev'));
     app.use(methodOverride('_method'));
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
@@ -23,16 +24,17 @@ function _useMiddleware(app) {
 
 function _useRoutes(app) {
     // seed
-    if (process.env.NODE_ENV === 'dev' || 'test') app.use('/seed', require('./seed'));
+    if (process.env['NODE_ENV'] === 'dev' || 'test') app.use('/seed', require('./seed'));
 
     // units
     app.use('/home', require('./admin'));
     app.use('/post', require('./post'));
-    app.use('/', require('./authentication'));
+    app.use('/', require('./account'));
     app.use('/', require('./page'));
 
     // error
-    app.use('/', require('../controllers/views/template').errorHandler);
+    app.get('*', (req, res, next) => next(new HttpError(404)));
+    app.use(require('../controllers/views/handler').errorHandler);
 }
 
 
