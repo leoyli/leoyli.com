@@ -37,13 +37,14 @@ exports.account.signin = {
     post: (req, res, next) => {
         if (req.isAuthenticated()) return res.redirect('/home');
         return require('passport').authenticate('local', (err, authUser) => {
-            if (err) return next(err);
+            if (err) return next(err);  // todo: throw an error
             if (!authUser) return next(new ClientError(20002));
             return req.logIn(authUser, err => {
-                if (err) return next(err);
+                if (err) return next(err); // todo: throw an error
+                authUser.UpdateSignInLog();
                 req.session.cookie.expires = req.body.isPersisted ? new Date(Date.now() + 14 * 24 * 3600000) : false;
                 req.session.user = { _id: authUser._id, picture: authUser.picture, nickname: authUser.nickname };
-                req.flash('info', `Welcome back ${authUser.username}`);
+                req.flash('info', `Welcome back ${authUser.nickname}`);
                 const returnTo = req.session.returnTo;
                 delete req.session.returnTo;
                 return res.redirect(returnTo || '/home');

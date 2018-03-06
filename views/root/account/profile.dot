@@ -1,0 +1,60 @@
+{{= _fn.loadPartial('_header') }}
+
+<h1 class="container mb-4">User Profile</h1>
+
+<div class="container d-flex">
+    <div class="col-3">
+        <div class="mb-3"><img class="" alt="User" src="{{= _view.user.picture }}" width="80%" /></div>
+        <div>Change the profile picture</div>
+    </div>
+    <div class="col-9 px-4">
+        <table class="table table-sm">
+            <thead>
+            <tr>
+                <th class="h3" colspan="2">User Info</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row" width="200">Full Name</th>
+                <td>{{= _view.user.info.firstName }} {{= _view.user.info.lastName }}</td>
+            </tr>            <tr>
+                <th scope="row" width="200">Nickname</th>
+                <td>{{= _view.user.nickname }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Date of birth</th>
+                <td>{{= new Date(_view.user.info.birthday).toDateString() }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Gender</th>
+                <td>{{= _view.user.info.gender }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Country/region of residence</th>
+                <td>{{= _view.user.info.residence }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Time zone</th>
+                <td>{{= _view.user.info.timezone }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <div>&nbsp;</div>
+        <table class="table table-sm">
+            <thead>
+            <tr>
+                <th class="h3" colspan="2">Account Security</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row" width="200">Email address</th>
+                <td>{{= _view.user.email }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{{= _fn.loadPartial('_footer') }}

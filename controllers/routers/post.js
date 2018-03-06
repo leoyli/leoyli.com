@@ -46,7 +46,7 @@ exports.editor.edit = {
 
 exports.post.show = {
     alias: async (req, res) => {
-        if (req.session.user)req.session.view = { post : await postModel.findOne(req.params) };
+        if (req.session.user) req.session.view = { post : await postModel.findOne(req.params) };
         else req.session.view = { post : await postModel.findOne({ ...req.params, status: 'published' })};
         return res.redirect(`/post/${req.session.view.post.canonical}`);
     },

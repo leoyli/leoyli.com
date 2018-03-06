@@ -10,9 +10,15 @@ const moc = {
         email       : 'leo@leoyli.com',
         username    : 'leo',
         password    : 'leo',
-        firstName   : 'Leo',
-        lastName    : 'Li',
-        picture     : '/media/201710/1509304639065.png'
+        picture     : '/media/201710/1509304639065.png',
+        info: {
+            firstName   : 'test',
+            lastName    : 'test',
+            residence   : 'Test/test',
+            timeZone    : 'UTC−07:00 (MST)',
+            gender      : 'NA',
+            birthday    : Date.now(),
+        }
     },
     post : function(newUser) { return {
         title       : 'New weapon arrived: Custom E-liter 4K!',

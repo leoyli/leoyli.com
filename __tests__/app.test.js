@@ -97,12 +97,18 @@ describe('Router - Authentication', () => {
 
     test('POST a new user', async () => {
         const mocUserInput = {
-            email       : 'test@leoyli.com',
-            username    : 'test',
-            password    : { new : 'test', confirmed: 'test' },
-            firstName   : 'test',
-            lastName    : 'test',
-            picture     : '/media/201710/1509304639065.png'
+            email           : 'test@leoyli.com',
+            username        : 'test',
+            password        : { new : 'test', confirmed: 'test' },
+            picture         : '/media/201710/1509304639065.png',
+            info: {
+                firstName   : 'test',
+                lastName    : 'test',
+                residence   : 'Test/test',
+                timeZone    : 'UTC−07:00 (MST)',
+                gender      : 'NA',
+                birthday    : Date.now(),
+            }
         };
         const result = await request(app)
             .post('/signup')

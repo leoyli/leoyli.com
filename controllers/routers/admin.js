@@ -26,7 +26,10 @@ home.setting = {
 };
 
 home.profile = {
-    get: (req, res) => res.render('./root/account/profile'),
+    get: (req, res) => {
+        res.locals._view.user = req.user._doc;
+        return res.render('./root/account/profile');
+    },
     patch: async (req, res) => {
         await userModel.update({ _id: req.user._id }, { $set: req.body.profile });
         return res.redirect('back');

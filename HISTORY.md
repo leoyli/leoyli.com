@@ -1,3 +1,22 @@
+### 0.8.0-dev.1 / 2018-03-06
+> App
+- Updated 'users' model schema:
+  - added `time._lastTimeSignIn` field.
+  - added `UpdateSignInLog()` document method.
+  - added `info:{ gender, residence, timezone, birthday }` fields;
+  - moved `firstName` and `lastName` into info.
+- Applied `UpdateSignInLog()` in 'account.signin' controller.
+- Populated whole user document in `home.profile.get` route.
+- Updated 'seed' route.
+
+> Test
+- Updated user mock in `app.test.js`.
+
+> UI
+- Updated '_navibar' in 'root'.
+- Updated fileNames in 'signup'.
+
+
 ### 0.8.0-dev.0 / 2018-03-04
 - Initiated v0.8: 'CMS-Panel' development.
 - Fixed typos in HISTORY.

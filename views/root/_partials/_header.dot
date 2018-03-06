@@ -30,6 +30,7 @@
 
 <body class="bg-black">
 <header role="banner">
+    {{= _fn.loadPartial('_navibar') }}
 </header>
 
 
