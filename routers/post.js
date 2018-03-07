@@ -7,14 +7,14 @@ const { editor, post } = require('../controllers/routers/post');
 //  ROUTER HUB
 // ==============================
 const PostRouter = new Device([{
-    route:          ['/editor', '/editor/new'],
+    route:          ['/edit', '/edit/new'],
     controller:     editor.post,
     settings:       { title: 'New post', template: './root/editor', authenticated: true },
 }, {
-    route:          /^\/editor\/([a-f\d]{24})(?:\?.*|\/)?$/i,
-    alias:          '/editor/:canonical',
+    route:          /^\/edit\/([a-f\d]{24})(?:\?.*|\/)?$/i,
+    alias:          '/edit/:canonical',
     controller:     editor.edit,
-    settings:       { title: 'post Editor', template: './root/editor', authorized: true },
+    settings:       { title: 'Edit post', template: './root/editor', authorized: true },
 }, {
     route:          /^\/(?![a-f\d]{24})(.+)$/i,
     alias:          '/:_id',

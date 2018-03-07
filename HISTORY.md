@@ -1,3 +1,17 @@
+### 0.8.0-dev.2 / 2018-03-06
+> App
+- Added `profile_editor` controller and router.
+- Rename `residence` as `residency` in 'users' model.
+- Rename 'post/editor' route as 'post/edit' route.
+
+> Test
+- Updated user mock in `app.test.js`.
+
+> UI
+- Added 'profile_editor' template in root.
+- Updated 'profile' template in root.
+
+
 ### 0.8.0-dev.1 / 2018-03-06
 > App
 - Updated 'users' model schema:

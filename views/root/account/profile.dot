@@ -32,7 +32,7 @@
             </tr>
             <tr>
                 <th scope="row">Country/region of residence</th>
-                <td>{{= _view.user.info.residence }}</td>
+                <td>{{= _view.user.info.residency }}</td>
             </tr>
             <tr>
                 <th scope="row">Time zone</th>

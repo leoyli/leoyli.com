@@ -12,7 +12,7 @@ const configModelSchema    = new mongoose.Schema({
     description             : { type: String, default: 'n/a' },
     keywords                : { type: String, default: 'n/a' },
     sets: {
-        imageTypes          : { type: [[String]], default: ['gif', 'jpe?g', 'png', 'svg', 'tiff', 'webp']},
+        imageTypes          : { type: [[String]], default: ['gif', 'jpe?g', 'png', 'svg', 'tiff', 'webp'] },
         language            : { type: String, default: 'en' },
         timezone            : { type: String, default: '' },
         timeFormat          : { type: String, default: '' },
@@ -42,6 +42,11 @@ configModelSchema.static('initialize', async function(next = () => {}) {
 configModelSchema.static('updateSettings', async function(doc, next = () => {}) {
     process.env['$WEBSITE_CONFIGS'] = JSON.stringify(await this.findOneAndUpdate({ active: true }, doc, { new: true }));
     return next();
+});
+
+
+configModelSchema.post('save', function () {
+    console.log(this);
 });
 
 

@@ -191,7 +191,7 @@ describe('Router - Post', () => {
     test('POST a new post', async () => {
         const mockNewPost = { post: { title: 'TEST POST', category: 'test', featured: '', content: 'TEST CONTENT' }};
         const result = await agent
-            .post('/post/editor')
+            .post('/post/edit')
             .send(mockNewPost);
         //
         expect(result.statusCode).toBe(302);
@@ -200,7 +200,7 @@ describe('Router - Post', () => {
     });
 
     test('GET access to the editor', async () => {
-        const result = await Promise.all([agent.get('/post/editor'), agent.get('/post/editor/test-post')]);
+        const result = await Promise.all([agent.get('/post/edit'), agent.get('/post/edit/test-post')]);
         result.push(await agent.get(result[1].headers.location));
         //
         expect(result[0].statusCode).toBe(200);
@@ -229,7 +229,7 @@ describe('Router - Post', () => {
         const mockEditedPost = { post: { title: 'EDITED', category: 'test', featured: '', content: 'CONTENT EDITED' }};
         const post = await postModel.findOne({ canonical: 'test-post' });
         const result = await agent
-            .patch(`/post/editor/${post._id}`)
+            .patch(`/post/edit/${post._id}`)
             .send(mockEditedPost);
         //
         expect(result.statusCode).toBe(302);
@@ -240,7 +240,7 @@ describe('Router - Post', () => {
     test('DELETE the created new post', async () => {
         const post = await postModel.findOne({ canonical: 'test-post' });
         const result = await agent
-            .delete(`/post/editor/${post._doc._id}`);
+            .delete(`/post/edit/${post._doc._id}`);
         //
         expect(result.statusCode).toBe(302);
         expect(result.headers.location).toBe('/post/');

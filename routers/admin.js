@@ -20,6 +20,10 @@ const DashboardRouter = new Device([{
     controller:     home.profile,
     settings:       { title: 'Profile' },
 }, {
+    route:          '/profile/edit',
+    controller:     home.profile_editor,
+    settings:       { title: 'Edit Your Profile' },
+}, {
     route:          '/security',
     controller:     home.security,
     settings:       { title: 'Account Settings' },

@@ -31,8 +31,18 @@ home.profile = {
         return res.render('./root/account/profile');
     },
     patch: async (req, res) => {
-        await userModel.update({ _id: req.user._id }, { $set: req.body.profile });
-        return res.redirect('back');
+        const raw = { info: req.body.profile.info, nickname: req.body.profile.nickname };
+        if (raw.info.birthday) raw.info.birthday = new Date(raw.info.birthday);
+        await userModel.update({ _id: req.user._id }, { $set: raw });
+        req.flash('info', 'Your profile have been successfully updated!');
+        return res.redirect('/home/profile');
+    },
+};
+
+home.profile_editor = {
+    get: (req, res) => {
+        res.locals._view.user = req.user._doc;
+        return res.render('./root/account/profile_editor');
     },
 };
 

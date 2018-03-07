@@ -1,0 +1,70 @@
+{{= _fn.loadPartial('_header') }}
+
+<h1 class="container mb-4">User Profile</h1>
+
+<div class="container d-flex">
+    <div class="col-3">
+        <div class="mb-3"><img class="" alt="User" src="{{= _view.user.picture }}" width="80%" /></div>
+        <div>Change the profile picture</div>
+    </div>
+    <div class="col-9 px-4">
+        <form method="POST">
+            <h3>User Info</h3>
+            <div class="input-group my-1">
+                <div class="input-group-prepend col-2 px-0">
+                    <span class="input-group-text w-100">Full Name</span>
+                </div>
+                <input id="firstName" name="profile[info][firstName]" class="form-control"
+                       type="text" value="{{= _view.user.info.firstName }}" placeholder="First name">
+                <input id="lastName" name="profile[info][lastName]" class="form-control"
+                       type="text" value="{{= _view.user.info.lastName }}" placeholder="Last name">
+            </div>
+            <div class="input-group my-1">
+                <div class="input-group-prepend col-2 px-0">
+                    <span class="input-group-text w-100">Nickname</span>
+                </div>
+                <input id="nickname" name="profile[nickname]" class="form-control"
+                       type="text" value="{{= _view.user.nickname }}" placeholder="Nickname">
+            </div>
+            <div class="input-group my-1">
+                <div class="input-group-prepend col-2 px-0">
+                    <span class="input-group-text w-100">Date of birth</span>
+                </div>
+                <input id="birthday" name="profile[info][birthday]" class="form-control"
+                       type="text" value="{{= _view.user.info.birthday }}" placeholder="Date of birth">
+            </div>
+            <div class="input-group my-1">
+                <div class="input-group-prepend col-2 px-0">
+                    <label class="input-group-text w-100" for="gender">Gender</label>
+                </div>
+                <select id="gender" name="profile[info][gender]" class="custom-select">
+                    <option value="NA">Prefer not to say</option>
+                    <option value="Male" {{? _view.user.info.gender === 'Male' }}selected{{?}}>Male</option>
+                    <option value="Female" {{? _view.user.info.gender === 'Female' }}selected{{?}}>Female</option>
+                </select>
+            </div>
+            <div class="input-group my-1">
+                <div class="input-group-prepend col-2 px-0">
+                    <label class="input-group-text w-100" for="residency">Residency</label>
+                </div>
+                <select id="residency" name="profile[info][residency]" class="custom-select">
+                    <option value="Canada/Alberta" selected>Canada/Alberta</option>
+                </select>
+            </div>
+            <div class="input-group my-1">
+                <div class="input-group-prepend col-2 px-0">
+                    <label class="input-group-text w-100" for="timezone">Timezone</label>
+                </div>
+                <select id="timezone" name="profile[info][timezone]" class="custom-select">
+                    <option value="UTC−07:00 (MST)" selected>UTC−07:00 (MST)</option>
+                </select>
+            </div>
+            <div>&nbsp;</div>
+            <button class="btn btn-outline-primary text-uppercase float-right mx-1" aria-label="Update"
+                    formaction="/home/profile?_method=PATCH">Update
+            </button>
+        </form>
+    </div>
+</div>
+
+{{= _fn.loadPartial('_footer') }}

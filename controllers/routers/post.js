@@ -26,7 +26,7 @@ exports.editor.post = {
 exports.editor.edit = {
     alias: async (req, res) => {
         req.session.view = { post: await postModel.findOne(req.params) };
-        return res.redirect(`/post/editor/${req.session.view.post._id}`);
+        return res.redirect(`/post/edit/${req.session.view.post._id}`);
     },
     get: async (req, res, next) => {
         if (!req.session.view) req.session.view = { post: await postModel.findById(_U_.string.readMongoId(req.url)) };
