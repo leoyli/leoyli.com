@@ -3,10 +3,8 @@
 <h1 class="container mb-4">User Profile</h1>
 
 <div class="container d-flex">
-    <div class="col-3">
-        <div class="mb-3"><img class="" alt="User" src="{{= _view.user.picture }}" width="80%" /></div>
-        <div>Change the profile picture</div>
-    </div>
+    {{= _fn.loadPartial('_sidebar', { path: 'relative' }) }}
+
     <div class="col-9 px-4">
         <form method="POST">
             <h3>User Info</h3>

@@ -9,12 +9,12 @@ const { editor, post } = require('../controllers/routers/post');
 const PostRouter = new Device([{
     route:          ['/edit', '/edit/new'],
     controller:     editor.post,
-    settings:       { title: 'New post', template: './root/editor', authenticated: true },
+    settings:       { title: 'New post', template: './__root__/editor', authenticated: true },
 }, {
     route:          /^\/edit\/([a-f\d]{24})(?:\?.*|\/)?$/i,
     alias:          '/edit/:canonical',
     controller:     editor.edit,
-    settings:       { title: 'Edit post', template: './root/editor', authorized: true },
+    settings:       { title: 'Edit post', template: './__root__/editor', authorized: true },
 }, {
     route:          /^\/(?![a-f\d]{24})(.+)$/i,
     alias:          '/:_id',

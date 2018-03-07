@@ -29,11 +29,6 @@ app.use(express.static(path.join(__dirname, './public'), {
 app.engine('dot', require('./controllers/engines/view').__express);
 app.set('view engine', 'dot');
 app.set('views', path.join(__dirname, './views'));
-app.set('partials', {
-    panel: path.join(__dirname, './views/root/_partials'),
-    theme: path.join(__dirname, './views/theme/_partials'),
-});
-
 
 
 // ==============================

@@ -3,23 +3,23 @@
 <h1 class="container mb-4">User Profile</h1>
 
 <div class="container d-flex">
-    <div class="col-3">
-        <div class="mb-3"><img class="" alt="User" src="{{= _view.user.picture }}" width="80%" /></div>
-        <div>Change the profile picture</div>
-    </div>
+    {{= _fn.loadPartial('_sidebar', { path: 'relative' }) }}
+
     <div class="col-9 px-4">
         <table class="table table-sm">
             <thead>
             <tr>
-                <th class="h3" colspan="2">User Info</th>
+                <th class="h3" colspan="2">User Info
+                    <a class="btn btn-success btn-sm float-right" href="/home/profile/edit">Edit</a>
+                </th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <th scope="row" width="200">Full Name</th>
+                <th scope="row" width="250">Full Name</th>
                 <td>{{= _view.user.info.firstName }} {{= _view.user.info.lastName }}</td>
             </tr>            <tr>
-                <th scope="row" width="200">Nickname</th>
+                <th scope="row">Nickname</th>
                 <td>{{= _view.user.nickname }}</td>
             </tr>
             <tr>
@@ -49,8 +49,19 @@
             </thead>
             <tbody>
             <tr>
-                <th scope="row" width="200">Email address</th>
+                <th scope="row" width="250">Email address</th>
                 <td>{{= _view.user.email }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Last time sign-in</th>
+                <td>{{= _view.user.time._signIn }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Your password changed in</th>
+                <td>
+                    {{= Math.floor((new Date(Date.now()) - new Date(_view.user.time._changePassword)) / 86400000)}}
+                    days ago <a class="btn btn-success btn-sm float-right" href="/home/security">Change password</a>
+                </td>
             </tr>
             </tbody>
         </table>

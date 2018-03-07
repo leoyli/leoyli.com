@@ -1,3 +1,26 @@
+### 0.8.0-dev.3 / 2018-03-07
+> App
+- Revised 'view' engine:
+  - added `source` parameter into `getRuntimeMethods()` and `getBlueprint()`;
+  - revised `loadPartial()` to accept: (1) relative partial; (2) default path (__root__); or (3) theme path.
+- Removed `_status` property from `res.locals._view` in initial middleware.
+- Removed `app.set('partials')` app setting.
+- Updated 'users' model:
+  - Added `time._changePassword` field.
+  - Renamed `_lastTimeSignIn` as `_signIn`.
+  - Revised `changePassword()` to update `time._changePassword`.
+  - Redefined `UpdateSignInLog()` as `updateLastTimeLog()` in 'users' model.
+- Renamed page title of `home/security` router.
+
+> Test
+- Updated `app.test.js`.
+
+> UI
+- Renamed 'root' as '__root__'.
+- Removed 'Account Settings' option from dropdown menu in `_navibar` template.
+- Added `profile` directory with `_sidebar` template.
+
+
 ### 0.8.0-dev.2 / 2018-03-06
 > App
 - Added `profile_editor` controller and router.

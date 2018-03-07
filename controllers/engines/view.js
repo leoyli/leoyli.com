@@ -54,7 +54,7 @@ class Template {
  * @return {Promise}                        - return the executable HTML string
  */
 function render(filePath, locals, next) {
-    return getTemplate(filePath, getBlueprint(locals))
+    return getTemplate(filePath, getBlueprint(locals, filePath))
         .then(Template => next(null, Template.render()))
         .catch(err => next(new TemplateError(err)));
 }
@@ -92,11 +92,12 @@ function getCompilationConfigs(variables) {
  * transpile Express.js meta into the blueprint of Template{object}
  * @param {object} {*}                      - local populations from the Express.js object
  * @param {object} settings                 - destructed parameters from locals{object}
+ * @param {string} [source]                 - pass down the caller (point to the source file)
  * @return {object}                         - return a transipiled blueprint
  */
-function getBlueprint({ settings, ...locals }) {
+function getBlueprint({ settings, ...locals }, source) {
     const blueprint = _.omit(locals, ['settings', 'cache', '_locals']);
-    blueprint._fn = getRuntimeMethods(blueprint, settings);
+    blueprint._fn = getRuntimeMethods(blueprint, settings, source);
     return blueprint;
 }
 
@@ -105,19 +106,23 @@ function getBlueprint({ settings, ...locals }) {
  * get runtime template methods
  * @param {object} blueprint                - raw blueprint{object} that has no `._fn` methods
  * @param {object} settings                 - view settings extracted from locals{object}
+ * @param {string} [source]                 - runtime function caller (point to the source file)
  * @return {object}                         - return a object contains runtime template functions
  */
-function getRuntimeMethods (blueprint, settings) {
+function getRuntimeMethods (blueprint, settings, source = '') {
     function useMarkdown (context, option, next) {
         return marked(context.replace(/&gt;|&#62;/g, '>', option, next));
     }
 
     function loadPartial (fileName, option = {}) {
-        const pathBase = option.isPanel === true || blueprint._view._status.isPanel === true
-            ? settings['partials'].panel
-            : settings['partials'].theme || settings['partials'].panel;
-        const filePath = path.join(pathBase || __dirname, `${fileName}.${settings['view engine'] || 'dot'}`);
-        return getTemplate(filePath, getBlueprint({ settings, ...blueprint }), true).render();
+        const pathBase = option.path === 'relative'
+            ? path.dirname(source)
+            : path.join(settings.views, option.path === 'default'
+                ? '__root__'
+                : /^[^\/]+/.exec(path.relative(settings.views, source))[0]
+                , '_partials');
+        const filePath = path.join(pathBase, `${fileName}.${settings['view engine'] || 'dot'}`);
+        return getTemplate(filePath, getBlueprint({ settings, ...blueprint }, filePath), true).render();
     }
 
     return { useMarkdown, loadPartial };

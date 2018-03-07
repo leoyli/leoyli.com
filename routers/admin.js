@@ -26,7 +26,7 @@ const DashboardRouter = new Device([{
 }, {
     route:          '/security',
     controller:     home.security,
-    settings:       { title: 'Account Settings' },
+    settings:       { title: 'Change Password' },
 }, {
     route:          '/upload',
     controller:     home.upload,

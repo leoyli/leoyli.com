@@ -37,7 +37,8 @@ const UserSchema            = new mongoose.Schema({
         birthday            : { type: Date },
     },
     time: {
-        _lastTimeSignIn     : { type: Date },
+        _signIn             : { type: Date },
+        _changePassword     : { type: Date },
     },
 }, {
     timestamps              : { createdAt: 'time._registered', updatedAt: 'time._updated' },
@@ -55,10 +56,11 @@ UserSchema.pre('save', function () {
 });
 
 // methods for the document
-UserSchema.methods.UpdateSignInLog = function () {
+UserSchema.methods.updateLastTimeLog = function (fieldName) {
+    const field = `time._${fieldName}`;
     return mongoose.connection.db.collection('users').update(
         { _id: this._id },
-        { $set: { 'time._lastTimeSignIn': new Date(Date.now()) }}
+        { $set: { [field]: new Date(Date.now()) }}
     );
 };
 
@@ -82,6 +84,7 @@ UserSchema.methods.authenticate = function (pw, next) {
 
 const _changePassword = UserSchema.methods.changePassword;
 UserSchema.methods.changePassword = function (old_PW, new_PW, next) {
+    this.time._changePassword = new Date(Date.now());
     return _U_.schema.promisify(_changePassword, arguments, this);
 };
 

@@ -44,7 +44,7 @@ describe('Bundle: engine.js', () => {
     });
 
     test('Fn: getRuntimeMethods: Should get runtime template methods', () => {
-        const result = getRuntimeMethods({}, {});
+        const result = getRuntimeMethods({}, {}, '');
         //
         expect(result).toHaveProperty('useMarkdown');
         expect(result).toHaveProperty('loadPartial');
