@@ -47,7 +47,7 @@ home.profile_editor = {
 };
 
 home.security = {
-    get: (req, res) => res.render('./__root__/account/security'),
+    get: (req, res) => res.render('./__root__/account/profile/security'),
     patch: [_M_.passwordValidation, async (req, res) => {
         await req.user.changePassword(req.body.password.old, req.body.password.new);
         req.flash('info', 'Password have been successfully changed.');
