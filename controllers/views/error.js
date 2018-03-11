@@ -4,7 +4,7 @@ const { _M_ } = require('../middleware/plugins');
 
 
 // gateway
-function errorHandler (err, req, res, next) {     // todo: error handler separations
+function errorHandler (err, req, res, next) {
     if (['dev', 'test'].indexOf(process.env['NODE_ENV']) !== -1) console.log(err.stack);
     if (_U_.error.hasOwnProperty(err.name) && terminal[err.name]) {
         return terminal[err.name](err, req, res, next);

@@ -45,7 +45,7 @@ exports._M_.usePassport = [passport.initialize(), passport.session()];
 
 // authentication
 exports._M_.isSignedIn = [exports._M_.doNotCrawled, ...exports._M_.usePassport, (req, res, next) => {
-    if (req.isAuthenticated()) return next();
+    if (req.isAuthenticated() && req.session.user) return next();
     else throw new ClientError(20003);
 }];
 
