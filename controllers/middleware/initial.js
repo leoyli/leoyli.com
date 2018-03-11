@@ -4,21 +4,22 @@ const { configModel, postModel } = require('../../models/');
 
 
 const generic = async (req, res, next) => {
-    // website settings
+    // checking website settings in environment variables
     if (!process.env['$WEBSITE_CONFIGS']) configModel.initialize(() => {
         if(!process.env['$WEBSITE_CONFIGS']) throw new _U_.error.ServerError(90001);
     });
+
+    // populating routing variables
     res.locals._site = JSON.parse(process.env['$WEBSITE_CONFIGS']);
-
-    // connecting session
-    if (!req.session.user && req.session.cookie.expires) req.session.cookie.expires = false;
-
-    // template variables
     res.locals._view = {
-        flash: { error: req.flash('error'), info: req.flash('info'), pass: req.flash('pass') },
+        flash: { error: req.flash('error'), info: req.flash('info'), action: req.flash('action') },
         title: res.locals._site.title,
         user: req.session.user,
     };
+
+    // configuring session variables
+    if (!req.session.user && req.session.cookie.expires) req.session.cookie.expires = false;
+    if (res.locals._view.flash.action[0] !== 'retry') delete req.session.returnTo;
 
     return req.body.post && ['POST', 'PATCH'].indexOf(req.method) !== -1 ? postNormalizer(req, res, next) : next();
 };

@@ -1,3 +1,15 @@
+### 0.8.0-dev.5 / 2018-03-11
+> App
+- Fixed `HISTORY` typos.
+- Added `redirect` branch in 'error' handler.
+- Extracted authentication retrying logic from middleware to error handler:
+  - added `redirect.signInRetry` to mange clientError retrying logic;
+  - added `action` tag in `req.flash` in 'initial' middleware;
+  - removed `pass` tag from `req.flash` in 'initial' middleware;
+  - centralized error messages;
+  - revised 'account' controller.
+
+
 ### 0.8.0-dev.4.1 / 2018-03-10
 > App
 - Moved template assignment from 'account' and 'admin' controllers to the routers.
@@ -31,10 +43,10 @@
 - Removed `_status` property from `res.locals._view` in initial middleware.
 - Removed `app.set('partials')` app setting.
 - Updated 'users' model:
-  - Added `time._changePassword` field.
-  - Renamed `_lastTimeSignIn` as `_signIn`.
-  - Revised `changePassword()` to update `time._changePassword`.
-  - Redefined `UpdateSignInLog()` as `updateLastTimeLog()` in 'users' model.
+  - added `time._changePassword` field;
+  - renamed `_lastTimeSignIn` as `_signIn`;
+  - revised `changePassword()` to update `time._changePassword`;
+  - redefined `UpdateSignInLog()` as `updateLastTimeLog()` in 'users' model.
 - Renamed page title of `home/security` router.
 
 > Test
@@ -63,8 +75,8 @@
 ### 0.8.0-dev.1 / 2018-03-06
 > App
 - Updated 'users' model schema:
-  - added `time._lastTimeSignIn` field.
-  - added `UpdateSignInLog()` document method.
+  - added `time._lastTimeSignIn` field;
+  - added `UpdateSignInLog()` document method;
   - added `info:{ gender, residence, timezone, birthday }` fields;
   - moved `firstName` and `lastName` into info.
 - Applied `UpdateSignInLog()` in 'account.signin' controller.
@@ -234,12 +246,12 @@
 ### 0.7.0-dev.5 / 2018-02-18
 > App
 - New feature: added `visibility` and `status` post parameters in the model.
-  - visibility 'hidden': hide the post from the searching result, and only can be accessed by its URL.
-  - visibility 'pinned': pin the post at the top level result, but have no effects if 'hidden' to be truthy.
-  - visibility 'protected': a holder parameter for password protection feature. (to be added)
-  - status 'published': published post.
-  - status 'drafted': unpublished post that can not be accessed publicly. (auto saving to be added)
-  - status 'recycled': user deleted post that can not be accessed publicly. (recycle data damping to be added).
+  - visibility 'hidden': hide the post from the searching result, and only can be accessed by its URL;
+  - visibility 'pinned': pin the post at the top level result, but have no effects if 'hidden' to be truthy;
+  - visibility 'protected': a holder parameter for password protection feature. (to be added);
+  - status 'published': published post;
+  - status 'drafted': unpublished post that can not be accessed publicly. (auto saving to be added);
+  - status 'recycled': user deleted post that can not be accessed publicly. (recycle data damping to be added);
 - New feature: added `sets` parameters in 'settings' for hosting dynamic default parameters.
 - Added `tag` and `visibility` Mongo indexes.
 - Added `meta.baseUrl` from `req.baseUrl` in search controller.

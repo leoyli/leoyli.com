@@ -46,12 +46,7 @@ exports._M_.usePassport = [passport.initialize(), passport.session()];
 // authentication
 exports._M_.isSignedIn = [exports._M_.doNotCrawled, ...exports._M_.usePassport, (req, res, next) => {
     if (req.isAuthenticated()) return next();
-    if (res.locals._view.flash.pass[0] === true) {
-        req.flash('error', res.locals._view.flash.error.toString());
-        req.flash('info', res.locals._view.flash.info.toString());
-    } else req.flash('error', 'Please sign in first!');     // tofix: to be centralized
-    req.session.returnTo = req.originalUrl;
-    return res.redirect('/signin');
+    else throw new ClientError(20003);
 }];
 
 
@@ -60,7 +55,7 @@ exports._M_.isAuthorized = [...exports._M_.isSignedIn, async (req, res, next) =>
     const [field, val] = req.params.canonical !== undefined
         ? ['canonical', req.params.canonical]
         : ['_id', _U_.string.readMongoId(req.url)];
-    if (await require('../../models/').postModel.count({ [field]: val, 'author._id': req.user }) !== 1) {   // tofix: find the post first then decide to give or not
+    if (await require('../../models/').postModel.count({ [field]: val, 'author._id': req.user }) !== 1) {               // tofix: find the post first then decide to give or not
         throw new ClientError(20001);
     } else return next();
 }];

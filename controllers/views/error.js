@@ -29,7 +29,8 @@ terminal.ClientError = (err, req, res, next) => {
             req.flash('error', err.message);
     }
 
-    return res.redirect('back');
+    if (!err.from && err.code === 20003) return redirect.signInRetry(req, res);
+    else return res.redirect('back');
 };
 
 terminal.MongoError = (err, req, res, next) => {
@@ -51,6 +52,22 @@ terminal.TemplateError = (err, req, res, next) => {
     });
 };
 
+
+// redirect
+const redirect = {};
+
+redirect.signInRetry = (req, res) => {
+    // if logout from a authentication required page
+    if (req.get('Referrer') && RegExp('^https?:\\/\\/[^\\/]+(.+$)').exec(req.get('Referrer'))[1] === req.originalUrl) { // option: generalized this string reading method
+        req.flash('info', res.locals._view.flash.info.toString());
+        delete req.flash('error');
+    }
+
+    // label the returning page which only be returned if action is 'retry'
+    req.session.returnTo = req.originalUrl;
+    req.flash('action', 'retry');
+    return res.redirect('/signin');
+};
 
 
 // exports
