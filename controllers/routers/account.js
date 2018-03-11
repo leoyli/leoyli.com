@@ -15,9 +15,9 @@ const { userModel } = require('../../models/');
 //  CONTROLLERS
 // ==============================
 exports.account.signup = {
-    get: (req, res) => {
+    get: (req, res, next) => {
         if (req.isAuthenticated()) return res.redirect('/home');
-        return res.render('./__root__/account/signup');
+        return next();
     },
     post: [_M_.passwordValidation, async (req, res) => {
         const newUser = await userModel.register(new userModel(req.body), req.body.password.new);
@@ -30,9 +30,9 @@ exports.account.signup = {
 };
 
 exports.account.signin = {
-    get: (req, res) => {
+    get: (req, res, next) => {
         if (req.isAuthenticated()) return res.redirect('/home');
-        return res.render('./__root__/account/signin');
+        return next();
     },
     post: (req, res, next) => {
         if (req.isAuthenticated()) return res.redirect('/home');

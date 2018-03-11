@@ -14,11 +14,11 @@ const { configModel, mediaModel, userModel } = require('../../models/');
 //  CONTROLLERS
 // ==============================
 home.main = {
-    get: (req, res) => res.render('./__root__/'),
+    get: (req, res, next) => next(),
 };
 
 home.setting = {
-    get: (req, res) => res.render('./__root__/setting'),
+    get: (req, res, next) => next(),
     patch: async (req, res) => {
         await configModel.updateSettings(req.body.configs);
         return res.redirect('back');
@@ -26,9 +26,9 @@ home.setting = {
 };
 
 home.profile = {
-    get: (req, res) => {
+    get: (req, res, next) => {
         res.locals._view.user = req.user._doc;
-        return res.render('./__root__/account/profile/info');
+        return next();
     },
     patch: async (req, res) => {
         const raw = { info: req.body.profile.info, nickname: req.body.profile.nickname };
@@ -40,14 +40,14 @@ home.profile = {
 };
 
 home.profile_editor = {
-    get: (req, res) => {
+    get: (req, res, next) => {
         res.locals._view.user = req.user._doc;
-        return res.render('./__root__/account/profile/profile_editor');
+        return next();
     },
 };
 
 home.security = {
-    get: (req, res) => res.render('./__root__/account/profile/security'),
+    get: (req, res, next) => next(),
     patch: [_M_.passwordValidation, async (req, res) => {
         await req.user.changePassword(req.body.password.old, req.body.password.new);
         req.flash('info', 'Password have been successfully changed.');
@@ -56,7 +56,7 @@ home.security = {
 };
 
 home.upload = {   // todo: to be integrated in profile and media manager
-    get: (req, res) => res.render('./__root__/upload'),
+    get: (req, res, next) => next(),
     post: [_M_.hireBusboy({ fileSize: 25*1048576 }), async (req, res) => {
         if (req.body.busboySlip.mes.length > 0) req.body.busboySlip.mes.forEach(mes => req.flash('error', mes));
         if (req.body.busboySlip.raw.length > 0) {

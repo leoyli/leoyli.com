@@ -10,11 +10,11 @@ const { account } = require('../controllers/routers/account');
 const UserRouter = new Device([{
     route:          '/signup',
     controller:     account.signup,
-    settings:       { title: 'Sign Up' },
+    settings:       { title: 'Sign Up', template: './__root__/account/signup' },
 }, {
     route:          '/signin',
     controller:     account.signin,
-    settings:       { title: 'Sign In' },
+    settings:       { title: 'Sign In', template: './__root__/account/signin' },
 }, {
     route:          '/signout',
     controller:     account.signout,

@@ -1,3 +1,8 @@
+### 0.8.0-dev.4.1 / 2018-03-10
+> App
+- Moved template assignment from 'account' and 'admin' controllers to the routers.
+
+
 ### 0.8.0-dev.4 / 2018-03-10
 > App
 - Added logic into `editor.post.get` router controller.
