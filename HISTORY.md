@@ -1,3 +1,8 @@
+### 0.8.0-dev.3.2 / 2018-03-10
+> UI
+- Renamed files.
+
+
 ### 0.8.0-dev.3.1 / 2018-03-07
 > UI
 - Moved and revised 'security' template.

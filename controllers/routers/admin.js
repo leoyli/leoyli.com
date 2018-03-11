@@ -28,7 +28,7 @@ home.setting = {
 home.profile = {
     get: (req, res) => {
         res.locals._view.user = req.user._doc;
-        return res.render('./__root__/account/profile/profile');
+        return res.render('./__root__/account/profile/info');
     },
     patch: async (req, res) => {
         const raw = { info: req.body.profile.info, nickname: req.body.profile.nickname };
@@ -42,7 +42,7 @@ home.profile = {
 home.profile_editor = {
     get: (req, res) => {
         res.locals._view.user = req.user._doc;
-        return res.render('./__root__/account/profile/editor');
+        return res.render('./__root__/account/profile/profile_editor');
     },
 };
 

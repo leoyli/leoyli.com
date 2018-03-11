@@ -219,7 +219,6 @@ describe('Router - Post', () => {
         const post = await postModel.findOne({ canonical: 'test-post' });
         const result = await agent
             .get(`/post/${post._id}`);
-        debugger;
         //
         expect(result.statusCode).toBe(302);
         expect(result.headers.location).toBe('/post/test-post');
