@@ -1,3 +1,13 @@
+### 0.8.0-dev.4 / 2018-03-10
+> App
+- Added logic into `editor.post.get` router controller.
+- Split handler into 'error' and 'template' controllers.
+- Extracted `templateHandler` from `postHandler` in 'template' controllers.
+
+> Test
+- Skipped 'PATCH user nickname' in `app.test.js` temporarily.
+
+
 ### 0.8.0-dev.3.2 / 2018-03-10
 > UI
 - Renamed files.

@@ -47,7 +47,7 @@ codeIndexes.HttpError_en = new ErrorCodeDictionary({
 
 
 
-// export
+// exports
 module.exports = new Proxy(codeIndexes, {
     get: (target, name) => {
         const dictionary = `${name}_${process.env['$WEBSITE_CONFIGS'].language || 'en'}`;

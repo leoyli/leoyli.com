@@ -153,7 +153,7 @@ describe('Router - Home', () => {
         expect((await configModel.findOne({})).title).toEqual('Testing Website');
     });
 
-    test('PATCH user nickname', async () => {
+    test.skip('PATCH user nickname', async () => {
         await agent
             .patch('/home/profile')
             .send({ profile: { nickname: 'test' }});
@@ -165,7 +165,7 @@ describe('Router - Home', () => {
         await agent
             .patch('/home/security')
             .send({ password: { old: 'leo', new: 'test', confirmed: 'test' }});
-        const req = (doc) => request(app).post('/signin').send(doc);
+        const req = doc => request(app).post('/signin').send(doc);
         const doc = [{ email: 'leo@leoyli.com', password: 'test' }, { email: 'leo@leoyli.com', password: 'leo' }];
         const result = await Promise.all([req(doc[0]), req(doc[1])]);
         //

@@ -61,6 +61,6 @@ exports.account.signout = {
             req.flash('info', 'See you next time!');
         }
         delete req.session.user;
-        return res.redirect('back');
+        return res.redirect('back');    // tofix: logout from panel and login again?
     },
 };

@@ -15,7 +15,10 @@ const search = require('../middleware/search');
 //  CONTROLLERS
 // ==============================
 exports.editor.post = {
-    get: [],
+    get: (req, res, next) => {
+        req.session.view = { post: {} };
+        return next();
+    },
     post: async (req, res) => {
         await postModel.postsCreateThenAssociate(req.body.post, req.user);          // tofix: ValidationError handle
         req.flash('info', 'post have been successfully posted!');

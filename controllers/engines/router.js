@@ -1,7 +1,7 @@
-const { postHandler } = require('../views/handler');
+const Router = require('express').Router;
+const templateHandler = require('../views/template');
 const { _M_ } = require('../middleware/plugins');
 const { _U_ } = require('../utilities/');
-const Router = require('express').Router;
 
 
 
@@ -119,7 +119,7 @@ function loadMainControls(controller, method) {
  * @return {array}                          - task is triggered only when the method is 'alias' or 'get'
  */
 function loadViewRenderer({ template } = {}, method) {
-    return (['get', 'alias'].indexOf(method) > -1) && template ? [postHandler(template)] : [];
+    return (['get', 'alias'].indexOf(method) > -1) && template ? [templateHandler(template)] : [];
 }
 
 

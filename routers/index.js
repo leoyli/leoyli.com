@@ -34,7 +34,7 @@ function _useRoutes(app) {
 
     // error
     app.get('*', (req, res, next) => next(new HttpError(404)));
-    app.use(require('../controllers/views/handler').errorHandler);
+    app.use(require('../controllers/views/error'));
 }
 
 

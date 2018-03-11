@@ -32,7 +32,7 @@ home.profile = {
     },
     patch: async (req, res) => {
         const raw = { info: req.body.profile.info, nickname: req.body.profile.nickname };
-        if (raw.info.birthday) raw.info.birthday = new Date(raw.info.birthday);
+        if (raw.info && raw.info.birthday) raw.info.birthday = new Date(raw.info.birthday);
         await userModel.update({ _id: req.user._id }, { $set: raw });
         req.flash('info', 'Your profile have been successfully updated!');
         return res.redirect('/home/profile');
