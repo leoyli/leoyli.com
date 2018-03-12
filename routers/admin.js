@@ -14,19 +14,19 @@ const DashboardRouter = new Device([{
 }, {
     route:          '/setting',
     controller:     home.setting,
-    settings:       { title: 'Website Configurations', template: './__root__/setting' },
+    settings:       { title: 'Website Configurations', template: './__root__/admin/setting' },
 }, {
     route:          '/profile',
     controller:     home.profile,
-    settings:       { title: 'Profile', template: './__root__/account/profile/info' },
+    settings:       { title: 'Profile', template: './__root__/admin/profile/info' },
 }, {
     route:          '/profile/edit',
     controller:     home.profile_editor,
-    settings:       { title: 'Edit Your Profile', template: './__root__/account/profile/profile_editor' },
+    settings:       { title: 'Edit Your Profile', template: './__root__/admin/profile/profile_editor' },
 }, {
     route:          '/security',
     controller:     home.security,
-    settings:       { title: 'Change Password', template: './__root__/account/profile/security' },
+    settings:       { title: 'Change Password', template: './__root__/admin/profile/security' },
 }, {
     route:          '/upload',
     controller:     home.upload,

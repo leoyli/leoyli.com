@@ -1,3 +1,11 @@
+### 0.8.0-dev.5.2 / 2018-03-11
+> App
+- Updated router settings based on renamed files.
+
+> UI
+- Renamed files.
+
+
 ### 0.8.0-dev.5.1 / 2018-03-11
 > App
 - Added a check of the existence of `req.session.user` after `req.isAuthenticated()`.
