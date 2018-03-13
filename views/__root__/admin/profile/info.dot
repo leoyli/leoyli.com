@@ -18,7 +18,8 @@
             <tr>
                 <th scope="row" width="250">Full Name</th>
                 <td>{{= _view.user.info.firstName }} {{= _view.user.info.lastName }}</td>
-            </tr>            <tr>
+            </tr>
+            <tr>
                 <th scope="row">Nickname</th>
                 <td>{{= _view.user.nickname }}</td>
             </tr>

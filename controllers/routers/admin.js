@@ -17,8 +17,11 @@ home.main = {
     get: (req, res, next) => next(),
 };
 
-home.setting = {
-    get: (req, res, next) => next(),
+home.configs = {
+    get: (req, res, next) => {
+        res.locals._view.configs = JSON.parse(process.env['$WEBSITE_CONFIGS']);
+        return next();
+    },
     patch: async (req, res) => {
         await configModel.updateSettings(req.body.configs);
         return res.redirect('back');

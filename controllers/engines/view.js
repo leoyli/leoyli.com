@@ -1,4 +1,4 @@
-const { ServerError, TemplateError } = require('../utilities/')._U_.error;
+const { TemplateError } = require('../utilities/')._U_.error;
 const
     _       = require('lodash'),
     fs      = require('fs'),
@@ -96,8 +96,23 @@ function getCompilationConfigs(variables) {
  * @return {object}                         - return a transipiled blueprint
  */
 function getBlueprint({ settings, ...locals }, source) {
+    function _loadWidget(blueprint, settings) {
+        return new Proxy(this, {
+            get: (target, name) => {
+                const filePath = path.join(settings.views, '__root__/_widgets',
+                    `${name}.${settings['view engine'] || 'dot'}`);
+                try {
+                    return getTemplate(filePath, getBlueprint({ settings, ...blueprint }, filePath), true).render();    // todo: pre-compile codes
+                } catch (err) {
+                    return '';
+                }
+            }
+        })
+    }
+
     const blueprint = _.omit(locals, ['settings', 'cache', '_locals']);
     blueprint._fn = getRuntimeMethods(blueprint, settings, source);
+    blueprint._widget = _loadWidget(blueprint, settings);
     return blueprint;
 }
 
@@ -110,11 +125,11 @@ function getBlueprint({ settings, ...locals }, source) {
  * @return {object}                         - return a object contains runtime template functions
  */
 function getRuntimeMethods (blueprint, settings, source = '') {
-    function useMarkdown (context, option, next) {
+    function _useMarkdown (context, option, next) {
         return marked(context.replace(/&gt;|&#62;/g, '>', option, next));
     }
 
-    function loadPartial (fileName, option = {}) {
+    function _loadPartial (fileName, option = {}) {
         const pathBase = option.path === 'relative'
             ? path.dirname(source)
             : path.join(settings.views, option.path === 'default'
@@ -125,7 +140,7 @@ function getRuntimeMethods (blueprint, settings, source = '') {
         return getTemplate(filePath, getBlueprint({ settings, ...blueprint }, filePath), true).render();
     }
 
-    return { useMarkdown, loadPartial };
+    return { useMarkdown: _useMarkdown, loadPartial: _loadPartial };
 }
 
 

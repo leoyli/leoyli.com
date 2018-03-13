@@ -147,7 +147,7 @@ describe('Router - Home', () => {
 
     test('PATCH configs of the site', async () => {
         await agent
-            .patch('/home/setting')
+            .patch('/home/configs')
             .send({ configs: { title: 'Testing Website' }});
         //
         expect((await configModel.findOne({})).title).toEqual('Testing Website');

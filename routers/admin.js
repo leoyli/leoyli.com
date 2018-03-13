@@ -12,9 +12,9 @@ const DashboardRouter = new Device([{
     controller:     home.main,
     settings:       { title: 'Dashboard', template: './__root__/' },
 }, {
-    route:          '/setting',
-    controller:     home.setting,
-    settings:       { title: 'Website Configurations', template: './__root__/admin/setting' },
+    route:          '/configs',
+    controller:     home.configs,
+    settings:       { title: 'Website Configurations', template: './__root__/admin/configs' },
 }, {
     route:          '/profile',
     controller:     home.profile,

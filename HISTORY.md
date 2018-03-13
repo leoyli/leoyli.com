@@ -1,3 +1,18 @@
+### 0.8.0-dev.6 / 2018-03-12
+> App
+- Added new runtime helper functions called 'widget' in view engine.
+- Revised and renamed `home.setting` as `home.configs`.
+- Updated 'admin' router.
+
+> Test
+- Update pathname in `app.test.js`.
+
+> UI
+- Revised and renamed 'setting' template as 'configs'.
+- Added 'website settings' dropdown link in '_navibar' template.
+- Added '_widget' directory with 'CDN' and 'meta' widgets.
+
+
 ### 0.8.0-dev.5.2 / 2018-03-11
 > App
 - Updated router settings based on renamed files.
@@ -67,8 +82,8 @@
 
 > UI
 - Renamed 'root' as '__root__'.
-- Removed 'Account Settings' option from dropdown menu in `_navibar` template.
-- Added `profile` directory with `_sidebar` template.
+- Removed 'Account Settings' option from dropdown menu in '_navibar' template.
+- Added 'profile' directory with '_sidebar' template.
 
 
 ### 0.8.0-dev.2 / 2018-03-06
