@@ -1,3 +1,16 @@
+### 0.8.0-dev.6.1 / 2018-03-12
+> App
+- Extracted 'admin' from 'home' router and controller.
+
+> Test
+- Update pathname in `app.test.js`.
+
+> UI
+- Restructured files and directories.
+- Added empty temples: 'media', 'post', and 'user' into 'manager' directory.
+- Update pathname in '_navibar' and 'configs' templates.
+
+
 ### 0.8.0-dev.6 / 2018-03-12
 > App
 - Added new runtime helper functions called 'widget' in view engine.

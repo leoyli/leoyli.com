@@ -147,7 +147,7 @@ describe('Router - Home', () => {
 
     test('PATCH configs of the site', async () => {
         await agent
-            .patch('/home/configs')
+            .patch('/admin/configs')
             .send({ configs: { title: 'Testing Website' }});
         //
         expect((await configModel.findOne({})).title).toEqual('Testing Website');
@@ -175,7 +175,7 @@ describe('Router - Home', () => {
 
     test('POST to upload a test file', async () => {
         const result = await agent
-            .post('/home/upload')
+            .post('/admin/upload')
             .attach('media[file]', path.join(__dirname, 'test.png'))
             .field('media[title]', 'test')
             .field('media[description]', 'user profile picture for the test');
