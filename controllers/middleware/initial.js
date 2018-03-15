@@ -38,7 +38,7 @@ const postNormalizer = async (req, res, next) => {
     post.title      = _U_.string.escapeChars(post.title);
     post.content    = _U_.string.escapeChars(post.content);                             // tofix: using sanitizer
     post.category   = _U_.string.toKebabCase(post.category) || undefined;
-    post.tag        = _U_.string.toKebabCase(post.tag) || undefined;
+    post.tags       = _U_.string.toKebabCase(post.tags) || undefined;
     post.visibility = _U_.object.assignDeep({}, post.visibility || 'normal', true);     // todo: split the assignment
     return next();
 };

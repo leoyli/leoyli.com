@@ -41,5 +41,5 @@
     </div>
 </div>
 
-{{= _fn.loadPartial('_pagination') }}
+{{= _widget.pagination }}
 {{= _fn.loadPartial('_footer') }}

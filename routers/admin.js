@@ -19,6 +19,10 @@ const DashboardRouter = new Device([{
     route:          '/upload',
     controller:     admin.upload,
     settings:       { title: 'Media Uploader', template: './__root__/admin/upload' },
+}, {
+    route:          '/stack/:stackType',
+    controller:     admin.stack,
+    settings:       { title: 'Content Stack', template: './__root__/admin/stack' },
 }]);
 
 

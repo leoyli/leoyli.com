@@ -1,3 +1,31 @@
+### 0.8.0-dev.6.1 / 2018-03-14
+> App
+- Renamed 'search' as 'fetch' with updates:
+  - removed arguments' default value in `fetch` middleware (assigned individually);
+  - rearranged and added '$project' stage for field masking in `getAggregationQuery`;
+  - renamed outputted meta `baseURL` property as `route`;
+  - corrected value of meta `route` property.
+  - renamed 'expression' functions;
+  - simplified `exp_matchFilter` in dated ranging query.
+  - added `exp_postFiledMask` for masking returning contents.
+- Added content managing 'stack' feature (temporarily only for 'posts'):
+  - added '/stack/:stackType' route under 'admin' router.
+  - added `admin.stack` controller.
+  - revised 'page' router.
+- Renamed `tag` property as `tags` in PostModel.
+- Stacked author by `nickname` instead of by `username` in PostModel.
+
+> Test
+- Update `search.test.js`:
+  - corrected input types in tests.
+  - added `exp_sortRule` unit test.
+
+> UI
+- Widgetified '_pagination' template.
+- Removed 'manager' directory and it contains files.
+- Added 'stack' template.
+
+
 ### 0.8.0-dev.6.1 / 2018-03-12
 > App
 - Extracted 'admin' from 'home' router and controller.

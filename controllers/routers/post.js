@@ -7,7 +7,7 @@ module.exports = exports = { editor: {}, post: {} };
 // ==============================
 const { _U_ } = require('../utilities/');
 const { postModel } = require('../../models/');
-const search = require('../middleware/search');
+const { fetch } = require('../middleware/fetch');
 
 
 
@@ -63,7 +63,7 @@ exports.post.show = {
 };
 
 exports.post.list = {
-    get: async (req, res, next) => {
-        return search.find()(req, res, next);
+    get: (req, res, next) => {
+        return fetch({ num: res.locals._site.sets.num })(req, res, next);
     },
 };

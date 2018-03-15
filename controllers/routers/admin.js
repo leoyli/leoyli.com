@@ -6,8 +6,9 @@ module.exports = admin = {};
 //  DEPENDENCIES
 // ==============================
 const { _M_ } = require('../middleware/plugins');
+const { _U_ } = require('../utilities/');
 const { configModel, mediaModel } = require('../../models/');
-
+const { fetch } = require('../middleware/fetch');
 
 
 // ==============================
@@ -38,4 +39,17 @@ admin.upload = {   // todo: to be integrated in profile and media manager
         }
         return res.redirect('back');
     }],
+};
+
+admin.stack = {
+    get: (req, res, next) => {
+        switch (req.params['stackType'].toLowerCase()) {
+            case 'posts':
+                _M_.setTitleTag('Posts')(req, res);
+                return fetch({ num: 10 })(req, res, next);
+            default:
+                throw new _U_.error.HttpError(404);
+        }
+    },
+    patch: async (req, res) => {},
 };

@@ -1,0 +1,34 @@
+{{= _fn.loadPartial('_header') }}
+
+<h1 class="container mb-4">Posts Stack</h1>
+
+<div class="container">
+    <table class="table table-sm table-hover">
+        <thead>
+        <tr>
+            <th scope="col" width="3%">[]</th>
+            <th scope="col" width="45%">Title</th>
+            <th scope="col" width="13%">Author</th>
+            <th scope="col" width="13%">Category</th>
+            <th scope="col" width="13%">Tags</th>
+            <th scope="col" width="13%">Time</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{? post.length > 0 }}
+        {{ post.forEach(function(post) { }}
+        <tr>
+            <th scope="row">[]</th>
+            <td>{{= post.title }}</td>
+            <td>{{= post.author.nickname }}</td>
+            <td>{{= post.category }}</td>
+            <td>{{= post.tags }}</td>
+            <td>{{= new Date(post.time.created).toDateString() }}</td>
+        </tr>
+        {{ }); }}{{?}}
+        </tbody>
+    </table>
+</div>
+
+{{= _widget.pagination }}
+{{= _fn.loadPartial('_footer') }}

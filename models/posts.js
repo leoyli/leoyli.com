@@ -19,7 +19,7 @@ const PostSchema            = new mongoose.Schema({
             type            : mongoose.Schema.Types.ObjectId,
             ref             : 'users',
         },
-        username            : { type: String },
+        nickname            : { type: String },
     },
     featured                : { type: String, // todo: featured by a video
         validate: {
@@ -30,7 +30,7 @@ const PostSchema            = new mongoose.Schema({
     title                   : { type: String, required: [true, 'is required'], trim: true },
     content                 : { type: String, required: [true, 'is required'], trim: true },
     category                : { type: String, lowercase: true, default: 'unclassified' },
-    tag                     : { type: String, lowercase: true },
+    tags                    : { type: String, lowercase: true },
     visibility: {
         hidden              : { type: Boolean, required: true, default: false },    // todo: add anti-robot HTML tag
         pinned              : { type: Boolean, required: true, default: false },
@@ -42,11 +42,11 @@ const PostSchema            = new mongoose.Schema({
     timestamps              : { createdAt: 'time.created', updatedAt: 'time.updated' },
     versionKey              : '_revised',
 })
-    .index({ 'tag' : 1 })
+    .index({ 'tags' : 1 })
     .index({ 'status' : 1 })
     .index({ 'category' : -1 })
     .index({ 'time.updated' : -1 })
-    .index({ 'title': 'text', 'content': 'text', 'category': 'text', 'tag' : 'text' });
+    .index({ 'title': 'text', 'content': 'text', 'category': 'text', 'tags' : 'text' });
 
 
 
