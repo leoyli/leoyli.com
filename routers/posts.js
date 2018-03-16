@@ -1,5 +1,5 @@
 const { Device } = require('../controllers/engines/router');
-const { editor, post } = require('../controllers/routers/post');
+const { editor, posts } = require('../controllers/routers/posts');
 
 
 
@@ -18,12 +18,12 @@ const PostRouter = new Device([{
 }, {
     route:          /^\/(?![a-f\d]{24})(.+)$/i,
     alias:          '/:_id',
-    controller:     post.show,
-    settings:       { template: './theme/post/post' },
+    controller:     posts.show,
+    settings:       { template: './theme/posts/posts' },
 }, {
     route:          '/',
-    controller:     post.list,
-    settings:       { template: './theme/post/index' },
+    controller:     posts.list,
+    settings:       { template: './theme/posts/index' },
 }]);
 
 

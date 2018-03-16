@@ -10,7 +10,7 @@
                     <a class="nav-link" href="/seed">Seed</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/post">Blog</a>
+                    <a class="nav-link" href="/posts">Blog</a>
                 </li>
                 {{? !_view.user }}
                     <li class="nav-item">
@@ -39,8 +39,9 @@
                             <div class="dropdown-divider my-1"></div>
                             <a class="dropdown-item px-3" href="/home">Dashboard</a>
                             <div class="dropdown-divider my-1"></div>
-                            <a class="dropdown-item px-3" href="/post/edit">New Post</a>
                             <a class="dropdown-item px-3" href="/admin/upload">Media Uploader</a>
+                            <a class="dropdown-item px-3" href="/admin/stack/posts">Posts Management</a>
+                            <a class="dropdown-item px-3" href="/posts/edit">New Post</a>
                             <div class="dropdown-divider my-1"></div>
                             <a class="dropdown-item px-3" href="/admin/configs">Website Settings</a>
                             <a class="dropdown-item px-3" href="/home/profile">User Profile</a>

@@ -34,7 +34,7 @@ const seed = async (req, res) => {
     const newUser = await userModel.register(new userModel(moc.user), moc.user.password);
     await postModel.postsCreateThenAssociate(moc.post(newUser), newUser);
     req.flash('info', 'Successfully seeded.');
-    res.redirect('/post');
+    res.redirect('/posts');
 };
 
 

@@ -17,8 +17,8 @@ describe('Bundle: search.js', () => {
         expect(JSON.stringify(getAggregationQuery({ params: {}}, 0, null, null))).toBe('[{\"$match\":' +
             '{\"status\":{\"$eq\":\"published\"},\"visibility.hidden\":false}},{\"$project\":{\"conte' +
             'nt\":0}},{\"$sort\":{\"visibility.pinned\":-1,\"time.updated\":-1}},{\"$group\":{\"_id\"' +
-            ':null,\"count\":{\"$sum\":1},\"post\":{\"$push\":\"$$ROOT\"}}},{\"$project\":{\"_id\":0,' +
-            '\"post\":{\"$slice\":[\"$post\",{\"$multiply\":[{\"$add\":[{\"$cond\":{\"if\":{\"$lt\":[' +
+            ':null,\"count\":{\"$sum\":1},\"list\":{\"$push\":\"$$ROOT\"}}},{\"$project\":{\"_id\":0,' +
+            '\"list\":{\"$slice\":[\"$list\",{\"$multiply\":[{\"$add\":[{\"$cond\":{\"if\":{\"$lt\":[' +
             '1,{\"$ceil\":{\"$divide\":[\"$count\",10]}}]},\"then\":{\"$literal\":1},\"else\":{\"$cei' +
             'l\":{\"$divide\":[\"$count\",10]}}}},-1]},10]},10]},\"meta\":{\"count\":\"$count\",\"num' +
             '\":{\"$literal\":10},\"now\":{\"$cond\":{\"if\":{\"$lt\":[1,{\"$ceil\":{\"$divide\":[\"$' +

@@ -12,7 +12,7 @@ const PageRouter = new Device([{
 }, {
     route:          '/search/:search',
     controller:     (req, res, next) => fetch({ num: res.locals._site.sets.num })(req, res, next),
-    settings:       { crawler: false, template: './theme/post/search' },
+    settings:       { crawler: false, template: './theme/posts/search' },
 }]);
 
 

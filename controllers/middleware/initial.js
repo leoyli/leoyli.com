@@ -31,8 +31,8 @@ const postNormalizer = async (req, res, next) => {
 
     if (req.method === 'POST' && !post.canonical) post.canonical = _U_.string.toKebabCase(post.title);
     if (post.canonical !== undefined) {
-        const canonicalCounts = await postModel.count({ canonical: post.canonical });
-        if (canonicalCounts > 0) post.canonical = post.canonical + '-' + (canonicalCounts + 1);
+        const counts = await postModel.count({ canonical: { $regex: new RegExp(`^${post.canonical}(?:-[0-9]+)?$`) }});
+        if (counts > 0) post.canonical = post.canonical + '-' + (counts + 1);
     }
     post.featured   = _U_.string.inspectFileURL(post.featured, res.locals._site.sets.imageTypes, { raw: false });
     post.title      = _U_.string.escapeChars(post.title);

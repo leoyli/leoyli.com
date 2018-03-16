@@ -8,7 +8,7 @@
 
     <!-- SEO -->
     {{? typeof post !== 'undefined' && !Array.isArray(post) }}
-        <link rel="canonical" href="/post/{{= post.canonical !== undefined ? post.canonical : '' }}"/>
+        <link rel="canonical" href="/posts/{{= post.canonical !== undefined ? post.canonical : '' }}"/>
     {{?}}
     {{? _view.prev }}<link rel="prev" href="{{= _view.prev }}">{{?}}
     {{? _view.next }}<link rel="next" href="{{= _view.next }}">{{?}}

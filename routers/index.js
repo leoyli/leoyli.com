@@ -29,7 +29,7 @@ function _useRoutes(app) {
     // units
     app.use('/admin', require('./admin'));
     app.use('/home', require('./home'));
-    app.use('/post', require('./post'));
+    app.use('/posts', require('./posts'));
     app.use('/', require('./account'));
     app.use('/', require('./page'));
 

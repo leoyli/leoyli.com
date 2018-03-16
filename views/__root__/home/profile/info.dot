@@ -60,7 +60,7 @@
             <tr>
                 <th scope="row">Your password changed in</th>
                 <td>
-                    {{= Math.floor((new Date(Date.now()) - new Date(_view.user.time._changePassword)) / 86400000)}}
+                    {{= Math.floor((new Date(Date.now())- new Date(_view.user.time._changePassword || _view.user.time._registered)) / 86400000)}}
                     days ago <a class="btn btn-success btn-sm float-right" href="/home/security">Change password</a>
                 </td>
             </tr>

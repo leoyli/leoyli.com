@@ -15,8 +15,8 @@
         </tr>
         </thead>
         <tbody>
-        {{? post.length > 0 }}
-        {{ post.forEach(function(post) { }}
+        {{? list.length > 0 }}
+        {{ list.forEach(function(post) { }}
         <tr>
             <th scope="row">[]</th>
             <td>{{= post.title }}</td>

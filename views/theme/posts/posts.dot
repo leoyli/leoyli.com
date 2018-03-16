@@ -12,8 +12,8 @@
         <header class="row">
             <div class="col-md-9">
                 {{= post.author.username }}
-                ｜<a href="/post/edit/{{= post._id }}">(edit)</a>
-                ｜<a href="/post/class/{{= post.category }}">{{= post.category }}</a>
+                ｜<a href="/posts/edit/{{= post._id }}">(edit)</a>
+                ｜<a href="/posts/class/{{= post.category }}">{{= post.category }}</a>
                 ｜Revised: {{= post._revised }}
                 {{? post.status === 'drafted' }}｜<i class="fa fa-hourglass-half"></i>{{?}}
                 {{? post.visibility.hidden }}｜<i class="fa fa-eye-slash"></i>{{?}}

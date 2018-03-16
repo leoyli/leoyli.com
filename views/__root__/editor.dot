@@ -31,12 +31,12 @@
         </div>
         <button class="btn btn-outline-primary text-uppercase float-right mx-1"
                 aria-label="{{= post._id ? 'Update' : 'Submit' }}"
-                formaction="/post/edit/{{? post._id }}{{= `${post._id}?_method=PATCH` }}{{?}}">
+                formaction="/posts/edit/{{? post._id }}{{= `${post._id}?_method=PATCH` }}{{?}}">
             {{= post._id ? 'Update' : 'Submit' }}
         </button>
         {{? post._id }}
             <button class="btn btn-outline-danger text-uppercase float-right mx-1"
-                    aria-label="Delete" formaction="/post/edit/{{= post._id }}?_method=DELETE">DELETE</button>
+                    aria-label="Delete" formaction="/posts/edit/{{= post._id }}?_method=DELETE">DELETE</button>
         {{?}}
     </fieldset>
 

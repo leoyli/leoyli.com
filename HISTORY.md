@@ -1,4 +1,22 @@
-### 0.8.0-dev.6.1 / 2018-03-14
+### 0.8.0-dev.7.1 / 2018-03-15
+> App
+- Renamed all `req.session.view` as `req.session._view`.
+- Renamed 'post' as 'posts' if it is characterized in plural.
+- Extract `list` from the `post` view object.
+- Revised 'templateHandler' view handler.
+- Fixed bug in 'initial' middleware.
+- Fixed Typos in `HISTORY`.
+
+> Test
+- Updated `search.test.js` and `app.test.js`.
+
+> UI
+- Added 'Posts Management' into dropdown menu in '_navibar' template.
+- Fixed `NAN` displaying error if password never being changed in 'info' template.
+- Renamed all 'post' as 'posts'.
+
+
+### 0.8.0-dev.7 / 2018-03-14
 > App
 - Renamed 'search' as 'fetch' with updates:
   - removed arguments' default value in `fetch` middleware (assigned individually);
@@ -26,17 +44,17 @@
 - Added 'stack' template.
 
 
-### 0.8.0-dev.6.1 / 2018-03-12
+### 0.8.0-dev.6.1 / 2018-03-13
 > App
 - Extracted 'admin' from 'home' router and controller.
 
 > Test
-- Update pathname in `app.test.js`.
+- Updated pathname in `app.test.js`.
 
 > UI
 - Restructured files and directories.
 - Added empty temples: 'media', 'post', and 'user' into 'manager' directory.
-- Update pathname in '_navibar' and 'configs' templates.
+- Updated pathname in '_navibar' and 'configs' templates.
 
 
 ### 0.8.0-dev.6 / 2018-03-12
@@ -46,7 +64,7 @@
 - Updated 'admin' router.
 
 > Test
-- Update pathname in `app.test.js`.
+- Updated pathname in `app.test.js`.
 
 > UI
 - Revised and renamed 'setting' template as 'configs'.
@@ -687,7 +705,7 @@
 > App
 - Removed the Mongo's anti-pattern as in `docList` schema.
 - Authorization was replaced by `Model.count()` method due to the removal of the anti-pattern.
-- Replaced `req.locals._render` by `req.session.view` for much dryer codes.
+- Replaced `req.locals._render` by `req.session._view` for much dryer codes.
 
 
 ### 0.2.3 / 2017-11-14

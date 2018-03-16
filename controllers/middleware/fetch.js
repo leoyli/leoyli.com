@@ -7,7 +7,7 @@ function fetch({ page, num, sort } = {}) {
         .then(docs => docs[0])
         .then(result => {
             if (typeof next !== 'function') return result;
-            req.session.view = result;                                                                                  // tofix: view -> _view
+            req.session._view = result;
             return next();
         })
 }
@@ -43,9 +43,9 @@ function getAggregationQuery(req, page, num, sort) {
         { $match    : $filter },
         { $project  : $mask },
         { $sort     : $sort },
-        { $group    : { _id: null, count: { $sum: 1 }, post: { $push: '$$ROOT' }}},                                     // todo: author populate
+        { $group    : { _id: null, count: { $sum: 1 }, list: { $push: '$$ROOT' }}},                                     // todo: author populate
         { $project  : { _id: 0,
-            post: { $slice: ['$post', { $multiply: [{ $add: [$now, -1] }, $num] }, $num] },
+            list: { $slice: ['$list', { $multiply: [{ $add: [$now, -1] }, $num] }, $num] },
             meta: { count: '$count', num: { $literal: $num }, now: $now, end: $end, sort: { $literal: $sort },
                 route: { $literal: req.baseUrl + req.path }, period: { $literal: $filter['time.updated'] || {} }}},
         },
