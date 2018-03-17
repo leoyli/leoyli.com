@@ -51,5 +51,5 @@ admin.stack = {
                 throw new _U_.error.HttpError(404);
         }
     },
-    patch: async (req, res) => {},
+    patch: async (req, res) => res.redirect('back'),
 };

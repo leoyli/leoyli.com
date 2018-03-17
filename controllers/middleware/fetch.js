@@ -74,7 +74,7 @@ function exp_matchFilter(params, query) {
  * @return {object}                         - full expression in $project stage
  */
 function exp_postFiledMask(params) {
-    const $stackPicker = { _id: 1, canonical: 1, title: 1, author: 1, category: 1, tags: 1, time: 1 };
+    const $stackPicker = { content: 0, featured: 0 };
     const $contentMask = { content: 0 };
     return params['stackType'] === 'posts' ? $stackPicker : $contentMask;
 }

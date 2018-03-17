@@ -6,16 +6,29 @@ const { _U_ } = require('../utilities/');
 
 
 /**
- * a routing device takes input settings outputting Express.js routing objects
+ * a routing device takes input setting outputting Express.js routing objects
  * @constructor
  * @param {array} rules                     - an array that contains routing rule objects
  * @param {object} [option]                 - (see express.Router() API)
  */
 class Device {
     constructor(rules, option) {            // todo: [private] make these private once JS supports
-        this._router = new Router(option);
-        this._queue = { pre: [], post: [] };
-        this._rules = rules;
+        this._router    = new Router(option);
+        this._queue     = { pre: [], post: [] };
+        this._rules     = rules;
+        this._handler   = '';
+    }
+
+    get setting() {
+        return new Proxy(this, {
+            get: (target, name) => arg => name === 'handler'
+                ? target._handler = arg
+                : target.pre(loadRoutePlugins({ [name]: arg })),
+        });
+    }
+
+    set setting(obj) {
+        return Object.keys(obj).forEach(key => this.setting[key](obj[key]));
     }
 
     pre(fn) {
@@ -30,13 +43,14 @@ class Device {
 
     run() {
         this._queue.pre.map(queue => this._router.use(queue));                          // universal pre-middleware
-        this._rules.forEach(({route, alias, controller, method, settings}) => {
+        this._rules.forEach(({ route, alias, controller, method, setting }) => {
+            if (this._handler) setting = { handler: this._handler, ...setting };
             stackHttpMethods({alias, controller, method}).forEach(method => {
                 this._router[(method === 'alias') ? 'get' : method](...asyncWrapper([
                     (method === 'alias') ? alias : route,                               // router path
-                    ...loadRoutePlugins(settings    , method),                          // middleware plugins
+                    ...loadRoutePlugins(setting     , method),                          // middleware plugins
                     ...loadMainControls(controller  , method),                          // router controller
-                    ...loadViewRenderer(settings    , method)                           // template handler
+                    ...loadViewRenderer(setting     , method)                           // template handler
                 ]));
             });
         });
@@ -79,7 +93,7 @@ function stackHttpMethods({ controller, alias, method }) {
 
 
 /**
- * stack a queue from settings
+ * stack a queue from setting
  * @param {string} [query]                  - accept case insensitive `req.query` (by Proxy)    default: insensitive
  * @param {boolean} [authorized]            - accept only authenticated? (load 4 fns)           default: false
  * @param {boolean} [authenticated]         - accept only authorized? (load 5 fns)              default: false
@@ -114,12 +128,13 @@ function loadMainControls(controller, method) {
 
 /**
  * stack a queue with a given template when HTTP method is 'get'
- * @param {string} [template]               - template file path
+ * @param {string|null} [template]          - template file path
+ * @param {string|null} [handler]           - template handler name
  * @param {string} method                   - method to be watched
  * @return {array}                          - task is triggered only when the method is 'alias' or 'get'
  */
-function loadViewRenderer({ template } = {}, method) {
-    return (['get', 'alias'].indexOf(method) > -1) && template ? [templateHandler(template)] : [];
+function loadViewRenderer({ template, handler } = {}, method) {
+    return (['get', 'alias'].indexOf(method) > -1) && template ? [templateHandler(template, handler)] : [];
 }
 
 

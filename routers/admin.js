@@ -1,5 +1,4 @@
 const { Device } = require('../controllers/engines/router');
-const { _M_ } = require('../controllers/middleware/plugins');
 const admin = require('../controllers/routers/admin');
 
 
@@ -10,24 +9,24 @@ const admin = require('../controllers/routers/admin');
 const DashboardRouter = new Device([{
     route:          '/',
     controller:     admin.main,
-    settings:       { title: 'Dashboard', template: './__root__/' },
+    setting:        { title: 'Dashboard', template: './__root__/' },
 }, {
     route:          '/configs',
     controller:     admin.configs,
-    settings:       { title: 'Website Configurations', template: './__root__/admin/configs' },
+    setting:        { title: 'Website Configurations', template: './__root__/admin/configs' },
 }, {
     route:          '/upload',
     controller:     admin.upload,
-    settings:       { title: 'Media Uploader', template: './__root__/admin/upload' },
+    setting:        { title: 'Media Uploader', template: './__root__/admin/upload' },
 }, {
     route:          '/stack/:stackType',
     controller:     admin.stack,
-    settings:       { title: 'Content Stack', template: './__root__/admin/stack' },
+    setting:        { title: 'Content Stack', template: './__root__/admin/stack', handler: 'posts' },
 }]);
 
 
 // pre-used middleware
-DashboardRouter.pre([_M_.isSignedIn, _M_.setTitleTag('Settings')]);
+DashboardRouter.setting = { title: 'Control', authenticated : true };
 
 
 

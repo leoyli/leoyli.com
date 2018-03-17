@@ -4,20 +4,23 @@ const { _M_ } = require('../middleware/plugins');
 
 
 // gateway
-const templateHandler = $template => (req, res) => {
+const templateHandler = ($template, $handler) => (req, res) => {
     const { template, list, post, meta } = req.session._view ? req.session._view : {};
     delete req.session._view;
 
-    if (req.baseUrl === '/posts' || req.path === '/stack/posts') {
-        return handler.postHandler(template || $template, list, post, meta)(req, res);
-    } else return res.render(template || $template);
+    switch ($handler) {
+        case 'posts':
+            return handler.postsHandler(template || $template, list, post, meta)(req, res);
+        default:
+            return res.render(template || $template);
+    }
 };
 
 
 // handlers
 const handler = {};
 
-handler.postHandler = (template, list, post, meta) => (req, res) => {
+handler.postsHandler = (template, list, post, meta) => (req, res) => {
     if (!list && !post) throw new _U_.error.HttpError(404);
 
     // title-tag

@@ -9,23 +9,26 @@ const { editor, posts } = require('../controllers/routers/posts');
 const PostRouter = new Device([{
     route:          ['/edit', '/edit/new'],
     controller:     editor.post,
-    settings:       { title: 'New post', template: './__root__/editor', authenticated: true },
+    setting:        { title: 'New post', template: './__root__/editor', authenticated: true },
 }, {
     route:          /^\/edit\/([a-f\d]{24})(?:\?.*|\/)?$/i,
     alias:          '/edit/:canonical',
     controller:     editor.edit,
-    settings:       { title: 'Edit post', template: './__root__/editor', authorized: true },
+    setting:        { title: 'Edit post', template: './__root__/editor', authorized: true },
 }, {
     route:          /^\/(?![a-f\d]{24})(.+)$/i,
     alias:          '/:_id',
     controller:     posts.show,
-    settings:       { template: './theme/posts/posts' },
+    setting:        { template: './theme/posts/posts' },
 }, {
     route:          '/',
     controller:     posts.list,
-    settings:       { template: './theme/posts/index' },
+    setting:        { template: './theme/posts/index' },
 }]);
 
+
+// device settings
+PostRouter.setting.handler('posts');
 
 
 // router exports

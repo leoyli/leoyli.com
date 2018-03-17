@@ -18,7 +18,7 @@ exports._M_.doNotCrawled = (req, res, next) => {
 // case insensitive to access `req.query`
 exports._M_.caseInsensitiveQuery = (req, res, next) => {
     req.query = new Proxy(req.query, {
-        get: (target, entry) => target[Object.keys(target).find(key => key.toLowerCase() === entry.toLowerCase())],
+        get: (target, name) => target[Object.keys(target).find(key => key.toLowerCase() === name.toLowerCase())],
     });
     return next();
 };

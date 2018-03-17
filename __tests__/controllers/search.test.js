@@ -64,7 +64,7 @@ describe('Bundle: search.js', () => {
 
     test('Fn: exp_postFiledMask - Should construct Mongo query expression (for $project)', () => {
         expect(exp_postFiledMask({ stackType: 'posts' }))
-            .toEqual({ _id: 1, canonical: 1, title: 1, author: 1, category: 1, tags: 1, time: 1 });
+            .toEqual({ content: 0, featured: 0 });
         expect(exp_postFiledMask({}))
             .toEqual({ content: 0 });
     });

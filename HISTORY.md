@@ -1,3 +1,21 @@
+### 0.8.0-dev.8 / 2018-03-16
+> App
+- Revised 'router' engine:
+  - added `_handler` as a private property;
+  - added `Device.setting` getter ans setter;
+  - added `handler` as an argument for `loadViewRenderer()`;
+  - renamed `settings` as `setting`;
+  - updated many routers associated with the changes.
+- Revised fetching mask for stack-type query.
+- Revised `templateHandler` with the newly added `handler` switching feature.
+
+> Test
+- Updated `search.test.js` and `engine.router.test.js`.
+
+> UI
+- Updated 'stack' template.
+
+
 ### 0.8.0-dev.7.1 / 2018-03-15
 > App
 - Renamed all `req.session.view` as `req.session._view`.
