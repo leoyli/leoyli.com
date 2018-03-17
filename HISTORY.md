@@ -1,3 +1,8 @@
+### 0.8.0-dev.8.2 / 2018-03-17
+> UI
+- Fixed broken link in `upload` template.
+
+
 ### 0.8.0-dev.8.1 / 2018-03-17
 > App
 - Revised 'router' engine:
