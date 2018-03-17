@@ -23,7 +23,7 @@ class Device {
         return new Proxy(this, {
             get: (target, name) => arg => name === 'handler'
                 ? target._handler = arg
-                : target.pre(loadRoutePlugins({ [name]: arg })),
+                : target.hook('pre', loadRoutePlugins({ [name]: arg })),
         });
     }
 
@@ -31,14 +31,9 @@ class Device {
         return Object.keys(obj).forEach(key => this.setting[key](obj[key]));
     }
 
-    pre(fn) {
+    hook (position, fn) {
         if(!Array.isArray(fn)) fn = [fn];
-        this._queue.pre.push(...fn);
-    }
-
-    post(fn) {
-        if(!Array.isArray(fn)) fn = [fn];
-        this._queue.post.push(...fn);
+        this._queue[position].push(...fn);
     }
 
     run() {

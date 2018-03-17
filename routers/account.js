@@ -22,8 +22,8 @@ const UserRouter = new Device([{
 
 
 // pre-used middleware
-UserRouter.pre(require('../controllers/middleware/plugins')._M_.usePassport);
-UserRouter.post((err, req, res, next) => next(new ClientError(err)));
+UserRouter.hook('pre', require('../controllers/middleware/plugins')._M_.usePassport);
+UserRouter.hook('post', (err, req, res, next) => next(new ClientError(err)));
 
 
 

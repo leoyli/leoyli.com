@@ -1,3 +1,10 @@
+### 0.8.0-dev.8.1 / 2018-03-17
+> App
+- Revised 'router' engine:
+  - combined `pre` and `post` device method into `hook`.
+  - updated 'account' router associated with the changes.
+  
+
 ### 0.8.0-dev.8 / 2018-03-16
 > App
 - Revised 'router' engine:
