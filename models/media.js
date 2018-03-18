@@ -20,7 +20,7 @@ const MediaSchema           = new mongoose.Schema({
             type            : mongoose.Schema.Types.ObjectId,
             ref: 'users',
         },
-        username            : { type: String },
+        nickname            : { type: String },
     },
     file: {
         type                : { type: String },
@@ -41,18 +41,6 @@ const MediaSchema           = new mongoose.Schema({
 // ==============================
 //  STATIC METHODS
 // ==============================
-// create and associate (model)
-MediaSchema.static('mediaCreateThenAssociate', function (raw, user, next) {
-    return Promise.resolve().then(() => _U_.schema.updateAndBind(raw, user, next, 'media', '$push', this));
-});
-
-
-// delete and dissociate (model)  // note: not workable for admin in deleting media owned by multiple users
-MediaSchema.static('mediaDeleteThenDissociate', function (docsID, user, next) {
-    return Promise.resolve().then(() => _U_.schema.updateAndBind(docsID, user, next, 'media', '$pullAll', this));
-});
-
-
 // (pre-hook) version counter
 MediaSchema.pre('findOneAndUpdate', function () {
     this.findOneAndUpdate({}, { $inc: { _revised: 1 }});

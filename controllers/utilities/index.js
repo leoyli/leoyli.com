@@ -1,5 +1,4 @@
 module.exports = exports = { _U_: {
-    schema  : require('./schema'),
     string  : require('./string'),
     object  : require('./object'),
     error   : require('./error'),

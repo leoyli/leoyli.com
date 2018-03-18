@@ -20,7 +20,7 @@ exports.editor.post = {
         return next();
     },
     post: async (req, res) => {
-        await postsModel.postsCreateThenAssociate(req.body.post, req.user);          // tofix: ValidationError handle
+        await postsModel.create({ author: req.session.user, ...req.body.post });
         req.flash('info', 'post have been successfully posted!');
         return res.redirect('/posts');
     },
@@ -41,7 +41,7 @@ exports.editor.edit = {
         return res.redirect(`/posts/${doc.canonical}`);
     },
     delete: async (req, res) => { // todo: trash can || double check
-        await postsModel.postsDeleteThenDissociate(_U_.string.readMongoId(req.url), req.user);
+        await postsModel.remove({ _id: _U_.string.readMongoId(req.url) });
         req.flash('info', 'post have been successfully deleted!');
         return res.redirect('/posts/');
     },

@@ -1,3 +1,10 @@
+### 0.8.0-dev.8.6 / 2018-03-18
+> App
+- Removed 'schema' utilities:
+  - updated 'posts', 'media', and 'users' models with the changes;
+  - updated 'seed', 'admin', and 'posts' router controllers with the changes;
+
+
 ### 0.8.0-dev.8.5 / 2018-03-18
 > App
 - Renamed `req.session._view` as `req.session.chest`.

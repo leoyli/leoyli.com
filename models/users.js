@@ -72,20 +72,28 @@ UsersSchema.plugin(passportLocalMongoose, {
 });
 
 //// rewrite plugin methods as promises
+function selfPromisify(fn, arg, THIS) {
+    if (typeof arg[arg.length-1] === 'function') return fn.call(THIS, ...arg);
+    return new Promise((resolve, reject) => fn.call(THIS, ...arg, (err, result) => {
+        if (err) return reject(err);
+        else return resolve(result);
+    }));
+}
+
 const _register = UsersSchema.statics.register;
-UsersSchema.statics.register = function (doc, pw, next) {
-    return _U_.schema.promisify(_register, arguments, this);
+UsersSchema.statics.register = function (...arg) {
+    return selfPromisify(_register, arg, this);
 };
 
 const _authenticate = UsersSchema.methods.authenticate;
-UsersSchema.methods.authenticate = function (pw, next) {
-    return _U_.schema.promisify(_authenticate, arguments, this);
+UsersSchema.methods.authenticate = function (...arg) {
+    return selfPromisify(_authenticate, arg, this);
 };
 
 const _changePassword = UsersSchema.methods.changePassword;
-UsersSchema.methods.changePassword = function (old_PW, new_PW, next) {
+UsersSchema.methods.changePassword = function (...arg) {
     this.time._changePassword = new Date(Date.now());
-    return _U_.schema.promisify(_changePassword, arguments, this);
+    return selfPromisify(_changePassword, arg, this);
 };
 
 

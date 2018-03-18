@@ -10,7 +10,7 @@ const moc = {
         email       : 'leo@leoyli.com',
         username    : 'leo',
         password    : 'leo',
-        picture     : '/media/201710/1509304639065.png',
+        picture     : '/media/201801/1521405154605.png',
         info: {
             firstName   : 'test',
             lastName    : 'test',
@@ -20,19 +20,19 @@ const moc = {
             birthday    : Date.now(),
         }
     },
-    post : function(newUser) { return {
-        title       : 'New weapon arrived: Custom E-liter 4K!',
-        author      : { _id: newUser._id, username: newUser.username },
+    post : {
+        title       : 'New arrived: Custom E-liter 4K!',
         featured    : 'http://www.perfectly-nintendo.com/wp-content/gallery/splatoon-2-13-10-2017/1.jpg',
         content     : 'New arrived: <strong>Custom E-liter 4K!</strong><script>alert("WARNING");</script>',
-    }}
+        category    : 'Splatoon 2',
+    },
 };
 
 
 const seed = async (req, res) => {
     const { postsModel, usersModel } = require('../models/');
     const newUser = await usersModel.register(new usersModel(moc.user), moc.user.password);
-    await postsModel.postsCreateThenAssociate(moc.post(newUser), newUser);
+    await postsModel.create({ author: newUser, ...moc.post });
     req.flash('info', 'Successfully seeded.');
     res.redirect('/posts');
 };

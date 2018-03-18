@@ -34,7 +34,8 @@ admin.upload = {   // todo: to be integrated in profile and media manager
     post: [_M_.hireBusboy({ fileSize: 25*1048576 }), async (req, res) => {
         if (req.body.busboySlip.mes.length > 0) req.body.busboySlip.mes.forEach(mes => req.flash('error', mes));
         if (req.body.busboySlip.raw.length > 0) {
-            const docs = await mediaModel.mediaCreateThenAssociate(req.body.busboySlip.raw, req.user);                  // tofix: handle ValidationError
+            req.body.busboySlip.raw.forEach(medium => medium.author = req.session.user);
+            const docs = await mediaModel.create(req.body.busboySlip.raw);
             if (docs.length > 0) req.flash('info', `${docs.length} file(s) successfully uploaded!`);
         }
         return res.redirect('back');
