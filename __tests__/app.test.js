@@ -1,7 +1,7 @@
 const path = require('path');
 const request = require('supertest');
 const { app, mongoose } = require('../app');
-const { configModel, userModel, mediaModel, postModel } = require('../models');
+const { configsModel, usersModel, mediaModel, postsModel } = require('../models');
 
 
 
@@ -12,7 +12,7 @@ const cookiesJar = [];
 
 beforeAll(done => {
     if (process.env['NODE_ENV'] !== 'test') throw new Error('Should run in the test mode!');
-    return mongoose.connection.dropDatabase(configModel.initialize(done));
+    return mongoose.connection.dropDatabase(configsModel.initialize(done));
 });
 
 afterAll(done => mongoose.disconnect(done));
@@ -41,8 +41,8 @@ describe('Router - Seed', () => {
         //
         expect(result.statusCode).toBe(302);
         expect(result.headers.location).toBe('/posts');
-        expect(await userModel.count({})).toBe(1);
-        expect(await postModel.count({})).toBe(1);
+        expect(await usersModel.count({})).toBe(1);
+        expect(await postsModel.count({})).toBe(1);
     });
 });
 
@@ -116,7 +116,7 @@ describe('Router - Authentication', () => {
         //
         expect(result.statusCode).toBe(302);
         expect(result.headers.location).toBe('/home');
-        expect(await userModel.count({})).toBe(2);
+        expect(await usersModel.count({})).toBe(2);
     });
 
     test('GET to sign-out from a session', async () => {
@@ -150,7 +150,7 @@ describe('Router - Home', () => {
             .patch('/admin/configs')
             .send({ configs: { title: 'Testing Website' }});
         //
-        expect((await configModel.findOne({ active: true })).title).toEqual('Testing Website');
+        expect((await configsModel.findOne({ active: true })).title).toEqual('Testing Website');
     });
 
     test.skip('PATCH user nickname', async () => {
@@ -158,7 +158,7 @@ describe('Router - Home', () => {
             .patch('/home/profile')
             .send({ profile: { nickname: 'test' }});
         //
-        expect((await userModel.findOne({ email: 'leo@leoyli.com' })).nickname).toContain('test');
+        expect((await usersModel.findOne({ email: 'leo@leoyli.com' })).nickname).toContain('test');
     });
 
     test('PATCH user password', async () => {
@@ -196,7 +196,7 @@ describe('Router - Posts', () => {
         //
         expect(result.statusCode).toBe(302);
         expect(result.headers.location).toBe('/posts');
-        expect(await postModel.count({ canonical: 'test-post' })).toBe(1);
+        expect(await postsModel.count({ canonical: 'test-post' })).toBe(1);
     });
 
     test('GET access to the editor', async () => {
@@ -216,7 +216,7 @@ describe('Router - Posts', () => {
     });
 
     test('GET the created post via alias', async () => {
-        const post = await postModel.findOne({ canonical: 'test-post' });
+        const post = await postsModel.findOne({ canonical: 'test-post' });
         const result = await agent
             .get(`/posts/${post._id}`);
         //
@@ -226,23 +226,23 @@ describe('Router - Posts', () => {
 
     test('PATCH the created post', async () => {
         const mockEditedPost = { post: { title: 'EDITED', category: 'test', featured: '', content: 'CONTENT EDITED' }};
-        const post = await postModel.findOne({ canonical: 'test-post' });
+        const post = await postsModel.findOne({ canonical: 'test-post' });
         const result = await agent
             .patch(`/posts/edit/${post._id}`)
             .send(mockEditedPost);
         //
         expect(result.statusCode).toBe(302);
         expect(result.headers.location).toBe('/posts/test-post');
-        expect(await postModel.count({ title: 'EDITED' })).toBe(1);
+        expect(await postsModel.count({ title: 'EDITED' })).toBe(1);
     });
 
     test('DELETE the created new post', async () => {
-        const post = await postModel.findOne({ canonical: 'test-post' });
+        const post = await postsModel.findOne({ canonical: 'test-post' });
         const result = await agent
             .delete(`/posts/edit/${post._doc._id}`);
         //
         expect(result.statusCode).toBe(302);
         expect(result.headers.location).toBe('/posts/');
-        expect(await postModel.count({ canonical: 'test-post' })).not.toBe(1);
+        expect(await postsModel.count({ canonical: 'test-post' })).not.toBe(1);
     });
 });

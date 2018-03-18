@@ -1,5 +1,5 @@
 const { Device } = require('../controllers/engines/router');
-const { fetch } = require('../controllers/middleware/fetch');
+const pages = require('../controllers/routers/pages');
 
 
 
@@ -11,7 +11,7 @@ const PageRouter = new Device([{
     controller:     (req, res) => res.render('./theme'),
 }, {
     route:          '/search/:search',
-    controller:     (req, res, next) => fetch({ num: res.locals._site.sets.num })(req, res, next),
+    controller:     pages.search,
     setting:        { template: './theme/posts/search', handler: 'posts', crawler: false },
 }]);
 

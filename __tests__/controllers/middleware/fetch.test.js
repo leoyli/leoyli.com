@@ -1,6 +1,6 @@
 // module
 const { getAggregationQuery, getDateRangeArray,
-    exp_matchFilter, exp_postFiledMask, exp_sortRule, exp_dateRange } = require('../../controllers/middleware/fetch')._test;
+    exp_matchFilter, exp_docFieldMask, exp_sortRule, exp_dateRange } = require('../../../controllers/middleware/fetch')._test;
 
 
 
@@ -24,7 +24,7 @@ describe('Bundle: search.js', () => {
             '\":{\"$literal\":10},\"now\":{\"$cond\":{\"if\":{\"$lt\":[1,{\"$ceil\":{\"$divide\":[\"$' +
             'count\",10]}}]},\"then\":{\"$literal\":1},\"else\":{\"$ceil\":{\"$divide\":[\"$count\",1' +
             '0]}}}},\"end\":{\"$ceil\":{\"$divide\":[\"$count\",10]}},\"sort\":{\"$literal\":{\"visib' +
-            'ility.pinned\":-1,\"time.updated\":-1}},\"route\":{\"$literal\":null},\"period\":{\"$lit' +
+            'ility.pinned\":-1,\"time.updated\":-1}},\"route\":{\"$literal\":\"\"},\"period\":{\"$lit' +
             'eral\":{}}}}}]');
     });
 
@@ -62,10 +62,10 @@ describe('Bundle: search.js', () => {
             .toEqual({ '$gte': new Date('2018-05-10T00:00:00.000Z'), '$lt': new Date('2019-01-02T00:00:00.000Z') });
     });
 
-    test('Fn: exp_postFiledMask - Should construct Mongo query expression (for $project)', () => {
-        expect(exp_postFiledMask({ stackType: 'posts' }))
+    test('Fn: exp_docFieldMask - Should construct Mongo query expression (for $project)', () => {
+        expect(exp_docFieldMask({ stackType: 'posts' }))
             .toEqual({ content: 0, featured: 0 });
-        expect(exp_postFiledMask({}))
+        expect(exp_docFieldMask({}))
             .toEqual({ content: 0 });
     });
 

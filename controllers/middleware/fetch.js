@@ -1,15 +1,15 @@
 
 
 
-function fetch({ page, num, sort } = {}) {
-    return (req, res, next) => require('../../models/').postModel
-        .aggregate(getAggregationQuery(req, page, num, sort))
+function fetch(modelName, { page, num, sort } = {}) {
+    return (req, res, next) => require('../../models/')[modelName]
+        .aggregate(getAggregationQuery(req.params, req.query, page, num || res.locals._site.num, sort))
         .then(docs => docs[0])
         .then(result => {
             if (typeof next !== 'function') return result;
             req.session._view = result;
             return next();
-        })
+        });
 }
 
 
@@ -19,18 +19,17 @@ function fetch({ page, num, sort } = {}) {
 // ==============================
 /**
  * construct Mongo query expression for search operations
- * @param {object} req                     - Express.js request object which contains fetching parameters
+ * @param {object} params                  - Express.js params object
+ * @param {object} query                   - Express.js query object
  * @param {number|*} num                   - pagination display unit
  * @param {number} page                    - pagination pin point
  * @param {object} sort                    - sorting parameters        - todo: sorting options in setting pages
  * @return {object} { post, meta }         - sorted docs and fetching meta(count, num, now, end, date, sort)
  */
-function getAggregationQuery(req, page, num, sort) {
-    const { params = {}, query = {} } = req;
-
+function getAggregationQuery(params, query, page, num, sort) {
     // query expressions
     const $filter   = exp_matchFilter(params, query);
-    const $mask     = exp_postFiledMask(params);
+    const $mask     = exp_docFieldMask(params);
     const $sort     = exp_sortRule(sort);
 
     // pagination variable expressions
@@ -47,7 +46,7 @@ function getAggregationQuery(req, page, num, sort) {
         { $project  : { _id: 0,
             list: { $slice: ['$list', { $multiply: [{ $add: [$now, -1] }, $num] }, $num] },
             meta: { count: '$count', num: { $literal: $num }, now: $now, end: $end, sort: { $literal: $sort },
-                route: { $literal: req.baseUrl + req.path }, period: { $literal: $filter['time.updated'] || {} }}},
+                route: { $literal: '' /* tofix: req.baseUrl + req.path */ }, period: { $literal: $filter['time.updated'] || {} }}},
         },
     ];
 }
@@ -73,7 +72,7 @@ function exp_matchFilter(params, query) {
  * @param {object} params                   - Express.js `req.params` object which contains fetching keywords
  * @return {object}                         - full expression in $project stage
  */
-function exp_postFiledMask(params) {
+function exp_docFieldMask(params) {
     const $stackPicker = { content: 0, featured: 0 };
     const $contentMask = { content: 0 };
     return params['stackType'] === 'posts' ? $stackPicker : $contentMask;
@@ -124,7 +123,6 @@ function getDateRangeArray(str) {
 
 
 
-
 // exports
 module.exports = { fetch,
-    _test: { getAggregationQuery, getDateRangeArray, exp_matchFilter, exp_postFiledMask, exp_dateRange, exp_sortRule }};
+    _test: { getAggregationQuery, getDateRangeArray, exp_matchFilter, exp_docFieldMask, exp_dateRange, exp_sortRule }};

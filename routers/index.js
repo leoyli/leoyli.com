@@ -31,7 +31,7 @@ function _useRoutes(app) {
     app.use('/home', require('./home'));
     app.use('/posts', require('./posts'));
     app.use('/', require('./account'));
-    app.use('/', require('./page'));
+    app.use('/', require('./pages'));
 
     // error
     app.get('*', (req, res, next) => next(new HttpError(404)));

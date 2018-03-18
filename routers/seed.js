@@ -30,9 +30,9 @@ const moc = {
 
 
 const seed = async (req, res) => {
-    const { postModel, userModel } = require('../models/');
-    const newUser = await userModel.register(new userModel(moc.user), moc.user.password);
-    await postModel.postsCreateThenAssociate(moc.post(newUser), newUser);
+    const { postsModel, usersModel } = require('../models/');
+    const newUser = await usersModel.register(new usersModel(moc.user), moc.user.password);
+    await postsModel.postsCreateThenAssociate(moc.post(newUser), newUser);
     req.flash('info', 'Successfully seeded.');
     res.redirect('/posts');
 };

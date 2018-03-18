@@ -1,11 +1,11 @@
 const { _U_ } = require('../utilities/');
-const { configModel, postModel } = require('../../models/');
+const { configsModel, postsModel } = require('../../models/');
 
 
 
 const generic = async (req, res, next) => {
     // checking website settings in environment variables
-    if (!process.env['$WEBSITE_CONFIGS']) configModel.initialize(() => {
+    if (!process.env['$WEBSITE_CONFIGS']) configsModel.initialize(() => {
         if(!process.env['$WEBSITE_CONFIGS']) throw new _U_.error.ServerError(90001);
     });
 
@@ -31,7 +31,7 @@ const postNormalizer = async (req, res, next) => {
 
     if (req.method === 'POST' && !post.canonical) post.canonical = _U_.string.toKebabCase(post.title);
     if (post.canonical !== undefined) {
-        const counts = await postModel.count({ canonical: { $regex: new RegExp(`^${post.canonical}(?:-[0-9]+)?$`) }});
+        const counts = await postsModel.count({ canonical: { $regex: new RegExp(`^${post.canonical}(?:-[0-9]+)?$`) }});
         if (counts > 0) post.canonical = post.canonical + '-' + (counts + 1);
     }
     post.featured   = _U_.string.inspectFileURL(post.featured, res.locals._site.sets.imageTypes, { raw: false });

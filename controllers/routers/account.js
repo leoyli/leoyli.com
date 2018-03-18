@@ -7,7 +7,7 @@ module.exports = exports = { account: {} };
 // ==============================
 const { ClientError } = require('../utilities/')._U_.error;
 const { _M_ } = require('../middleware/plugins');
-const { userModel } = require('../../models/');
+const { usersModel } = require('../../models/');
 
 
 
@@ -20,7 +20,7 @@ exports.account.signup = {
         else return next();
     },
     post: [_M_.passwordValidation, async (req, res) => {
-        const newUser = await userModel.register(new userModel(req.body), req.body.password.new);
+        const newUser = await usersModel.register(new usersModel(req.body), req.body.password.new);
         req.logIn(newUser, err => {
             if (err) throw err;
             req.flash('info', `Welcome new user: ${req.body.username}`);

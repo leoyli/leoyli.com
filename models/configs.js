@@ -6,7 +6,7 @@ const
 // ==============================
 //  SCHEMA
 // ==============================
-const configModelSchema    = new mongoose.Schema({
+const configsSchema         = new mongoose.Schema({
     active                  : { type: Boolean, default: false, unique: true },
     title                   : { type: String, default: 'New Website' },
     description             : { type: String, default: 'n/a' },
@@ -30,7 +30,7 @@ const configModelSchema    = new mongoose.Schema({
 //  STATIC METHODS
 // ==============================
 // initialization (model)
-configModelSchema.static('initialize', async function(next = () => {}) {
+configsSchema.static('initialize', async function(next = () => {}) {
     process.env['$WEBSITE_CONFIGS'] = JSON.stringify(await this.findOne({ active: true }));
     if (process.env['$WEBSITE_CONFIGS'] === 'null') {
         process.env['$WEBSITE_CONFIGS'] = JSON.stringify(await this.create({ active: true }));
@@ -39,17 +39,17 @@ configModelSchema.static('initialize', async function(next = () => {}) {
 
 
 // update settings (model)
-configModelSchema.static('updateSettings', async function(doc, next = () => {}) {
+configsSchema.static('updateSettings', async function(doc, next = () => {}) {
     process.env['$WEBSITE_CONFIGS'] = JSON.stringify(await this.findOneAndUpdate({ active: true }, doc, { new: true }));
     return next();
 });
 
 
-configModelSchema.post('save', function () {
+configsSchema.post('save', function () {
     console.log(this);
 });
 
 
 
 // exports
-module.exports = mongoose.model('settings', configModelSchema);
+module.exports = mongoose.model('settings', configsSchema);

@@ -13,7 +13,7 @@ const { _U_ }               = require('../controllers/utilities/');
 // ==============================
 //  SCHEMA
 // ==============================
-const PostSchema            = new mongoose.Schema({
+const PostsSchema           = new mongoose.Schema({
     author: {
         _id: {
             type            : mongoose.Schema.Types.ObjectId,
@@ -54,23 +54,23 @@ const PostSchema            = new mongoose.Schema({
 //  STATIC METHODS
 // ==============================
 // create and associate (model)
-PostSchema.static('postsCreateThenAssociate', function (raw, user, next) {
+PostsSchema.static('postsCreateThenAssociate', function (raw, user, next) {
     return Promise.resolve().then(() => _U_.schema.updateAndBind(raw, user, next, 'posts', '$push', this));
 });
 
 
 // delete and dissociate (model)  // note: not workable for admin in deleting media owned by multiple users
-PostSchema.static('postsDeleteThenDissociate', function (docsID, user, next) {
+PostsSchema.static('postsDeleteThenDissociate', function (docsID, user, next) {
     return Promise.resolve().then(() => _U_.schema.updateAndBind(docsID, user, next, 'posts', '$pullAll', this));
 });
 
 
 // (pre-hook) version counter
-PostSchema.pre('findOneAndUpdate', function () {
+PostsSchema.pre('findOneAndUpdate', function () {
     this.findOneAndUpdate({}, { $inc: { _revised: 1 }});
 });
 
 
 
 // exports
-module.exports = mongoose.model('posts', PostSchema);
+module.exports = mongoose.model('posts', PostsSchema);

@@ -16,7 +16,7 @@ const { _U_ }               = require('../controllers/utilities/');
 // ==============================
 //  SCHEMA
 // ==============================
-const UserSchema            = new mongoose.Schema({
+const UsersSchema           = new mongoose.Schema({
     active                  : { type: String, default: false },
     roles                   : { type: String, default: 'admin' },
     username                : { type: String, unique: true, lowercase: true },
@@ -51,12 +51,12 @@ const UserSchema            = new mongoose.Schema({
 //  STATIC METHODS
 // ==============================
 // nickname assignment (pre-hook)
-UserSchema.pre('save', function () {
+UsersSchema.pre('save', function () {
     if (this.nickname === undefined) this.nickname = `${this.info.firstName} ${this.info.lastName}`;
 });
 
 // methods for the document
-UserSchema.methods.updateLastTimeLog = function (fieldName) {
+UsersSchema.methods.updateLastTimeLog = function (fieldName) {
     const field = `time._${fieldName}`;
     return mongoose.connection.db.collection('users').update(
         { _id: this._id },
@@ -65,29 +65,29 @@ UserSchema.methods.updateLastTimeLog = function (fieldName) {
 };
 
 // methods from third-party plugin (object method)
-UserSchema.plugin(passportLocalMongoose, {
+UsersSchema.plugin(passportLocalMongoose, {
     usernameField: 'email',
     usernameQueryFields: ['username'],
     selectFields: ['_id', 'email', 'nickname', 'picture', 'info', 'time'],
 });
 
 //// rewrite plugin methods as promises
-const _register = UserSchema.statics.register;
-UserSchema.statics.register = function (doc, pw, next) {
+const _register = UsersSchema.statics.register;
+UsersSchema.statics.register = function (doc, pw, next) {
     return _U_.schema.promisify(_register, arguments, this);
 };
 
-const _authenticate = UserSchema.methods.authenticate;
-UserSchema.methods.authenticate = function (pw, next) {
+const _authenticate = UsersSchema.methods.authenticate;
+UsersSchema.methods.authenticate = function (pw, next) {
     return _U_.schema.promisify(_authenticate, arguments, this);
 };
 
-const _changePassword = UserSchema.methods.changePassword;
-UserSchema.methods.changePassword = function (old_PW, new_PW, next) {
+const _changePassword = UsersSchema.methods.changePassword;
+UsersSchema.methods.changePassword = function (old_PW, new_PW, next) {
     this.time._changePassword = new Date(Date.now());
     return _U_.schema.promisify(_changePassword, arguments, this);
 };
 
 
 // exports
-module.exports = mongoose.model('users', UserSchema);
+module.exports = mongoose.model('users', UsersSchema);

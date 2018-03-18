@@ -39,8 +39,8 @@ mongoose.connect(process.env['DB']);
 
 
 // initialization
-const { configModel, userModel } = require('./models/');
-if (process.env['NODE_ENV'] !== 'test') configModel.initialize();
+const { configsModel, usersModel } = require('./models/');
+if (process.env['NODE_ENV'] !== 'test') configsModel.initialize();
 
 
 // session
@@ -57,9 +57,9 @@ app.use(session({
 
 
 // passport
-passport.use(userModel.createStrategy());
-passport.serializeUser(userModel.serializeUser());
-passport.deserializeUser(userModel.deserializeUser());
+passport.use(usersModel.createStrategy());
+passport.serializeUser(usersModel.serializeUser());
+passport.deserializeUser(usersModel.deserializeUser());
 
 
 

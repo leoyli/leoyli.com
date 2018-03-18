@@ -1,3 +1,15 @@
+### 0.8.0-dev.8.3 / 2018-03-17
+> App
+- Renamed `exp_postFiledMask` as `exp_docFieldMask`.
+- Renamed `configModel`, `userModel` and `postModel` in plural.
+- Revised `fetch` middleware.
+- Revised `admin.stack` controller.
+- Added 'pages' controller.
+
+> Test
+- Updated, moved, and renamed `search.test.js` as `fetch.test.js`.
+
+
 ### 0.8.0-dev.8.2 / 2018-03-17
 > UI
 - Fixed broken link in `upload` template.
