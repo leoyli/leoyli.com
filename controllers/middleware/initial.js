@@ -14,6 +14,7 @@ const generic = async (req, res, next) => {
     res.locals._view = {
         flash: { error: req.flash('error'), info: req.flash('info'), action: req.flash('action') },
         title: res.locals._site.title,
+        route: req.baseUrl + req.path,
         user: req.session.user,
     };
 

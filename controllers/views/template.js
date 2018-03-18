@@ -28,9 +28,9 @@ handler.postsHandler = (template, list, post, meta) => (req, res) => {
 
     // pagination
     if (meta) {
-        const urlBase = `${req.baseUrl}?num=${meta.num}&page='`;
-        if (meta.now > 1)           res.locals._view.prev = urlBase + (meta.now - 1);
-        if (meta.now < meta.end)    res.locals._view.next = urlBase + (meta.now + 1);
+        const paginatedURL = `${res.locals._view.route}?num=${meta.num}&page='`;
+        if (meta.now > 1)           res.locals._view.prev = paginatedURL + (meta.now - 1);
+        if (meta.now < meta.end)    res.locals._view.next = paginatedURL + (meta.now + 1);
     }
 
     return res.render(template, { list, post, meta });

@@ -21,7 +21,7 @@ function fetch(modelName, { page, num, sort } = {}) {
  * construct Mongo query expression for search operations
  * @param {object} params                  - Express.js params object
  * @param {object} query                   - Express.js query object
- * @param {number|*} num                   - pagination display unit
+ * @param {number} num                     - pagination display unit
  * @param {number} page                    - pagination pin point
  * @param {object} sort                    - sorting parameters        - todo: sorting options in setting pages
  * @return {object} { post, meta }         - sorted docs and fetching meta(count, num, now, end, date, sort)
@@ -45,8 +45,8 @@ function getAggregationQuery(params, query, page, num, sort) {
         { $group    : { _id: null, count: { $sum: 1 }, list: { $push: '$$ROOT' }}},                                     // todo: author populate
         { $project  : { _id: 0,
             list: { $slice: ['$list', { $multiply: [{ $add: [$now, -1] }, $num] }, $num] },
-            meta: { count: '$count', num: { $literal: $num }, now: $now, end: $end, sort: { $literal: $sort },
-                route: { $literal: '' /* tofix: req.baseUrl + req.path */ }, period: { $literal: $filter['time.updated'] || {} }}},
+            meta: { count: '$count', num: { $literal: $num }, now: $now, end: $end,
+                sort: { $literal: $sort }, period: { $literal: $filter['time.updated'] || {} }}},
         },
     ];
 }

@@ -1,3 +1,15 @@
+### 0.8.0-dev.8.4 / 2018-03-18
+> App
+- Added `_view.route` population into 'initial' middleware.
+- Removed `meta.route` property from 'fetch' controller.
+
+> Test
+- Skipped `getAggregationQuery` unit test temporarily.
+
+> UI
+- Updated 'pagination' widget.
+
+
 ### 0.8.0-dev.8.3 / 2018-03-17
 > App
 - Renamed `exp_postFiledMask` as `exp_docFieldMask`.

@@ -4,18 +4,18 @@
             <div class="btn-group btn-group-sm" role="group" aria-label="Page navigation">
                 {{ for(let i = 1; i < meta.now; i++) { }}
                 <a role="button" class="btn btn-dark"
-                   href="{{= meta.route }}?num={{= meta.num }}&page={{= i }}">{{= i }}</a>
+                   href="{{= _view.route }}?num={{= meta.num }}&page={{= i }}">{{= i }}</a>
                 {{ }; }}
                 <a role="button" class="btn btn-outline-dark" href="#">{{= meta.now }}</a>
                 {{ for(let j = meta.now + 1, k = meta.end < 10 ? meta.end + 1 : 10; j < k; j++) { }}
                 <a role="button" class="btn btn-dark"
-                   href="{{= meta.route }}?num={{= meta.num }}&page={{= j }}">{{= j }}</a>
+                   href="{{= _view.route }}?num={{= meta.num }}&page={{= j }}">{{= j }}</a>
                 {{ }; }}
             </div>
             {{? meta.end > 9 }}
                 <div class="btn-group btn-group-sm mr-2" aria-label="Last page">
                     <a role="button" class="btn btn-dark"
-                       href="{{= meta.route }}?num={{= meta.num }}&page={{= meta.end }}">{{= meta.end }}</a>
+                       href="{{= _view.route }}?num={{= meta.num }}&page={{= meta.end }}">{{= meta.end }}</a>
                 </div>
             {{?}}
         </div>
