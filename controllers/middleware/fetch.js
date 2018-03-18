@@ -3,11 +3,11 @@
 
 function fetch(modelName, { page, num, sort } = {}) {
     return (req, res, next) => require('../../models/')[modelName]
-        .aggregate(getAggregationQuery(req.params, req.query, page, num || res.locals._site.num, sort))
+        .aggregate(getAggregationQuery(req.params, req.query, page, num || res.locals.$$SITE.num, sort))
         .then(docs => docs[0])
         .then(result => {
             if (typeof next !== 'function') return result;
-            req.session._view = result;
+            req.session.chest = result;
             return next();
         });
 }
@@ -44,9 +44,9 @@ function getAggregationQuery(params, query, page, num, sort) {
         { $sort     : $sort },
         { $group    : { _id: null, count: { $sum: 1 }, list: { $push: '$$ROOT' }}},                                     // todo: author populate
         { $project  : { _id: 0,
-            list: { $slice: ['$list', { $multiply: [{ $add: [$now, -1] }, $num] }, $num] },
-            meta: { count: '$count', num: { $literal: $num }, now: $now, end: $end,
-                sort: { $literal: $sort }, period: { $literal: $filter['time.updated'] || {} }}},
+                list: { $slice: ['$list', { $multiply: [{ $add: [$now, -1] }, $num] }, $num] },
+                meta: { count: '$count', num: { $literal: $num }, now: $now, end: $end,
+                    sort: { $literal: $sort }, period: { $literal: $filter['time.updated'] || {} }}},
         },
     ];
 }

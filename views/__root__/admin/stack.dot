@@ -27,8 +27,8 @@
         </tr>
         </thead>
         <tbody>
-        {{? list.length > 0 }}
-        {{ list.forEach(function(post) { }}
+        {{? $$LIST.length > 0 }}
+        {{ $$LIST.forEach(function(post) { }}
         <tr>
             <th class="text-center" scope="row">
                 <input id="{{= post._id }}" name="target" type="checkbox" value="{{= post._id }}">

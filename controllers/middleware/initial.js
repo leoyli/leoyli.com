@@ -10,17 +10,17 @@ const generic = async (req, res, next) => {
     });
 
     // populating routing variables
-    res.locals._site = JSON.parse(process.env['$WEBSITE_CONFIGS']);
-    res.locals._view = {
-        flash: { error: req.flash('error'), info: req.flash('info'), action: req.flash('action') },
-        title: res.locals._site.title,
-        route: req.baseUrl + req.path,
-        user: req.session.user,
+    res.locals.$$SITE = JSON.parse(process.env['$WEBSITE_CONFIGS']);
+    res.locals.$$VIEW = {
+        flash   : { error: req.flash('error'), info: req.flash('info'), action: req.flash('action') },
+        title   : res.locals.$$SITE.title,
+        route   : req.baseUrl + req.path,
+        user    : req.session.user,
     };
 
     // configuring session variables
     if (!req.session.user && req.session.cookie.expires) req.session.cookie.expires = false;
-    if (res.locals._view.flash.action[0] !== 'retry') delete req.session.returnTo;
+    if (res.locals.$$VIEW.flash.action[0] !== 'retry') delete req.session.returnTo;
 
     return req.body.post && ['POST', 'PATCH'].indexOf(req.method) !== -1 ? postNormalizer(req, res, next) : next();
 };
@@ -35,7 +35,7 @@ const postNormalizer = async (req, res, next) => {
         const counts = await postsModel.count({ canonical: { $regex: new RegExp(`^${post.canonical}(?:-[0-9]+)?$`) }});
         if (counts > 0) post.canonical = post.canonical + '-' + (counts + 1);
     }
-    post.featured   = _U_.string.inspectFileURL(post.featured, res.locals._site.sets.imageTypes, { raw: false });
+    post.featured   = _U_.string.inspectFileURL(post.featured, res.locals.$$SITE.sets.imageTypes, { raw: false });
     post.title      = _U_.string.escapeChars(post.title);
     post.content    = _U_.string.escapeChars(post.content);                             // tofix: using sanitizer
     post.category   = _U_.string.toKebabCase(post.category) || undefined;

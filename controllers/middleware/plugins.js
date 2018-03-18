@@ -31,10 +31,10 @@ exports._M_.hireBusboy = (limits) => (req, res, next) => require('./upload').upl
 // set title tag
 exports._M_.setTitleTag = (title, { append, root } = {}) => (req, res, next) => {
     const sequence = [];
-    if (root !== false) sequence.push(res.locals._view.title);
+    if (root !== false) sequence.push(res.locals.$$VIEW.title);
     if (append === true) sequence.push(title);
     else sequence.unshift(title);
-    res.locals._view.title = sequence.join(' - ');
+    res.locals.$$VIEW.title = sequence.join(' - ');
     if (typeof next === 'function') return next();
 };
 

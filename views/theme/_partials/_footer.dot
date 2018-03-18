@@ -28,7 +28,7 @@
         <!-- copyright -->
         <div class="col-md-8 col-lg-7" id="sitePolicy" role="contentinfo">
             <p id="copyright">
-                {{= new Date().getFullYear() }} &copy; {{= _site.title }}.
+                {{= new Date().getFullYear() }} &copy; {{= $$SITE.title }}.
             </p>
             <p id="licence">
                 Except as otherwise noted, the content of this site is licensed under the

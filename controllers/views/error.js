@@ -59,7 +59,7 @@ const redirect = {};
 redirect.signInRetry = (req, res) => {
     // if logout from a authentication required page
     if (req.get('Referrer') && RegExp('^https?:\\/\\/[^\\/]+(.+$)').exec(req.get('Referrer'))[1] === req.originalUrl) { // option: generalized this string reading method
-        req.flash('info', res.locals._view.flash.info.toString());
+        req.flash('info', res.locals.$$VIEW.flash.info.toString());
         delete req.flash('error');
     }
 

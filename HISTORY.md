@@ -1,3 +1,13 @@
+### 0.8.0-dev.8.5 / 2018-03-18
+> App
+- Renamed `req.session._view` as `req.session.chest`.
+- Renamed template variables in a form of `$${UPPERCASE}`.
+
+> UI
+- Updated with the changes.
+- Fixed typos.
+
+
 ### 0.8.0-dev.8.4 / 2018-03-18
 > App
 - Added `_view.route` population into 'initial' middleware.

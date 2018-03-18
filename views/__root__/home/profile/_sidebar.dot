@@ -1,5 +1,5 @@
 <div class="col-3">
-    <div class="mb-3 text-center"><img class="" alt="User" src="{{= _view.user.picture }}" width="80%" /></div>
-    <div class="text-center h3">{{= _view.user.nickname }}</div>
+    <div class="mb-3 text-center"><img class="" alt="User" src="{{= $$VIEW.user.picture }}" width="80%" /></div>
+    <div class="text-center h3">{{= $$VIEW.user.nickname }}</div>
     <div class="text-center"><a class="btn btn-success btn-sm" href="/home/security">Change picture</a></div>
 </div>

@@ -10,9 +10,9 @@
 
     <!-- content -->
     <div class="col-9">
-        {{? list.length === 0 }}
+        {{? $$LIST.length === 0 }}
         <h3>NO POSTS</h3>
-        {{??}}{{ list.forEach(function(post) { }}
+        {{??}}{{ $$LIST.forEach(function(post) { }}
         <article class="mb-4 pb-4" id="{{= post._id }}">
             <h2 class="_title">
                 {{? post.visibility.pinned }} [PINNED] {{?}}
@@ -21,7 +21,7 @@
             </h2>
             <header class="row">
                 <div class="col-md-9">
-                    {{= post.author.username }}
+                    {{= post.author.nickname }}
                     ｜<a href="/posts/edit/{{= post._id }}">(edit)</a>
                     ｜<a href="/posts/class/{{= post.category }}">{{= post.category }}</a>
                     ｜Revised: {{= post._revised }}

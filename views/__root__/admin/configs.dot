@@ -10,21 +10,21 @@
                     <span class="input-group-text w-100">Title</span>
                 </div>
                 <input id="title" name="configs[title]" class="form-control"
-                       type="text" value="{{= _view.configs.title }}" placeholder="Title">
+                       type="text" value="{{= $$VIEW.configs.title }}" placeholder="Title">
             </div>
             <div class="input-group my-1">
                 <div class="input-group-prepend col-2 px-0">
                     <span class="input-group-text w-100">Description</span>
                 </div>
                 <input id="description" name="configs[description]" class="form-control"
-                       type="text" value="{{= _view.configs.description }}" placeholder="Description">
+                       type="text" value="{{= $$VIEW.configs.description }}" placeholder="Description">
             </div>
             <div class="input-group my-1">
                 <div class="input-group-prepend col-2 px-0">
                     <span class="input-group-text w-100">Keywords</span>
                 </div>
                 <input id="keywords" name="configs[keywords]" class="form-control"
-                       type="text" value="{{= _view.configs.keywords }}" placeholder="Keywords (separated by ',')">
+                       type="text" value="{{= $$VIEW.configs.keywords }}" placeholder="Keywords (separated by ',')">
             </div>
 
             <div class="input-group my-1">

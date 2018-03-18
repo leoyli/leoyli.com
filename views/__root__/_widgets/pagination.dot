@@ -1,21 +1,21 @@
-{{? meta && meta.end > 1 }}
+{{? $$META && $$META.end > 1 }}
     <div class="container pb-4">
         <div id="pagination" class="col-9 btn-toolbar" role="navigation" aria-label="Pagination">
             <div class="btn-group btn-group-sm" role="group" aria-label="Page navigation">
-                {{ for(let i = 1; i < meta.now; i++) { }}
+                {{ for(let i = 1; i < $$META.now; i++) { }}
                 <a role="button" class="btn btn-dark"
-                   href="{{= _view.route }}?num={{= meta.num }}&page={{= i }}">{{= i }}</a>
+                   href="{{= $$VIEW.route }}?num={{= $$META.num }}&page={{= i }}">{{= i }}</a>
                 {{ }; }}
-                <a role="button" class="btn btn-outline-dark" href="#">{{= meta.now }}</a>
-                {{ for(let j = meta.now + 1, k = meta.end < 10 ? meta.end + 1 : 10; j < k; j++) { }}
+                <a role="button" class="btn btn-outline-dark" href="#">{{= $$META.now }}</a>
+                {{ for(let j = $$META.now + 1, k = $$META.end < 10 ? $$META.end + 1 : 10; j < k; j++) { }}
                 <a role="button" class="btn btn-dark"
-                   href="{{= _view.route }}?num={{= meta.num }}&page={{= j }}">{{= j }}</a>
+                   href="{{= $$VIEW.route }}?num={{= $$META.num }}&page={{= j }}">{{= j }}</a>
                 {{ }; }}
             </div>
-            {{? meta.end > 9 }}
+            {{? $$META.end > 9 }}
                 <div class="btn-group btn-group-sm mr-2" aria-label="Last page">
                     <a role="button" class="btn btn-dark"
-                       href="{{= _view.route }}?num={{= meta.num }}&page={{= meta.end }}">{{= meta.end }}</a>
+                       href="{{= $$VIEW.route }}?num={{= $$META.num }}&page={{= $$META.end }}">{{= $$META.end }}</a>
                 </div>
             {{?}}
         </div>

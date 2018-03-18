@@ -17,27 +17,27 @@
             <tbody>
             <tr>
                 <th scope="row" width="250">Full Name</th>
-                <td>{{= _view.user.info.firstName }} {{= _view.user.info.lastName }}</td>
+                <td>{{= $$VIEW.user.info.firstName }} {{= $$VIEW.user.info.lastName }}</td>
             </tr>
             <tr>
                 <th scope="row">Nickname</th>
-                <td>{{= _view.user.nickname }}</td>
+                <td>{{= $$VIEW.user.nickname }}</td>
             </tr>
             <tr>
                 <th scope="row">Date of birth</th>
-                <td>{{= new Date(_view.user.info.birthday).toDateString() }}</td>
+                <td>{{= new Date($$VIEW.user.info.birthday).toDateString() }}</td>
             </tr>
             <tr>
                 <th scope="row">Gender</th>
-                <td>{{= _view.user.info.gender }}</td>
+                <td>{{= $$VIEW.user.info.gender }}</td>
             </tr>
             <tr>
                 <th scope="row">Country/region of residence</th>
-                <td>{{= _view.user.info.residency }}</td>
+                <td>{{= $$VIEW.user.info.residency }}</td>
             </tr>
             <tr>
                 <th scope="row">Time zone</th>
-                <td>{{= _view.user.info.timezone }}</td>
+                <td>{{= $$VIEW.user.info.timezone }}</td>
             </tr>
             </tbody>
         </table>
@@ -51,16 +51,16 @@
             <tbody>
             <tr>
                 <th scope="row" width="250">Email address</th>
-                <td>{{= _view.user.email }}</td>
+                <td>{{= $$VIEW.user.email }}</td>
             </tr>
             <tr>
                 <th scope="row">Last time sign-in</th>
-                <td>{{= _view.user.time._signIn }}</td>
+                <td>{{= $$VIEW.user.time._signIn }}</td>
             </tr>
             <tr>
                 <th scope="row">Your password changed in</th>
                 <td>
-                    {{= Math.floor((new Date(Date.now())- new Date(_view.user.time._changePassword || _view.user.time._registered)) / 86400000)}}
+                    {{= Math.floor((new Date(Date.now())- new Date($$VIEW.user.time._changePassword || $$VIEW.user.time._registered)) / 86400000)}}
                     days ago <a class="btn btn-success btn-sm float-right" href="/home/security">Change password</a>
                 </td>
             </tr>

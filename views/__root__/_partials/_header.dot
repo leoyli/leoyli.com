@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-    <title>{{= _view.title }}</title>
+    <title>{{= $$VIEW.title }}</title>
 
     <!-- meta tags -->
     {{= _widget.meta }}
 
     <!-- internal reference -->
-    {{? _view.prev }}<link rel="prev" href="{{= _view.prev }}">{{?}}
-    {{? _view.next }}<link rel="next" href="{{= _view.next }}">{{?}}
+    {{? $$VIEW.prev }}<link rel="prev" href="{{= $$VIEW.prev }}">{{?}}
+    {{? $$VIEW.next }}<link rel="next" href="{{= $$VIEW.next }}">{{?}}
 
     <!-- CDN stylesheets -->
     {{= _widget.CDN }}
@@ -28,13 +28,13 @@
 
 <main class="bg-white pb-5 pt-4" role="main">
     <!-- flash message -->
-    {{? _view.flash && (_view.flash.error || _view.flash.info) }}
+    {{? $$VIEW.flash && ($$VIEW.flash.error || $$VIEW.flash.info) }}
         <div class="container pb-2" id="flashMessage">
-            {{? _view.flash.error.length > 0 }}
-                <div class="alert alert-danger" role="alert">{{= _view.flash.error }}</div>
+            {{? $$VIEW.flash.error.length > 0 }}
+                <div class="alert alert-danger" role="alert">{{= $$VIEW.flash.error }}</div>
             {{?}}
-            {{? _view.flash.info.length > 0 }}
-                <div class="alert alert-success" role="alert">{{= _view.flash.info }}</div>
+            {{? $$VIEW.flash.info.length > 0 }}
+                <div class="alert alert-success" role="alert">{{= $$VIEW.flash.info }}</div>
             {{?}}
         </div>
     {{?}}

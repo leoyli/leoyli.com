@@ -31,7 +31,7 @@ exports.account.signup = {
 
 exports.account.signin = {
     get: (req, res, next) => {
-        if (res.locals._view.flash.action[0] === 'retry' ) req.flash('action', 'retry');
+        if (res.locals.$$VIEW.flash.action[0] === 'retry' ) req.flash('action', 'retry');
         if (req.isAuthenticated() && req.session.user) return res.redirect('/home');
         else return next();
     },

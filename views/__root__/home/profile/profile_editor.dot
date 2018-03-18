@@ -13,23 +13,23 @@
                     <span class="input-group-text w-100">Full Name</span>
                 </div>
                 <input id="firstName" name="profile[info][firstName]" class="form-control"
-                       type="text" value="{{= _view.user.info.firstName }}" placeholder="First name">
+                       type="text" value="{{= $$VIEW.user.info.firstName }}" placeholder="First name">
                 <input id="lastName" name="profile[info][lastName]" class="form-control"
-                       type="text" value="{{= _view.user.info.lastName }}" placeholder="Last name">
+                       type="text" value="{{= $$VIEW.user.info.lastName }}" placeholder="Last name">
             </div>
             <div class="input-group my-1">
                 <div class="input-group-prepend col-2 px-0">
                     <span class="input-group-text w-100">Nickname</span>
                 </div>
                 <input id="nickname" name="profile[nickname]" class="form-control"
-                       type="text" value="{{= _view.user.nickname }}" placeholder="Nickname">
+                       type="text" value="{{= $$VIEW.user.nickname }}" placeholder="Nickname">
             </div>
             <div class="input-group my-1">
                 <div class="input-group-prepend col-2 px-0">
                     <span class="input-group-text w-100">Date of birth</span>
                 </div>
                 <input id="birthday" name="profile[info][birthday]" class="form-control"
-                       type="text" value="{{= _view.user.info.birthday }}" placeholder="Date of birth">
+                       type="text" value="{{= $$VIEW.user.info.birthday }}" placeholder="Date of birth">
             </div>
             <div class="input-group my-1">
                 <div class="input-group-prepend col-2 px-0">
@@ -37,8 +37,8 @@
                 </div>
                 <select id="gender" name="profile[info][gender]" class="custom-select">
                     <option value="NA">Prefer not to say</option>
-                    <option value="Male" {{? _view.user.info.gender === 'Male' }}selected{{?}}>Male</option>
-                    <option value="Female" {{? _view.user.info.gender === 'Female' }}selected{{?}}>Female</option>
+                    <option value="Male" {{? $$VIEW.user.info.gender === 'Male' }}selected{{?}}>Male</option>
+                    <option value="Female" {{? $$VIEW.user.info.gender === 'Female' }}selected{{?}}>Female</option>
                 </select>
             </div>
             <div class="input-group my-1">

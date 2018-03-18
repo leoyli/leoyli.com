@@ -19,7 +19,7 @@ home.main = {
 
 home.profile = {
     get: (req, res, next) => {
-        res.locals._view.user = req.user._doc;
+        res.locals.$$VIEW.user = req.user._doc;
         return next();
     },
     patch: async (req, res) => {
@@ -33,7 +33,7 @@ home.profile = {
 
 home.profile_editor = {
     get: (req, res, next) => {
-        res.locals._view.user = req.user._doc;
+        res.locals.$$VIEW.user = req.user._doc;
         return next();
     },
 };

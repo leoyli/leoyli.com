@@ -20,7 +20,7 @@ admin.main = {
 
 admin.configs = {
     get: (req, res, next) => {
-        res.locals._view.configs = JSON.parse(process.env['$WEBSITE_CONFIGS']);
+        res.locals.$$VIEW.configs = JSON.parse(process.env['$WEBSITE_CONFIGS']);
         return next();
     },
     patch: async (req, res) => {

@@ -5,8 +5,8 @@ const { _M_ } = require('../middleware/plugins');
 
 // gateway
 const templateHandler = ($template, $handler) => (req, res) => {
-    const { template, list, post, meta } = req.session._view ? req.session._view : {};
-    delete req.session._view;
+    const { template, list, post, meta } = req.session.chest ? req.session.chest : {};
+    delete req.session.chest;
 
     switch ($handler) {
         case 'posts':
@@ -20,20 +20,20 @@ const templateHandler = ($template, $handler) => (req, res) => {
 // handlers
 const handler = {};
 
-handler.postsHandler = (template, list, post, meta) => (req, res) => {
-    if (!list && !post) throw new _U_.error.HttpError(404);
+handler.postsHandler = (template, $$LIST, $$POST, $$META) => (req, res) => {
+    if (!$$LIST && !$$POST) throw new _U_.error.HttpError(404);
 
     // title-tag
-    if (post && post.title) _M_.setTitleTag(post.title, { root: true })(req, res);
+    if ($$POST && $$POST.title) _M_.setTitleTag($$POST.title, { root: true })(req, res);
 
     // pagination
-    if (meta) {
-        const paginatedURL = `${res.locals._view.route}?num=${meta.num}&page='`;
-        if (meta.now > 1)           res.locals._view.prev = paginatedURL + (meta.now - 1);
-        if (meta.now < meta.end)    res.locals._view.next = paginatedURL + (meta.now + 1);
+    if ($$META) {
+        const paginatedURL = `${res.locals.$$VIEW.route}?num=${$$META.num}&page='`;
+        if ($$META.now > 1)             res.locals.$$VIEW.prev = paginatedURL + ($$META.now - 1);
+        if ($$META.now < $$META.end)    res.locals.$$VIEW.next = paginatedURL + ($$META.now + 1);
     }
 
-    return res.render(template, { list, post, meta });
+    return res.render(template, { $$LIST, $$POST, $$META });
 };
 
 
