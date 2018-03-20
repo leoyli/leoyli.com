@@ -1,3 +1,13 @@
+### 0.8.0-dev.11 / 2018-03-20
+> App
+- Revised 'template' view handler to accommodate dynamic template assignment based on `req.params`.
+- Updated 'admin' router setting.
+
+> UI
+- Adjusted widths of table cell in '/stack/media' nad '/stack/posts' template.
+- Updated the dropdown menu in `_navibar` template.
+
+
 ### 0.8.0-dev.10 / 2018-03-20
 > App
 - Revised `exp_matchFilter` to accommodate different queried collections.

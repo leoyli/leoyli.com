@@ -39,9 +39,11 @@
                         <div class="dropdown-divider my-1"></div>
                         <a class="dropdown-item px-3" href="/home">Dashboard</a>
                         <div class="dropdown-divider my-1"></div>
-                        <a class="dropdown-item px-3" href="/admin/upload">Media Uploader</a>
-                        <a class="dropdown-item px-3" href="/admin/stack/posts">Posts Management</a>
                         <a class="dropdown-item px-3" href="/posts/edit">New Post</a>
+                        <a class="dropdown-item px-3" href="/admin/stack/posts">Posts Overview</a>
+                        <div class="dropdown-divider my-1"></div>
+                        <a class="dropdown-item px-3" href="/admin/upload">Upload Media</a>
+                        <a class="dropdown-item px-3" href="/admin/stack/media">Media Overview</a>
                         <div class="dropdown-divider my-1"></div>
                         <a class="dropdown-item px-3" href="/admin/configs">Website Settings</a>
                         <a class="dropdown-item px-3" href="/home/profile">User Profile</a>

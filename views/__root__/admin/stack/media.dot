@@ -18,9 +18,9 @@
                 <label for="select-all" class="m-0"><input id="select-all" type="checkbox"></label>
             </th>
             <th scope="col" width="25%">Title</th>
-            <th scope="col" width="45%">Description</th>
-            <th scope="col" width="15%">Author</th>
-            <th scope="col" width="15%">Time</th>
+            <th scope="col" width="44%">Description</th>
+            <th scope="col" width="14%">Author</th>
+            <th scope="col" width="14%">Time</th>
         </tr>
         </thead>
         <tbody>

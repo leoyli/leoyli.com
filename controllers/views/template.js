@@ -6,13 +6,14 @@ const { _M_ } = require('../middleware/plugins');
 // gateway
 const templateHandler = ($template, $handler) => (req, res) => {
     const { template, list, post, meta } = req.session.chest ? req.session.chest : {};
+    const _template = (template || $template).replace(/\/:([a-z0-9-$]+)$/i, (match, key) => `/${req.params[key]}`);
     delete req.session.chest;
 
     switch ($handler) {
         case 'posts':
-            return handler.postsHandler(template || $template, list, post, meta)(req, res);
+            return handler.postsHandler(_template, list, post, meta)(req, res);
         default:
-            return res.render(template || $template);
+            return res.render(_template);
     }
 };
 
