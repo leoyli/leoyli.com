@@ -63,5 +63,5 @@ exports.posts.show = {
 };
 
 exports.posts.list = {
-    get: fetch('postsModel'),
+    get: fetch('posts'),
 };

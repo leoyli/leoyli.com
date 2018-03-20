@@ -15,5 +15,5 @@ const { fetch } = require('../middleware/fetch');
 //  CONTROLLERS
 // ==============================
 pages.search = {
-    get: fetch('postsModel'),
+    get: fetch('posts'),
 };

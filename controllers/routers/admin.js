@@ -44,10 +44,10 @@ admin.upload = {   // todo: to be integrated in profile and media manager
 
 admin.stack = {
     get: (req, res, next) => {
-        const stackType = req.params['stackType'].toLowerCase();
-        if (['posts', 'media'].indexOf(stackType) !== -1) {
-            _M_.setTitleTag(stackType)(req, res);                                                                       // todo: capitalize
-            return fetch(`${stackType}Model`, { num: 10 })(req, res, next);
+        const collection = req.params['stackType'].toLowerCase();
+        if (['posts', 'media'].indexOf(collection) !== -1) {
+            _M_.setTitleTag(collection)(req, res);                                                                       // todo: capitalize
+            return fetch(collection, { num: 10 })(req, res, next);
         } else throw new _U_.error.HttpError(404);
     },
     patch: async (req, res) => res.redirect('back'),

@@ -1,3 +1,16 @@
+### 0.8.0-dev.10 / 2018-03-20
+> App
+- Revised `exp_matchFilter` to accommodate different queried collections.
+- Revised `fetch` function to take by db name instead of the model name.
+- Updated 'admin' router setting.
+
+> Test
+- Added a new test item in `exp_matchFilter` test.
+
+> UI
+- Added 'media' and 'posts' template under 'stack' directory.
+
+
 ### 0.8.0-dev.9 / 2018-03-19
 > App
 - Added a 'pre' hook on 'update' event to auto-update all posts associated with the author in dark.

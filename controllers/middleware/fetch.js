@@ -1,11 +1,11 @@
 
 
 
-function fetch(modelName, { page, num, sort } = {}) {
-    return (req, res, next) => require('../../models/')[modelName]
-        .aggregate(getAggregationQuery(req.params, req.query, page, num || res.locals.$$SITE.num, sort))
+function fetch(collection, { page, num, sort } = {}) {
+    return (req, res, next) => require(`../../models/`)[`${collection}Model`]
+        .aggregate(getAggregationQuery(collection, req.params, req.query, page, num || res.locals.$$SITE.num, sort))
         .then(docs => docs[0])
-        .then(result => {
+        .then(async (result) => {
             if (typeof next !== 'function') return result;
             req.session.chest = result;
             return next();
@@ -19,6 +19,7 @@ function fetch(modelName, { page, num, sort } = {}) {
 // ==============================
 /**
  * construct Mongo query expression for search operations
+ * @param {string} collection               - name of the queried mongoDB collection
  * @param {object} params                  - Express.js params object
  * @param {object} query                   - Express.js query object
  * @param {number} num                     - pagination display unit
@@ -26,9 +27,9 @@ function fetch(modelName, { page, num, sort } = {}) {
  * @param {object} sort                    - sorting parameters        - todo: sorting options in setting pages
  * @return {object} { post, meta }         - sorted docs and fetching meta(count, num, now, end, date, sort)
  */
-function getAggregationQuery(params, query, page, num, sort) {
+function getAggregationQuery(collection, params, query, page, num, sort) {
     // query expressions
-    const $filter   = exp_matchFilter(params, query);
+    const $filter   = exp_matchFilter(collection, params, query);
     const $mask     = exp_docFieldMask(params);
     const $sort     = exp_sortRule(sort);
 
@@ -54,17 +55,19 @@ function getAggregationQuery(params, query, page, num, sort) {
 
 /**
  * construct Mongo query expression (for $match)
+ * @param {string} collection               - name of the queried mongoDB collection
  * @param {object} params                   - Express.js `req.params` object which contains fetching keywords
  * @param {object} query                    - Express.js `req.query` object which contains fetching parameters
  * @return {object}                         - full expression in $match stage
  */
-function exp_matchFilter(params, query) {
+function exp_matchFilter(collection, params, query) {
     const $filter = params.hasOwnProperty('search')
         ? { $text : { $search: params.search }} : params.hasOwnProperty('category')
             ? { category : params.category } : {};
 
     if (query.date) $filter['time.updated'] = exp_dateRange(...getDateRangeArray(query.date));
-    return { ...$filter, status: { $eq: 'published' }, 'visibility.hidden': false }
+    if (collection === 'posts') return { ...$filter, status: { $eq: 'published' }, 'visibility.hidden': false };
+    else return $filter;
 }
 
 /**

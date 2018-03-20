@@ -41,13 +41,15 @@ describe('Bundle: search.js', () => {
     });
 
     test('Fn: exp_matchFilter: Should construct Mongo query expression (for $match)', () => {
-        expect(exp_matchFilter({}, {}))
+        expect(exp_matchFilter('', {}, {}))
+            .toEqual({});
+        expect(exp_matchFilter('posts', {}, {}))
             .toEqual({ status: { $eq: 'published'}, 'visibility.hidden': false });
-        expect(exp_matchFilter({ search: {} }, {}))
+        expect(exp_matchFilter('posts', { search: {} }, {}))
             .toEqual({ $text: { $search: {} }, status: { $eq: 'published'}, 'visibility.hidden': false });
-        expect(exp_matchFilter({ category: 'test'}, {}))
+        expect(exp_matchFilter('posts', { category: 'test'}, {}))
             .toEqual({ category: 'test', status: { $eq: 'published'}, 'visibility.hidden': false });
-        expect(exp_matchFilter({}, { date: '20180510-20190101/' })['time.updated'])
+        expect(exp_matchFilter('', {}, { date: '20180510-20190101/' })['time.updated'])
             .toEqual({ '$gte': new Date('2018-05-10T00:00:00.000Z'), '$lt': new Date('2019-01-02T00:00:00.000Z') });
     });
 

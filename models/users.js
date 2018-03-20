@@ -45,7 +45,7 @@ const UsersSchema           = new mongoose.Schema({
 // action hooks
 //// nickname assignment (pre-hook)
 UsersSchema.pre('save', function () {
-    if (this.nickname === undefined) this.nickname = `${this.info.firstName} ${this.info.lastName}`.trim();             // todo: when nickname changed, updated all post under that user
+    if (this.nickname === undefined) this.nickname = `${this.info.firstName} ${this.info.lastName}`.trim();
 });
 
 //// auto-update all posts associated with the author in dark (pre-hook)
@@ -62,10 +62,9 @@ UsersSchema.pre('update', function () {
 // methods for the document
 //// update the specified last time field
 UsersSchema.methods.updateLastTimeLog = function (fieldName) {
-    const field = `time._${fieldName}`;
     return mongoose.connection.db.collection('users').update(
         { _id: this._id },
-        { $set: { [field]: new Date(Date.now()) }}
+        { $set: { [`time._${fieldName}`]: new Date(Date.now()) }}
     );
 };
 
