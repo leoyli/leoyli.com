@@ -39,9 +39,10 @@ const MediaSchema           = new mongoose.Schema({
 
 
 // ==============================
-//  STATIC METHODS
+//  METHODS
 // ==============================
-// (pre-hook) version counter
+// action hooks
+// version counter (pre-hook)
 MediaSchema.pre('findOneAndUpdate', function () {
     this.findOneAndUpdate({}, { $inc: { _revised: 1 }});
 });

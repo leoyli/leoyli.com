@@ -1,3 +1,10 @@
+### 0.8.0-dev.9 / 2018-03-19
+> App
+- Added a 'pre' hook on 'update' event to auto-update all posts associated with the author in dark.
+- Modified `home.profile.patch` by also submitting the current user nickname(`_nickname`) for the later comparison.
+- Updated the format of comments in all models.
+
+
 ### 0.8.0-dev.8.6 / 2018-03-18
 > App
 - Removed 'schema' utilities:

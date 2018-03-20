@@ -27,9 +27,10 @@ const configsSchema         = new mongoose.Schema({
 
 
 // ==============================
-//  STATIC METHODS
+//  METHODS
 // ==============================
-// initialization (model)
+// static methods
+// initialization
 configsSchema.static('initialize', async function(next = () => {}) {
     process.env['$WEBSITE_CONFIGS'] = JSON.stringify(await this.findOne({ active: true }));
     if (process.env['$WEBSITE_CONFIGS'] === 'null') {
@@ -38,15 +39,10 @@ configsSchema.static('initialize', async function(next = () => {}) {
 });
 
 
-// update settings (model)
+// update settings
 configsSchema.static('updateSettings', async function(doc, next = () => {}) {
     process.env['$WEBSITE_CONFIGS'] = JSON.stringify(await this.findOneAndUpdate({ active: true }, doc, { new: true }));
     return next();
-});
-
-
-configsSchema.post('save', function () {
-    console.log(this);
 });
 
 

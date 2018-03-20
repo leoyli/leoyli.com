@@ -6,14 +6,6 @@ const
 
 
 // ==============================
-//  FUNCTIONS
-// ==============================
-// ancillaries
-const { _U_ }               = require('../controllers/utilities/');
-
-
-
-// ==============================
 //  SCHEMA
 // ==============================
 const UsersSchema           = new mongoose.Schema({
@@ -29,8 +21,8 @@ const UsersSchema           = new mongoose.Schema({
     nickname                : { type: String },
     picture                 : { type: String, required: true, default: '' },    // todo: added a validator
     info: {
-        firstName           : { type: String, required: true },
-        lastName            : { type: String, required: true },
+        firstName           : { type: String, required: true, trim: true },
+        lastName            : { type: String, required: true, trim: true },
         gender              : { type: String, required: true, enum: ['Male', 'Female', 'NA'], default: 'NA' },
         residency           : { type: String },
         timezone            : { type: String },
@@ -48,14 +40,27 @@ const UsersSchema           = new mongoose.Schema({
 
 
 // ==============================
-//  STATIC METHODS
+//  METHODS
 // ==============================
-// nickname assignment (pre-hook)
+// action hooks
+//// nickname assignment (pre-hook)
 UsersSchema.pre('save', function () {
-    if (this.nickname === undefined) this.nickname = `${this.info.firstName} ${this.info.lastName}`;
+    if (this.nickname === undefined) this.nickname = `${this.info.firstName} ${this.info.lastName}`.trim();             // todo: when nickname changed, updated all post under that user
 });
 
+//// auto-update all posts associated with the author in dark (pre-hook)
+UsersSchema.pre('update', function () {
+    const raw = this.getUpdate().$set;
+    if (raw.nickname !== raw._nickname) mongoose.connection.db.collection('posts').update(
+        { 'author._id': this.getQuery()._id },
+        { $set: { 'author.nickname': raw.nickname }},
+        { multi: true }
+    );
+});
+
+
 // methods for the document
+//// update the specified last time field
 UsersSchema.methods.updateLastTimeLog = function (fieldName) {
     const field = `time._${fieldName}`;
     return mongoose.connection.db.collection('users').update(
@@ -63,6 +68,7 @@ UsersSchema.methods.updateLastTimeLog = function (fieldName) {
         { $set: { [field]: new Date(Date.now()) }}
     );
 };
+
 
 // methods from third-party plugin (object method)
 UsersSchema.plugin(passportLocalMongoose, {
@@ -95,6 +101,7 @@ UsersSchema.methods.changePassword = function (...arg) {
     this.time._changePassword = new Date(Date.now());
     return selfPromisify(_changePassword, arg, this);
 };
+
 
 
 // exports
