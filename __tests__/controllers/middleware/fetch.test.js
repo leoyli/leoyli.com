@@ -44,12 +44,14 @@ describe('Bundle: search.js', () => {
         expect(exp_matchFilter('', {}, {}))
             .toEqual({});
         expect(exp_matchFilter('posts', {}, {}))
-            .toEqual({ status: { $eq: 'published'}, 'visibility.hidden': false });
+            .toEqual({ 'state.hidden': false, 'state.published': true, 'time._recycled': { $eq: null }});
         expect(exp_matchFilter('posts', { search: {} }, {}))
-            .toEqual({ $text: { $search: {} }, status: { $eq: 'published'}, 'visibility.hidden': false });
+            .toEqual({ '$text': { '$search': {}},
+                'state.hidden': false, 'state.published': true, 'time._recycled': { $eq: null }});
         expect(exp_matchFilter('posts', { category: 'test'}, {}))
-            .toEqual({ category: 'test', status: { $eq: 'published'}, 'visibility.hidden': false });
-        expect(exp_matchFilter('', {}, { date: '20180510-20190101/' })['time.updated'])
+            .toEqual({ 'category': 'test',
+                'state.hidden': false, 'state.published': true, 'time._recycled': { $eq: null }});
+        expect(exp_matchFilter('', {}, { date: '20180510-20190101/' })['time._created'])
             .toEqual({ '$gte': new Date('2018-05-10T00:00:00.000Z'), '$lt': new Date('2019-01-02T00:00:00.000Z') });
     });
 
@@ -61,9 +63,9 @@ describe('Bundle: search.js', () => {
     });
 
     test('Fn: exp_sortRule - Should construct Mongo query expression (for $sort)', () => {
-        expect(exp_sortRule({ 'time.updated': 0 })).toEqual({ 'time.updated': -1, 'visibility.pinned': -1 });
-        expect(exp_sortRule({ 'time.updated': 1 })).toEqual({ 'time.updated': 1, 'visibility.pinned': -1 });
-        expect(exp_sortRule({})).toEqual({ 'time.updated': -1, 'visibility.pinned': -1 });
+        expect(exp_sortRule({ 'time._updated': 0 })).toEqual({ 'time._updated': -1, 'state.pinned': -1 });
+        expect(exp_sortRule({ 'time._updated': 1 })).toEqual({ 'time._updated': 1, 'state.pinned': -1 });
+        expect(exp_sortRule({})).toEqual({ 'time._updated': -1, 'state.pinned': -1 });
     });
 
     test('Fn: exp_dateRange - Should construct Mongo query expression based on a time range from an array', () => {

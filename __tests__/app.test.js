@@ -232,7 +232,6 @@ describe('Router - Posts', () => {
             .send(mockEditedPost);
         //
         expect(result.statusCode).toBe(302);
-        expect(result.headers.location).toBe('/posts/test-post');
         expect(await postsModel.count({ title: 'EDITED' })).toBe(1);
     });
 

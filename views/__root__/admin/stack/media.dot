@@ -4,12 +4,27 @@
 
 <form class="container" method="POST">
     <div class="container d-flex px-0 pb-2">
-        <select class="custom-select custom-select-sm col-2 mr-2">
-            <option selected>Select a bulk action</option>
+        <select class="custom-select custom-select-sm col-2 mr-2" name="action">
+            <option value="null" selected>Select a bulk action</option>
+            {{? $$VIEW.query.access !== 'bin' }}
+            <option value="pinned">Pin</option>
+            <option value="hidden">Hide</option>
             <option value="recycled">Recycle</option>
+            {{??}}
+            <option value="restored">Restore</option>
+            <option value="deleted">Permanently Delete</option>
+            {{?}}
+
         </select>
-        <button class="btn btn-sm btn-outline-secondary" aria-label="Apply"
-                formaction="/admin/stack/docs?_method=PATCH" >Apply</button>
+        <button class="btn btn-sm btn-outline-primary" aria-label="Apply"
+                formaction="/admin/stack/posts?_method=PATCH" >Apply</button>
+        <div class="ml-auto">
+            {{? $$VIEW.query.access !== 'bin' }}
+            <a class="btn btn-sm btn-outline-success" href="{{= $$VIEW.route }}?access=bin">RECYCLE BIN</a>
+            {{??}}
+            <a class="btn btn-sm btn-outline-primary" href="{{= $$VIEW.route }}">BACK</a>
+            {{?}}
+        </div>
     </div>
     <table class="table table-sm table-hover">
         <thead>

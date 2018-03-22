@@ -20,7 +20,7 @@ const configsSchema         = new mongoose.Schema({
         num                 : { type: Number, default: 5 },
     },
 }, {
-    timestamps              : { createdAt: 'time.created', updatedAt: 'time.updated' },
+    timestamps              : { createdAt: 'time._created', updatedAt: 'time._updated' },
     versionKey              : false,
 });
 

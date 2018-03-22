@@ -50,10 +50,10 @@ UsersSchema.pre('save', function () {
 
 //// auto-update all posts associated with the author in dark (pre-hook)
 UsersSchema.pre('update', function () {
-    const raw = this.getUpdate().$set;
-    if (raw.nickname !== raw._nickname) mongoose.connection.db.collection('posts').update(
+    const _$update = this.getUpdate();
+    if (_$update.$set.nickname !== _$update.$set._nickname) mongoose.connection.db.collection('posts').update(
         { 'author._id': this.getQuery()._id },
-        { $set: { 'author.nickname': raw.nickname }},
+        { $set: { 'author.nickname': _$update.$set.nickname }},
         { multi: true }
     );
 });

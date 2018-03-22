@@ -32,7 +32,7 @@ const MediaSchema           = new mongoose.Schema({
     category                : { type: String, lowercase: true },
     tag                     : { type: String, lowercase: true },
 }, {
-    timestamps              : { createdAt: 'time.uploaded', updatedAt: 'time.updated' },
+    timestamps              : { createdAt: 'time.uploaded', updatedAt: 'time._updated' },
     versionKey              : '_revised',
 });
 

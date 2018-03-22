@@ -4,14 +4,27 @@
 
 <form class="container" method="POST">
     <div class="container d-flex px-0 pb-2">
-        <select class="custom-select custom-select-sm col-2 mr-2">
-            <option selected>Select a bulk action</option>
+        <select class="custom-select custom-select-sm col-2 mr-2" name="action">
+            <option value="null" selected>Select a bulk action</option>
+            {{? $$VIEW.query.access !== 'bin' }}
             <option value="pinned">Pin</option>
             <option value="hidden">Hide</option>
             <option value="recycled">Recycle</option>
+            {{??}}
+            <option value="restored">Restore</option>
+            <option value="deleted">Permanently Delete</option>
+            {{?}}
+
         </select>
-        <button class="btn btn-sm btn-outline-secondary" aria-label="Apply"
+        <button class="btn btn-sm btn-outline-primary" aria-label="Apply"
                 formaction="/admin/stack/posts?_method=PATCH" >Apply</button>
+        <div class="ml-auto">
+            {{? $$VIEW.query.access !== 'bin' }}
+            <a class="btn btn-sm btn-outline-success" href="{{= $$VIEW.route }}?access=bin">RECYCLE BIN</a>
+            {{??}}
+            <a class="btn btn-sm btn-outline-primary" href="{{= $$VIEW.route }}">UNTRASHED</a>
+            {{?}}
+        </div>
     </div>
     <table class="table table-sm table-hover">
         <thead>
@@ -34,11 +47,19 @@
                 <input id="{{= post._id }}" name="target" type="checkbox" value="{{= post._id }}">
                 <label for="{{= post._id }}"></label>
             </th>
-            <td>{{= post.title }}</td>
+            <td>
+                {{? !post.time._recycled }}
+                <a href="/posts/edit/{{= post._id }}">{{= post.title }}</a>
+                {{??}}
+                {{= post.title }}
+                {{?}}{{? !post.state.published }}<i class="fa fa-hourglass-half"></i>{{?}}                                   <!-- tofix: mongo virtual properties are not functioned here -->
+                {{? post.state.hidden }}<i class="fa fa-eye-slash"></i>{{?}}
+                {{? post.state.pinned }}<i class="fa fa-thumb-tack"></i>{{?}}
+            </td>
             <td>{{= post.category }}</td>
             <td>{{= post.tags }}</td>
             <td>{{= post.author.nickname }}</td>
-            <td>{{= new Date(post.time.created).toDateString() }}</td>
+            <td>{{= new Date(post.time._created).toDateString() }}</td>
         </tr>
         {{ }); }}{{?}}
         </tbody>

@@ -23,12 +23,12 @@ const PostRouter = new Device([{
 }, {
     route:          '/',
     controller:     posts.list,
-    setting:        { template: './theme/posts/index' },
+    setting:        { template: './theme/posts/index', handler: 'posts.multiple' },
 }]);
 
 
 // device settings
-PostRouter.setting.handler('posts');
+PostRouter.setting.handler('posts.singular');
 
 
 // router exports

@@ -3,14 +3,6 @@ const
 
 
 // ==============================
-//  FUNCTIONS
-// ==============================
-// ancillaries
-const { _U_ }               = require('../controllers/utilities/');
-
-
-
-// ==============================
 //  SCHEMA
 // ==============================
 const PostsSchema           = new mongoose.Schema({
@@ -31,21 +23,23 @@ const PostsSchema           = new mongoose.Schema({
     content                 : { type: String, required: [true, 'is required'], trim: true },
     category                : { type: String, lowercase: true, default: 'unclassified' },
     tags                    : { type: String, lowercase: true },
-    visibility: {
-        hidden              : { type: Boolean, default: false },    // todo: add anti-robot HTML tag
-        pinned              : { type: Boolean, default: false },
-        protected           : { type: Boolean, default: false },    // todo: add pw
+    state: {
+        published           : { type: Boolean, required: true, default: true },
+        protected           : { type: Boolean, required: true, default: false },                                        // todo: add pw
+        hidden              : { type: Boolean, required: true, default: false },                                        // todo: add anti-robot HTML tag
+        pinned              : { type: Boolean, required: true, default: false },
     },
-    status                  : { type: String, default: 'published',
-                                enum: ['drafted','published', 'recycled'] },
+    time: {
+        _recycled           : { type: Date },
+    },
 }, {
-    timestamps              : { createdAt: 'time.created', updatedAt: 'time.updated' },
+    timestamps              : { createdAt: 'time._created', updatedAt: 'time._updated' },
     versionKey              : '_revised',
 })
     .index({ 'tags' : 1 })
-    .index({ 'status' : 1 })
     .index({ 'category' : -1 })
-    .index({ 'time.updated' : -1 })
+    .index({ 'time._updated' : -1 })
+    .index({ 'time._recycled' : 1 }, { expireAfterSeconds: 14 * 24 * 3600 * 1000 })
     .index({ 'title': 'text', 'content': 'text', 'category': 'text', 'tags' : 'text' });
 
 
@@ -59,6 +53,24 @@ PostsSchema.pre('findOneAndUpdate', function () {
     this.findOneAndUpdate({}, { $inc: { _revised: 1 }});
 });
 
+
+// recycle setter (pre-hook)
+PostsSchema.pre('update', function () {
+    const _$update = this.getUpdate();
+    if (_$update.$set['state.pended'] === true) _$update.$set['state.published'] = false;
+    if (_$update.$set['state.recycled'] === true) _$update.$set = { 'time._recycled': Date.now() };
+    if (_$update.$set['state.recycled'] === false) _$update.$set = { 'time._recycled': null };
+});
+
+
+// virtual property
+PostsSchema.virtual('state.recycled').get(function () {
+    return !!this.time._recycled;
+});
+
+PostsSchema.virtual('time._expired').get(function () {
+    return this.time._recycled ? new Date(this.time._recycled.getTime() + 14 * 24 * 3600 * 1000) : null;
+});
 
 
 // exports

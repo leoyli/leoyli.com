@@ -1,3 +1,33 @@
+### 0.8.0-dev.12 / 2018-03-21
+
+> App
+- Renamed all time fields lead by `_`.
+- Revised 'date range' query from updated-time-based to created-time-based in 'fetch' controller.
+- Added `admin.stack.patch` router controller.
+- Introduced the 'recycling bin' feature:
+  - combined `status` and `visibility` into `state` field;
+  - added `admin.stack.patch` router;
+  - revised `posts` and `admin` router controllers;
+  - revised 'posts' model:
+    - added with `state.recycled` virtual field in 'posts' model;
+    - added with `time._expired` virtual field in 'posts' model;
+    - hooked `update` event for mongo query modifications in 'posts' model;
+  - Revised 'fetch' controller:
+    - populated `req.query` in `$$VIEW` for further template usages;
+    - revised `exp_matchFilter` for supporting the recycling bin feature;
+  - Revised 'template' view handler:
+    - split `handler.postHandler` to `handler.posts.singular` and `handler.posts.multiple`.
+
+> Test
+- Updated 'fetch.test' and 'app.test' w.r.t. the changes.
+
+> UI
+- Revised 'stack/media' and 'stack/posts' templates:
+  - added the 'bin mode' whenever `?access=bin` URL query options is met;
+  - added `recycle` and `permanently delete` actions in the 'bin mode'.
+- Updated other templates w.r.t. the changes.
+
+
 ### 0.8.0-dev.11 / 2018-03-20
 > App
 - Revised 'template' view handler to accommodate dynamic template assignment based on `req.params`.

@@ -12,7 +12,7 @@ const PageRouter = new Device([{
 }, {
     route:          '/search/:search',
     controller:     pages.search,
-    setting:        { template: './theme/posts/search', handler: 'posts', crawler: false },
+    setting:        { template: './theme/posts/search', handler: 'posts.multiple', crawler: false },
 }]);
 
 

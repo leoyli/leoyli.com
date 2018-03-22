@@ -8,18 +8,18 @@
 
     <!-- content -->
     <article class="col-9" id="{{= $$POST._id }}">
-        <h2>{{? $$POST.status === 'drafted' }} [DRAFT] {{?}}{{= $$POST.title }}</h2>
+        <h2>{{? !$$POST.state.published }} [DRAFT] {{?}}{{= $$POST.title }}</h2>
         <header class="row">
             <div class="col-md-9">
                 {{= $$POST.author.nickname }}
                 ｜<a href="/posts/edit/{{= $$POST._id }}">(edit)</a>
                 ｜<a href="/posts/class/{{= $$POST.category }}">{{= $$POST.category }}</a>
                 ｜Revised: {{= $$POST._revised }}
-                {{? $$POST.status === 'drafted' }}｜<i class="fa fa-hourglass-half"></i>{{?}}
-                {{? $$POST.visibility.hidden }}｜<i class="fa fa-eye-slash"></i>{{?}}
+                {{? !$$POST.state.published }}｜<i class="fa fa-hourglass-half"></i>{{?}}
+                {{? $$POST.state.hidden }}｜<i class="fa fa-eye-slash"></i>{{?}}
             </div>
             <time class="col-md-3 text-lg-right"
-                  datetime="{{= $$POST.time.updated }}">{{= new Date($$POST.time.updated).toDateString() }}</time>
+                  datetime="{{= $$POST.time._updated }}">{{= new Date($$POST.time._updated).toDateString() }}</time>
         </header>
         {{? $$POST.featured }}
             <figure class="_featured py-2">

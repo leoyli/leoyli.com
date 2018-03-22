@@ -7,7 +7,7 @@ module.exports = admin = {};
 // ==============================
 const { _M_ } = require('../middleware/plugins');
 const { _U_ } = require('../utilities/');
-const { configsModel, mediaModel } = require('../../models/');
+const { configsModel, mediaModel, postsModel } = require('../../models/');
 const { fetch } = require('../middleware/fetch');
 
 
@@ -24,7 +24,7 @@ admin.configs = {
         return next();
     },
     patch: async (req, res) => {
-        await configsModel.updateSettings(req.body.configs);                                                             // tofix: pickup updated variables to avoid injections
+        await configsModel.updateSettings(req.body.configs);                                                            // tofix: pickup updated variables to avoid injections
         return res.redirect('back');
     },
 };
@@ -46,9 +46,16 @@ admin.stack = {
     get: (req, res, next) => {
         const collection = req.params['stackType'].toLowerCase();
         if (['posts', 'media'].indexOf(collection) !== -1) {
-            _M_.setTitleTag(collection)(req, res);                                                                       // todo: capitalize
+            _M_.setTitleTag(collection)(req, res);                                                                      // todo: capitalize
             return fetch(collection, { num: 10 })(req, res, next);
         } else throw new _U_.error.HttpError(404);
     },
-    patch: async (req, res) => res.redirect('back'),
+    patch: async (req, res) => {
+        const $update = { $set: {}};
+        if (req.body.action === 'restored') $update.$set = { [`state.recycled`]: false };
+        else $update.$set = { [`state.${req.body.action}`]: true };
+
+        if (req.body.action) await postsModel.update({ _id: { '$in' : req.body.target }}, $update, { multi: true });
+        return res.redirect('back');
+    },
 };

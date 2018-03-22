@@ -20,12 +20,12 @@ function fetch(collection, { page, num, sort } = {}) {
 /**
  * construct Mongo query expression for search operations
  * @param {string} collection               - name of the queried mongoDB collection
- * @param {object} params                  - Express.js params object
- * @param {object} query                   - Express.js query object
- * @param {number} num                     - pagination display unit
- * @param {number} page                    - pagination pin point
- * @param {object} sort                    - sorting parameters        - todo: sorting options in setting pages
- * @return {object} { post, meta }         - sorted docs and fetching meta(count, num, now, end, date, sort)
+ * @param {object} params                   - Express.js params object
+ * @param {object} query                    - Express.js query object
+ * @param {number} num                      - pagination display unit
+ * @param {number} page                     - pagination pin point
+ * @param {object} sort                     - sorting parameters                                                        // todo: sorting options in setting pages
+ * @return {object} { post, meta }          - sorted docs and fetching meta(count, num, now, end, date, sort)
  */
 function getAggregationQuery(collection, params, query, page, num, sort) {
     // query expressions
@@ -47,7 +47,7 @@ function getAggregationQuery(collection, params, query, page, num, sort) {
         { $project  : { _id: 0,
                 list: { $slice: ['$list', { $multiply: [{ $add: [$now, -1] }, $num] }, $num] },
                 meta: { count: '$count', num: { $literal: $num }, now: $now, end: $end,
-                    sort: { $literal: $sort }, period: { $literal: $filter['time.updated'] || {} }}},
+                    sort: { $literal: $sort }, period: { $literal: $filter['time._updated'] || {} }}},
         },
     ];
 }
@@ -65,9 +65,16 @@ function exp_matchFilter(collection, params, query) {
         ? { $text : { $search: params.search }} : params.hasOwnProperty('category')
             ? { category : params.category } : {};
 
-    if (query.date) $filter['time.updated'] = exp_dateRange(...getDateRangeArray(query.date));
-    if (collection === 'posts') return { ...$filter, status: { $eq: 'published' }, 'visibility.hidden': false };
-    else return $filter;
+    if (query.date) $filter['time._created'] = exp_dateRange(...getDateRangeArray(query.date));                         // tofix: query time zone problem
+    if (collection === 'posts') {
+        if (!params.stackType) {
+            $filter['state.hidden'] = false;
+            $filter['state.published'] = true;
+            $filter['time._recycled'] = { $eq: null };
+        } else $filter['time._recycled'] = query.access === 'bin' ? { $ne: null } : { $eq: null };
+    }
+
+    return $filter;
 }
 
 /**
@@ -87,8 +94,8 @@ function exp_docFieldMask(params) {
  * @return {object}                         - part-of expression in $match stage
  */
 function exp_sortRule(sort) {
-    const $sort = Object.assign({ 'visibility.pinned': -1 }, sort || {});
-    if ($sort['time.updated'] !== 1) $sort['time.updated'] = -1;
+    const $sort = Object.assign({ 'state.pinned': -1 }, sort || {});
+    if ($sort['time._updated'] !== 1) $sort['time._updated'] = -1;
     return $sort;
 }
 

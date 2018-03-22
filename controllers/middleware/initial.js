@@ -15,6 +15,7 @@ const generic = async (req, res, next) => {
         flash   : { error: req.flash('error'), info: req.flash('info'), action: req.flash('action') },
         title   : res.locals.$$SITE.title,
         route   : req.baseUrl + req.path,
+        query   : req.query,
         user    : req.session.user,
     };
 
@@ -37,10 +38,11 @@ const postNormalizer = async (req, res, next) => {
     }
     post.featured   = _U_.string.inspectFileURL(post.featured, res.locals.$$SITE.sets.imageTypes, { raw: false });
     post.title      = _U_.string.escapeChars(post.title);
-    post.content    = _U_.string.escapeChars(post.content);                             // tofix: using sanitizer
+    post.content    = _U_.string.escapeChars(post.content);                                                             // tofix: using sanitizer
     post.category   = _U_.string.toKebabCase(post.category) || undefined;
     post.tags       = _U_.string.toKebabCase(post.tags) || undefined;
-    post.visibility = _U_.object.assignDeep({}, post.visibility || 'normal', true);     // todo: split the assignment
+    if (post.state) post.state.forEach(state => post[`state.${state}`] = true);
+    delete post.state;
     return next();
 };
 

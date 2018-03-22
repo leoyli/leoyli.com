@@ -10,8 +10,12 @@ const templateHandler = ($template, $handler) => (req, res) => {
     delete req.session.chest;
 
     switch ($handler) {
-        case 'posts':
-            return handler.postsHandler(_template, list, post, meta)(req, res);
+        case 'posts.singular':
+            return handler.posts.singular(_template, post, meta)(req, res);
+        case 'posts.multiple':
+            return handler.posts.multiple(_template, list || [], meta)(req, res);
+        case 'stack':
+            return handler.posts.multiple(_template, list || [], meta)(req, res);
         default:
             return res.render(_template);
     }
@@ -19,14 +23,19 @@ const templateHandler = ($template, $handler) => (req, res) => {
 
 
 // handlers
-const handler = {};
+const handler = { posts: {}};
 
-handler.postsHandler = (template, $$LIST, $$POST, $$META) => (req, res) => {
-    if (!$$LIST && !$$POST) throw new _U_.error.HttpError(404);
+handler.posts.singular = (template, $$POST, $$META) => (req, res) => {
+    if (!$$POST || $$POST && $$POST.state && $$POST.state.recycled) throw new _U_.error.HttpError(404);
+    else if (!req.session.user && $$POST.state && !$$POST.state.published) throw new _U_.error.HttpError(404);
 
     // title-tag
     if ($$POST && $$POST.title) _M_.setTitleTag($$POST.title, { root: true })(req, res);
 
+    return res.render(template, { $$POST, $$META });
+};
+
+handler.posts.multiple = (template, $$LIST, $$META) => (req, res) => {
     // pagination
     if ($$META) {
         const paginatedURL = `${res.locals.$$VIEW.route}?num=${$$META.num}&page='`;
@@ -34,7 +43,7 @@ handler.postsHandler = (template, $$LIST, $$POST, $$META) => (req, res) => {
         if ($$META.now < $$META.end)    res.locals.$$VIEW.next = paginatedURL + ($$META.now + 1);
     }
 
-    return res.render(template, { $$LIST, $$POST, $$META });
+    return res.render(template, { $$LIST, $$META });
 };
 
 

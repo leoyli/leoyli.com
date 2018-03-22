@@ -43,31 +43,31 @@
     <fieldset id="sidebar" class="col-lg-3 mt-4">
         <div class="input-group input-group-sm mb-2">
             <div class="input-group-prepend col-2 px-0">
-                <label class="input-group-text w-100" for="status">
-                    <i class="fa fa-pencil w-100" title="Status"></i>
+                <label class="input-group-text w-100" for="state">
+                    <i class="fa fa-pencil w-100" title="State"></i>
                 </label>
             </div>
-            <select id="status" class="custom-select col-8" name="post[status]" aria-label="Status">
-                <option value="published" {{? $$POST.status === 'published'}}selected{{?}}>Publishing</option>
-                <option value="drafted" {{? $$POST.status === 'drafted'}}selected{{?}}>Pending</option>
+            <select id="state" class="custom-select col-8" name="post[state]" aria-label="State">
+                <option value="pended">Pending</option>
+                <option value="published" {{? $$POST.state && $$POST.state.published }}selected{{?}}>Published</option>
             </select>
         </div>
         <div class="input-group input-group-sm my-2">
             <div class="input-group-prepend col-2 px-0">
-                <label class="input-group-text w-100" for="visibility">
-                    <i class="fa fa-eye w-100" title="Visibility"></i>
+                <label class="input-group-text w-100" for="state">
+                    <i class="fa fa-eye w-100" title="State"></i>
                 </label>
             </div>
             <!--// todo: split the assignment-->
-            <select id="visibility" class="custom-select col-8" name="post[visibility]" aria-label="Visibility">
+            <select id="visibility" class="custom-select col-8" name="post[state]" aria-label="Visibility">
                 <option value="normal"
                         selected>Normal</option>
                 <option value="pinned"
-                        {{? $$POST.visibility && $$POST.visibility.pinned }}selected{{?}}>Pined</option>
+                        {{? $$POST.state && $$POST.state.pinned }}selected{{?}}>Pined</option>
                 <option value="hidden"
-                        {{? $$POST.visibility && $$POST.visibility.hidden }}selected{{?}}>Hidden</option>
+                        {{? $$POST.state && $$POST.state.hidden }}selected{{?}}>Hidden</option>
                 <option value="protected"
-                        {{? $$POST.visibility && $$POST.visibility.protected}}selected{{?}}>Protected</option>
+                        {{? $$POST.state && $$POST.state.protected }}selected{{?}}>Protected</option>
             </select>
         </div>
     </fieldset>

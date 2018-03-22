@@ -15,8 +15,8 @@
         {{??}}{{ $$LIST.forEach(function(post) { }}
         <article class="mb-4 pb-4" id="{{= post._id }}">
             <h2 class="_title">
-                {{? post.visibility.pinned }} [PINNED] {{?}}
-                {{? post.status === 'drafted' }} [DRAFT] {{?}}
+                {{? post.state.pinned }} [PINNED] {{?}}
+                {{? !$$POST.state.published }} [DRAFT] {{?}}
                 <a href="/posts/{{= post.canonical }}">{{= post.title }}</a>
             </h2>
             <header class="row">
@@ -25,11 +25,11 @@
                     ｜<a href="/posts/edit/{{= post._id }}">(edit)</a>
                     ｜<a href="/posts/class/{{= post.category }}">{{= post.category }}</a>
                     ｜Revised: {{= post._revised }}
-                    {{? post.status === 'drafted' }}｜<i class="fa fa-hourglass-half"></i>{{?}}
-                    {{? post.visibility.hidden }}｜<i class="fa fa-eye-slash"></i>{{?}}
+                    {{? !$$POST.state.published }}｜<i class="fa fa-hourglass-half"></i>{{?}}
+                    {{? post.state.hidden }}｜<i class="fa fa-eye-slash"></i>{{?}}
                 </div>
                 <time class="col-md-3 text-lg-right"
-                      datetime="{{= post.time.updated }}">{{= new Date(post.time.updated).toDateString() }}</time>
+                      datetime="{{= post.time._updated }}">{{= new Date(post.time._updated).toDateString() }}</time>
             </header>
             {{? post.featured }}
             <figure class="_featured py-2">

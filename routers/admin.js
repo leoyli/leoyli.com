@@ -21,7 +21,7 @@ const DashboardRouter = new Device([{
 }, {
     route:          '/stack/:stackType',
     controller:     admin.stack,
-    setting:        { title: 'Content Stack', template: './__root__/admin/stack/:stackType', handler: 'posts' },
+    setting:        { title: 'Content Stack', template: './__root__/admin/stack/:stackType', handler: 'stack' },
 }]);
 
 
