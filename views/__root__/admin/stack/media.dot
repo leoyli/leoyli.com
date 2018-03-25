@@ -22,7 +22,7 @@
             {{? $$VIEW.query.access !== 'bin' }}
             <a class="btn btn-sm btn-outline-success" href="{{= $$VIEW.route }}?access=bin">RECYCLE BIN</a>
             {{??}}
-            <a class="btn btn-sm btn-outline-primary" href="{{= $$VIEW.route }}">BACK</a>
+            <a class="btn btn-sm btn-outline-primary" href="{{= $$VIEW.route }}">UNTRASHED</a>
             {{?}}
         </div>
     </div>
@@ -43,8 +43,9 @@
         {{ $$LIST.forEach(function(doc) { }}
         <tr>
             <th class="text-center" scope="row">
-                <input id="{{= doc._id }}" name="target" type="checkbox" value="{{= doc._id }}">
-                <label for="{{= doc._id }}"></label>
+                <label for="{{= doc._id }}" class="m-0">
+                    <input id="{{= doc._id }}" name="target" type="checkbox" value="{{= doc._id }}">
+                </label>
             </th>
             <td>{{= doc.title }}</td>
             <td>{{= doc.description }}</td>

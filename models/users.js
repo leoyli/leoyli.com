@@ -35,6 +35,7 @@ const UsersSchema           = new mongoose.Schema({
 }, {
     timestamps              : { createdAt: 'time._registered', updatedAt: 'time._updated' },
     versionKey              : false,
+    toJSON                  : { virtuals: true },
 });
 
 
@@ -101,6 +102,14 @@ UsersSchema.methods.changePassword = function (...arg) {
     return selfPromisify(_changePassword, arg, this);
 };
 
+
+//// virtual method for user-post association
+//// to-use: usersModel.findOne({}).populate({ path: 'posts', match: { 'time._recycled': { $eq: null } }}).exec();
+UsersSchema.virtual('posts', {
+    ref         : 'posts',
+    localField  : '_id',
+    foreignField: 'author._id',
+});
 
 
 // exports

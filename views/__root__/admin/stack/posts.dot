@@ -44,15 +44,16 @@
         {{ $$LIST.forEach(function(post) { }}
         <tr>
             <th class="text-center" scope="row">
-                <input id="{{= post._id }}" name="target" type="checkbox" value="{{= post._id }}">
-                <label for="{{= post._id }}"></label>
+                <label for="{{= post._id }}" class="m-0">
+                    <input id="{{= post._id }}" name="target" type="checkbox" value="{{= post._id }}">
+                </label>
             </th>
             <td>
                 {{? !post.time._recycled }}
                 <a href="/posts/edit/{{= post._id }}">{{= post.title }}</a>
                 {{??}}
                 {{= post.title }}
-                {{?}}{{? !post.state.published }}<i class="fa fa-hourglass-half"></i>{{?}}                                   <!-- tofix: mongo virtual properties are not functioned here -->
+                {{?}}{{? post.state.pended }}<i class="fa fa-hourglass-half"></i>{{?}}                                   <!-- tofix: mongo virtual properties are not functioned here -->
                 {{? post.state.hidden }}<i class="fa fa-eye-slash"></i>{{?}}
                 {{? post.state.pinned }}<i class="fa fa-thumb-tack"></i>{{?}}
             </td>

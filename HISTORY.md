@@ -1,5 +1,15 @@
-### 0.8.0-dev.12 / 2018-03-21
+### 0.8.0-dev.13 / 2018-03-25
+> App
+- Hydrated the documents returned from aggregation to mongoose documents in `fetch` controller.
+- Added `state.recycled` virtual field in 'posts' model.
+- Added `posts` virtual field to populate the post under a specific user{mongoose.document} in 'users' model.
 
+> UI
+- Ensured the accessibility of mongoose virtual fields in templates.
+- Replaced `!state.published` by more readable `state.pended` virtual object.
+
+
+### 0.8.0-dev.12 / 2018-03-21
 > App
 - Renamed all time fields lead by `_`.
 - Revised 'date range' query from updated-time-based to created-time-based in 'fetch' controller.
@@ -9,8 +19,8 @@
   - added `admin.stack.patch` router;
   - revised `posts` and `admin` router controllers;
   - revised 'posts' model:
-    - added with `state.recycled` virtual field in 'posts' model;
-    - added with `time._expired` virtual field in 'posts' model;
+    - added `state.recycled` virtual field in 'posts' model;
+    - added `time._expired` virtual field in 'posts' model;
     - hooked `update` event for mongo query modifications in 'posts' model;
   - Revised 'fetch' controller:
     - populated `req.query` in `$$VIEW` for further template usages;

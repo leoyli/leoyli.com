@@ -57,13 +57,17 @@ PostsSchema.pre('findOneAndUpdate', function () {
 // recycle setter (pre-hook)
 PostsSchema.pre('update', function () {
     const _$update = this.getUpdate();
-    if (_$update.$set['state.pended'] === true) _$update.$set['state.published'] = false;
+    if (_$update.$set['state.pended'] === true) _$update.$set['state.published'] = false;                               // tofix: initial post ist not worked
     if (_$update.$set['state.recycled'] === true) _$update.$set = { 'time._recycled': Date.now() };
     if (_$update.$set['state.recycled'] === false) _$update.$set = { 'time._recycled': null };
 });
 
 
 // virtual property
+PostsSchema.virtual('state.pended').get(function () {
+    return !this.state.published;
+});
+
 PostsSchema.virtual('state.recycled').get(function () {
     return !!this.time._recycled;
 });

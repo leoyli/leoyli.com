@@ -1,11 +1,13 @@
 
 
 
-function fetch(collection, { page, num, sort } = {}) {
-    return (req, res, next) => require(`../../models/`)[`${collection}Model`]
+function fetch(collection, { page, num, sort } = {}) {                                                                  // todo: methodify into mongoose user document
+    const $Model = require(`../../models/`)[`${collection}Model`];
+    return (req, res, next) => $Model
         .aggregate(getAggregationQuery(collection, req.params, req.query, page, num || res.locals.$$SITE.num, sort))
         .then(docs => docs[0])
         .then(async (result) => {
+            if (Array.isArray(result.list)) result.list = result.list.map(doc => $Model.hydrate(doc));                  // note: cast all raw JSON to mongoose document
             if (typeof next !== 'function') return result;
             req.session.chest = result;
             return next();

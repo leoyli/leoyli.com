@@ -55,12 +55,9 @@ exports.posts.show = {
         return res.redirect(`/posts/${req.session.chest.post.canonical}`);
     },
     get: async (req, res, next) => {                                                                                    // tofix: post not found page
-        if (!req.session.chest) {
-            console.log(123);
-            req.session.chest = {
-                post : await postsModel.findOne({ canonical: req.params[0], 'time._recycled': { $eq: null }})
-            };
-        } return next();
+        if (!req.session.chest) req.session.chest = {
+            post : await postsModel.findOne({ canonical: req.params[0], 'time._recycled': { $eq: null }})};
+        return next();
     },
 };
 
