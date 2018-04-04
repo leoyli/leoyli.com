@@ -1,3 +1,9 @@
+### 0.8.0-dev.14.1 / 2018-04-03
+> App
+- Set 'Access-Control-Allow-Origin' HttpHeader pointed to 'http://localhost:8080' in api router controller.
+- Removed unrelated modules from api router controller.
+
+
 ### 0.8.0-dev.14 / 2018-04-03
 > App
 - Added api router and controller.
