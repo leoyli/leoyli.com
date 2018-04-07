@@ -20,11 +20,11 @@ api.stack = {
       return res.json(await fetch(collection, { num: 10 })(req, res));
     } else throw new _U_.error.HttpError(404);
   },
-  PATCH: async (req, res) => {
+  POST: async (req, res) => {
     return res.json({ ok: true });
   },
   OPTIONS: async(req, res) => {
-    res.set('Allow', 'GET, PATCH, OPTIONS');
+    res.set('Allow', 'GET, POST, OPTIONS');
     res.sendStatus(200);
   },
 };

@@ -1,3 +1,10 @@
+### 0.8.0-dev.15.1 / 2018-04-06
+> App
+- Added `Access-Control-Allow-Methods` http header.
+- Updated 'API/OPTIONS' router.
+- Changed from 'API/PITCH' to 'API/POST' router.
+
+
 ### 0.8.0-dev.15 / 2018-04-06
 > App
 - Changed all from 4-spaced indented to 2-spaced.

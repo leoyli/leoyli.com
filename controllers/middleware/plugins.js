@@ -18,6 +18,7 @@ exports._M_.doNotCrawled = (req, res, next) => {
 exports._M_.APIHttpHeaders = (req, res, next) => {
   res.set('x-robots-tag', 'none');
   res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.set('Access-Control-Allow-Headers', 'Content-Type, Cache-Control');
   return next();
 };
