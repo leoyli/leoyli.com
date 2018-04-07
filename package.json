@@ -14,7 +14,7 @@
     "connect-mongo": "^2.0.1",
     "debug": "^3.1.0",
     "dot": "^1.1.2",
-    "express": "^4.16.2",
+    "express": "^4.16.3",
     "express-session": "^1.15.6",
     "lodash": "^4.17.5",
     "marked": "^0.3.12",

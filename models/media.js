@@ -1,5 +1,5 @@
 const
-    mongoose                = require('mongoose');
+  mongoose           = require('mongoose');
 
 
 
@@ -7,33 +7,33 @@ const
 //  FUNCTIONS
 // ==============================
 // ancillaries
-const { _U_ }               = require('../controllers/utilities/');
+const { _U_ }        = require('../controllers/utilities/');
 
 
 
 // ==============================
 //  SCHEMA
 // ==============================
-const MediaSchema           = new mongoose.Schema({
-    author: {
-        _id: {
-            type            : mongoose.Schema.Types.ObjectId,
-            ref: 'users',
-        },
-        nickname            : { type: String },
+const MediaSchema    = new mongoose.Schema({
+  author: {
+    _id: {
+      type           : mongoose.Schema.Types.ObjectId,
+      ref: 'users',
     },
-    file: {
-        type                : { type: String },
-        path                : { type: String },
-        name                : { type: String },
-    },
-    title                   : { type: String, trim: true, required: [true, 'is required'] },
-    description             : { type: String, trim: true, required: [true, 'is required'] },
-    category                : { type: String, lowercase: true },
-    tag                     : { type: String, lowercase: true },
+    nickname         : { type: String },
+  },
+  file: {
+    type             : { type: String },
+    path             : { type: String },
+    name             : { type: String },
+  },
+  title              : { type: String, trim: true, required: [true, 'is required'] },
+  description        : { type: String, trim: true, required: [true, 'is required'] },
+  category           : { type: String, lowercase: true },
+  tag                : { type: String, lowercase: true },
 }, {
-    timestamps              : { createdAt: 'time.uploaded', updatedAt: 'time._updated' },
-    versionKey              : '_revised',
+  timestamps         : { createdAt: 'time.uploaded', updatedAt: 'time._updated' },
+  versionKey         : '_revised',
 });
 
 
@@ -44,7 +44,7 @@ const MediaSchema           = new mongoose.Schema({
 // action hooks
 // version counter (pre-hook)
 MediaSchema.pre('findOneAndUpdate', function () {
-    this.findOneAndUpdate({}, { $inc: { _revised: 1 }});
+  this.findOneAndUpdate({}, { $inc: { _revised: 1 }});
 });
 
 

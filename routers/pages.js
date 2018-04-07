@@ -7,12 +7,12 @@ const pages = require('../controllers/routers/pages');
 //  ROUTER HUB
 // ==============================
 const PageRouter = new Device([{
-    route:          '/',
-    controller:     (req, res) => res.render('./theme/index'),
+  route:          '/',
+  controller:     (req, res) => res.render('./theme/index'),
 }, {
-    route:          '/search/:search',
-    controller:     pages.search,
-    setting:        { template: './theme/posts/search', handler: 'posts.multiple', crawler: false },
+  route:          '/search/:search',
+  controller:     pages.search,
+  setting:        { template: './theme/posts/search', handler: 'posts.multiple', crawler: false },
 }]);
 
 

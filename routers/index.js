@@ -37,6 +37,7 @@ function _useRoutes(app) {
   // error
   app.get('*', (req, res, next) => next(new HttpError(404)));
   app.use(require('../controllers/views/error'));
+  app.use((err, req, res, next) => res.sendStatusl(500));
 }
 
 

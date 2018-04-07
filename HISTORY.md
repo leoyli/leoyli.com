@@ -1,3 +1,23 @@
+### 0.8.0-dev.15 / 2018-04-06
+> App
+- Changed all from 4-spaced indented to 2-spaced.
+- Added `APIHttpHeaders` plugin middleware.
+- Added `proxyfiedForCaseInsensitiveAccess` object method in utilities.
+- Updated 'express' lib.
+- Updated `caseInsensitiveQuery` plugin middleware.
+- Updated routers:
+  - renamed all truthy HTTP methods in upper case for all controllers;
+  - revised 'router' engine for handling the method name changes
+    (case-insensitive w.r.t. method name);
+  - pre-hooked `APIHttpHeaders` on 'api' router;
+  - added 'API/OPTIONS' router for handling preflight fetching;
+  - added 'API/PATCH' router.
+  - added the very last error handler in the case of unhandled/unreachable errors.
+
+> Test
+- Added `proxyfiedForCaseInsensitiveAccess` unit test.
+
+
 ### 0.8.0-dev.14.1 / 2018-04-03
 > App
 - Set 'Access-Control-Allow-Origin' HttpHeader pointed to 'http://localhost:8080' in api router controller.

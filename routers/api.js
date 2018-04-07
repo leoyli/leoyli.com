@@ -13,6 +13,7 @@ const APIRouter = new Device([{
 
 
 // pre-used middleware
+APIRouter.hook('pre', require('../controllers/middleware/plugins')._M_.APIHttpHeaders);
 APIRouter.setting = { authenticated : false };
 
 

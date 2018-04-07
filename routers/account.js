@@ -8,16 +8,16 @@ const { account } = require('../controllers/routers/account');
 //  ROUTER HUB
 // ==============================
 const UserRouter = new Device([{
-    route:          '/signup',
-    controller:     account.signup,
-    setting:        { title: 'Sign Up', template: './__root__/account/signup' },
+  route:          '/signup',
+  controller:     account.signup,
+  setting:        { title: 'Sign Up', template: './__root__/account/signup' },
 }, {
-    route:          '/signin',
-    controller:     account.signin,
-    setting:        { title: 'Sign In', template: './__root__/account/signin' },
+  route:          '/signin',
+  controller:     account.signin,
+  setting:        { title: 'Sign In', template: './__root__/account/signin' },
 }, {
-    route:          '/signout',
-    controller:     account.signout,
+  route:          '/signout',
+  controller:     account.signout,
 }]);
 
 
