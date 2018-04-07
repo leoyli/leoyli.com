@@ -4,51 +4,53 @@
 const
   path                    = require('path'),
   express                 = require('express'),
-  session                 = require('express-session'),
   mongoose                = require('mongoose'),
+  session                 = require('express-session'),
   MongoStore              = require('connect-mongo')(session),
   passport                = require('passport'),
+  logger                  = require('morgan'),
+  bodyParser              = require('body-parser'),
+  flash                   = require('connect-flash'),
+  methodOverride          = require('method-override'),
+  favicon                 = require('serve-favicon');
   app = express();
 
 
 
 // ==============================
-//  SERVER
+//  SERVICES AGENT
 // ==============================
-// security
-app.set('x-powered-by', false);
+const routerAgent         = require('./services/routers');
+const passportAgent       = require('./services/passport');
+const securityHeaderAgent = require('./services/security');
 
 
-// static   // note: have to set prior to the session
+
+// ==============================
+//  SERVICES QUEUE
+// ==============================
+/** security **/
+securityHeaderAgent(app);
+
+
+/** static **/
 app.use(express.static(path.join(__dirname, './public'), {
   setHeaders: (res, path, stat) => res.set('x-robots-tag', 'none'),
 }));
 
 
-// dynamic
-app.engine('dot', require('./controllers/engines/view').__express);
-app.set('view engine', 'dot');
-app.set('views', path.join(__dirname, './views'));
-
-
-// ==============================
-//  DATABASE
-// ==============================
-// connection
+/** database **/
 mongoose.connect(process.env['DB']);
+if (process.env['NODE_ENV'] !== 'test') require('./models/').configsModel.initialize();
 
 
-// initialization
-const { configsModel, usersModel } = require('./models/');
-if (process.env['NODE_ENV'] !== 'test') configsModel.initialize();
-
-
-// session
+/** session **/
 app.use(session({
+  name: '__SESSION__',
   secret: process.env['SECRET'],
   saveUninitialized: false,
   resave: false,
-  // cookie: { secure: true },
+  cookie: (process.env['NODE_ENV'] === 'test') ? {} : { secure: true, httpOnly: true },                                 // note: secure === true only allows HTTPS and leading to test fail
   store: new MongoStore({
     mongooseConnection: mongoose.connection,
     autoRemove: 'native',
@@ -56,21 +58,39 @@ app.use(session({
 }));
 
 
-// passport
-passport.use(usersModel.createStrategy());
-passport.serializeUser(usersModel.serializeUser());
-passport.deserializeUser(usersModel.deserializeUser());
+/** passport **/
+passportAgent(passport);
+
+
+/** debugger **/
+if (process.env['NODE_ENV'] === 'dev') app.use(logger('dev'));
+
+
+/** API **/
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ type: 'application/json' }));
+app.use('/api', require('./routers/').APIRouter);
+
+
+/** UI **/
+app.engine('dot', require('./controllers/engines/view').__express);
+app.set('view engine', 'dot');
+app.set('views', path.join(__dirname, './views'));
+app.use(flash());
+app.use(methodOverride('_method'));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(require('./controllers/middleware/initial'));
+if (process.env['NODE_ENV'] === 'dev' || 'test') app.use('/seed', require('./routers/seed'));
+
+
+/** routers **/
+routerAgent(app);
+
+
+/** error-handlers **/
+app.use((err, req, res, next) => res.sendStatus(500));
 
 
 
-// ==============================
-//  ROUTES
-// ==============================
-require('./routers').init(app);
-
-
-
-// ==============================
-//  APP EXPORTS
-// ==============================
+// exports
 module.exports = (process.env['NODE_ENV'] === 'test') ? { app, mongoose } : app;

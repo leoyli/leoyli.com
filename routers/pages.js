@@ -8,7 +8,8 @@ const pages = require('../controllers/routers/pages');
 // ==============================
 const PageRouter = new Device([{
   route:          '/',
-  controller:     (req, res) => res.render('./theme/index'),
+  controller:     pages.landing,
+  setting:        { template: './theme/index' },
 }, {
   route:          '/search/:search',
   controller:     pages.search,

@@ -31,6 +31,7 @@ describe('Bundle: router.js', () => {
   const mockController2 = [() => { return 0 }, () => { return 1 }];
   const mockSetting1 = { title: 'test', authenticated: true, authorized: true, template: './test' };
   const mockSetting2 = { title: 'test', titleOption: { root: true }, crawler: false };
+  const mockSetting3 = { cache: false };
 
   test('Fn: stackHttpMethods: Should normalize into a method array in the anti-alphabetical order', () => {
     const test = [{ controller: mockController1 }, { controller: mockController1, method: ['pull'], alias: '/' }];
@@ -41,11 +42,12 @@ describe('Bundle: router.js', () => {
   });
 
   test('Fn: loadRoutePlugins: Should stack a queue from settings', () => {
-    const test = [mockSetting1, mockSetting2];
+    const test = [mockSetting1, mockSetting2, mockSetting3];
     const result = test.map(obj => loadRoutePlugins(obj));
     //
     expect(result[0].length).toBe(7);
     expect(result[1].length).toBe(3);
+    expect(result[2].length).toBe(2);
   });
 
   test('Fn: loadMainControls: Should stack a queue from controllers with normalization', () => {

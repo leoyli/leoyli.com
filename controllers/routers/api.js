@@ -5,7 +5,6 @@ module.exports = api = {};
 // ==============================
 //  DEPENDENCIES
 // ==============================
-const { _U_ } = require('../utilities/');
 const { fetch } = require('../middleware/fetch');
 
 
@@ -18,13 +17,13 @@ api.stack = {
     const collection = req.params['stackType'].toLowerCase();
     if (['posts', 'media'].indexOf(collection) !== -1) {
       return res.json(await fetch(collection, { num: 10 })(req, res));
-    } else throw new _U_.error.HttpError(404);
+    } else res.statusCode(404);
   },
   POST: async (req, res) => {
     return res.json({ ok: true });
   },
   OPTIONS: async(req, res) => {
-    res.set('Allow', 'GET, POST, OPTIONS');
+    res.set('Allow', 'GET, POST, HEAD, OPTIONS');
     res.sendStatus(200);
   },
 };

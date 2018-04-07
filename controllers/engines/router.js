@@ -37,18 +37,18 @@ class Device {
   }
 
   run() {
-    this._queue.pre.map(queue => this._router.use(queue));                                                              // universal pre-middleware
     this._rules.forEach(({ route, alias, controller, method, setting }) => {
       if (this._handler) setting = { handler: this._handler, ...setting };
       stackHttpMethods({ alias, controller, method })
         .forEach(method => this._router[(method === 'alias') ? 'get' : method.toLowerCase()](...asyncWrapper([
           (method === 'alias') ? alias : route,                                                                         // router path
           ...loadRoutePlugins(setting     , method),                                                                    // middleware plugins
+          ...this._queue.pre,                                                                                           // universal pre-middleware
           ...loadMainControls(controller  , method),                                                                    // router controller
-          ...loadViewRenderer(setting     , method)                                                                     // template handler
+          ...loadViewRenderer(setting     , method),                                                                    // template handler
+          ...this._queue.post                                                                                           // universal post-middleware
         ])));
     });
-    this._queue.post.map(queue => this._router.use(queue));                                                             // universal post-middleware
     return this._router;
   }
 }
@@ -89,6 +89,7 @@ function stackHttpMethods({ controller, alias, method }) {
 /**
  * stack a queue from setting
  * @param {string} [query]                  - accept case insensitive `req.query` (by Proxy)    default: insensitive
+ * @param {boolean} [cache]                 - accept client-side caching?                       default: true
  * @param {boolean} [authorized]            - accept only authenticated? (load 4 fns)           default: false
  * @param {boolean} [authenticated]         - accept only authorized? (load 5 fns)              default: false
  * @param {boolean} [crawler]               - accept crawlers? (load 1 fn)                      default: true
@@ -97,9 +98,10 @@ function stackHttpMethods({ controller, alias, method }) {
  * @param {string} [method]                 - method to be watched
  * @return {Array}                          - ordering of the result is important
  */
-function loadRoutePlugins({ query, authorized, authenticated, crawler, title, titleOption } = {}, method) {
+function loadRoutePlugins({ query, cache, authorized, authenticated, crawler, title, titleOption } = {}, method) {
   const queue = [];
   if (query !== 'sensitive') queue.push(_M_.caseInsensitiveQuery);
+  if (cache === false) queue.push(_M_.doNotCached);
   if (authorized === true) queue.push(..._M_.isAuthorized);
   else if (authenticated === true) queue.push(..._M_.isSignedIn);
   else if (crawler === false) queue.push(_M_.doNotCrawled);

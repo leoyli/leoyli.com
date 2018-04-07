@@ -10,7 +10,14 @@ module.exports = exports = { _M_: {} };
 // ==============================
 // http header for stopping crawlers
 exports._M_.doNotCrawled = (req, res, next) => {
+  res.set('Cache-Control', 'private');
   res.set('x-robots-tag', 'none');
+  return next();
+};
+
+// http header for stopping client caching
+exports._M_.doNotCached = (req, res, next) => {
+  res.set('Cache-Control', 'private, no-store');
   return next();
 };
 
@@ -18,7 +25,7 @@ exports._M_.doNotCrawled = (req, res, next) => {
 exports._M_.APIHttpHeaders = (req, res, next) => {
   res.set('x-robots-tag', 'none');
   res.set('Access-Control-Allow-Origin', '*');
-  res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.set('Access-Control-Allow-Methods', 'GET, POST, HEAD, OPTIONS');
   res.set('Access-Control-Allow-Headers', 'Content-Type, Cache-Control');
   return next();
 };
@@ -46,11 +53,11 @@ exports._M_.setTitleTag = (title, { append, root } = {}) => (req, res, next) => 
 
 
 // passport
-exports._M_.usePassport = [passport.initialize(), passport.session()];
+exports._M_.usePassport = [exports._M_.doNotCrawled, passport.initialize(), passport.session()];
 
 
 // authentication
-exports._M_.isSignedIn = [exports._M_.doNotCrawled, ...exports._M_.usePassport, (req, res, next) => {
+exports._M_.isSignedIn = [...exports._M_.usePassport, (req, res, next) => {
   if (req.isAuthenticated() && req.session.user) return next();
   else throw new ClientError(20003);
 }];

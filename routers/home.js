@@ -26,7 +26,7 @@ const DashboardRouter = new Device([{
 
 
 // pre-used middleware
-DashboardRouter.setting = { title: 'Account', authenticated : true };
+DashboardRouter.setting = { title: 'Account', authenticated : true , cache: false };
 
 
 

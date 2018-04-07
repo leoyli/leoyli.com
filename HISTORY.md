@@ -1,3 +1,27 @@
+### 0.8.0-dev.16 / 2018-04-07
+> App
+- Restructured 'app' configs for better readability and security:
+  - extracted non-indexing components out from `router/index`;
+  - extracted partial settings and referred as 'passport' and 'router' services agents;
+  - added 'securityHeaderAgent' service agent for configuring security-related headers.
+  - enabled security cookie function;
+    (disabled when under 'test' mode)
+- Added `'Cache-Control', 'private'` header in `_M_.doNotCrawled` plugin.
+- Added `_M_.doNotCached` plugin to avoid client-side caching.
+- Added 'favicon' feature.
+- Added `page.landing` router controller.
+- Configured 'admin' and 'home' router to avoiding client-side caching.
+- Supported 'HEAD' http method for API services.
+- Revised 'engine/router' to avoid 'pre/post' hooking contamination.
+- Fixed typo in 'view/error' handler.
+
+> Test
+- Updated 'engine.router.test'.
+
+> UI
+- Fixed typos in variables' name.
+
+
 ### 0.8.0-dev.15.1 / 2018-04-06
 > App
 - Added `Access-Control-Allow-Methods` http header.

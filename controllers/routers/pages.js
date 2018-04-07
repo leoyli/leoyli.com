@@ -13,6 +13,10 @@ const { fetch } = require('../middleware/fetch');
 // ==============================
 //  CONTROLLERS
 // ==============================
+pages.landing = {
+  GET: (req, res, next) => next()
+};
+
 pages.search = {
-  GET: fetch('posts'),
+  GET: (req, res, next) => fetch('posts')(req, res, next),
 };
