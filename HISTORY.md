@@ -1,3 +1,16 @@
+### 0.8.0-dev.17 / 2018-04-07
+> App
+- Revised 'engine/router':
+  - revised `loadMainControls` to simplified `run` method;
+  - added `use` method to bypass the path preset plugins;
+  - removed 'API/OPTIONS' router
+    (using express default settings instead).
+- Revised `proxyfiedForCaseInsensitiveAccess` for checking the native brand of object.
+
+> Test
+- Updated 'engine.router.test'.
+
+
 ### 0.8.0-dev.16 / 2018-04-07
 > App
 - Restructured 'app' configs for better readability and security:

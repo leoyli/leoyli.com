@@ -37,8 +37,8 @@ describe('Bundle: router.js', () => {
     const test = [{ controller: mockController1 }, { controller: mockController1, method: ['pull'], alias: '/' }];
     const result = test.map(obj => stackHttpMethods(obj));
     //
-    expect(result[0]).toEqual(['pull', 'get']);
-    expect(result[1]).toEqual(['pull', 'alias']);
+    expect(result[0]).toEqual(['get','pull']);
+    expect(result[1]).toEqual(['alias','pull']);
   });
 
   test('Fn: loadRoutePlugins: Should stack a queue from settings', () => {

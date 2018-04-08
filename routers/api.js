@@ -1,4 +1,5 @@
 const { Device } = require('../controllers/engines/router');
+const { _M_ } = require('../controllers/middleware/plugins');
 const api = require('../controllers/routers/api');
 
 
@@ -13,9 +14,8 @@ const APIRouter = new Device([{
 
 
 // pre-used middleware
-APIRouter.hook('pre', require('../controllers/middleware/plugins')._M_.APIHttpHeaders);
 APIRouter.setting = { authenticated : false };
-
+APIRouter.use(_M_.APIHttpHeaders);
 
 
 // router exports

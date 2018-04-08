@@ -22,8 +22,4 @@ api.stack = {
   POST: async (req, res) => {
     return res.json({ ok: true });
   },
-  OPTIONS: async(req, res) => {
-    res.set('Allow', 'GET, POST, HEAD, OPTIONS');
-    res.sendStatus(200);
-  },
 };

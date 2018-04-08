@@ -68,12 +68,13 @@ function assignDeep(target, path, value, { mutate } = {}) {
  * @return {object}                         - the proxyfied object
  */
 function proxyfiedForCaseInsensitiveAccess(obj) {
-  return new Proxy(obj, {
+  if (checkNativeBrand(obj, 'Object')) return new Proxy(obj, {
     get: (target, name) => {
-      if (typeof name !== 'string') return target;
+      if (!checkNativeBrand(name, 'String')) return target;
       else return target[Object.keys(target).find(key => key.toLowerCase() === name.toLowerCase())];
     },
   });
+  else return obj;
 }
 
 

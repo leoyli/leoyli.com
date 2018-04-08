@@ -36,6 +36,10 @@ class Device {
     this._queue[position].push(...fn);
   }
 
+  use(fn) {
+    return this._router.use(fn);
+  }
+
   run() {
     this._rules.forEach(({ route, alias, controller, method, setting }) => {
       if (this._handler) setting = { handler: this._handler, ...setting };
@@ -82,7 +86,7 @@ function stackHttpMethods({ controller, alias, method }) {
     ? _U_.object.checkNativeBrand(method, 'String') ? [method] : method
     : _U_.object.checkNativeBrand(controller, 'Object') ? Object.keys(controller) : ['get'];
   if (alias && $method.indexOf('alias') === -1) $method.push('alias');
-  return $method.sort((a, b) => b.toLowerCase().localeCompare(a.toLowerCase()));
+  return $method.sort();
 }
 
 
@@ -117,8 +121,9 @@ function loadRoutePlugins({ query, cache, authorized, authenticated, crawler, ti
  * @return {array}                          - if no matched method, the controller would just be normalized to an array
  */
 function loadMainControls(controller, method) {
-  if (controller[method]) controller = controller[method];
-  return _U_.object.checkNativeBrand(controller, 'Array') ? controller : [controller];
+  const agent = _U_.object.proxyfiedForCaseInsensitiveAccess(controller);
+  const worker = agent[method] ? agent[method] : agent;
+  return _U_.object.checkNativeBrand(worker, 'Array') ? worker : [worker];
 }
 
 
