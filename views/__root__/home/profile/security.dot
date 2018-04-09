@@ -1,0 +1,35 @@
+{{= _fn.loadPartial('_header') }}
+
+<h1 class="container mb-4">User Profile</h1>
+
+<div class="container d-flex">
+    {{= _fn.loadPartial('_sidebar', { path: 'relative' }) }}
+
+    <div class="col-9 px-4">
+        <form action="/home/security/?_method=PATCH" method="POST">
+            <h3 class="mb-4">Change Password</h3>
+            <div class="input-group my-1">
+                <div class="input-group-prepend col-3 px-0">
+                    <label class="input-group-text w-100" for="currentPassword">Current password</label>
+                </div>
+                <input id="currentPassword" name="password[old]" class="form-control" type="password">
+            </div>
+            <div class="input-group my-1">
+                <div class="input-group-prepend col-3 px-0">
+                    <label class="input-group-text w-100" for="newPassword">New password</label>
+                </div>
+                <input id="newPassword" name="password[new]" class="form-control" type="password">
+            </div>
+            <div class="input-group my-1">
+                <div class="input-group-prepend col-3 px-0">
+                    <label class="input-group-text w-100" for="confirmedPassword">New password (again)</label>
+                </div>
+                <input id="confirmedPassword" name="password[confirmed]" class="form-control" type="password">
+            </div>
+            <div>&nbsp;</div>
+            <button class="btn btn-outline-primary text-uppercase float-right">Submit</button>
+        </form>
+    </div>
+</div>
+
+{{= _fn.loadPartial('_footer') }}

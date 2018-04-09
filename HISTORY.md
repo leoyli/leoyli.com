@@ -1,4 +1,423 @@
-### 0.7.0-dev.12 / 2018-03-04
+### 0.8.0-dev.18.etc / 2018-04-08
+> .etc
+- Added 'aggregation' experimental db query engine.
+
+
+### 0.8.0-dev.18 / 2018-04-08
+> App
+- Cleaned 'middleware/fetch'.
+- Revised `_M_.doNotCrawled` and `_M_.doNotCached` in `Cache-Control` header.
+- Added controlling logic for 'API/POST'.
+
+
+### 0.8.0-dev.17 / 2018-04-07
+> App
+- Revised 'engine/router':
+  - revised `loadMainControls` to simplified `run` method;
+  - added `use` method to bypass the path preset plugins;
+  - removed 'API/OPTIONS' router
+    (using express default settings instead).
+- Revised `proxyfiedForCaseInsensitiveAccess` for checking the native brand of object.
+
+> Test
+- Updated 'engine.router.test'.
+
+
+### 0.8.0-dev.16 / 2018-04-07
+> App
+- Restructured 'app' configs for better readability and security:
+  - extracted non-indexing components out from `router/index`;
+  - extracted partial settings and referred as 'passport' and 'router' services agents;
+  - added 'securityHeaderAgent' service agent for configuring security-related headers.
+  - enabled security cookie function;
+    (disabled when under 'test' mode)
+- Added `'Cache-Control', 'private'` header in `_M_.doNotCrawled` plugin.
+- Added `_M_.doNotCached` plugin to avoid client-side caching.
+- Added 'favicon' feature.
+- Added `page.landing` router controller.
+- Configured 'admin' and 'home' router to avoiding client-side caching.
+- Supported 'HEAD' http method for API services.
+- Revised 'engine/router' to avoid 'pre/post' hooking contamination.
+- Fixed typo in 'view/error' handler.
+
+> Test
+- Updated 'engine.router.test'.
+
+> UI
+- Fixed typos in variables' name.
+
+
+### 0.8.0-dev.15.1 / 2018-04-06
+> App
+- Added `Access-Control-Allow-Methods` http header.
+- Updated 'API/OPTIONS' router.
+- Changed from 'API/PITCH' to 'API/POST' router.
+
+
+### 0.8.0-dev.15 / 2018-04-06
+> App
+- Changed all from 4-spaced indented to 2-spaced.
+- Added `APIHttpHeaders` plugin middleware.
+- Added `proxyfiedForCaseInsensitiveAccess` object method in utilities.
+- Updated 'express' lib.
+- Updated `caseInsensitiveQuery` plugin middleware.
+- Updated routers:
+  - renamed all truthy HTTP methods in upper case for all controllers;
+  - revised 'router' engine for handling the method name changes
+    (case-insensitive w.r.t. method name);
+  - pre-hooked `APIHttpHeaders` on 'api' router;
+  - added 'API/OPTIONS' router for handling preflight fetching;
+  - added 'API/PATCH' router.
+  - added the very last error handler in the case of unhandled/unreachable errors.
+
+> Test
+- Added `proxyfiedForCaseInsensitiveAccess` unit test.
+
+
+### 0.8.0-dev.14.1 / 2018-04-03
+> App
+- Set 'Access-Control-Allow-Origin' HttpHeader pointed to 'http://localhost:8080' in api router controller.
+- Removed unrelated modules from api router controller.
+
+
+### 0.8.0-dev.14 / 2018-04-03
+> App
+- Added api router and controller.
+- Configured the new api router in 'index' router.
+- Changed from 4-spaced indented to 2-spaced.
+
+
+### 0.8.0-dev.13 / 2018-03-25
+> App
+- Hydrated the documents returned from aggregation to mongoose documents in `fetch` controller.
+- Added `state.recycled` virtual field in 'posts' model.
+- Added `posts` virtual field to populate the post under a specific user{mongoose.document} in 'users' model.
+
+> UI
+- Ensured the accessibility of mongoose virtual fields in templates.
+- Replaced `!state.published` by more readable `state.pended` virtual object.
+
+
+### 0.8.0-dev.12 / 2018-03-21
+> App
+- Renamed all time fields lead by `_`.
+- Revised 'date range' query from updated-time-based to created-time-based in 'fetch' controller.
+- Added `admin.stack.patch` router controller.
+- Introduced the 'recycling bin' feature:
+  - combined `status` and `visibility` into `state` field;
+  - added `admin.stack.patch` router;
+  - revised `posts` and `admin` router controllers;
+  - revised 'posts' model:
+    - added `state.recycled` virtual field in 'posts' model;
+    - added `time._expired` virtual field in 'posts' model;
+    - hooked `update` event for mongo query modifications in 'posts' model;
+  - Revised 'fetch' controller:
+    - populated `req.query` in `$$VIEW` for further template usages;
+    - revised `exp_matchFilter` for supporting the recycling bin feature;
+  - Revised 'template' view handler:
+    - split `handler.postHandler` to `handler.posts.singular` and `handler.posts.multiple`.
+
+> Test
+- Updated 'fetch.test' and 'app.test' w.r.t. the changes.
+
+> UI
+- Revised 'stack/media' and 'stack/posts' templates:
+  - added the 'bin mode' whenever `?access=bin` URL query options is met;
+  - added `recycle` and `permanently delete` actions in the 'bin mode'.
+- Updated other templates w.r.t. the changes.
+
+
+### 0.8.0-dev.11 / 2018-03-20
+> App
+- Revised 'template' view handler to accommodate dynamic template assignment based on `req.params`.
+- Updated 'admin' router setting.
+
+> UI
+- Adjusted widths of table cell in '/stack/media' nad '/stack/posts' template.
+- Updated the dropdown menu in `_navibar` template.
+
+
+### 0.8.0-dev.10 / 2018-03-20
+> App
+- Revised `exp_matchFilter` to accommodate different queried collections.
+- Revised `fetch` function to take by db name instead of the model name.
+- Updated 'admin' router setting.
+
+> Test
+- Added a new test item in `exp_matchFilter` test.
+
+> UI
+- Added 'media' and 'posts' template under 'stack' directory.
+
+
+### 0.8.0-dev.9 / 2018-03-19
+> App
+- Added a 'pre' hook on 'update' event to auto-update all posts associated with the author in dark.
+- Modified `home.profile.patch` by also submitting the current user nickname(`_nickname`) for the later comparison.
+- Updated the format of comments in all models.
+
+
+### 0.8.0-dev.8.6 / 2018-03-18
+> App
+- Removed 'schema' utilities:
+  - updated 'posts', 'media', and 'users' models with the changes;
+  - updated 'seed', 'admin', and 'posts' router controllers with the changes;
+
+
+### 0.8.0-dev.8.5 / 2018-03-18
+> App
+- Renamed `req.session._view` as `req.session.chest`.
+- Renamed template variables in a form of `$${UPPERCASE}`.
+
+> UI
+- Updated with the changes.
+- Fixed typos.
+
+
+### 0.8.0-dev.8.4 / 2018-03-18
+> App
+- Added `_view.route` population into 'initial' middleware.
+- Removed `meta.route` property from 'fetch' controller.
+
+> Test
+- Skipped `getAggregationQuery` unit test temporarily.
+
+> UI
+- Updated 'pagination' widget.
+
+
+### 0.8.0-dev.8.3 / 2018-03-17
+> App
+- Renamed `exp_postFiledMask` as `exp_docFieldMask`.
+- Renamed `configModel`, `userModel` and `postModel` in plural.
+- Revised `fetch` middleware.
+- Revised `admin.stack` controller.
+- Added 'pages' controller.
+
+> Test
+- Updated, moved, and renamed `search.test.js` as `fetch.test.js`.
+
+
+### 0.8.0-dev.8.2 / 2018-03-17
+> UI
+- Fixed broken link in `upload` template.
+
+
+### 0.8.0-dev.8.1 / 2018-03-17
+> App
+- Revised 'router' engine:
+  - combined `pre` and `post` device method into `hook`.
+  - updated 'account' router associated with the changes.
+  
+
+### 0.8.0-dev.8 / 2018-03-16
+> App
+- Revised 'router' engine:
+  - added `_handler` as a private property;
+  - added `Device.setting` getter ans setter;
+  - added `handler` as an argument for `loadViewRenderer()`;
+  - renamed `settings` as `setting`;
+  - updated many routers associated with the changes.
+- Revised fetching mask for stack-type query.
+- Revised `templateHandler` with the newly added `handler` switching feature.
+
+> Test
+- Updated `search.test.js` and `engine.router.test.js`.
+
+> UI
+- Updated 'stack' template.
+
+
+### 0.8.0-dev.7.1 / 2018-03-15
+> App
+- Renamed all `req.session.view` as `req.session._view`.
+- Renamed 'post' as 'posts' if it is characterized in plural.
+- Extract `list` from the `post` view object.
+- Revised 'templateHandler' view handler.
+- Fixed bug in 'initial' middleware.
+- Fixed Typos in `HISTORY`.
+
+> Test
+- Updated `search.test.js` and `app.test.js`.
+
+> UI
+- Added 'Posts Management' into dropdown menu in '_navibar' template.
+- Fixed `NAN` displaying error if password never being changed in 'info' template.
+- Renamed all 'post' as 'posts'.
+
+
+### 0.8.0-dev.7 / 2018-03-14
+> App
+- Renamed 'search' as 'fetch' with updates:
+  - removed arguments' default value in `fetch` middleware (assigned individually);
+  - rearranged and added '$project' stage for field masking in `getAggregationQuery`;
+  - renamed outputted meta `baseURL` property as `route`;
+  - corrected value of meta `route` property.
+  - renamed 'expression' functions;
+  - simplified `exp_matchFilter` in dated ranging query.
+  - added `exp_postFiledMask` for masking returning contents.
+- Added content managing 'stack' feature (temporarily only for 'posts'):
+  - added '/stack/:stackType' route under 'admin' router.
+  - added `admin.stack` controller.
+  - revised 'page' router.
+- Renamed `tag` property as `tags` in PostModel.
+- Stacked author by `nickname` instead of by `username` in PostModel.
+
+> Test
+- Update `search.test.js`:
+  - corrected input types in tests.
+  - added `exp_sortRule` unit test.
+
+> UI
+- Widgetified '_pagination' template.
+- Removed 'manager' directory and it contains files.
+- Added 'stack' template.
+
+
+### 0.8.0-dev.6.1 / 2018-03-13
+> App
+- Extracted 'admin' from 'home' router and controller.
+
+> Test
+- Updated pathname in `app.test.js`.
+
+> UI
+- Restructured files and directories.
+- Added empty temples: 'media', 'post', and 'user' into 'manager' directory.
+- Updated pathname in '_navibar' and 'configs' templates.
+
+
+### 0.8.0-dev.6 / 2018-03-12
+> App
+- Added new runtime helper functions called 'widget' in view engine.
+- Revised and renamed `home.setting` as `home.configs`.
+- Updated 'admin' router.
+
+> Test
+- Updated pathname in `app.test.js`.
+
+> UI
+- Revised and renamed 'setting' template as 'configs'.
+- Added 'website settings' dropdown link in '_navibar' template.
+- Added '_widget' directory with 'CDN' and 'meta' widgets.
+
+
+### 0.8.0-dev.5.2 / 2018-03-11
+> App
+- Updated router settings based on renamed files.
+
+> UI
+- Renamed files.
+
+
+### 0.8.0-dev.5.1 / 2018-03-11
+> App
+- Added a check of the existence of `req.session.user` after `req.isAuthenticated()`.
+
+
+### 0.8.0-dev.5 / 2018-03-11
+> App
+- Fixed `HISTORY` typos.
+- Added `redirect` branch in 'error' handler.
+- Extracted authentication retrying logic from middleware to error handler:
+  - added `redirect.signInRetry` to mange clientError retrying logic;
+  - added `action` tag in `req.flash` in 'initial' middleware;
+  - removed `pass` tag from `req.flash` in 'initial' middleware;
+  - centralized error messages;
+  - revised 'account' controller.
+
+
+### 0.8.0-dev.4.1 / 2018-03-10
+> App
+- Moved template assignment from 'account' and 'admin' controllers to the routers.
+
+
+### 0.8.0-dev.4 / 2018-03-10
+> App
+- Added logic into `editor.post.get` router controller.
+- Split handler into 'error' and 'template' controllers.
+- Extracted `templateHandler` from `postHandler` in 'template' controllers.
+
+> Test
+- Skipped 'PATCH user nickname' in `app.test.js` temporarily.
+
+
+### 0.8.0-dev.3.2 / 2018-03-10
+> UI
+- Renamed files.
+
+
+### 0.8.0-dev.3.1 / 2018-03-07
+> UI
+- Moved and revised 'security' template.
+
+
+### 0.8.0-dev.3 / 2018-03-07
+> App
+- Revised 'view' engine:
+  - added `source` parameter into `getRuntimeMethods()` and `getBlueprint()`;
+  - revised `loadPartial()` to accept: (1) relative partial; (2) default path (__root__); or (3) theme path.
+- Removed `_status` property from `res.locals._view` in initial middleware.
+- Removed `app.set('partials')` app setting.
+- Updated 'users' model:
+  - added `time._changePassword` field;
+  - renamed `_lastTimeSignIn` as `_signIn`;
+  - revised `changePassword()` to update `time._changePassword`;
+  - redefined `UpdateSignInLog()` as `updateLastTimeLog()` in 'users' model.
+- Renamed page title of `home/security` router.
+
+> Test
+- Updated `app.test.js`.
+
+> UI
+- Renamed 'root' as '__root__'.
+- Removed 'Account Settings' option from dropdown menu in '_navibar' template.
+- Added 'profile' directory with '_sidebar' template.
+
+
+### 0.8.0-dev.2 / 2018-03-06
+> App
+- Added `profile_editor` controller and router.
+- Rename `residence` as `residency` in 'users' model.
+- Rename 'post/editor' route as 'post/edit' route.
+
+> Test
+- Updated user mock in `app.test.js`.
+
+> UI
+- Added 'profile_editor' template in root.
+- Updated 'profile' template in root.
+
+
+### 0.8.0-dev.1 / 2018-03-06
+> App
+- Updated 'users' model schema:
+  - added `time._lastTimeSignIn` field;
+  - added `UpdateSignInLog()` document method;
+  - added `info:{ gender, residence, timezone, birthday }` fields;
+  - moved `firstName` and `lastName` into info.
+- Applied `UpdateSignInLog()` in 'account.signin' controller.
+- Populated whole user document in `home.profile.get` route.
+- Updated 'seed' route.
+
+> Test
+- Updated user mock in `app.test.js`.
+
+> UI
+- Updated '_navibar' in 'root'.
+- Updated fileNames in 'signup'.
+
+
+### 0.8.0-dev.0 / 2018-03-04
+- Initiated v0.8: 'CMS-Panel' development.
+- Fixed typos in HISTORY.
+
+
+### 0.7.0 / 2018-03-04
+- Completed v0.7: 'tofix-fix-up' & 'error-handling' development.
+
+
+### 0.7.0-dev.13 / 2018-03-04
 > App
 - Added [eCODE: 20003] into ClientError dictionary.
 - Fixed `_M_.isSignedIn` message display bug.
@@ -144,12 +563,12 @@
 ### 0.7.0-dev.5 / 2018-02-18
 > App
 - New feature: added `visibility` and `status` post parameters in the model.
-  - visibility 'hidden': hide the post from the searching result, and only can be accessed by its URL.
-  - visibility 'pinned': pin the post at the top level result, but have no effects if 'hidden' to be truthy.
-  - visibility 'protected': a holder parameter for password protection feature. (to be added)
-  - status 'published': published post.
-  - status 'drafted': unpublished post that can not be accessed publicly. (auto saving to be added)
-  - status 'recycled': user deleted post that can not be accessed publicly. (recycle data damping to be added).
+  - visibility 'hidden': hide the post from the searching result, and only can be accessed by its URL;
+  - visibility 'pinned': pin the post at the top level result, but have no effects if 'hidden' to be truthy;
+  - visibility 'protected': a holder parameter for password protection feature. (to be added);
+  - status 'published': published post;
+  - status 'drafted': unpublished post that can not be accessed publicly. (auto saving to be added);
+  - status 'recycled': user deleted post that can not be accessed publicly. (recycle data damping to be added);
 - New feature: added `sets` parameters in 'settings' for hosting dynamic default parameters.
 - Added `tag` and `visibility` Mongo indexes.
 - Added `meta.baseUrl` from `req.baseUrl` in search controller.
@@ -187,8 +606,9 @@
 
 
 ### 0.7.0-dev.1 / 2018-02-16
-> App
 - Initiated v0.7: 'tofix-fix-up' development.
+
+> App
 - Fixed 'canonical' value escaping issue by added `postNormalizer` middleware.
 - Added `inspectFileURL` string helper function and its unit test.
 - Removed dependency on 'validator' lib.
@@ -196,7 +616,6 @@
 
 
 ### 0.6.0 / 2018-02-15
-> App
 - Completed v0.6: 'unit-testing' development.
 
 
@@ -516,7 +935,7 @@
 > App
 - Removed the Mongo's anti-pattern as in `docList` schema.
 - Authorization was replaced by `Model.count()` method due to the removal of the anti-pattern.
-- Replaced `req.locals._render` by `req.session.view` for much dryer codes.
+- Replaced `req.locals._render` by `req.session._view` for much dryer codes.
 
 
 ### 0.2.3 / 2017-11-14

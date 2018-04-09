@@ -8,22 +8,22 @@ const { account } = require('../controllers/routers/account');
 //  ROUTER HUB
 // ==============================
 const UserRouter = new Device([{
-    route:          '/signup',
-    controller:     account.signup,
-    settings:       { title: 'Sign Up' },
+  route:          '/signup',
+  controller:     account.signup,
+  setting:        { title: 'Sign Up', template: './__root__/account/signup' },
 }, {
-    route:          '/signin',
-    controller:     account.signin,
-    settings:       { title: 'Sign In' },
+  route:          '/signin',
+  controller:     account.signin,
+  setting:        { title: 'Sign In', template: './__root__/account/signin' },
 }, {
-    route:          '/signout',
-    controller:     account.signout,
+  route:          '/signout',
+  controller:     account.signout,
 }]);
 
 
 // pre-used middleware
-UserRouter.pre(require('../controllers/middleware/plugins')._M_.usePassport);
-UserRouter.post((err, req, res, next) => next(new ClientError(err)));
+UserRouter.hook('pre', require('../controllers/middleware/plugins')._M_.usePassport);
+UserRouter.hook('post', (err, req, res, next) => next(new ClientError(err)));
 
 
 

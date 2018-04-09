@@ -1,76 +1,81 @@
 const
-    mongoose                = require('mongoose');
-
-
-// ==============================
-//  FUNCTIONS
-// ==============================
-// ancillaries
-const { _U_ }               = require('../controllers/utilities/');
-
+  mongoose           = require('mongoose');
 
 
 // ==============================
 //  SCHEMA
 // ==============================
-const PostSchema            = new mongoose.Schema({
-    author: {
-        _id: {
-            type            : mongoose.Schema.Types.ObjectId,
-            ref             : 'users',
-        },
-        username            : { type: String },
+const PostsSchema    = new mongoose.Schema({
+  author: {
+    _id: {
+      type           : mongoose.Schema.Types.ObjectId,
+      ref            : 'users',
     },
-    featured                : { type: String, // todo: featured by a video
-        validate: {
-            validator       : value => value !== undefined,
-            message         : 'Invalid image URL',
-        }},
-    canonical               : { type: String, lowercase: true, unique: true },
-    title                   : { type: String, required: [true, 'is required'], trim: true },
-    content                 : { type: String, required: [true, 'is required'], trim: true },
-    category                : { type: String, lowercase: true, default: 'unclassified' },
-    tag                     : { type: String, lowercase: true },
-    visibility: {
-        hidden              : { type: Boolean, required: true, default: false },    // todo: add anti-robot HTML tag
-        pinned              : { type: Boolean, required: true, default: false },
-        protected           : { type: Boolean, required: true, default: false },    // todo: add pw
-    },
-    status                  : { type: String, default: 'published',
-                                enum: ['drafted','published', 'recycled'] },
+    nickname         : { type: String },
+  },
+  featured           : { type: String,                                                                                    // todo: featured by a video
+    validate: {
+      validator      : value => value !== undefined,
+      message        : 'Invalid image URL',
+    }},
+  canonical          : { type: String, lowercase: true, unique: true },
+  title              : { type: String, required: [true, 'is required'], trim: true },
+  content            : { type: String, required: [true, 'is required'], trim: true },
+  category           : { type: String, lowercase: true, default: 'unclassified' },
+  tags               : { type: String, lowercase: true },
+  state: {
+    published        : { type: Boolean, required: true, default: true },
+    protected        : { type: Boolean, required: true, default: false },                                                 // todo: add pw
+    hidden           : { type: Boolean, required: true, default: false },                                                 // todo: add anti-robot HTML tag
+    pinned           : { type: Boolean, required: true, default: false },
+  },
+  time: {
+    _recycled        : { type: Date },
+  },
 }, {
-    timestamps              : { createdAt: 'time.created', updatedAt: 'time.updated' },
-    versionKey              : '_revised',
+  timestamps         : { createdAt: 'time._created', updatedAt: 'time._updated' },
+  versionKey         : '_revised',
 })
-    .index({ 'tag' : 1 })
-    .index({ 'status' : 1 })
-    .index({ 'category' : -1 })
-    .index({ 'time.updated' : -1 })
-    .index({ 'title': 'text', 'content': 'text', 'category': 'text', 'tag' : 'text' });
+  .index({ 'tags' : 1 })
+  .index({ 'category' : -1 })
+  .index({ 'time._updated' : -1 })
+  .index({ 'time._recycled' : 1 }, { expireAfterSeconds: 14 * 24 * 3600 * 1000 })
+  .index({ 'title': 'text', 'content': 'text', 'category': 'text', 'tags' : 'text' });
 
 
 
 // ==============================
-//  STATIC METHODS
+//  METHODS
 // ==============================
-// create and associate (model)
-PostSchema.static('postsCreateThenAssociate', function (raw, user, next) {
-    return Promise.resolve().then(() => _U_.schema.updateAndBind(raw, user, next, 'posts', '$push', this));
+// action hooks
+// version counter (pre-hook)
+PostsSchema.pre('findOneAndUpdate', function () {
+  this.findOneAndUpdate({}, { $inc: { _revised: 1 }});
 });
 
 
-// delete and dissociate (model)  // note: not workable for admin in deleting media owned by multiple users
-PostSchema.static('postsDeleteThenDissociate', function (docsID, user, next) {
-    return Promise.resolve().then(() => _U_.schema.updateAndBind(docsID, user, next, 'posts', '$pullAll', this));
+// recycle setter (pre-hook)
+PostsSchema.pre('update', function () {
+  const _$update = this.getUpdate();
+  if (_$update.$set['state.pended'] === true) _$update.$set['state.published'] = false;                                 // tofix: initial post ist not worked
+  if (_$update.$set['state.recycled'] === true) _$update.$set = { 'time._recycled': Date.now() };
+  if (_$update.$set['state.recycled'] === false) _$update.$set = { 'time._recycled': null };
 });
 
 
-// (pre-hook) version counter
-PostSchema.pre('findOneAndUpdate', function () {
-    this.findOneAndUpdate({}, { $inc: { _revised: 1 }});
+// virtual property
+PostsSchema.virtual('state.pended').get(function () {
+  return !this.state.published;
 });
 
+PostsSchema.virtual('state.recycled').get(function () {
+  return !!this.time._recycled;
+});
+
+PostsSchema.virtual('time._expired').get(function () {
+  return this.time._recycled ? new Date(this.time._recycled.getTime() + 14 * 24 * 3600 * 1000) : null;
+});
 
 
 // exports
-module.exports = mongoose.model('posts', PostSchema);
+module.exports = mongoose.model('posts', PostsSchema);

@@ -1,69 +1,73 @@
 {{= _fn.loadPartial('_header') }}
 
-<h1 class="container mb-4">{{= post._id ? 'UPDATE A POST' : 'WRITE A POST' }}</h1>
+<h1 class="container mb-4">{{= $$POST._id ? 'UPDATE A POST' : 'WRITE A POST' }}</h1>
 
 <form class="container d-flex pb-5" method="POST">
     <fieldset id="main" class="col-lg-9">
         <div class="form-row">
             <div class="form-group col-md-7">
                 <label class="font-weight-bold" for="title">Title</label>
-                <input id="title" {{? post.title }}{{= `value="${post.title}"` }}{{?}}
+                <input id="title" {{? $$POST.title }}{{= `value="${$$POST.title}"` }}{{?}}
                        aria-label="Title" name="post[title]" class="form-control"
                        placeholder="Enter the post title" />
             </div>
             <div class="form-group col-md-5">
                 <label class="font-weight-bold" for="category">Category</label>
-                <input id="category" {{? post.category }}{{= `value="${post.category}"` }}{{?}}
+                <input id="category" {{? $$POST.category }}{{= `value="${$$POST.category}"` }}{{?}}
                        aria-label="Category" name="post[category]" class="form-control"
                        placeholder="Enter the category" />
             </div>
         </div>
         <div class="form-group">
             <label class="font-weight-bold" for="featuredImage">Featured Image Address</label>
-            <input id="featuredImage" {{? post.featured }}{{= `value="${post.featured}"` }}{{?}}
+            <input id="featuredImage" {{? $$POST.featured }}{{= `value="${$$POST.featured}"` }}{{?}}
                    aria-label="Feature image" name="post[featured]" class="form-control"
                    placeholder="Enter URL for a featured image/video" />
         </div>
         <div class="form-group">
             <label class="font-weight-bold" for="content">Content</label>
             <textarea id="content" name="post[content]" rows="16" aria-label="Content" class="form-control"
-                      placeholder="Enter the post content">{{? post.content }}{{= post.content }}{{?}}</textarea>
+                      placeholder="Enter the post content">{{? $$POST.content }}{{= $$POST.content }}{{?}}</textarea>
         </div>
         <button class="btn btn-outline-primary text-uppercase float-right mx-1"
-                aria-label="{{= post._id ? 'Update' : 'Submit' }}"
-                formaction="/post/editor/{{? post._id }}{{= `${post._id}?_method=PATCH` }}{{?}}">
-            {{= post._id ? 'Update' : 'Submit' }}
+                aria-label="{{= $$POST._id ? 'Update' : 'Submit' }}"
+                formaction="/posts/edit/{{? $$POST._id }}{{= `${$$POST._id}?_method=PATCH` }}{{?}}">
+            {{= $$POST._id ? 'Update' : 'Submit' }}
         </button>
-        {{? post._id }}
+        {{? $$POST._id }}
             <button class="btn btn-outline-danger text-uppercase float-right mx-1"
-                    aria-label="Delete" formaction="/post/editor/{{= post._id }}?_method=DELETE">DELETE</button>
+                    aria-label="Delete" formaction="/posts/edit/{{= $$POST._id }}?_method=DELETE">DELETE</button>
         {{?}}
     </fieldset>
 
     <fieldset id="sidebar" class="col-lg-3 mt-4">
         <div class="input-group input-group-sm mb-2">
             <div class="input-group-prepend col-2 px-0">
-                <label class="input-group-text w-100" for="status">
-                    <i class="fa fa-pencil w-100" title="Status"></i>
+                <label class="input-group-text w-100" for="state">
+                    <i class="fa fa-pencil w-100" title="State"></i>
                 </label>
             </div>
-            <select id="status" class="custom-select col-8" name="post[status]" aria-label="Status">
-                <option value="published" {{? post.status === 'published'}}selected{{?}}>Publishing</option>
-                <option value="drafted" {{? post.status === 'drafted'}}selected{{?}}>Pending</option>
+            <select id="state" class="custom-select col-8" name="post[state]" aria-label="State">
+                <option value="pended">Pending</option>
+                <option value="published" {{? $$POST.state && $$POST.state.published }}selected{{?}}>Published</option>
             </select>
         </div>
         <div class="input-group input-group-sm my-2">
             <div class="input-group-prepend col-2 px-0">
-                <label class="input-group-text w-100" for="visibility">
-                    <i class="fa fa-eye w-100" title="Visibility"></i>
+                <label class="input-group-text w-100" for="state">
+                    <i class="fa fa-eye w-100" title="State"></i>
                 </label>
             </div>
             <!--// todo: split the assignment-->
-            <select id="visibility" class="custom-select col-8" name="post[visibility]" aria-label="Visibility">
-                <option value="normal" selected>Normal</option>
-                <option value="pinned" {{? post.visibility && post.visibility.pinned }}selected{{?}}>Pined</option>
-                <option value="hidden" {{? post.visibility && post.visibility.hidden }}selected{{?}}>Hidden</option>
-                <option value="protected" {{? post.visibility && post.visibility.protected}}selected{{?}}>Protected</option>
+            <select id="visibility" class="custom-select col-8" name="post[state]" aria-label="Visibility">
+                <option value="normal"
+                        selected>Normal</option>
+                <option value="pinned"
+                        {{? $$POST.state && $$POST.state.pinned }}selected{{?}}>Pined</option>
+                <option value="hidden"
+                        {{? $$POST.state && $$POST.state.hidden }}selected{{?}}>Hidden</option>
+                <option value="protected"
+                        {{? $$POST.state && $$POST.state.protected }}selected{{?}}>Protected</option>
             </select>
         </div>
     </fieldset>

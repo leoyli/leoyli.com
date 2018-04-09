@@ -1,5 +1,5 @@
 {{= _fn.loadPartial('_header') }}
 
-<h1 class="container mb-4">{{= _site.title }}</h1>
+<h1 class="container mb-4">{{= $$SITE.title }}</h1>
 
 {{= _fn.loadPartial('_footer') }}

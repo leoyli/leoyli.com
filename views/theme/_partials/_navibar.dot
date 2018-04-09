@@ -1,7 +1,7 @@
 <!-- client notifications -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between" role="navigation" aria-label="Primary">
     <div class="container">
-        <a class="navbar-brand mb-0 h1" href="/">{{= _site.title }}</a>
+        <a class="navbar-brand mb-0 h1" href="/">{{= $$SITE.title }}</a>
 
         <!-- Nav-bar items -->
         <div class="collapse navbar-collapse justify-content-end ">
@@ -10,42 +10,46 @@
                     <a class="nav-link" href="/seed">Seed</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/post">Blog</a>
+                    <a class="nav-link" href="/posts">Blog</a>
                 </li>
-                {{? !_view.user }}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/signup">Sign Up</a>
-                    </li>
-                    <li class="nav-item pt-1">
-                        <a class="nav-link" href="/signin">Sign In</a>
-                    </li>
+                {{? !$$VIEW.user }}
+                <li class="nav-item">
+                    <a class="nav-link" href="/signup">Sign Up</a>
+                </li>
+                <li class="nav-item pt-1">
+                    <a class="nav-link" href="/signin">Sign In</a>
+                </li>
                 {{?}}
-                {{? _view.user }}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle d-flex align-items-center px-1" href="#" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{? _view.user.picture }}
-                                <img class="" alt="User" src="{{= _view.user.picture }}" />
-                            {{?}}
-                            {{? !_view.user.picture }}
-                            <!-- tofix: load the profile image as svg -->
-                                <svg width="25" height="25">
-                                    <rect width="25" height="25" style="fill:rgba(0,0,0,.1);" />
-                                </svg>
-                            {{?}}
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right py-2" aria-labelledby="navbarDropdown">
-                            <span class="dropdown-header text-truncate px-3 py-0 mb-2">Hi, {{= _view.user.nickname }}!</span>
-                            <div class="dropdown-divider my-1"></div>
-                            <a class="dropdown-item px-3" href="/home">Dashboard</a>
-                            <div class="dropdown-divider my-1"></div>
-                            <a class="dropdown-item px-3" href="/post/editor">New Post</a>
-                            <a class="dropdown-item px-3" href="/home/upload">Media Uploader</a>
-                            <div class="dropdown-divider my-1"></div>
-                            <a class="dropdown-item px-3" href="/home/security">Account Settings</a>
-                            <a class="dropdown-item px-3" href="/signout">Sign Out</a>
-                        </div>
-                    </li>
+                {{? $$VIEW.user }}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center px-1" href="#" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{? $$VIEW.user.picture }}
+                        <img class="" alt="User" src="{{= $$VIEW.user.picture }}" />
+                        {{?}}
+                        {{? !$$VIEW.user.picture }}
+                        <!-- tofix: load the profile image as svg -->
+                        <svg width="25" height="25">
+                            <rect width="25" height="25" style="fill:rgba(0,0,0,.1);" />
+                        </svg>
+                        {{?}}
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right py-2" aria-labelledby="navbarDropdown">
+                        <span class="dropdown-header text-truncate px-3 py-0 mb-2">Hi, {{= $$VIEW.user.nickname }}!</span>
+                        <div class="dropdown-divider my-1"></div>
+                        <a class="dropdown-item px-3" href="/home">Dashboard</a>
+                        <div class="dropdown-divider my-1"></div>
+                        <a class="dropdown-item px-3" href="/posts/edit">New Post</a>
+                        <a class="dropdown-item px-3" href="/admin/stack/posts">Posts Overview</a>
+                        <div class="dropdown-divider my-1"></div>
+                        <a class="dropdown-item px-3" href="/admin/upload">Upload Media</a>
+                        <a class="dropdown-item px-3" href="/admin/stack/media">Media Overview</a>
+                        <div class="dropdown-divider my-1"></div>
+                        <a class="dropdown-item px-3" href="/admin/configs">Website Settings</a>
+                        <a class="dropdown-item px-3" href="/home/profile">User Profile</a>
+                        <a class="dropdown-item px-3" href="/signout">Sign Out</a>
+                    </div>
+                </li>
                 {{?}}
             </ul>
         </div>

@@ -1,6 +1,5 @@
 const { Device } = require('../controllers/engines/router');
-const { _M_ } = require('../controllers/middleware/plugins');
-const home = require('../controllers/routers/admin');
+const admin = require('../controllers/routers/admin');
 
 
 
@@ -8,30 +7,26 @@ const home = require('../controllers/routers/admin');
 //  ROUTE HUB
 // ==============================
 const DashboardRouter = new Device([{
-    route:          '/',
-    controller:     home.main,
-    settings:       { title: 'Dashboard' },
+  route:          '/',
+  controller:     admin.main,
+  setting:        { title: 'Dashboard', template: './__root__/' },
 }, {
-    route:          '/setting',
-    controller:     home.setting,
-    settings:       { title: 'Website Configurations' },
+  route:          '/configs',
+  controller:     admin.configs,
+  setting:        { title: 'Website Configurations', template: './__root__/admin/configs' },
 }, {
-    route:          '/profile',
-    controller:     home.profile,
-    settings:       { title: 'Profile' },
+  route:          '/upload',
+  controller:     admin.upload,
+  setting:        { title: 'Media Uploader', template: './__root__/admin/upload' },
 }, {
-    route:          '/security',
-    controller:     home.security,
-    settings:       { title: 'Account Settings' },
-}, {
-    route:          '/upload',
-    controller:     home.upload,
-    settings:       { title: 'Media Uploader' },
+  route:          '/stack/:stackType',
+  controller:     admin.stack,
+  setting:        { title: 'Content Stack', template: './__root__/admin/stack/:stackType', handler: 'stack' },
 }]);
 
 
 // pre-used middleware
-DashboardRouter.pre([_M_.isSignedIn, _M_.setTitleTag('Account')]);
+DashboardRouter.setting = { title: 'Control', authenticated : true , cache: false };
 
 
 

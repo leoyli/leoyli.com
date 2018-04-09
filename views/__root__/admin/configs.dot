@@ -1,0 +1,62 @@
+{{= _fn.loadPartial('_header') }}
+
+
+<div class="container d-flex">
+    <div class="col-9 px-4">
+        <form method="POST">
+            <h3 class="mb-4">Website Settings</h3>
+            <div class="input-group my-1">
+                <div class="input-group-prepend col-2 px-0">
+                    <span class="input-group-text w-100">Title</span>
+                </div>
+                <input id="title" name="configs[title]" class="form-control"
+                       type="text" value="{{= $$VIEW.configs.title }}" placeholder="Title">
+            </div>
+            <div class="input-group my-1">
+                <div class="input-group-prepend col-2 px-0">
+                    <span class="input-group-text w-100">Description</span>
+                </div>
+                <input id="description" name="configs[description]" class="form-control"
+                       type="text" value="{{= $$VIEW.configs.description }}" placeholder="Description">
+            </div>
+            <div class="input-group my-1">
+                <div class="input-group-prepend col-2 px-0">
+                    <span class="input-group-text w-100">Keywords</span>
+                </div>
+                <input id="keywords" name="configs[keywords]" class="form-control"
+                       type="text" value="{{= $$VIEW.configs.keywords }}" placeholder="Keywords (separated by ',')">
+            </div>
+
+            <div class="input-group my-1">
+                <div class="input-group-prepend col-2 px-0">
+                    <label class="input-group-text w-100" for="language">Language</label>
+                </div>
+                <select id="language" name="configs[sets][language]" class="custom-select">
+                    <option value="en" selected>English (en)</option>
+                </select>
+            </div>
+            <div class="input-group my-1">
+                <div class="input-group-prepend col-2 px-0">
+                    <label class="input-group-text w-100" for="timezone">Timezone</label>
+                </div>
+                <select id="timezone" name="configs[sets][timezone]" class="custom-select">
+                    <option value="UTC−07:00 (MST)" selected>UTC−07:00 (MST)</option>
+                </select>
+            </div>
+            <div class="input-group my-1">
+                <div class="input-group-prepend col-2 px-0">
+                    <label class="input-group-text w-100" for="time-format">Time Format</label>
+                </div>
+                <select id="time-format" name="configs[sets][timeFormat]" class="custom-select">
+                    <option value="YYYY-MM-DD" selected>YYYY-MM-DD</option>
+                </select>
+            </div>
+            <div>&nbsp;</div>
+            <button class="btn btn-outline-primary text-uppercase float-right mx-1" aria-label="Update"
+                    formaction="/admin/configs?_method=PATCH">Update
+            </button>
+        </form>
+    </div>
+</div>
+
+{{= _fn.loadPartial('_footer') }}
