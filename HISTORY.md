@@ -1,3 +1,7 @@
+### 0.9.0-dev.0 / 2018-04-09
+- Initiated v0.9: 'CMS & UI' development.
+
+
 ### 0.8.0 / 2018-04-09
 > Completed v0.8: 'CMS-Panel' development
 - Added 'widget' feature in view engine.
