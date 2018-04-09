@@ -1,3 +1,10 @@
+### 0.8.0-dev.18 / 2018-04-08
+> App
+- Cleaned 'middleware/fetch'.
+- Revised `_M_.doNotCrawled` and `_M_.doNotCached` in `Cache-Control` header.
+- Added controlling logic for 'API/POST'.
+
+
 ### 0.8.0-dev.17 / 2018-04-07
 > App
 - Revised 'engine/router':

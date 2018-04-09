@@ -6,7 +6,7 @@ module.exports = api = {};
 //  DEPENDENCIES
 // ==============================
 const { fetch } = require('../middleware/fetch');
-
+const modelIndex = require('../../models/');
 
 
 // ==============================
@@ -20,6 +20,14 @@ api.stack = {
     } else res.statusCode(404);
   },
   POST: async (req, res) => {
-    return res.json({ ok: true });
+    const collection = req.params['stackType'].toLowerCase();
+    const $update = { $set: {} };
+    if (req.body.action === 'restored') $update.$set = { [`state.recycled`]: false };
+    else $update.$set = { [`state.${req.body.action}`]: true };
+
+    if (req.body.action) return modelIndex[`${collection}Model`]
+      .update({ _id: { '$in' : req.body.list }}, $update, { multi: true })
+      .then(() => res.json({ ok: true }))
+      .catch(err => res.sendStatus(500));
   },
 };

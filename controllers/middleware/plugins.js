@@ -10,14 +10,14 @@ module.exports = exports = { _M_: {} };
 // ==============================
 // http header for stopping crawlers
 exports._M_.doNotCrawled = (req, res, next) => {
-  res.set('Cache-Control', 'private');
+  res.set('Cache-Control', 'private, max-age=0');
   res.set('x-robots-tag', 'none');
   return next();
 };
 
 // http header for stopping client caching
 exports._M_.doNotCached = (req, res, next) => {
-  res.set('Cache-Control', 'private, no-store');
+  res.set('Cache-Control', 'no-store');
   return next();
 };
 

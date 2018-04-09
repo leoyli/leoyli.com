@@ -4,8 +4,8 @@ function fetch(collection, { page, num, sort } = {}) {                          
   return (req, res, next) => $Model
     .aggregate(getAggregationQuery(collection, req.params, req.query, page, num || res.locals.$$SITE.num, sort))
     .then(docs => docs[0])
-    .then(async (result) => {
-      if (Array.isArray(result.list)) result.list = result.list.map(doc => $Model.hydrate(doc));                        // note: cast all raw JSON to mongoose document
+    .then(result => {
+      if (result && Array.isArray(result.list)) result.list = result.list.map(doc => $Model.hydrate(doc));              // note: cast all raw JSON to mongoose document
       if (typeof next !== 'function') return result;
       req.session.chest = result;
       return next();
