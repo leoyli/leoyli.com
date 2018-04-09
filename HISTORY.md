@@ -1,3 +1,8 @@
+### 0.8.0-dev.18.etc / 2018-04-08
+> .etc
+- Added 'aggregation' experimental db query engine.
+
+
 ### 0.8.0-dev.18 / 2018-04-08
 > App
 - Cleaned 'middleware/fetch'.
