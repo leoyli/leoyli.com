@@ -19,15 +19,16 @@ api.stack = {
       return res.json(await fetch(collection, { num: 10 })(req, res));
     } else res.statusCode(404);
   },
-  POST: async (req, res) => {
+  PUT: async (req, res) => {                                                                                            // todo: limit update range (matching with query)
     const collection = req.params['stackType'].toLowerCase();
     const $update = { $set: {} };
     if (req.body.action === 'restored') $update.$set = { [`state.recycled`]: false };
     else $update.$set = { [`state.${req.body.action}`]: true };
 
-    if (req.body.action) return modelIndex[`${collection}Model`]
+    if (req.body.action && req.body.list.length > 0) return modelIndex[`${collection}Model`]
       .update({ _id: { '$in' : req.body.list }}, $update, { multi: true })
-      .then(() => res.json({ ok: true }))
+      .then(() => res.json({ modified: true }))
       .catch(err => res.sendStatus(500));
+    else return res.json({ modified: false });
   },
 };

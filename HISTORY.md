@@ -1,3 +1,8 @@
+### 0.9.0-dev.1 / 2018-04-12
+> App
+- Changed from 'API/POST' to 'API/PUT'.
+
+
 ### 0.9.0-dev.0 / 2018-04-09
 - Initiated v0.9: 'CMS & UI' development.
 

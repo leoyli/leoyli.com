@@ -25,7 +25,7 @@ exports._M_.doNotCached = (req, res, next) => {
 exports._M_.APIHttpHeaders = (req, res, next) => {
   res.set('x-robots-tag', 'none');
   res.set('Access-Control-Allow-Origin', '*');
-  res.set('Access-Control-Allow-Methods', 'GET, POST, HEAD, OPTIONS');
+  res.set('Access-Control-Allow-Methods', 'GET, PUT, HEAD, OPTIONS');
   res.set('Access-Control-Allow-Headers', 'Content-Type, Cache-Control');
   return next();
 };
