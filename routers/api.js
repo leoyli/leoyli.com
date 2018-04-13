@@ -4,19 +4,18 @@ const api = require('../controllers/routers/api');
 
 
 
-// ==============================
-//  ROUTE HUB
-// ==============================
+// device
 const APIRouter = new Device([{
   route:          '/stack/:stackType',
   controller:     api.stack,
 }]);
 
 
-// pre-used middleware
+// settings
 APIRouter.setting = { authenticated : false };
 APIRouter.use(_M_.APIHttpHeaders);
 
 
-// router exports
+
+// exports
 module.exports = APIRouter.run();

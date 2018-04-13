@@ -4,15 +4,14 @@ const { _M_ } = require('../middleware/plugins');
 
 
 // gateway
-function errorHandler (err, req, res, next) {
+const errorHandler = (err, req, res, next) => {
   if (['dev', 'test'].indexOf(process.env['NODE_ENV']) !== -1) console.log(err.stack);
-  if (_U_.error.hasOwnProperty(err.name) && !!terminal[err.name]) {
-    return terminal[err.name](err, req, res, next);
-  } else return res.render('./theme/error', { err });
-}
+  if (_U_.error.hasOwnProperty(err.name) && !!terminal[err.name]) return terminal[err.name](err, req, res, next);
+  return res.render('./theme/error', { err });
+};
 
 
-// terminal
+// terminals
 const terminal = {};
 
 terminal.ClientError = (err, req, res, next) => {
@@ -25,12 +24,13 @@ terminal.ClientError = (err, req, res, next) => {
       break;
     case 'BulkWriteError':
       return terminal.MongoError(err, req, res, next);
-    default:
+    default: {
       req.flash('error', err.message);
+    }
   }
 
   if (!err.from && err.code === 20003) return redirect.signInRetry(req, res);
-  else return res.redirect('back');
+  return res.redirect('back');
 };
 
 terminal.MongoError = (err, req, res, next) => {

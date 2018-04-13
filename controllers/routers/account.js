@@ -2,22 +2,18 @@ module.exports = exports = { account: {} };
 
 
 
-// ==============================
-//  DEPENDENCIES
-// ==============================
+// modules
 const { ClientError } = require('../utilities/')._U_.error;
 const { _M_ } = require('../middleware/plugins');
 const { usersModel } = require('../../models/');
 
 
 
-// ==============================
-//  CONTROLLERS
-// ==============================
+// controllers
 exports.account.signup = {
   GET: (req, res, next) => {
     if (req.isAuthenticated() && req.session.user) return res.redirect('/home');
-    else return next();
+    return next();
   },
   POST: [_M_.passwordValidation, async (req, res) => {
     const newUser = await usersModel.register(new usersModel(req.body), req.body.password.new);
@@ -33,7 +29,7 @@ exports.account.signin = {
   GET: (req, res, next) => {
     if (res.locals.$$VIEW.flash.action[0] === 'retry' ) req.flash('action', 'retry');
     if (req.isAuthenticated() && req.session.user) return res.redirect('/home');
-    else return next();
+    return next();
   },
   POST: (req, res, next) => {
     if (req.isAuthenticated() && req.session.user) return res.redirect('/home');
@@ -58,6 +54,7 @@ exports.account.signout = {
       req.logout();
       req.flash('info', 'See you next time!');
       delete req.session.user;
-    } return res.redirect('back');
+    }
+    return res.redirect('back');
   },
 };

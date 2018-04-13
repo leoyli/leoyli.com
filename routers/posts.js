@@ -3,9 +3,7 @@ const { editor, posts } = require('../controllers/routers/posts');
 
 
 
-// ==============================
-//  ROUTER HUB
-// ==============================
+// device
 const PostRouter = new Device([{
   route:          ['/edit', '/edit/new'],
   controller:     editor.post,
@@ -31,5 +29,6 @@ const PostRouter = new Device([{
 PostRouter.setting.handler('posts.singular');
 
 
-// router exports
+
+// exports
 module.exports = PostRouter.run();

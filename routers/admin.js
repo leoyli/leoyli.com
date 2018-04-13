@@ -3,9 +3,7 @@ const admin = require('../controllers/routers/admin');
 
 
 
-// ==============================
-//  ROUTE HUB
-// ==============================
+// device
 const DashboardRouter = new Device([{
   route:          '/',
   controller:     admin.main,
@@ -25,10 +23,10 @@ const DashboardRouter = new Device([{
 }]);
 
 
-// pre-used middleware
+// settings
 DashboardRouter.setting = { title: 'Control', authenticated : true , cache: false };
 
 
 
-// router exports
+// exports
 module.exports = DashboardRouter.run();

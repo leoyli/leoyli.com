@@ -2,18 +2,14 @@ module.exports = exports = { editor: {}, posts: {} };
 
 
 
-// ==============================
-//  DEPENDENCIES
-// ==============================
+// modules
 const { _U_ } = require('../utilities/');
 const { postsModel } = require('../../models/');
 const { fetch } = require('../middleware/fetch');
 
 
 
-// ==============================
-//  CONTROLLERS
-// ==============================
+// controllers
 exports.editor.post = {
   GET: (req, res, next) => {
     req.session.chest = { post: {} };

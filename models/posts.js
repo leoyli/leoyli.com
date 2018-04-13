@@ -1,10 +1,8 @@
-const
-  mongoose           = require('mongoose');
+const mongoose = require('mongoose');
 
 
-// ==============================
-//  SCHEMA
-// ==============================
+
+// schema
 const PostsSchema    = new mongoose.Schema({
   author: {
     _id: {
@@ -36,6 +34,10 @@ const PostsSchema    = new mongoose.Schema({
   timestamps         : { createdAt: 'time._created', updatedAt: 'time._updated' },
   versionKey         : '_revised',
 })
+
+
+// indexes
+PostsSchema
   .index({ 'tags' : 1 })
   .index({ 'category' : -1 })
   .index({ 'time._updated' : -1 })
@@ -43,10 +45,6 @@ const PostsSchema    = new mongoose.Schema({
   .index({ 'title': 'text', 'content': 'text', 'category': 'text', 'tags' : 'text' });
 
 
-
-// ==============================
-//  METHODS
-// ==============================
 // action hooks
 // version counter (pre-hook)
 PostsSchema.pre('findOneAndUpdate', function () {
@@ -75,6 +73,7 @@ PostsSchema.virtual('state.recycled').get(function () {
 PostsSchema.virtual('time._expired').get(function () {
   return this.time._recycled ? new Date(this.time._recycled.getTime() + 14 * 24 * 3600 * 1000) : null;
 });
+
 
 
 // exports

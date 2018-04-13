@@ -3,13 +3,14 @@ const { configsModel, postsModel } = require('../../models/');
 
 
 
+// main
 const generic = async (req, res, next) => {
   // checking website settings in environment variables
   if (!process.env['$WEBSITE_CONFIGS']) configsModel.initialize(() => {
     if(!process.env['$WEBSITE_CONFIGS']) throw new _U_.error.ServerError(90001);
   });
 
-  // populating routing variables
+  // populating routing variables                                                                                       // tofix: remove from API route
   res.locals.$$SITE = JSON.parse(process.env['$WEBSITE_CONFIGS']);
   res.locals.$$VIEW = {
     flash   : { error: req.flash('error'), info: req.flash('info'), action: req.flash('action') },
@@ -19,30 +20,40 @@ const generic = async (req, res, next) => {
     user    : req.session.user,
   };
 
-  // configuring session variables
+  // configuring sessions
   if (!req.session.user && req.session.cookie.expires) req.session.cookie.expires = false;
   if (res.locals.$$VIEW.flash.action[0] !== 'retry') delete req.session.returnTo;
 
   return req.body.post && ['POST', 'PATCH'].indexOf(req.method) !== -1 ? postNormalizer(req, res, next) : next();
 };
 
-
 const postNormalizer = async (req, res, next) => {
-  const post = req.body.post;
-  if (!post) return next();
+  if (req.method === 'GET' || !req.body.post) return next();
+  const { post } = req.body;
 
-  if (req.method === 'POST' && !post.canonical) post.canonical = _U_.string.toKebabCase(post.title);
-  if (post.canonical !== undefined) {
-    const counts = await postsModel.count({ canonical: { $regex: new RegExp(`^${post.canonical}(?:-[0-9]+)?$`) }});
-    if (counts > 0) post.canonical = post.canonical + '-' + (counts + 1);
-  }
-  post.featured   = _U_.string.inspectFileURL(post.featured, res.locals.$$SITE.sets.imageTypes, { raw: false });
-  post.title      = _U_.string.escapeChars(post.title);
-  post.content    = _U_.string.escapeChars(post.content);                                                               // tofix: using sanitizer
-  post.category   = _U_.string.toKebabCase(post.category) || undefined;
-  post.tags       = _U_.string.toKebabCase(post.tags) || undefined;
-  if (post.state) post.state.forEach(state => post[`state.${state}`] = true);
-  delete post.state;
+  // canonicalize                                                                                                       // todo: move to error handler
+  const checkAndResolveConflict = (str) => postsModel
+    .count({ canonical: { $regex: new RegExp(`^${str}(?:-[0-9]+)?$`) }})
+    .then(counts => {
+      if (counts > 0) return str + '-' + (counts + 1);
+      return str;
+    });
+
+  // normalize                                                                                                          // todo: only normalize for POST, PATCH (different logic)
+  const normalizedPost = {
+    ...post,
+    featured  : _U_.string.inspectFileURL(post.featured, res.locals.$$SITE.sets.imageTypes, { raw: false }),
+    title     : _U_.string.escapeChars(post.title),
+    content   : _U_.string.escapeChars(post.content),
+    category  : _U_.string.toKebabCase(post.category) || undefined,
+    tags      : _U_.string.toKebabCase(post.tags) || undefined,
+  };
+  if (post.state) normalizedPost.state.forEach(state => normalizedPost[`state.${state}`] = true);
+  if (req.method === 'POST') normalizedPost.canonical = await checkAndResolveConflict(_U_.string.toKebabCase(post.title));
+
+  // overwrite
+  req.body.post = normalizedPost;
+
   return next();
 };
 

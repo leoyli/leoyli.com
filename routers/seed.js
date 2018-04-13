@@ -2,9 +2,7 @@ const { Device } = require('../controllers/engines/router');
 
 
 
-// ==============================
-//  CONTROLLERS
-// ==============================
+// controllers
 const moc = {
   user: {
     email       : 'leo@leoyli.com',
@@ -39,9 +37,7 @@ const seed = async (req, res) => {
 
 
 
-// ==============================
-//  ROUTER HUB
-// ==============================
+// device
 const SeedRouter = new Device([{
   route: '/',
   controller: seed,
@@ -49,5 +45,5 @@ const SeedRouter = new Device([{
 
 
 
-// router exports
+// exports
 module.exports = SeedRouter.run();

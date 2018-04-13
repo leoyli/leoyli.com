@@ -2,17 +2,13 @@ module.exports = home = {};
 
 
 
-// ==============================
-//  DEPENDENCIES
-// ==============================
+// modules
 const { _M_ } = require('../middleware/plugins');
 const { usersModel } = require('../../models/');
 
 
 
-// ==============================
-//  CONTROLLERS
-// ==============================
+// controllers
 home.main = {
   GET: (req, res, next) => next(),
 };

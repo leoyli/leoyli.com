@@ -3,9 +3,7 @@ const pages = require('../controllers/routers/pages');
 
 
 
-// ==============================
-//  ROUTER HUB
-// ==============================
+// device
 const PageRouter = new Device([{
   route:          '/',
   controller:     pages.landing,
@@ -18,5 +16,5 @@ const PageRouter = new Device([{
 
 
 
-// router exports
+// exports
 module.exports = PageRouter.run();

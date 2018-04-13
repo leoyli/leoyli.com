@@ -2,7 +2,9 @@ const { adminRouter, homeRouter, postsRouter, accountRouter, pagesRouter } = req
 const { HttpError } = require('../controllers/utilities/')._U_.error;
 
 
-function routerAgent(app) {
+
+// main
+const routerAgent = (app) => {
   app.use('/admin',   adminRouter);
   app.use('/home',    homeRouter);
   app.use('/posts',   postsRouter);
@@ -10,7 +12,7 @@ function routerAgent(app) {
   app.use('/',        pagesRouter);
   app.get('*',        (req, res, next) => next(new HttpError(404)));
   app.use(require('../controllers/views/error'));
-}
+};
 
 
 

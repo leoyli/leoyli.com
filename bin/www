@@ -3,48 +3,15 @@
 /**
  * Module dependencies.
  */
-
-const
-  app         = require('../app'),
-  debug       = require('debug')('leoyli-main:server'),
-  http2       = require('spdy'),
-  fs          = require('fs');
-
-/**
- * Get SSL credentials as options
- */
-
-const options = {
-  key         : fs.readFileSync(process.env['SSL_KEY'], 'utf8'),
-  cert        : fs.readFileSync(process.env['SSL_CRT'], 'utf8'),
-};
-
-/**
- * Get port from environment and store in Express.
- */
-
-const port      = normalizePort(process.env['PORT'] || '3443');
-app.set('port', port);
-
-/**
- * Create HTTP2 server.
- */
-
-const server    = http2.createServer(options, app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+const app = require('../app');
+const debug = require('debug')('leoyli-main:server');
+const http2 = require('spdy');
+const fs = require('fs');
 
 /**
  * Normalize a port into a number, string, or false.
  */
-
-function normalizePort(val) {
+const normalizePort = (val) => {
   const port = parseInt(val, 10);
 
   if (isNaN(port)) {
@@ -58,13 +25,12 @@ function normalizePort(val) {
   }
 
   return false;
-}
+};
 
 /**
  * Event listener for HTTP server "error" event.
  */
-
-function onError(error) {
+const onError = (error) => {
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -83,27 +49,50 @@ function onError(error) {
       console.error(bind + ' is already in use');
       process.exit(1);
       break;
-    default:
+    default: {
       throw error;
+    }
   }
-}
+};
 
 /**
  * Event listener for HTTP server "listening" event.
  */
-
-function onListening() {
+const onListening = () => {
   const addr = server.address();
   const bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
-}
+};
+
+/**
+ * Get SSL credentials as options
+ */
+const options = {
+  key: fs.readFileSync(process.env['SSL_KEY'], 'utf8'),
+  cert: fs.readFileSync(process.env['SSL_CRT'], 'utf8'),
+};
+
+/**
+ * Get port from environment and store in Express.
+ */
+const port = normalizePort(process.env['PORT'] || '3443');
+app.set('port', port);
+
+/**
+ * Create HTTP2 server.
+ */
+const server = http2.createServer(options, app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
 
 /**
  * Event listener for 'unhandledRejection' event.
  */
-
-process.on('unhandledRejection', (err) => {
-  console.log('Unhandled Promise Rejection:\n', err.stack);
-});
+process.on('unhandledRejection', (err) => console.log('Unhandled Promise Rejection:\n', err.stack));

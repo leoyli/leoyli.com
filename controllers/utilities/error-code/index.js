@@ -52,6 +52,6 @@ module.exports = new Proxy(codeIndexes, {
   get: (target, name) => {
     const dictionary = `${name}_${process.env['$WEBSITE_CONFIGS'].language || 'en'}`;
     if (target.hasOwnProperty(dictionary)) return (...arg) => target[dictionary].lookup(...arg) || arg[0];
-    else return arg => arg;
+    return arg => arg;
   }
 });

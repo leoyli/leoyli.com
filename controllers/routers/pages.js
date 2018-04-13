@@ -2,17 +2,13 @@ module.exports = pages = {};
 
 
 
-// ==============================
-//  DEPENDENCIES
-// ==============================
+// modules
 const { _U_ } = require('../utilities/');
 const { fetch } = require('../middleware/fetch');
 
 
 
-// ==============================
-//  CONTROLLERS
-// ==============================
+// controllers
 pages.landing = {
   GET: (req, res, next) => next()
 };

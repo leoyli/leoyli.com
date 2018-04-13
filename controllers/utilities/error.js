@@ -2,9 +2,7 @@ const errorCodeProxyAgent = require('./error-code/');
 
 
 
-// ==============================
-//  CORE
-// ==============================
+// main
 class ExtendableError extends Error {
   constructor(...arg) {
     if (new.target.__proto__.name === 'TransferableError') {
@@ -31,10 +29,7 @@ class TransferableError extends ExtendableError {
 }
 
 
-
-// ==============================
-//  ERROR CLASSES
-// ==============================
+// extensions
 class ServerError       extends TransferableError {}                                                                    // note: this error cannot be handled by middleware
 class TemplateError     extends TransferableError {}
 class ClientError       extends TransferableError {}

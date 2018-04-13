@@ -1,13 +1,10 @@
-const
-  mongoose                = require('mongoose'),
-  validator               = require('validator'),
-  passportLocalMongoose   = require('passport-local-mongoose');
+const mongoose = require('mongoose');
+const validator = require('validator');
+const passportLocalMongoose = require('passport-local-mongoose');
 
 
 
-// ==============================
-//  SCHEMA
-// ==============================
+// schema
 const UsersSchema   = new mongoose.Schema({
   active            : { type: String, default: false },
   roles             : { type: String, default: 'admin' },
@@ -39,10 +36,6 @@ const UsersSchema   = new mongoose.Schema({
 });
 
 
-
-// ==============================
-//  METHODS
-// ==============================
 // action hooks
 //// nickname assignment (pre-hook)
 UsersSchema.pre('save', function () {
@@ -60,7 +53,7 @@ UsersSchema.pre('update', function () {
 });
 
 
-// methods for the document
+// methods for documents
 //// update the specified last time field
 UsersSchema.methods.updateLastTimeLog = function (fieldName) {
   return mongoose.connection.db.collection('users').update(
@@ -78,13 +71,13 @@ UsersSchema.plugin(passportLocalMongoose, {
 });
 
 //// rewrite plugin methods as promises
-function selfPromisify(fn, arg, THIS) {
+const selfPromisify = (fn, arg, THIS) => {
   if (typeof arg[arg.length-1] === 'function') return fn.call(THIS, ...arg);
   return new Promise((resolve, reject) => fn.call(THIS, ...arg, (err, result) => {
     if (err) return reject(err);
-    else return resolve(result);
+    return resolve(result);
   }));
-}
+};
 
 const _register = UsersSchema.statics.register;
 UsersSchema.statics.register = function (...arg) {
@@ -103,13 +96,14 @@ UsersSchema.methods.changePassword = function (...arg) {
 };
 
 
-//// virtual method for user-post association
+// virtual method for user-post association
 //// to-use: usersModel.findOne({}).populate({ path: 'posts', match: { 'time._recycled': { $eq: null } }}).exec();
 UsersSchema.virtual('posts', {
   ref         : 'posts',
   localField  : '_id',
   foreignField: 'author._id',
 });
+
 
 
 // exports

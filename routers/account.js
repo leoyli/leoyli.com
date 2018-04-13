@@ -4,9 +4,7 @@ const { account } = require('../controllers/routers/account');
 
 
 
-// ==============================
-//  ROUTER HUB
-// ==============================
+// device
 const UserRouter = new Device([{
   route:          '/signup',
   controller:     account.signup,
@@ -21,11 +19,12 @@ const UserRouter = new Device([{
 }]);
 
 
-// pre-used middleware
-UserRouter.hook('pre', require('../controllers/middleware/plugins')._M_.usePassport);
-UserRouter.hook('post', (err, req, res, next) => next(new ClientError(err)));
+// settings
+UserRouter
+  .hook('pre', require('../controllers/middleware/plugins')._M_.usePassport)
+  .hook('post', (err, req, res, next) => next(new ClientError(err)));
 
 
 
-// router exports
+// exports
 module.exports = UserRouter.run();

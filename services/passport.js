@@ -1,11 +1,13 @@
 const { usersModel } = require('../models/');
 
 
-function passportAgent(passport) {
+
+// main
+const passportAgent = (passport) => {
   passport.use(usersModel.createStrategy());
   passport.serializeUser(usersModel.serializeUser());
   passport.deserializeUser(usersModel.deserializeUser());
-}
+};
 
 
 

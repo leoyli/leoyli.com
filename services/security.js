@@ -5,6 +5,7 @@ class ContentSecurityPolicy {
 
   addToWhitelist(src, domain) {
     this.whitelist.push([src, domain]);
+    return this;
   }
 
   getTrustedDomains(src) {
@@ -25,8 +26,7 @@ class ContentSecurityPolicy {
   }
 }
 
-
-function securityHeaderAgent(app) {
+const securityHeaderAgent = (app) => {
   const CSPConfigs = new ContentSecurityPolicy();
   CSPConfigs.addToWhitelist('script, style, font', 'https://maxcdn.bootstrapcdn.com/');
   CSPConfigs.addToWhitelist('script, style', 'https://cdnjs.cloudflare.com/');
@@ -42,7 +42,7 @@ function securityHeaderAgent(app) {
     });
     return next();
   });
-}
+};
 
 
 

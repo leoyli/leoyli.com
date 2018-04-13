@@ -1,3 +1,25 @@
+### 0.9.0-dev.2 / 2018-04-12
+> App
+- Removed unnecessary comments.
+- Refactored codes in accordance with code styles:
+  - used 'function expressions' over 'function declarations';
+    (leveraged 'function name inference' from V8 in using arrow functions)
+  - return `this` in `class` methods whenever applicable;
+    (allow methods to be chained)
+  - removed redundant `else` from `else return` pattern;
+  - renamed some variables for better readability;
+  - avoided argument mutations;
+  - wrapped `default` case by `{}` in all `switch`.
+- Refactored `postNormalizer` in 'initial' middleware.
+- Refactored 'fetch' middleware and removed 'aggregation.exp' engine.
+- Refactored `checkNativeBrand` object utility.
+- Added `hasOwnProperty` object utility.
+
+> Test
+- Updated tests.
+- Added `hasOwnProperty` object utility unit test.
+
+
 ### 0.9.0-dev.1 / 2018-04-12
 > App
 - Changed from 'API/POST' to 'API/PUT'.

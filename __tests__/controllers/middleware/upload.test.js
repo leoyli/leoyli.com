@@ -81,7 +81,7 @@ describe('Bundle: upload.js', () => {
     //
     expect(result[0].length).toBe(0);
     expect(result[1]).toEqual([`test.png is too large (> ${mocConfigs.fileSize/1048576} MB)...`]);
-    expect(result[2]).toEqual([`test.png is an unsupported file types...`]);
-    expect(result[3]).toEqual([`No Files was found on media_test[file]...`]);
+    expect(result[2]).toEqual(['types of \'test.png\' is not supported.']);
+    expect(result[3]).toEqual(['No Files was found on media_test[file]...']);
   });
 });

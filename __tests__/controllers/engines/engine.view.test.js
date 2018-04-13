@@ -75,7 +75,7 @@ describe('Bundle: engine.js', () => {
   test('Fn: render: Should return the requested content in HTML', async () => {
     const result = await (render( '', mockLocals, (err, context) => {
       if (err) throw err;
-      else return context;
+      return context;
     })).then(string => {
       return typeof string === 'string';
     });

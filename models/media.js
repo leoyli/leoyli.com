@@ -1,19 +1,13 @@
-const
-  mongoose           = require('mongoose');
+const mongoose = require('mongoose');
 
 
 
-// ==============================
-//  FUNCTIONS
-// ==============================
-// ancillaries
-const { _U_ }        = require('../controllers/utilities/');
+// modules
+const { _U_ } = require('../controllers/utilities/');
 
 
 
-// ==============================
-//  SCHEMA
-// ==============================
+// schema
 const MediaSchema    = new mongoose.Schema({
   author: {
     _id: {
@@ -37,10 +31,6 @@ const MediaSchema    = new mongoose.Schema({
 });
 
 
-
-// ==============================
-//  METHODS
-// ==============================
 // action hooks
 // version counter (pre-hook)
 MediaSchema.pre('findOneAndUpdate', function () {

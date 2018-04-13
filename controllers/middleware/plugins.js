@@ -1,13 +1,15 @@
+module.exports = exports = { _M_: {} };
+const passport = require('passport');
+
+
+
+// modules
 const { ClientError } = require('../utilities/')._U_.error;
 const { _U_ } = require('../utilities/');
-const passport = require('passport');
-module.exports = exports = { _M_: {} };
 
 
 
-// ==============================
-//  MIDDLEWARE PLUGINS
-// ==============================
+// main
 // http header for stopping crawlers
 exports._M_.doNotCrawled = (req, res, next) => {
   res.set('Cache-Control', 'private, max-age=0');
@@ -36,10 +38,8 @@ exports._M_.caseInsensitiveQuery = (req, res, next) => {
   return next();
 };
 
-
 // busboy for multipart form parsing
 exports._M_.hireBusboy = (limits) => (req, res, next) => require('./upload').uploadController(req, res, limits, next);
-
 
 // set title tag
 exports._M_.setTitleTag = (title, { append, root } = {}) => (req, res, next) => {
@@ -48,13 +48,11 @@ exports._M_.setTitleTag = (title, { append, root } = {}) => (req, res, next) => 
   if (append === true) sequence.push(title);
   else sequence.unshift(title);
   res.locals.$$VIEW.title = sequence.join(' - ');
-  if (typeof next === 'function') return next();
+  return next();
 };
-
 
 // passport
 exports._M_.usePassport = [exports._M_.doNotCrawled, passport.initialize(), passport.session()];
-
 
 // authentication
 exports._M_.isSignedIn = [...exports._M_.usePassport, (req, res, next) => {
@@ -62,17 +60,18 @@ exports._M_.isSignedIn = [...exports._M_.usePassport, (req, res, next) => {
   else throw new ClientError(20003);
 }];
 
-
 // authorization
 exports._M_.isAuthorized = [...exports._M_.isSignedIn, async (req, res, next) => {
   const [field, val] = req.params.canonical !== undefined
     ? ['canonical', req.params.canonical]
     : ['_id', _U_.string.readMongoId(req.url)];
+
   if (await require('../../models/').postsModel.count({ [field]: val, 'author._id': req.user._id }) !== 1) {            // tofix: find the post first then decide to give or not
     throw new ClientError(20001);
-  } else return next();
-}];
+  }
 
+  return next();
+}];
 
 // password validations
 exports._M_.passwordValidation = (req, res, next) => {
@@ -82,5 +81,7 @@ exports._M_.passwordValidation = (req, res, next) => {
     throw new ClientError(10002);
   } else if (req.body.password.old && (req.body.password.old.toString() === req.body.password.new.toString())) {
     throw new ClientError(10003);
-  } else return next();
+  }
+
+  return next();
 };

@@ -2,18 +2,15 @@ module.exports = admin = {};
 
 
 
-// ==============================
-//  DEPENDENCIES
-// ==============================
+// modules
 const { _M_ } = require('../middleware/plugins');
 const { _U_ } = require('../utilities/');
 const { configsModel, mediaModel, postsModel } = require('../../models/');
 const { fetch } = require('../middleware/fetch');
 
 
-// ==============================
-//  CONTROLLERS
-// ==============================
+
+// controllers
 admin.main = {
   GET: (req, res, next) => next(),
 };
@@ -45,16 +42,14 @@ admin.upload = {   // todo: to be integrated in profile and media manager
 admin.stack = {
   GET: (req, res, next) => {
     const collection = req.params['stackType'].toLowerCase();
-    if (['posts', 'media'].indexOf(collection) !== -1) {
-      _M_.setTitleTag(collection)(req, res);                                                                      // todo: capitalize
-      return fetch(collection, { num: 10 })(req, res, next);
-    } else throw new _U_.error.HttpError(404);
+    if (['posts', 'media'].indexOf(collection) === -1) throw new _U_.error.HttpError(404);
+    _M_.setTitleTag(collection)(req, res);                                                                              // todo: capitalize
+    return fetch(collection, {num: 10})(req, res, next);
   },
   PATCH: async (req, res) => {
     const $update = { $set: {}};
     if (req.body.action === 'restored') $update.$set = { [`state.recycled`]: false };
     else $update.$set = { [`state.${req.body.action}`]: true };
-
     if (req.body.action) await postsModel.update({ _id: { '$in' : req.body.target }}, $update, { multi: true });
     return res.redirect('back');
   },

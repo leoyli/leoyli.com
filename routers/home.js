@@ -3,9 +3,7 @@ const home = require('../controllers/routers/home');
 
 
 
-// ==============================
-//  ROUTE HUB
-// ==============================
+// device
 const DashboardRouter = new Device([{
   route:          '/',
   controller:     home.main,
@@ -25,10 +23,10 @@ const DashboardRouter = new Device([{
 }]);
 
 
-// pre-used middleware
+// settings
 DashboardRouter.setting = { title: 'Account', authenticated : true , cache: false };
 
 
 
-// router exports
+// exports
 module.exports = DashboardRouter.run();
