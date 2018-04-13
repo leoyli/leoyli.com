@@ -12,7 +12,7 @@ const modelIndex = require('../../models/');
 api.stack = {
   GET: async (req, res) => {
     const collection = req.params['stackType'].toLowerCase();
-    if (['posts', 'media'].indexOf(collection) !== -1) return res.json(await fetch(collection, { num: 10 })(req, res));
+    if (['posts', 'media'].includes(collection)) return res.json(await fetch(collection, { num: 10 })(req, res));
     return res.statusCode(404);
   },
   PUT: async (req, res) => {                                                                                            // todo: limit update range (matching with query)

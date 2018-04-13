@@ -1,3 +1,13 @@
+### 0.9.0-dev.2.1 / 2018-04-13
+> App
+- Replaced `array.indexOf('val') !== -1` by `array.includes('val')`. (The ES7 feature)
+- Updated CSP rules.
+
+> UI
+- CDN source file updates.
+- Upgraded from Bootstrap v4.0 to v4.1.
+
+
 ### 0.9.0-dev.2 / 2018-04-12
 > App
 - Removed unnecessary comments.

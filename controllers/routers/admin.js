@@ -42,7 +42,7 @@ admin.upload = {   // todo: to be integrated in profile and media manager
 admin.stack = {
   GET: (req, res, next) => {
     const collection = req.params['stackType'].toLowerCase();
-    if (['posts', 'media'].indexOf(collection) === -1) throw new _U_.error.HttpError(404);
+    if (!['posts', 'media'].includes(collection)) throw new _U_.error.HttpError(404);
     _M_.setTitleTag(collection)(req, res);                                                                              // todo: capitalize
     return fetch(collection, {num: 10})(req, res, next);
   },

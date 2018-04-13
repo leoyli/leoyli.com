@@ -24,7 +24,7 @@ const generic = async (req, res, next) => {
   if (!req.session.user && req.session.cookie.expires) req.session.cookie.expires = false;
   if (res.locals.$$VIEW.flash.action[0] !== 'retry') delete req.session.returnTo;
 
-  return req.body.post && ['POST', 'PATCH'].indexOf(req.method) !== -1 ? postNormalizer(req, res, next) : next();
+  return req.body.post && ['POST', 'PATCH'].includes(req.method) ? postNormalizer(req, res, next) : next();
 };
 
 const postNormalizer = async (req, res, next) => {

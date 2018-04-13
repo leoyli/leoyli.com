@@ -17,7 +17,7 @@ const { _U_ } = require('../utilities/');
  * @return {boolean}                        - action passed(true) / blocked(false)
  */
 const checkStatus = (parser, configs) => {
-  return !(!parser.fileName || configs.MIME.indexOf(parser.MIME) === -1 || parser.stream.truncated);
+  return !(!parser.fileName || !configs.MIME.includes(parser.MIME) || parser.stream.truncated);
 };
 
 /**
@@ -68,7 +68,7 @@ const transpileRaw = (parser, configs) => {
 const transpileMes = (parser, configs) => {
   const messenger = [];
   if (!parser.fileName) messenger.push(`No Files was found on ${parser.fieldName}...`);                                 // tofix: centralized message; only display when upload = 0
-  else if (configs.MIME.indexOf(parser.MIME) === -1) messenger.push(`types of '${parser.fileName}' is not supported.`);
+  else if (!configs.MIME.includes(parser.MIME)) messenger.push(`types of '${parser.fileName}' is not supported.`);
   else if (parser.stream.truncated) {
     messenger.push(`${parser.fileName} is too large (> ${configs.fileSize/1048576} MB)...`);
     fs.unlink(parser.filePath, err => {

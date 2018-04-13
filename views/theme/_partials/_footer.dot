@@ -2,69 +2,69 @@
 
 
 <footer class="mt-4 py-4">
-    <!-- site map -->
-    <div class="container d-sm-flex text-light" id="siteMap" role="navigation" aria-label="Secondary">
-        <div class="col-lg-3 col-xl-2 pb-4">
-            <div class="h5 text-uppercase">Info</div>
-            <ul class="list-unstyled">
-                <li><a class="fa fa-chevron-right" href="/">About Me</a></li>
-                <li><a class="fa fa-chevron-right" href="/">My Projects</a></li>
-                <li><a class="fa fa-chevron-right" href="/">Site Policy</a></li>
-            </ul>
-        </div>
-
-        <div class="col-lg-3 col-xl-2 pb-4">
-            <div class="h5 text-uppercase">Contact</div>
-            <ul class="list-unstyled">
-                <li><a class="fa fa-chevron-right" href="/">Contact Me</a></li>
-                <li><a class="fa fa-chevron-right" href="/">Content Report</a></li>
-                <li><a class="fa fa-chevron-right" href="/">Cooperate</a></li>
-            </ul>
-        </div>
+  <!-- site map -->
+  <div class="container d-sm-flex text-light" id="siteMap" role="navigation" aria-label="Secondary">
+    <div class="col-lg-3 col-xl-2 pb-4">
+      <div class="h5 text-uppercase">Info</div>
+      <ul class="list-unstyled">
+        <li><a class="fa fa-chevron-right" href="/">About Me</a></li>
+        <li><a class="fa fa-chevron-right" href="/">My Projects</a></li>
+        <li><a class="fa fa-chevron-right" href="/">Site Policy</a></li>
+      </ul>
     </div>
 
-    <!-- misc -->
-    <div class="container d-md-flex pt-3 text-justify" id="misc">
-        <!-- copyright -->
-        <div class="col-md-8 col-lg-7" id="sitePolicy" role="contentinfo">
-            <p id="copyright">
-                {{= new Date().getFullYear() }} &copy; {{= $$SITE.title }}.
-            </p>
-            <p id="licence">
-                Except as otherwise noted, the content of this site is licensed under the
-                <a href="https://creativecommons.org/licenses/by-sa/4.0/">
-                    CC BY-SA 4.0 Licence</a>, and code samples are licensed under the
-                <a href="http://www.apache.org/licenses/LICENSE-2.0">
-                    Apache License 2.0</a>.
-            </p>
-        </div>
-
-        <!-- social media // todo: will loop data from DB -->
-        <div class="col-md-4 col-lg-5 text-md-right" id="socialLinks" aria-label="socialMedia">
-            <a class="fa fa-github" href="https://github.com/leoyli"
-               title="GitHub" aria-label="GitHub"></a>
-            <a class="fa fa-linkedin" href="https://www.linkedin.com/in/leoyli"
-               title="Twitter" aria-label="Twitter"></a>
-            <a class="fa fa-facebook-official" href="https://www.facebook.com/leo.yuxiu.li"
-               title="Facebook" aria-label="Facebook"></a>
-            <!--<a class="fa fa-twitter" href="https://twitter.com/leoyli"-->
-                <!--title="Twitter" aria-label="Twitter"></a>-->
-            <!--<a class="fa fa-rss" href="/" target="_blank" rel="noopener"-->
-               <!--title="RSS" aria-label="RSS"></a>-->
-        </div>
+    <div class="col-lg-3 col-xl-2 pb-4">
+      <div class="h5 text-uppercase">Contact</div>
+      <ul class="list-unstyled">
+        <li><a class="fa fa-chevron-right" href="/">Contact Me</a></li>
+        <li><a class="fa fa-chevron-right" href="/">Content Report</a></li>
+        <li><a class="fa fa-chevron-right" href="/">Cooperate</a></li>
+      </ul>
     </div>
+  </div>
+
+  <!-- misc -->
+  <div class="container d-md-flex pt-3 text-justify" id="misc">
+    <!-- copyright -->
+    <div class="col-md-8 col-lg-7" id="sitePolicy" role="contentinfo">
+      <p id="copyright">
+        {{= new Date().getFullYear() }} &copy; {{= $$SITE.title }}.
+      </p>
+      <p id="licence">
+        Except as otherwise noted, the content of this site is licensed under the
+        <a href="https://creativecommons.org/licenses/by-sa/4.0/">
+          CC BY-SA 4.0 Licence</a>, and code samples are licensed under the
+        <a href="http://www.apache.org/licenses/LICENSE-2.0">
+          Apache License 2.0</a>.
+      </p>
+    </div>
+
+    <!-- social media // todo: will loop data from DB -->
+    <div class="col-md-4 col-lg-5 text-md-right" id="socialLinks" aria-label="socialMedia">
+      <a class="fa fa-github" href="https://github.com/leoyli"
+         title="GitHub" aria-label="GitHub"></a>
+      <a class="fa fa-linkedin" href="https://www.linkedin.com/in/leoyli"
+         title="Twitter" aria-label="Twitter"></a>
+      <a class="fa fa-facebook-official" href="https://www.facebook.com/leo.yuxiu.li"
+         title="Facebook" aria-label="Facebook"></a>
+      <!--<a class="fa fa-twitter" href="https://twitter.com/leoyli"-->
+      <!--title="Twitter" aria-label="Twitter"></a>-->
+      <!--<a class="fa fa-rss" href="/" target="_blank" rel="noopener"-->
+      <!--title="RSS" aria-label="RSS"></a>-->
+    </div>
+  </div>
 </footer>
 
 
 <!-- endpoint scripts -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.bundle.min.js"
+        integrity="sha384-lZmvU/TzxoIQIOD9yQDEpvxp6wEU32Fy0ckUgOH4EIlMOCdR823rg4+3gWRwnX1M"
         crossorigin="anonymous"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"
         integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw="

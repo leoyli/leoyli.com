@@ -14,8 +14,8 @@ class ContentSecurityPolicy {
 
   rules() {
     const RuleMaps  = {
-      "default-src" : "'self'",
-      "script-src"  : `'self' ${this.getTrustedDomains('script')}`,
+      "default-src" : "'self' ",
+      "script-src"  : `'self' 'unsafe-inline' ${this.getTrustedDomains('script')}`,
       "style-src"   : `'self' 'unsafe-inline' ${this.getTrustedDomains('style')}`,
       "font-src"    : `${this.getTrustedDomains('font')}`,
       "img-src"     : "*",
@@ -28,7 +28,7 @@ class ContentSecurityPolicy {
 
 const securityHeaderAgent = (app) => {
   const CSPConfigs = new ContentSecurityPolicy();
-  CSPConfigs.addToWhitelist('script, style, font', 'https://maxcdn.bootstrapcdn.com/');
+  CSPConfigs.addToWhitelist('script, style, font', 'https://stackpath.bootstrapcdn.com/');
   CSPConfigs.addToWhitelist('script, style', 'https://cdnjs.cloudflare.com/');
   CSPConfigs.addToWhitelist('script', 'https://code.jquery.com/');
 

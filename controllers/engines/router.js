@@ -32,7 +32,7 @@ const stackHttpMethods = ({ controller, alias, method }) => {
   const methodList = method
     ? _U_.object.checkNativeBrand(method, 'String') ? [method] : method
     : _U_.object.checkNativeBrand(controller, 'Object') ? Object.keys(controller) : ['get'];
-  if (alias && methodList.indexOf('alias') === -1) methodList.push('alias');
+  if (alias && !methodList.includes('alias')) methodList.push('alias');
   return methodList.sort();
 };
 
@@ -79,7 +79,7 @@ const loadMainControls = (controller, method) => {
  * @return {array}                          - task is triggered only when the method is 'alias' or 'get'
  */
 const loadViewRenderer = ({ template, handler } = {}, method) => {
-  return (['get', 'alias'].indexOf(method.toLowerCase()) > -1) && template ? [templateHandler(template, handler)] : [];
+  return ['get', 'alias'].includes(method.toLowerCase()) && template ? [templateHandler(template, handler)] : [];
 };
 
 
