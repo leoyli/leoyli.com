@@ -1,5 +1,5 @@
 const { Device } = require('../controllers/engines/router');
-const { _M_ } = require('../controllers/middleware/plugins');
+const { _M_ } = require('../controllers/middleware/');
 const api = require('../controllers/routers/api');
 
 

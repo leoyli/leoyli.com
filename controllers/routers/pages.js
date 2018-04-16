@@ -4,7 +4,7 @@ module.exports = pages = {};
 
 // modules
 const { _U_ } = require('../utilities/');
-const { fetch } = require('../middleware/fetch');
+const { _M_ } = require('../middleware/');
 
 
 
@@ -14,5 +14,5 @@ pages.landing = {
 };
 
 pages.search = {
-  GET: (req, res, next) => fetch('posts')(req, res, next),
+  GET: (req, res, next) => _M_.aggregateFetch('posts')(req, res, next),
 };

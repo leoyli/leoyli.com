@@ -3,9 +3,9 @@ module.exports = exports = { editor: {}, posts: {} };
 
 
 // modules
+const { _M_ } = require('../middleware/');
 const { _U_ } = require('../utilities/');
 const { postsModel } = require('../../models/');
-const { fetch } = require('../middleware/fetch');
 
 
 
@@ -58,5 +58,5 @@ exports.posts.show = {
 };
 
 exports.posts.list = {
-  GET: fetch('posts'),
+  GET: _M_.aggregateFetch('posts'),
 };

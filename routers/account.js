@@ -21,7 +21,7 @@ const UserRouter = new Device([{
 
 // settings
 UserRouter
-  .hook('pre', require('../controllers/middleware/plugins')._M_.usePassport)
+  .hook('pre', require('../controllers/middleware/')._M_.usePassport)
   .hook('post', (err, req, res, next) => next(new ClientError(err)));
 
 

@@ -4,7 +4,7 @@ module.exports = exports = { account: {} };
 
 // modules
 const { ClientError } = require('../utilities/')._U_.error;
-const { _M_ } = require('../middleware/plugins');
+const { _M_ } = require('../middleware/');
 const { usersModel } = require('../../models/');
 
 

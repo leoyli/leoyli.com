@@ -1,5 +1,14 @@
 ### 0.9.0-dev.2.1 / 2018-04-13
 > App
+- Revised 'plugin' middleware:
+  - renamed file as 'index';
+  - reorganized codes;
+  - updated 'upload' middleware;
+  - encapsulated 'fetch' in `_M_.aggregateFetch` middleware.
+
+
+### 0.9.0-dev.2.1 / 2018-04-13
+> App
 - Replaced `array.indexOf('val') !== -1` by `array.includes('val')`. (The ES7 feature)
 - Updated CSP rules.
 

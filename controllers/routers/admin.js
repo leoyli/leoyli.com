@@ -3,10 +3,9 @@ module.exports = admin = {};
 
 
 // modules
-const { _M_ } = require('../middleware/plugins');
+const { _M_ } = require('../middleware/');
 const { _U_ } = require('../utilities/');
 const { configsModel, mediaModel, postsModel } = require('../../models/');
-const { fetch } = require('../middleware/fetch');
 
 
 
@@ -28,7 +27,7 @@ admin.configs = {
 
 admin.upload = {   // todo: to be integrated in profile and media manager
   GET: (req, res, next) => next(),
-  POST: [_M_.hireBusboy({ fileSize: 25*1048576 }), async (req, res) => {
+  POST: [_M_.parseMultipart({ fileSize: 25*1048576 }), async (req, res) => {
     if (req.body.busboySlip.mes.length > 0) req.body.busboySlip.mes.forEach(mes => req.flash('error', mes));
     if (req.body.busboySlip.raw.length > 0) {
       req.body.busboySlip.raw.forEach(medium => medium.author = req.session.user);
@@ -44,7 +43,7 @@ admin.stack = {
     const collection = req.params['stackType'].toLowerCase();
     if (!['posts', 'media'].includes(collection)) throw new _U_.error.HttpError(404);
     _M_.setTitleTag(collection)(req, res);                                                                              // todo: capitalize
-    return fetch(collection, {num: 10})(req, res, next);
+    return _M_.aggregateFetch(collection, {num: 10})(req, res, next);
   },
   PATCH: async (req, res) => {
     const $update = { $set: {}};

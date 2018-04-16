@@ -3,7 +3,7 @@ module.exports = home = {};
 
 
 // modules
-const { _M_ } = require('../middleware/plugins');
+const { _M_ } = require('../middleware/');
 const { usersModel } = require('../../models/');
 
 

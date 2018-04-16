@@ -54,9 +54,9 @@ const pullPipe_1_matching = (collection, params, query) => {
 };
 
 const pullPipe_2_masking = (params) => {
-  const $stackPicker = { content: 0, featured: 0 };
-  const $contentMask = { content: 0 };
-  const $project = params['stackType'] === 'posts' ? $stackPicker : $contentMask;
+  const _$$stackPicker = { content: 0, featured: 0 };
+  const _$$contentMask = { content: 0 };
+  const $project = params['stackType'] === 'posts' ? _$$stackPicker : _$$contentMask;
   return { $project };
 };
 
@@ -140,14 +140,13 @@ const getAggregationQuery = (collection, params, query, page, num, sort/**, upda
 
 
 // middleware
-const fetch = (collection, { page, num, sort } = {}, update) => {                                                       // todo: methodify into mongoose user document
+const fetchController = (collection, { page, num, sort } = {}) => {
   const $Model = require(`../../models/`)[`${collection}Model`];
   return (req, res, next) => $Model
-    .aggregate(getAggregationQuery(collection, req.params, req.query, page, num || res.locals.$$SITE.num, sort, update))
+    .aggregate(getAggregationQuery(collection, req.params, req.query, page, num || res.locals.$$SITE.num, sort))
     .then(docs => docs[0])
-    .then(async (result) => {
-      // if (update) return { ok: true };
-      if (Array.isArray(result.list)) result.list = result.list.map(doc => $Model.hydrate(doc));                        // note: cast all raw JSON to mongoose document
+    .then(result => {
+      if (Array.isArray(result.list)) result.list = result.list.map(doc => $Model.hydrate(doc));
       if (typeof next !== 'function') return result;
       req.session.chest = result;
       return next();
@@ -157,7 +156,7 @@ const fetch = (collection, { page, num, sort } = {}, update) => {               
 
 
 // exports
-module.exports = { fetch, _test: {
+module.exports = { fetchController, _test: {
     getAggregationQuery,
     getDateRangeArray,
     exp_dateRange,

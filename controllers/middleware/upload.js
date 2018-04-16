@@ -114,7 +114,7 @@ const finishExport = (req, res, configs, next) => {
 
 
 // middleware
-const uploadController = (req, res, configs, next) => {
+const uploadController = (configs) => (req, res, next) => {
   req.body.busboySlip = { raw: {}, mes: [] };
   if (!configs.fileSize) configs.fileSize = 25 * 1048576;
   if (!configs.MIME) configs.MIME = ['image/png', 'image/gif', 'image/jpeg', 'image/svg+xml', 'image/x-icon'];

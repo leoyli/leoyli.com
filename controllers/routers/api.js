@@ -3,7 +3,7 @@ module.exports = api = {};
 
 
 // modules
-const { fetch } = require('../middleware/fetch');
+const { _M_ } = require('../middleware/');
 const modelIndex = require('../../models/');
 
 
@@ -12,8 +12,8 @@ const modelIndex = require('../../models/');
 api.stack = {
   GET: async (req, res) => {
     const collection = req.params['stackType'].toLowerCase();
-    if (['posts', 'media'].includes(collection)) return res.json(await fetch(collection, { num: 10 })(req, res));
-    return res.statusCode(404);
+    if (!['posts', 'media'].includes(collection)) res.statusCode(404);
+    return res.json(await _M_.aggregateFetch(collection, { num: 10 })(req, res));
   },
   PUT: async (req, res) => {                                                                                            // todo: limit update range (matching with query)
     const collection = req.params['stackType'].toLowerCase();

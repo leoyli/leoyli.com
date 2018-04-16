@@ -4,7 +4,7 @@ const Router = require('express').Router;
 
 // modules
 const templateHandler = require('../views/template');
-const { _M_ } = require('../middleware/plugins');
+const { _M_ } = require('../middleware/');
 const { _U_ } = require('../utilities/');
 
 
