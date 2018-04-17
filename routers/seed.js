@@ -40,7 +40,7 @@ const seed = async (req, res) => {
 // device
 const SeedRouter = new Device([{
   route: '/',
-  controller: seed,
+  controller: { GET: seed },
 }]);
 
 

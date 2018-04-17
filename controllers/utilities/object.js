@@ -77,13 +77,13 @@ const assignDeep = (target, path, value, { mutate } = {}) => {
  * @return {object}                         - the proxyfied object
  */
 const proxyfiedForCaseInsensitiveAccess = (obj) => {
-  if (checkNativeBrand(obj, 'Object')) return new Proxy(obj, {
+  if (!checkNativeBrand(obj, 'Object')) throw new TypeError('The argument is not a valid object.');
+  return new Proxy(obj, {
     get: (target, name) => {
-      if (!checkNativeBrand(name, 'String')) return target;
+      if (!checkNativeBrand(name, 'String')) return target.name;
       return target[Object.keys(target).find(key => key.toLowerCase() === name.toLowerCase())];
     },
   });
-  return obj;
 };
 
 

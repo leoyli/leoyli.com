@@ -1,3 +1,15 @@
+### 0.9.0-dev.3 / 2018-04-16
+- Revised `proxyfiedForCaseInsensitiveAccess` in 'object' utilities.
+- Refracted 'router' engine:
+  - simplified codes from the need for argument normalization;
+  - restricted `controller` parameter, which must be a object that mapped with its method;
+  - restricted pseudo method `alias` have to be handled and `alias` parameter have to be provided;
+  - enhanced `asyncWrapper` to process both array and function types;
+  - renamed `loadRoutePlugins` as `getPreprocessor`;
+  - mingled `stackHttpMethods`, `loadViewRenderer` and `Device.run` into `getMiddlewareChain`.
+- Updated 'seed' route.
+
+
 ### 0.9.0-dev.2.1 / 2018-04-13
 > App
 - Revised 'plugin' middleware:
