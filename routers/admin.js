@@ -11,7 +11,7 @@ const DashboardRouter = new Device([{
 }, {
   route:          '/configs',
   controller:     admin.configs,
-  setting:        { title: 'Website Configurations', template: './__root__/admin/configs' },
+  setting:        { title: 'Website Settings', template: './__root__/admin/configs' },
 }, {
   route:          '/upload',
   controller:     admin.upload,
@@ -25,7 +25,7 @@ const DashboardRouter = new Device([{
 
 
 // settings
-DashboardRouter.setting = { title: 'Control', authenticated : true , cache: false };
+DashboardRouter.setting = { title: 'Control', authentication: true, cache: false };
 
 
 

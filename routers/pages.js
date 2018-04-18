@@ -7,7 +7,7 @@ const pages = require('../controllers/routers/pages');
 const PageRouter = new Device([{
   route:          '/',
   controller:     pages.landing,
-  setting:        { template: './theme/index' },
+  setting:        { template: './theme/' },
 }, {
   route:          '/search/:search',
   controller:     pages.search,

@@ -1,3 +1,28 @@
+### 0.9.0-dev.5 / 2018-04-18
+> App
+- Revised 'router' engine:
+  - introduced `defaultSetting` device attribute;
+    (`defaultSetting` can be overwritten by more specific routing rules)
+  - merged `handler` into `defaultSetting`;
+  - revised `getMiddlewareChain` for decorating routing HTML title tag value;
+  - revised `get setting()` in `Device` class;
+    (only `setting.title` method would pre-populated middleware in `this.queue.pre`)
+  - revised `getPreprocessor` and improved readability.
+    (only property with `boolean` value would be preprocessed)
+- Revised 'app' setting file:
+  - decoupled the use of 'initial' middleware;
+    (handled by routing engine instead)
+  - added `upload` property for configuring 'upload' module;
+  - updated 'upload' module so the uploading path is independent of the file location.
+- Renamed 'middleware' folder as 'modules'.
+- Revised `modifyHTMLTitleTag` module for accepting `object/string` in `options`.
+- Moved and renamed 'middleware/initial' as 'view/responder'.
+- Updated routers w.r.t. the changes.
+
+> Test
+- Updated file paths.
+
+
 ### 0.9.0-dev.4 / 2018-04-17
 > App
 - Extracted middleware as 'adapter' and 'regulator' from 'middleware/index'.

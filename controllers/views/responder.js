@@ -1,23 +1,19 @@
 const { _U_ } = require('../utilities/');
-const { configsModel, postsModel } = require('../../models/');
+const { postsModel } = require('../../models/');
 
 
 
 // main
-const generic = async (req, res, next) => {
-  // checking website settings in environment variables
-  if (!process.env['$WEBSITE_CONFIGS']) configsModel.initialize(() => {
-    if(!process.env['$WEBSITE_CONFIGS']) throw new _U_.error.ServerError(90001);
-  });
-
-  // populating routing variables                                                                                       // tofix: remove from API route
+const responseInitializer = async (req, res, next) => {
+  // populating variables
   res.locals.$$SITE = JSON.parse(process.env['$WEBSITE_CONFIGS']);
   res.locals.$$VIEW = {
-    flash   : { error: req.flash('error'), info: req.flash('info'), action: req.flash('action') },
-    title   : res.locals.$$SITE.title,
-    route   : req.baseUrl + req.path,
-    query   : req.query,
-    user    : req.session.user,
+    params: req.params,
+    query: req.query,
+    route: req.baseUrl + req.path,
+    title: res.locals.$$SITE.title,
+    flash: { error: req.flash('error'), info: req.flash('info'), action: req.flash('action') },
+    user: req.session.user,
   };
 
   // configuring sessions
@@ -61,4 +57,4 @@ const postNormalizer = async (req, res, next) => {
 
 
 // exports
-module.exports = generic;
+module.exports = { responseInitializer };

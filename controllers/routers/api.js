@@ -1,4 +1,4 @@
-const { _M_ } = require('../middleware/');
+const { _M_ } = require('../modules/');
 const modelIndex = require('../../models/');
 
 

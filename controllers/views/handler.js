@@ -1,5 +1,5 @@
 const { _U_ } = require('../utilities/');
-const { _M_ } = require('../middleware/');
+const { _M_ } = require('../modules/');
 
 
 
@@ -30,7 +30,7 @@ const handler = { posts: {}};
 handler.posts.singular = (template, $$POST, $$META) => function singlePostHandler(req, res) {
   if (!$$POST || $$POST && $$POST.state && $$POST.state.recycled) throw new _U_.error.HttpError(404);
   else if (!req.session.user && $$POST.state && !$$POST.state.published) throw new _U_.error.HttpError(404);
-  if ($$POST && $$POST.title) _M_.modifyHTMLTitleTag($$POST.title, { root: true })(req, res);
+  if ($$POST && $$POST.title) _M_.modifyHTMLTitleTag({ name: $$POST.title, root: true })(req, res);
   return res.render(template, { $$POST, $$META });
 };
 

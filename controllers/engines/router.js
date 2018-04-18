@@ -3,9 +3,9 @@ const Router = require('express').Router;
 
 
 // modules
-const { _M_ } = require('../middleware/');
+const { _M_ } = require('../modules/');
 const { _U_ } = require('../utilities/');
-const templateHandler = require('../views/template');
+const templateHandler = require('../views/handler');
 
 
 
@@ -27,24 +27,19 @@ const asyncWrapper = (target) => {
 
 
 /**
- * stack a queue from setting
- * @param {string} [query]                  - accept case insensitive `req.query` (by Proxy)    default: insensitive
- * @param {boolean} [cache]                 - accept client-side caching?                       default: true
- * @param {boolean} [authorized]            - accept only authenticated? (load 4 fns)           default: false
- * @param {boolean} [authenticated]         - accept only authorized? (load 5 fns)              default: false
- * @param {boolean} [crawler]               - accept crawlers? (load 1 fn)                      default: true
- * @param {string} [title]                  - title tag name
- * @param {object} [titleOption]            - title tagging options (see _M_.modifyHTMLTitleTag())
+ * stack a queue from setting options
+ * @param {object} options                  - setting options
  * @return {array}                          - ordering of the result is important
  */
-const getPreprocessor = ({ query, cache, authorized, authenticated, crawler, title, titleOption }) => {
+const getPreprocessor = (options) => {
   const queue = [];
-  if (query !== 'sensitive') queue.push(_M_.caseInsensitiveProxy);
-  if (cache === false) queue.push(_M_.noStoreCacheHeader);
-  if (authorized === true) queue.push(..._M_.isAuthorized);
-  else if (authenticated === true) queue.push(..._M_.isSignedIn);
-  else if (crawler === false) queue.push(_M_.noCrawlerHeader);
-  if (title) queue.push(_M_.modifyHTMLTitleTag(title, titleOption));
+  if (options.servingAPI      !== true)     queue.push(_M_.responseHTMLRequest);
+  if (options.servingAPI      === true)     queue.push(_M_.responseAPIRequest);
+  if (options.sensitive       !== true)     queue.push(_M_.caseInsensitiveProxy);
+  if (options.authorization   === true)     queue.push(..._M_.isAuthorized);
+  if (options.authentication  === true)     queue.push(..._M_.isSignedIn);
+  if (options.crawler         === false)    queue.push(_M_.noCrawlerHeader);
+  if (options.cache           === false)    queue.push(_M_.noStoreCacheHeader);
   return queue;
 };
 
@@ -53,13 +48,14 @@ const getPreprocessor = ({ query, cache, authorized, authenticated, crawler, tit
  * compose an ordered, unique middleware firing chain
  * @param {array|function} protagonist      - the main controlling logic
  * @param {object} hooker                   - pre/post hooked middleware on the device
- * @param {object} setting                  - router settings
+ * @param {object} options                  - router settings
  * @return {array}
  */
-const getMiddlewareChain = (protagonist, hooker, setting) => {
-  const preprocessor = getPreprocessor(setting);
-  const viewHandler = templateHandler(setting);
-  return asyncWrapper([...new Set([].concat(preprocessor, hooker.pre, protagonist, hooker.post, viewHandler))]);
+const getMiddlewareChain = (protagonist, hooker, options) => {
+  const preprocessor = getPreprocessor(options);
+  const renderer = !options.servingAPI ? templateHandler(options) : [];
+  const decorator = !options.servingAPI && options.title ? _M_.modifyHTMLTitleTag(options.title): [];
+  return asyncWrapper([...new Set([].concat(preprocessor, hooker.pre, decorator, protagonist, hooker.post, renderer))]);
 };
 
 
@@ -72,23 +68,25 @@ const getMiddlewareChain = (protagonist, hooker, setting) => {
  * @param {object} [option]                 - (see express.Router() API)
  */
 class Device {
-  constructor(rules, option) {                                                                                         
-    this.handler = null;
+  constructor(rules, option) {
     this.router = new Router(option);
-    this.queue = { pre: [], post: [] };
     this.rules = rules;
+    this.defaultSetting = {};
+    this.queue = { pre: [], post: [] };
   }
 
   get setting() {
-    return new Proxy(this, {
-      get: (target, name) => arg => name === 'handler'
-        ? target.handler = arg
-        : target.hook('pre', getPreprocessor({ [name]: arg })),
+    return new Proxy(this.defaultSetting, {
+      set: (defaultSetting, option, value) => {
+        if (option === 'title') this.queue.pre.push(_M_.modifyHTMLTitleTag(value));
+        else defaultSetting[option] = value;
+        return true;
+      },
     });
-  }
+  };
 
-  set setting(obj) {
-    Object.keys(obj).forEach(key => this.setting[key](obj[key]));
+  set setting(options) {
+    Object.keys(options).forEach(key => this.setting[key] = options[key]);
   }
 
   hook (position, fn) {
@@ -105,14 +103,14 @@ class Device {
     // router registrations
     this.rules.forEach(({ route, alias, controller, setting }) => {
       const controlKeys = Object.keys(controller).sort();
-      const settingPack = { handler: this.handler, ...setting };
+      const options = { ...this.defaultSetting, ...setting };
 
       // method registrations
       controlKeys.forEach(key => {
         if (key === 'alias' && !alias) throw new ReferenceError('Parameter "alias" have to be provided.');
         const path = key === 'alias' ? alias : route;
         const method = key === 'alias' ? 'get' : key.toLowerCase();
-        this.router[method](path, getMiddlewareChain(controller[key], this.queue, settingPack));
+        this.router[method](path, getMiddlewareChain(controller[key], this.queue, options));
       });
     });
     return this.router;

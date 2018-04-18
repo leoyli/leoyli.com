@@ -1,5 +1,5 @@
 const { Device } = require('../controllers/engines/router');
-const { _M_ } = require('../controllers/middleware/');
+const { _M_ } = require('../controllers/modules/');
 const api = require('../controllers/routers/api');
 
 
@@ -13,8 +13,7 @@ const APIRouter = new Device([{
 
 
 // settings
-APIRouter.setting = { authenticated : false };
-APIRouter.use(_M_.APIHeader);
+APIRouter.setting = { servingAPI: true, authentication: false };
 
 
 

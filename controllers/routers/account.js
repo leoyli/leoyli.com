@@ -1,4 +1,4 @@
-const { _M_ } = require('../middleware/');
+const { _M_ } = require('../modules/');
 const { usersModel } = require('../../models/');
 const { ClientError } = require('../utilities/')._U_.error;
 

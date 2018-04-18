@@ -34,12 +34,15 @@ const caseInsensitiveProxy = function caseInsensitiveProxy(req, res, next) {
 };
 
 
-/** HTML title tag modification **/
-const modifyHTMLTitleTag = (title, { append, root } = {}) => function modifyHTMLTitleTag(req, res, next) {
+/**
+ * HTML title tag modification
+ * @param {(object|string)} options
+ */
+const modifyHTMLTitleTag = (options) => function modifyHTMLTitleTag(req, res, next) {
   const sequence = [];
-  if (root !== false) sequence.push(res.locals.$$VIEW.title);
-  if (append === true) sequence.push(title);
-  else sequence.unshift(title);
+  if (options.root !== false) sequence.push(res.locals.$$VIEW.title);
+  if (options.append === true) sequence.push(options.name || options);
+  else sequence.unshift(options.name || options);
   res.locals.$$VIEW.title = sequence.join(' - ');
   if (typeof next === 'function') return next();
 };

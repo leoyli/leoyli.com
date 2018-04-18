@@ -76,10 +76,10 @@ app.use('/api', require('./routers/').APIRouter);
 app.engine('dot', require('./controllers/engines/view').__express);
 app.set('view engine', 'dot');
 app.set('views', path.join(__dirname, './views'));
+app.set('upload', path.join(__dirname, './public/media'));
 app.use(flash());
 app.use(methodOverride('_method'));
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(require('./controllers/middleware/initial'));
 if (process.env['NODE_ENV'] === 'dev' || 'test') app.use('/seed', require('./routers/seed'));
 
 

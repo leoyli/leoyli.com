@@ -1,5 +1,5 @@
 // const { ObjectId } = require('mongodb');
-const modelIndex = require(`../../../models/`);
+const modelIndex = require(`../../models/`);
 
 
 

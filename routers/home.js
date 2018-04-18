@@ -25,7 +25,7 @@ const DashboardRouter = new Device([{
 
 
 // settings
-DashboardRouter.setting = { title: 'Account', authenticated : true , cache: false };
+DashboardRouter.setting = { title: 'Account', authentication: true , cache: false };
 
 
 

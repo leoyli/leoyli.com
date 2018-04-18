@@ -1,5 +1,5 @@
 // modules
-const { exp_dateRange, getDateRangeArray } = require('../../../../controllers/middleware/package/fetch')._test;
+const { exp_dateRange, getDateRangeArray } = require('../../../controllers/modules/fetch')._test;
 
 
 

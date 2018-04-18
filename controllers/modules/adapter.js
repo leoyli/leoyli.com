@@ -1,14 +1,22 @@
 const { _U_ } = require('../utilities/');
 
 
+/** HTML responder **/
+const { responseInitializer } = require('../views/responder');
+const responseHTMLRequest = (...arg) => responseInitializer(...arg);
+
+
+/** API responder **/
+const responseAPIRequest = (...arg) => _U_.APIHeader(...arg);
+
 
 /** busboy for multipart form parsing **/
-const { uploadController } = require('./package/upload');
+const { uploadController } = require('./upload');
 const parseMultipart = (...arg) => uploadController(...arg);
 
 
 /** Mongo aggregation for database fetching **/
-const { fetchController } = require('./package/fetch');
+const { fetchController } = require('./fetch');
 const aggregateFetch = (...arg) => fetchController(...arg);
 
 
@@ -51,4 +59,13 @@ const passwordValidation = function passwordValidation(req, res, next) {
 
 
 // exports
-module.exports = { parseMultipart, aggregateFetch, usePassport, isSignedIn, isAuthorized, passwordValidation };
+module.exports = {
+  responseHTMLRequest,
+  responseAPIRequest,
+  parseMultipart,
+  aggregateFetch,
+  usePassport,
+  isSignedIn,
+  isAuthorized,
+  passwordValidation,
+};

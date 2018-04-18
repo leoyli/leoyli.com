@@ -1,5 +1,5 @@
 const { _U_ } = require('../utilities/');
-const { _M_ } = require('../middleware/');
+const { _M_ } = require('../modules/');
 
 
 

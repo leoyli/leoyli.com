@@ -7,12 +7,12 @@ const { editor, posts } = require('../controllers/routers/posts');
 const PostRouter = new Device([{
   route:          ['/edit', '/edit/new'],
   controller:     editor.post,
-  setting:        { title: 'New post', template: './__root__/editor', authenticated: true },
+  setting:        { title: 'New post', template: './__root__/editor', authentication: true },
 }, {
   route:          /^\/edit\/([a-f\d]{24})(?:\?.*|\/)?$/i,
   alias:          '/edit/:canonical',
   controller:     editor.edit,
-  setting:        { title: 'Edit post', template: './__root__/editor', authorized: true },
+  setting:        { title: 'Edit post', template: './__root__/editor', authorization: true },
 }, {
   route:          /^\/(?![a-f\d]{24})(.+)$/i,
   alias:          '/:_id',
@@ -21,13 +21,13 @@ const PostRouter = new Device([{
 }, {
   route:          '/',
   controller:     posts.list,
-  setting:        { template: './theme/posts/index', handler: 'posts.multiple' },
+  setting:        { template: './theme/posts/', handler: 'posts.multiple' },
 }]);
 
 
 
 // settings
-PostRouter.setting.handler('posts.singular');
+PostRouter.setting.handler = 'posts.singular';
 
 
 

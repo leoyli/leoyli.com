@@ -5,7 +5,7 @@ const Busboy = require('busboy');
 
 
 // modules
-const { _U_ } = require('../../utilities/');
+const { _U_ } = require('../utilities/');
 
 
 
@@ -24,13 +24,14 @@ const checkStatus = (parser, configs) => {
 /**
  * generate an path from the executing time                                                                             // note: can only be called once in a stream
  * @param {object} parser                   - busboy emitted referencing object from a file listener
+ * @param {string} __UPLOAD_ROOT__          - upload path set by `app.set('upload')`
  * @return {string}                         - upload path
  */
-const getUploadPath = (parser) => {
+const getUploadPath = (parser, __UPLOAD_ROOT__) => {
   const fireTime = new Date();
   const dirIndex = fireTime.getUTCFullYear() + `0${fireTime.getUTCMonth() + 1}`.slice(-2);
   const fileBase = fireTime.getTime() + path.extname(parser.fileName);
-  return path.join(__dirname + '/../../..', 'public', 'media', dirIndex, fileBase);
+  return path.join(__UPLOAD_ROOT__, dirIndex, fileBase);
 };
 
 
@@ -93,7 +94,7 @@ const fileParser = (req, res, configs, args) => {
     encoding  : args[3],
     MIME      : args[4],
   };
-  parser.filePath = getUploadPath(parser);
+  parser.filePath = getUploadPath(parser, req.app.get('upload'));
   parser.settings = configs;
   parser.stream.on('end', () => {
     _U_.object.mergeDeep(req.body.busboySlip.raw, transpileRaw(parser, configs), { mutate: true });

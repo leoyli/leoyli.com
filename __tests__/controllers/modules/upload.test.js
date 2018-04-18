@@ -5,7 +5,7 @@ fs.unlink = jest.fn();
 
 // module
 const { checkStatus, getUploadPath, uploadFile,
-  transpileRaw ,transpileMes } = require('../../../../controllers/middleware/package/upload')._test;
+  transpileRaw ,transpileMes } = require('../../../controllers/modules/upload')._test;
 
 
 
@@ -46,7 +46,7 @@ describe('Bundle: upload.js', () => {
   });
 
   test('Fn: getUploadPath: Should generate an path from the executing time', () => {
-    const result = getUploadPath(mocParser);
+    const result = getUploadPath(mocParser, '__moc_UPLOAD_ROOT__');
     //
     expect(result).not.toContain(mocParser.fileName);
     expect(result).toContain(((new Date).getUTCMonth()+1).toString());
