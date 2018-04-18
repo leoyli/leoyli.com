@@ -16,6 +16,7 @@ class ExtendableError extends Error {
   }
 }
 
+
 class TransferableError extends ExtendableError {
   constructor(arg, ...ref) {
     if (new.target !== TransferableError) if (arg instanceof ExtendableError) return arg;
@@ -27,6 +28,7 @@ class TransferableError extends ExtendableError {
     } else super(arg, ...ref);
   }
 }
+
 
 
 // extensions

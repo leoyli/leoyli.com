@@ -12,6 +12,7 @@ const toKebabCase = (str) => {
     .toLowerCase();
 };
 
+
 /**
  * convert matched context to HTML entity                                                                               // note: this method allows `null` or `undefined` argument
  * @param {string} str                      - any arbitrary string
@@ -25,6 +26,7 @@ const escapeChars = (str) => {
   return str === undefined ? undefined : str.replace(/[='"`.,:;<([{]/g, char => charMap[char]);
 };
 
+
 /**
  * parse Mongo ObjectId (hexadecimal)                                                                                   // todo: option to output ObjectId obj.
  * @param {string} str                      - any arbitrary string
@@ -36,6 +38,7 @@ const readMongoId = (str) => {
   return output[1].toLowerCase();
 };
 
+
 /**
  * transpile string to object path array
  * @param {string} str                      - any arbitrary string
@@ -44,6 +47,7 @@ const readMongoId = (str) => {
 const readObjPath = (str) => {
   return str.match(/[a-zA-Z0-9$_]+/g);
 };
+
 
 /**
  * inspect the given file URL

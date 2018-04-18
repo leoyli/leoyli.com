@@ -1,21 +1,18 @@
-module.exports = exports = { account: {} };
-
-
-
-// modules
-const { ClientError } = require('../utilities/')._U_.error;
 const { _M_ } = require('../middleware/');
 const { usersModel } = require('../../models/');
+const { ClientError } = require('../utilities/')._U_.error;
 
 
 
 // controllers
-exports.account.signup = {
-  GET: (req, res, next) => {
+module.exports = account = {};
+
+account.signup = {
+  GET: function account_signup_GET(req, res, next) {
     if (req.isAuthenticated() && req.session.user) return res.redirect('/home');
     return next();
   },
-  POST: [_M_.passwordValidation, async (req, res) => {
+  POST: [_M_.passwordValidation, async function account_signup_POST(req, res) {
     const newUser = await usersModel.register(new usersModel(req.body), req.body.password.new);
     req.logIn(newUser, err => {
       if (err) throw err;
@@ -25,13 +22,13 @@ exports.account.signup = {
   }],
 };
 
-exports.account.signin = {
-  GET: (req, res, next) => {
+account.signin = {
+  GET: function account_signin_GET(req, res, next) {
     if (res.locals.$$VIEW.flash.action[0] === 'retry' ) req.flash('action', 'retry');
     if (req.isAuthenticated() && req.session.user) return res.redirect('/home');
     return next();
   },
-  POST: (req, res, next) => {
+  POST: function account_signin_POST(req, res, next) {
     if (req.isAuthenticated() && req.session.user) return res.redirect('/home');
     return require('passport').authenticate('local', (err, authUser) => {
       if (err) return next(err);  // todo: throw an error
@@ -48,8 +45,8 @@ exports.account.signin = {
   },
 };
 
-exports.account.signout = {
-  GET: (req, res) => {
+account.signout = {
+  GET: function account_signout_GET(req, res) {
     if (req.isAuthenticated() && req.session.user) {
       req.logout();
       req.flash('info', 'See you next time!');

@@ -25,7 +25,8 @@ const PostRouter = new Device([{
 }]);
 
 
-// device settings
+
+// settings
 PostRouter.setting.handler('posts.singular');
 
 

@@ -1,4 +1,22 @@
+### 0.9.0-dev.4 / 2018-04-17
+> App
+- Extracted middleware as 'adapter' and 'regulator' from 'middleware/index'.
+- Renamed some variables and middleware for being more semantic.
+- Improved line readability and code style consistency.
+- Improved error stack trace readability by assigning middleware names explicitly:
+  - router controllers were named after their object path.
+  - plugged middleware are named after their accessing name.
+- Revised 'router' engine:
+  - name of async functions wrapped by `asyncWrapper` are preserved.
+  - members in the array returned by `getMiddlewareChain` are unique.
+    (ensured by `[...new Set()]` ES6 feature)
+
+> Test
+- Updated file paths.
+
+
 ### 0.9.0-dev.3 / 2018-04-16
+> App
 - Revised `proxyfiedForCaseInsensitiveAccess` in 'object' utilities.
 - Refracted 'router' engine:
   - simplified codes from the need for argument normalization;

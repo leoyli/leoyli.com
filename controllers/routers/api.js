@@ -1,21 +1,18 @@
-module.exports = api = {};
-
-
-
-// modules
 const { _M_ } = require('../middleware/');
 const modelIndex = require('../../models/');
 
 
 
 // controllers
+module.exports = api = {};
+
 api.stack = {
-  GET: async (req, res) => {
+  GET: async function API_stack_GET(req, res) {
     const collection = req.params['stackType'].toLowerCase();
     if (!['posts', 'media'].includes(collection)) res.statusCode(404);
     return res.json(await _M_.aggregateFetch(collection, { num: 10 })(req, res));
   },
-  PUT: async (req, res) => {                                                                                            // todo: limit update range (matching with query)
+  PUT: async function API_stack_PUT(req, res) {                                                                                            // todo: limit update range (matching with query)
     const collection = req.params['stackType'].toLowerCase();
     const $update = { $set: {} };
     if (req.body.action === 'restored') $update.$set = { [`state.recycled`]: false };

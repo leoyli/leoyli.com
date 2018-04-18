@@ -5,7 +5,7 @@ const Busboy = require('busboy');
 
 
 // modules
-const { _U_ } = require('../utilities/');
+const { _U_ } = require('../../utilities/');
 
 
 
@@ -20,6 +20,7 @@ const checkStatus = (parser, configs) => {
   return !(!parser.fileName || !configs.MIME.includes(parser.MIME) || parser.stream.truncated);
 };
 
+
 /**
  * generate an path from the executing time                                                                             // note: can only be called once in a stream
  * @param {object} parser                   - busboy emitted referencing object from a file listener
@@ -29,8 +30,9 @@ const getUploadPath = (parser) => {
   const fireTime = new Date();
   const dirIndex = fireTime.getUTCFullYear() + `0${fireTime.getUTCMonth() + 1}`.slice(-2);
   const fileBase = fireTime.getTime() + path.extname(parser.fileName);
-  return path.join(__dirname + '/../..', 'public', 'media', dirIndex, fileBase);
+  return path.join(__dirname + '/../../..', 'public', 'media', dirIndex, fileBase);
 };
+
 
 /**
  * pipe the writable stream to upload the file
@@ -41,11 +43,12 @@ const uploadFile = (parser) => {
   parser.stream.pipe(fs.createWriteStream(parser.filePath).on('error', err => {
     if (err && !(err.code === 'ENOENT')) throw new _U_.error.ServerError(err);
     fs.mkdir(path.dirname(parser.filePath), err => {
-      if (err) throw _U_.error.ServerError(92001, `${path.dirname(parser.filePath)}\n${err.toString()}`);
+      if (err) throw new _U_.error.ServerError(92001, `${path.dirname(parser.filePath)}\n${err.toString()}`);
       parser.stream.pipe(fs.createWriteStream(parser.filePath));
     });
   }));
 };
+
 
 /**
  * transpile the raw document of media from parser
@@ -58,6 +61,7 @@ const transpileRaw = (parser, configs) => {
     { type: path.extname(parser.fileName), path: parser.filePath, name: path.basename(parser.filePath) });
   return _U_.object.assignDeep({}, _U_.string.readObjPath(parser.fieldName)[0], { isSkipped: true });
 };
+
 
 /**
  * transpile the raw document of media from parser
@@ -79,6 +83,7 @@ const transpileMes = (parser, configs) => {
 };
 
 
+
 // workers
 const fileParser = (req, res, configs, args) => {
   const parser = {
@@ -97,6 +102,7 @@ const fileParser = (req, res, configs, args) => {
   checkStatus(parser, configs) ? uploadFile(parser) : parser.stream.resume();
 };
 
+
 const fieldParser = (req, res, configs, args) => {
   const parser = {
     fieldName       : args[0],
@@ -107,14 +113,16 @@ const fieldParser = (req, res, configs, args) => {
   if (parser.value) _U_.object.assignDeep(req.body.busboySlip.raw, parser.fieldName, parser.value, { mutate: true });
 };
 
+
 const finishExport = (req, res, configs, next) => {
   req.body.busboySlip.raw = Object.values(req.body.busboySlip.raw).filter(obj => obj.isSkipped !== true);
   return next();
 };
 
 
+
 // middleware
-const uploadController = (configs) => (req, res, next) => {
+const uploadController = (configs) => function uploadController(req, res, next) {
   req.body.busboySlip = { raw: {}, mes: [] };
   if (!configs.fileSize) configs.fileSize = 25 * 1048576;
   if (!configs.MIME) configs.MIME = ['image/png', 'image/gif', 'image/jpeg', 'image/svg+xml', 'image/x-icon'];

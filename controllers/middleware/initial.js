@@ -27,6 +27,7 @@ const generic = async (req, res, next) => {
   return req.body.post && ['POST', 'PATCH'].includes(req.method) ? postNormalizer(req, res, next) : next();
 };
 
+
 const postNormalizer = async (req, res, next) => {
   if (req.method === 'GET' || !req.body.post) return next();
   const { post } = req.body;

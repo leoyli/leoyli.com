@@ -11,6 +11,7 @@ const checkNativeBrand = (target, str) => {
   return nativeBrandName(target);
 };
 
+
 /**
  * check if object has wwn a property
  * @param {object} obj                      - target{object} to be evaluate
@@ -21,6 +22,7 @@ const hasOwnProperty = (obj, prop) => {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 };
 
+
 /**
  * clone the object totally into different memory allocation
  * @param {object} source                   - source{object} to be cloned, not support to an Array object
@@ -29,6 +31,7 @@ const hasOwnProperty = (obj, prop) => {
 const cloneDeep = (source) => {
   return mergeDeep({}, source, { mutate: true });
 };
+
 
 /**
  * merge two object recursively                                                                                              // note: can be set to mutable
@@ -51,6 +54,7 @@ const mergeDeep = (target, source, { mutate } = {}) => {
   return obj;
 };
 
+
 /**
  * assigned the value to an object by path recursively                                                                  // note: (1) can be set to mutable; (2) value could be 0{number}
  * @param {object} target                   - target{object} to be operated
@@ -70,6 +74,7 @@ const assignDeep = (target, path, value, { mutate } = {}) => {
   _assignRecursion(obj, path, value);
   return obj;
 };
+
 
 /**
  * proxyfy the object for allowing case-insensitive access

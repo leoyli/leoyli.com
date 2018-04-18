@@ -4,17 +4,18 @@ const { _M_ } = require('../middleware/');
 
 
 // gateway
-const errorHandler = (err, req, res, next) => {
+const errorHandler = function errorHandler(err, req, res, next) {
   if (['dev', 'test'].includes(process.env['NODE_ENV'])) console.log(err.stack);
   if (_U_.error.hasOwnProperty(err.name) && !!terminal[err.name]) return terminal[err.name](err, req, res, next);
   return res.render('./theme/error', { err });
 };
 
 
+
 // terminals
 const terminal = {};
 
-terminal.ClientError = (err, req, res, next) => {
+terminal.ClientError = function ClientError(err, req, res, next) {
   switch (err.from) {
     case 'UserExistsError':
       req.flash('error', 'This email have been used.');
@@ -33,19 +34,19 @@ terminal.ClientError = (err, req, res, next) => {
   return res.redirect('back');
 };
 
-terminal.MongoError = (err, req, res, next) => {
+terminal.MongoError = function MongoError(err, req, res, next) {
   if (err.code === 11000) req.flash('error', 'This username is not available.');
   return res.redirect('back');
 };
 
-terminal.HttpError = (err, req, res, next) => {
-  return _M_.doNotCrawled(req, res, () => {
+terminal.HttpError = function HttpError(err, req, res, next) {
+  return _M_.noCrawlerHeader(req, res, () => {
     return res.status(err.code).render('./theme/error', {err});
   });
 };
 
-terminal.TemplateError = (err, req, res, next) => {
-  return _M_.doNotCrawled(req, res, () => {
+terminal.TemplateError = function TemplateError(err, req, res, next) {
+  return _M_.noCrawlerHeader(req, res, () => {
     // todo: log the message and call the admin
     // todo: guidance for the client
     return res.status(500).send(`<h1>${new _U_.error.HttpError(500).message}</h1>`);
@@ -53,10 +54,11 @@ terminal.TemplateError = (err, req, res, next) => {
 };
 
 
+
 // redirect
 const redirect = {};
 
-redirect.signInRetry = (req, res) => {
+redirect.signInRetry = function signInRetry(req, res) {
   // if logout from a authentication required page
   if (req.get('Referrer') && RegExp('^https?:\\/\\/[^\\/]+(.+$)').exec(req.get('Referrer'))[1] === req.originalUrl) {   // option: generalized this string reading method
     req.flash('info', res.locals.$$VIEW.flash.info.toString());
@@ -68,6 +70,7 @@ redirect.signInRetry = (req, res) => {
   req.flash('action', 'retry');
   return res.redirect('/signin');
 };
+
 
 
 // exports

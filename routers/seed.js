@@ -2,7 +2,7 @@ const { Device } = require('../controllers/engines/router');
 
 
 
-// controllers
+// seed-data
 const moc = {
   user: {
     email       : 'leo@leoyli.com',
@@ -27,12 +27,16 @@ const moc = {
 };
 
 
-const seed = async (req, res) => {
-  const { postsModel, usersModel } = require('../models/');
-  const newUser = await usersModel.register(new usersModel(moc.user), moc.user.password);
-  await postsModel.create({ author: newUser, ...moc.post });
-  req.flash('info', 'Successfully seeded.');
-  res.redirect('/posts');
+
+// controllers
+const seed = {
+  GET: async function seed_GET(req, res) {
+    const { postsModel, usersModel } = require('../models/');
+    const newUser = await usersModel.register(new usersModel(moc.user), moc.user.password);
+    await postsModel.create({ author: newUser, ...moc.post });
+    req.flash('info', 'Successfully seeded.');
+    res.redirect('/posts');
+  },
 };
 
 
@@ -40,7 +44,7 @@ const seed = async (req, res) => {
 // device
 const SeedRouter = new Device([{
   route: '/',
-  controller: { GET: seed },
+  controller: seed,
 }]);
 
 

@@ -3,9 +3,9 @@ const Router = require('express').Router;
 
 
 // modules
-const templateHandler = require('../views/template');
 const { _M_ } = require('../middleware/');
 const { _U_ } = require('../utilities/');
+const templateHandler = require('../views/template');
 
 
 
@@ -16,8 +16,9 @@ const { _U_ } = require('../utilities/');
  * @return {array|function}                 - task is triggered only when keyword 'async' is found
  */
 const asyncWrapper = (target) => {
-  const wrapper = (fn) => (req, res, next) => fn(req, res, next).catch(next);
-  const evaluator = (fn) => _U_.object.checkNativeBrand(fn, 'AsyncFunction') ? wrapper(fn) : fn;
+  const unnamedWrapper = (fn) => (req, res, next) => fn(req, res, next).catch(next);
+  const namedWrapper = (fn) => Object.defineProperty(unnamedWrapper(fn), 'name', { value: fn.name });
+  const evaluator = (fn) => _U_.object.checkNativeBrand(fn, 'AsyncFunction') ? namedWrapper(fn) : fn;
   const type = _U_.object.checkNativeBrand(target);
   if (type === 'Array') return target.map(fn => evaluator(fn));
   if (type.toLowerCase().includes('function')) return evaluator(target);
@@ -33,23 +34,23 @@ const asyncWrapper = (target) => {
  * @param {boolean} [authenticated]         - accept only authorized? (load 5 fns)              default: false
  * @param {boolean} [crawler]               - accept crawlers? (load 1 fn)                      default: true
  * @param {string} [title]                  - title tag name
- * @param {object} [titleOption]            - title tagging options (see _M_.setTitleTag())
+ * @param {object} [titleOption]            - title tagging options (see _M_.modifyHTMLTitleTag())
  * @return {array}                          - ordering of the result is important
  */
-const getPreprocessor = ({ query, cache, authorized, authenticated, crawler, title, titleOption } = {}) => {
+const getPreprocessor = ({ query, cache, authorized, authenticated, crawler, title, titleOption }) => {
   const queue = [];
-  if (query !== 'sensitive') queue.push(_M_.caseInsensitiveQuery);
-  if (cache === false) queue.push(_M_.doNotCached);
+  if (query !== 'sensitive') queue.push(_M_.caseInsensitiveProxy);
+  if (cache === false) queue.push(_M_.noStoreCacheHeader);
   if (authorized === true) queue.push(..._M_.isAuthorized);
   else if (authenticated === true) queue.push(..._M_.isSignedIn);
-  else if (crawler === false) queue.push(_M_.doNotCrawled);
-  if (title) queue.push(_M_.setTitleTag(title, titleOption));
+  else if (crawler === false) queue.push(_M_.noCrawlerHeader);
+  if (title) queue.push(_M_.modifyHTMLTitleTag(title, titleOption));
   return queue;
 };
 
 
 /**
- *
+ * compose an ordered, unique middleware firing chain
  * @param {array|function} protagonist      - the main controlling logic
  * @param {object} hooker                   - pre/post hooked middleware on the device
  * @param {object} setting                  - router settings
@@ -57,9 +58,10 @@ const getPreprocessor = ({ query, cache, authorized, authenticated, crawler, tit
  */
 const getMiddlewareChain = (protagonist, hooker, setting) => {
   const preprocessor = getPreprocessor(setting);
-  const viewHandler = templateHandler(setting.template, setting.handler);
-  return asyncWrapper([].concat(preprocessor, hooker.pre, protagonist, hooker.post, viewHandler));
+  const viewHandler = templateHandler(setting);
+  return asyncWrapper([...new Set([].concat(preprocessor, hooker.pre, protagonist, hooker.post, viewHandler))]);
 };
+
 
 
 // main
@@ -71,10 +73,10 @@ const getMiddlewareChain = (protagonist, hooker, setting) => {
  */
 class Device {
   constructor(rules, option) {                                                                                         
+    this.handler = null;
     this.router = new Router(option);
     this.queue = { pre: [], post: [] };
     this.rules = rules;
-    this.handler = null;
   }
 
   get setting() {
@@ -103,14 +105,14 @@ class Device {
     // router registrations
     this.rules.forEach(({ route, alias, controller, setting }) => {
       const controlKeys = Object.keys(controller).sort();
-      const settingWrap = { handler: this.handler, ...setting };
+      const settingPack = { handler: this.handler, ...setting };
 
       // method registrations
       controlKeys.forEach(key => {
         if (key === 'alias' && !alias) throw new ReferenceError('Parameter "alias" have to be provided.');
         const path = key === 'alias' ? alias : route;
         const method = key === 'alias' ? 'get' : key.toLowerCase();
-        this.router[method](path, getMiddlewareChain(controller[key], this.queue, settingWrap));
+        this.router[method](path, getMiddlewareChain(controller[key], this.queue, settingPack));
       });
     });
     return this.router;

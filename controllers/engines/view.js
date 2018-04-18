@@ -35,6 +35,7 @@ const getCompilationConfigs = (variables) => {
   };
 };
 
+
 /**
  * get context as string from a template file
  * @param {string} filePath                 - template file path
@@ -55,6 +56,7 @@ const getFileString = (filePath, _SYNC) => {
     throw new TemplateError(91004, filePath);
   }
 };
+
 
 /**
  * get runtime template methods
@@ -77,6 +79,7 @@ const getRuntimeMethods = (blueprint, settings, source = '') => {
 
   return { useMarkdown, loadPartial };
 };
+
 
 /**
  * transpile Express.js meta into the blueprint of Template{object}
@@ -105,6 +108,7 @@ const getBlueprint = ({ settings, ...locals }, source) => {
   return blueprint;
 };
 
+
 /**
  * construct a new Template{object}                                                                                     // todo: added multiple sections support
  * @param {string} filePath                 - template file path to be passed
@@ -117,6 +121,7 @@ const buildTemplate = (filePath, blueprint, fileString) => {
   return new Template(filePath, blueprint, sections);
 };
 
+
 /**
  * get a compiled Template{object}
  * @param {string} filePath                 - template file path to be passed
@@ -128,6 +133,7 @@ const getTemplate = (filePath, blueprint, _SYNC) => {
   if (_SYNC === true) return buildTemplate(filePath, blueprint, getFileString(filePath, true));
   return getFileString(filePath).then(templateString => buildTemplate(filePath, blueprint, templateString));
 };
+
 
 
 // main
@@ -167,6 +173,7 @@ class Template {
     }
   }
 }
+
 
 
 // middleware

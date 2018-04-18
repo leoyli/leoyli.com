@@ -33,7 +33,8 @@ const PostsSchema    = new mongoose.Schema({
 }, {
   timestamps         : { createdAt: 'time._created', updatedAt: 'time._updated' },
   versionKey         : '_revised',
-})
+});
+
 
 
 // indexes
@@ -45,20 +46,21 @@ PostsSchema
   .index({ 'title': 'text', 'content': 'text', 'category': 'text', 'tags' : 'text' });
 
 
+
 // action hooks
-// version counter (pre-hook)
+//// version counter (pre-hook)
 PostsSchema.pre('findOneAndUpdate', function () {
   this.findOneAndUpdate({}, { $inc: { _revised: 1 }});
 });
 
-
-// recycle setter (pre-hook)
+//// recycle setter (pre-hook)
 PostsSchema.pre('update', function () {
   const _$update = this.getUpdate();
   if (_$update.$set['state.pended'] === true) _$update.$set['state.published'] = false;                                 // tofix: initial post ist not worked
   if (_$update.$set['state.recycled'] === true) _$update.$set = { 'time._recycled': Date.now() };
   if (_$update.$set['state.recycled'] === false) _$update.$set = { 'time._recycled': null };
 });
+
 
 
 // virtual property

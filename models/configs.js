@@ -22,6 +22,7 @@ const configsSchema  = new mongoose.Schema({
 });
 
 
+
 // static methods
 configsSchema.static('initialize', async function(next = () => {}) {
   process.env['$WEBSITE_CONFIGS'] = JSON.stringify(await this.findOne({ active: true }));

@@ -36,6 +36,7 @@ const UsersSchema   = new mongoose.Schema({
 });
 
 
+
 // action hooks
 //// nickname assignment (pre-hook)
 UsersSchema.pre('save', function () {
@@ -53,6 +54,7 @@ UsersSchema.pre('update', function () {
 });
 
 
+
 // methods for documents
 //// update the specified last time field
 UsersSchema.methods.updateLastTimeLog = function (fieldName) {
@@ -62,8 +64,7 @@ UsersSchema.methods.updateLastTimeLog = function (fieldName) {
   );
 };
 
-
-// methods from third-party plugin (object method)
+//// methods from third-party plugin (object method)
 UsersSchema.plugin(passportLocalMongoose, {
   usernameField: 'email',
   usernameQueryFields: ['username'],
@@ -94,6 +95,7 @@ UsersSchema.methods.changePassword = function (...arg) {
   this.time._changePassword = new Date(Date.now());
   return selfPromisify(_changePassword, arg, this);
 };
+
 
 
 // virtual method for user-post association

@@ -15,6 +15,7 @@ class ErrorCodeDictionary {
 
 // error codes
 const codeIndexes = {};
+
 codeIndexes.ServerError_en = new ErrorCodeDictionary({
   90001:  'Failed to load website configs, please contact the admin.',
   92001:  '[MultiPartUpload] Cannot create the folder (fs.mkdir, missing parent folder?): ${dirPath}',

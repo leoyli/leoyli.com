@@ -1,18 +1,18 @@
-module.exports = pages = {};
-
-
-
-// modules
-const { _U_ } = require('../utilities/');
 const { _M_ } = require('../middleware/');
 
 
 
 // controllers
+module.exports = pages = {};
+
 pages.landing = {
-  GET: (req, res, next) => next()
+  GET: function pages_landing_GET(req, res, next) {
+    return next();
+  },
 };
 
 pages.search = {
-  GET: (req, res, next) => _M_.aggregateFetch('posts')(req, res, next),
+  GET: function pages_search_GET(req, res, next) {
+    return _M_.aggregateFetch('posts')(req, res, next);
+  },
 };

@@ -1,4 +1,5 @@
 // const { ObjectId } = require('mongodb');
+const modelIndex = require(`../../../models/`);
 
 
 
@@ -140,9 +141,9 @@ const getAggregationQuery = (collection, params, query, page, num, sort/**, upda
 
 
 // middleware
-const fetchController = (collection, { page, num, sort } = {}) => {
-  const $Model = require(`../../models/`)[`${collection}Model`];
-  return (req, res, next) => $Model
+const fetchController = (collection, { page, num, sort } = {}) => function fetchController(req, res, next) {
+  const $Model = modelIndex[`${collection}Model`];
+  return $Model
     .aggregate(getAggregationQuery(collection, req.params, req.query, page, num || res.locals.$$SITE.num, sort))
     .then(docs => docs[0])
     .then(result => {

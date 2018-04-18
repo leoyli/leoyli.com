@@ -1,6 +1,6 @@
 const { ClientError } = require('../controllers/utilities/')._U_.error;
 const { Device } = require('../controllers/engines/router');
-const { account } = require('../controllers/routers/account');
+const account = require('../controllers/routers/account');
 
 
 
@@ -19,10 +19,13 @@ const UserRouter = new Device([{
 }]);
 
 
+
 // settings
 UserRouter
   .hook('pre', require('../controllers/middleware/')._M_.usePassport)
-  .hook('post', (err, req, res, next) => next(new ClientError(err)));
+  .hook('post', function errorCatcher(err, req, res, next) {
+    return next(new ClientError(err));
+  });
 
 
 

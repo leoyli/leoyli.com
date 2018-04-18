@@ -1,16 +1,14 @@
 #!/usr/bin/env node
 
-/**
- * Module dependencies.
- */
+
+/** Module dependencies. **/
 const app = require('../app');
 const debug = require('debug')('leoyli-main:server');
 const http2 = require('spdy');
 const fs = require('fs');
 
-/**
- * Normalize a port into a number, string, or false.
- */
+
+/** Normalize a port into a number, string, or false. **/
 const normalizePort = (val) => {
   const port = parseInt(val, 10);
 
@@ -27,9 +25,8 @@ const normalizePort = (val) => {
   return false;
 };
 
-/**
- * Event listener for HTTP server "error" event.
- */
+
+/** Event listener for HTTP server "error" event. **/
 const onError = (error) => {
   if (error.syscall !== 'listen') {
     throw error;
@@ -55,9 +52,8 @@ const onError = (error) => {
   }
 };
 
-/**
- * Event listener for HTTP server "listening" event.
- */
+
+/** Event listener for HTTP server "listening" event. **/
 const onListening = () => {
   const addr = server.address();
   const bind = typeof addr === 'string'
@@ -66,33 +62,28 @@ const onListening = () => {
   debug('Listening on ' + bind);
 };
 
-/**
- * Get SSL credentials as options
- */
+
+/** Get SSL credentials as options **/
 const options = {
   key: fs.readFileSync(process.env['SSL_KEY'], 'utf8'),
   cert: fs.readFileSync(process.env['SSL_CRT'], 'utf8'),
 };
 
-/**
- * Get port from environment and store in Express.
- */
+
+/** Get port from environment and store in Express. **/
 const port = normalizePort(process.env['PORT'] || '3443');
 app.set('port', port);
 
-/**
- * Create HTTP2 server.
- */
+
+/** Create HTTP2 server. **/
 const server = http2.createServer(options, app);
 
-/**
- * Listen on provided port, on all network interfaces.
- */
+
+/** Listen on provided port, on all network interfaces. **/
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
-/**
- * Event listener for 'unhandledRejection' event.
- */
+
+/** Event listener for 'unhandledRejection' event. **/
 process.on('unhandledRejection', (err) => console.log('Unhandled Promise Rejection:\n', err.stack));

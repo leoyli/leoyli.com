@@ -11,9 +11,10 @@ const APIRouter = new Device([{
 }]);
 
 
+
 // settings
 APIRouter.setting = { authenticated : false };
-APIRouter.use(_M_.APIHttpHeaders);
+APIRouter.use(_M_.APIHeader);
 
 
 

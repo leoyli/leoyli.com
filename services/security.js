@@ -26,6 +26,7 @@ class ContentSecurityPolicy {
   }
 }
 
+
 const securityHeaderAgent = (app) => {
   const CSPConfigs = new ContentSecurityPolicy();
   CSPConfigs.addToWhitelist('script, style, font', 'https://stackpath.bootstrapcdn.com/');

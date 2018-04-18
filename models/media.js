@@ -31,8 +31,8 @@ const MediaSchema    = new mongoose.Schema({
 });
 
 
+
 // action hooks
-// version counter (pre-hook)
 MediaSchema.pre('findOneAndUpdate', function () {
   this.findOneAndUpdate({}, { $inc: { _revised: 1 }});
 });

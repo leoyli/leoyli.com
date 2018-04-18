@@ -23,6 +23,7 @@ const DashboardRouter = new Device([{
 }]);
 
 
+
 // settings
 DashboardRouter.setting = { title: 'Control', authenticated : true , cache: false };
 
