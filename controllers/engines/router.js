@@ -94,8 +94,8 @@ class Device {
     return this;
   }
 
-  use(fn) {
-    this.router.use(fn);
+  use(...arg) {
+    this.router.use(...arg);
     return this;
   }
 

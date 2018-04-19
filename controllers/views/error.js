@@ -41,7 +41,7 @@ terminal.MongoError = function MongoError(err, req, res, next) {
 
 terminal.HttpError = function HttpError(err, req, res, next) {
   return _M_.noCrawlerHeader(req, res, () => {
-    return res.status(err.code).render('./theme/error', {err});
+    return res.status(err.code).render('./theme/error', { err });
   });
 };
 

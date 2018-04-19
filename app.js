@@ -20,7 +20,7 @@ const
 // ==============================
 //  SERVICES AGENT
 // ==============================
-const routerAgent         = require('./services/routers');
+const routerAgent         = require('./routers/');
 const passportAgent       = require('./services/passport');
 const securityHeaderAgent = require('./services/security');
 
@@ -69,10 +69,10 @@ if (process.env['NODE_ENV'] === 'dev') app.use(logger('dev'));
 /** API **/
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ type: 'application/json' }));
-app.use('/api', require('./routers/').APIRouter);
+app.use('/api', routerAgent.APIRouter);
 
 
-/** UI **/
+/** HTML **/
 app.engine('dot', require('./controllers/engines/view').__express);
 app.set('view engine', 'dot');
 app.set('views', path.join(__dirname, './views'));
@@ -80,15 +80,14 @@ app.set('upload', path.join(__dirname, './public/media'));
 app.use(flash());
 app.use(methodOverride('_method'));
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-if (process.env['NODE_ENV'] === 'dev' || 'test') app.use('/seed', require('./routers/seed'));
+app.use('/', routerAgent.HTMLRouter);
 
 
-/** routers **/
-routerAgent(app);
-
-
-/** error-handlers **/
-app.use((err, req, res, next) => res.sendStatus(500));
+/** Last-ditch **/
+app.use((err, req, res, next) => {
+  console.log(err);
+  return res.sendStatus(500);
+});
 
 
 

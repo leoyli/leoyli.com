@@ -1,3 +1,11 @@
+### 0.9.0-dev.5.1 / 2018-04-19
+> App
+- Fixed API service breakdown.
+- Fixed unfulfilled short cut in `Device.use`.
+- Integrated 'service/router' into 'router/index'.
+- Updated 'app' settings.
+
+
 ### 0.9.0-dev.5 / 2018-04-18
 > App
 - Revised 'router' engine:

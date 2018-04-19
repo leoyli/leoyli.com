@@ -1,13 +1,15 @@
 const { _U_ } = require('../utilities/');
 
 
+
 /** HTML responder **/
 const { responseInitializer } = require('../views/responder');
 const responseHTMLRequest = (...arg) => responseInitializer(...arg);
 
 
 /** API responder **/
-const responseAPIRequest = (...arg) => _U_.APIHeader(...arg);
+const { APIHeader } = require('./regulator');
+const responseAPIRequest = (...arg) => APIHeader(...arg);
 
 
 /** busboy for multipart form parsing **/

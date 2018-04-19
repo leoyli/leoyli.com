@@ -9,7 +9,7 @@ module.exports = api = {};
 api.stack = {
   GET: async function API_stack_GET(req, res) {
     const collection = req.params['stackType'].toLowerCase();
-    if (!['posts', 'media'].includes(collection)) res.statusCode(404);
+    if (!['posts', 'media'].includes(collection)) return res.sendStatus(404);
     return res.json(await _M_.aggregateFetch(collection, { num: 10 })(req, res));
   },
   PUT: async function API_stack_PUT(req, res) {                                                                                            // todo: limit update range (matching with query)
