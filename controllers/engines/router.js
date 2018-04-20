@@ -70,7 +70,7 @@ const getMiddlewareChain = (protagonist, hooker, options) => {
 class Device {
   constructor(rules, option) {
     this.router = new Router(option);
-    this.rules = rules;
+    this.rules = _U_.object.freezeDeep(rules);
     this.defaultSetting = {};
     this.queue = { pre: [], post: [] };
   }

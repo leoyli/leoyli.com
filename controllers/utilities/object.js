@@ -24,12 +24,12 @@ const hasOwnProperty = (obj, prop) => {
 
 
 /**
- * clone the object totally into different memory allocation
- * @param {object} source                   - source{object} to be cloned, not support to an Array object
- * @return {object}                         - cloned object which is allocated at different memory
+ * clone the object/array deeply by its value (reference decoupled)
+ * @param {object|array} source             - source{object} to be cloned, not support to an Array object
+ * @return {object|array}                   - cloned object which is allocated at different memory
  */
 const cloneDeep = (source) => {
-  return mergeDeep({}, source, { mutate: true });
+  return mergeDeep(checkNativeBrand(source, 'Array') ? [] : {}, source, { mutate: true });
 };
 
 
@@ -41,7 +41,7 @@ const cloneDeep = (source) => {
  * @return {object}                         - the merged object
  */
 const mergeDeep = (target, source, { mutate } = {}) => {
-  const obj = mutate === true ? target : cloneDeep(target);
+  const worker = mutate === true ? target : cloneDeep(target);
   const _mergeRecursion = (obj, source) => {
     for (const key in source) {
       if (hasOwnProperty(source, key) && checkNativeBrand(source[key], 'object')) {
@@ -50,8 +50,8 @@ const mergeDeep = (target, source, { mutate } = {}) => {
       } else obj[key] = source[key];
     }
   };
-  _mergeRecursion(obj, source);
-  return obj;
+  _mergeRecursion(worker, source);
+  return worker;
 };
 
 
@@ -64,15 +64,34 @@ const mergeDeep = (target, source, { mutate } = {}) => {
  * @return {object}                         - the assigned object
  */
 const assignDeep = (target, path, value, { mutate } = {}) => {
-  const obj = mutate === true ? target : cloneDeep(target);
+  const worker = mutate === true ? target : cloneDeep(target);
   const _assignRecursion = (obj, path, value) => {
     const keys = checkNativeBrand(path, 'string') ? require('./string').readObjPath(path) : path;
     if (keys.length !== 1) {
       _assignRecursion(obj[keys[0]] !== undefined ? obj[keys[0]] : (obj[keys[0]] = {}), keys.slice(1), value);
     } else obj[keys[0]] = value !== undefined ? value : {};
   };
-  _assignRecursion(obj, path, value);
-  return obj;
+  _assignRecursion(worker, path, value);
+  return worker;
+};
+
+
+/**
+ * frozen the target and its property deeply
+ * @param {object|array} target]]
+ * @param {boolean} [mutate=false]          - allow to mutate the target object
+ * @return {object|array}                   - the deeply frozen object/array
+ */
+const freezeDeep = (target, { mutate } = {}) => {
+  const worker = mutate === true ? target : cloneDeep(target);
+  const _freezeRecursion = (obj) => {
+    if (['Object', 'Array'].includes(checkNativeBrand(obj))) {
+      Object.keys(obj).forEach(property => hasOwnProperty(obj, property) && _freezeRecursion(obj[property]));
+      Object.freeze(obj);
+    }
+  };
+  _freezeRecursion(worker);
+  return worker;
 };
 
 
@@ -100,5 +119,6 @@ module.exports = {
   cloneDeep,
   mergeDeep,
   assignDeep,
+  freezeDeep,
   proxyfiedForCaseInsensitiveAccess,
 };

@@ -1,3 +1,15 @@
+### 0.9.0-dev.6 / 2018-04-19
+> App
+- Added `_U_.object.freezeDeep` object utiltities.
+- Applied `_U_.object.freezeDeep` to prevent mutations of `Device.rules` in 'router' engine.
+- Extended `_U_.object.cloneDeep` to clone array object.
+
+> Test
+- Added `_U_.object.freezeDeep` unit test
+- Added more test for `_U_.object.cloneDeep`.
+- Updated testing descriptions.
+
+
 ### 0.9.0-dev.5.1 / 2018-04-19
 > App
 - Fixed API service breakdown.

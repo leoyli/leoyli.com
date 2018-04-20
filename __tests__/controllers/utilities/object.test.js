@@ -1,5 +1,5 @@
 // module
-const { checkNativeBrand, hasOwnProperty, cloneDeep, mergeDeep, assignDeep,
+const { checkNativeBrand, hasOwnProperty, cloneDeep, mergeDeep, assignDeep, freezeDeep,
   proxyfiedForCaseInsensitiveAccess } = require('../../../controllers/utilities/')._test;
 
 
@@ -25,12 +25,15 @@ describe('Bundle: Object methods', () => {
     expect(hasOwnProperty({ a: { b: 0 }}, 'b')).toBeFalsy();
   });
 
-  test('Fn: cloneDeep: clone the object totally into different memory allocation', () => {
-    const mockSource = { test: test };
-    const result = cloneDeep(mockSource);
+  test('Fn: cloneDeep: clone the object/array deeply by its value (reference decoupled)', () => {
+    const mockSource1 = { test: 'test' };
+    const mockSource2 = ['test'];
+    const result = [cloneDeep(mockSource1), cloneDeep(mockSource2)];
     //
-    expect(result).not.toBe(mockSource);
-    expect(result).toEqual(mockSource);
+    expect(result[0]).not.toBe(mockSource1);
+    expect(result[0]).toEqual(mockSource1);
+    expect(result[1]).not.toBe(mockSource2);
+    expect(result[1]).toEqual(['test']);
   });
 
   test('Fn: mergeDeep: merge two object recursively', () => {
@@ -50,9 +53,24 @@ describe('Bundle: Object methods', () => {
     const mockPath = 'a[b].c.d[e][f]';
     const result = [assignDeep(mockTarget1, mockPath, 0), assignDeep(mockTarget2, mockPath, 0, { mutate: true })];
     //
-    expect(mockTarget1).not.toEqual(mockTarget2);
+    expect(result[0]).not.toBe(result[1]);
     expect(result[0]).toEqual({ a: { b: { c: { d: { e: { f: 0 }}}}}});
     expect(result[1]).toEqual({ a: { b: { c: { d: { e: { f: 0 }}}}}});
+  });
+
+  test('Fn: freezeDeep: frozen the target and its property deeply', () => {
+    const mockTarget1 = { a: { b: { c: { d: { e: { f: 0 }}}}}};
+    const mockTarget2 = { a: { b: { c: { d: { e: { f: 0 }}}}}};
+    const result = [freezeDeep(mockTarget1), freezeDeep(mockTarget2, { mutate: true })];
+    //
+    expect(result[0]).not.toBe(mockTarget1);
+    expect(result[1]).toBe(mockTarget2);
+    expect(Object.getOwnPropertyDescriptors(mockTarget1)).toHaveProperty('a.writable', true);
+    expect(Object.getOwnPropertyDescriptors(mockTarget2)).toHaveProperty('a.writable', false);
+    expect(Object.getOwnPropertyDescriptors(result[0])).toHaveProperty('a.writable', false);
+    expect(Object.getOwnPropertyDescriptors(result[1])).toHaveProperty('a.writable', false);
+    expect(Object.getOwnPropertyDescriptors(result[0].a.b.c.d.e)).toHaveProperty('f.writable', false);
+    expect(Object.getOwnPropertyDescriptors(result[1].a.b.c.d.e)).toHaveProperty('f.writable', false);
   });
 
   test('Fn: proxyfiedForCaseInsensitiveAccess: proxyfy the object for allowing case-insensitive access', () => {
