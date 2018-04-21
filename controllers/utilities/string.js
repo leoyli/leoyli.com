@@ -4,7 +4,7 @@
  * @return {string}                         - kebabCased string
  */
 const toKebabCase = (str) => {
-  return (str || '')
+  return str === undefined ? undefined : str
     .replace(/([a-z])([A-Z])/g, '$1-$2')                                                                                // handle CamelCase
     .replace(/(-([A-Z])([A-Z]))/g, '-$2-$3')                                                                            // handle signal words in CamelCase
     .replace(/[`'":;,.?!@#$%^&*_=~(){}<>/\\\[\]\-\+\|\s]+/g, '-')                                                       // normalize special characters
@@ -33,8 +33,8 @@ const escapeChars = (str) => {
  * @return {string}                         - hexadecimal{string}
  */
 const readMongoId = (str) => {
-  const output = /(?:\=|\/|^)([a-f\d]{24})(?:\?|\/|$)/i.exec(str);
-  if (output === null) throw new TypeError(`No Mongo ObjectId in ${str} can be read.`);
+  const output = str === undefined ? undefined : /(?:\=|\/|^)([a-f\d]{24})(?:\?|\/|$)/i.exec(str);
+  if (!output) throw new TypeError(`No Mongo ObjectId in ${str} can be read.`);
   return output[1].toLowerCase();
 };
 
@@ -45,7 +45,7 @@ const readMongoId = (str) => {
  * @return {array}                          - an array contains elements in ordered by nest keys (path)
  */
 const readObjPath = (str) => {
-  return str.match(/[a-zA-Z0-9$_]+/g);
+  return str === undefined ? undefined : str.match(/[a-zA-Z0-9$_]+/g);
 };
 
 

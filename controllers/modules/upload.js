@@ -87,13 +87,8 @@ const transpileMes = (parser, configs) => {
 
 // workers
 const fileParser = (req, res, configs, args) => {
-  const parser = {
-    fieldName : args[0],
-    stream    : args[1],
-    fileName  : args[2],
-    encoding  : args[3],
-    MIME      : args[4],
-  };
+  const { 0: fieldName, 1: stream, 2: fileName, 3: encoding, 4: MIME } = args;
+  const parser = { fieldName, stream, fileName, encoding, MIME };
   parser.filePath = getUploadPath(parser, req.app.get('upload'));
   parser.settings = configs;
   parser.stream.on('end', () => {
@@ -105,13 +100,8 @@ const fileParser = (req, res, configs, args) => {
 
 
 const fieldParser = (req, res, configs, args) => {
-  const parser = {
-    fieldName       : args[0],
-    value           : _U_.string.escapeChars(args[1]),
-    truncatedName   : args[2],
-    truncatedValue  : args[3], encoding: args[4], MIME: args[5],
-  };
-  if (parser.value) _U_.object.assignDeep(req.body.busboySlip.raw, parser.fieldName, parser.value, { mutate: true });
+  const { 0: fieldName, 1: value, 2: truncatedName, 3: truncatedValue, 4: encoding, 5: MIME } = args;
+  if (value) _U_.object.assignDeep(req.body.busboySlip.raw, fieldName, _U_.string.escapeChars(value), { mutate: true });
 };
 
 

@@ -5,17 +5,17 @@ const { _M_ } = require('../modules/');
 
 // gateway
 const templateHandler = ({ template: $template, handler: $handler }) => function templateHandler(req, res) {
-  const { template, list, post, meta } = req.session.chest ? req.session.chest : {};
-  const filename = (template || $template).replace(/\/:([a-z0-9-$]+)$/i, (match, key) => `/${req.params[key]}`);
+  const { meta, post, list = [], template = $template } = req.session.chest ? req.session.chest : {};
+  const filename = template.replace(/\/:([a-z0-9-$]+)$/i, (match, key) => `/${req.params[key]}`);
   delete req.session.chest;
 
   switch ($handler) {
     case 'posts.singular':
       return handler.posts.singular(filename, post, meta)(req, res);
     case 'posts.multiple':
-      return handler.posts.multiple(filename, list || [], meta)(req, res);
+      return handler.posts.multiple(filename, list, meta)(req, res);
     case 'stack':
-      return handler.posts.multiple(filename, list || [], meta)(req, res);
+      return handler.posts.multiple(filename, list, meta)(req, res);
     default: {
       return res.render(filename);
     }
@@ -28,7 +28,7 @@ const templateHandler = ({ template: $template, handler: $handler }) => function
 const handler = { posts: {}};
 
 handler.posts.singular = (template, $$POST, $$META) => function singlePostHandler(req, res) {
-  if (!$$POST || $$POST && $$POST.state && $$POST.state.recycled) throw new _U_.error.HttpError(404);
+  if (!$$POST || $$POST.state && $$POST.state.recycled) throw new _U_.error.HttpError(404);
   else if (!req.session.user && $$POST.state && !$$POST.state.published) throw new _U_.error.HttpError(404);
   if ($$POST && $$POST.title) _M_.modifyHTMLTitleTag({ name: $$POST.title, root: true })(req, res);
   return res.render(template, { $$POST, $$META });

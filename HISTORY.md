@@ -1,3 +1,10 @@
+### 0.9.0-dev.6.1 / 2018-04-21
+> App
+- Enhanced code maintainability and readability by using ES6 function default argument assignments.
+- Revised 'string' utilities for handling empty arguments properly.
+- Used ES6 destruction syntax to simplify 'upload' module.
+
+
 ### 0.9.0-dev.6 / 2018-04-19
 > App
 - Added `_U_.object.freezeDeep` object utiltities.

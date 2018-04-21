@@ -17,23 +17,21 @@ const { TemplateError } = require('../utilities/')._U_.error;
  * @param {string} variables                - names to be registered into the runtime scope
  * @return {object}                         - return doT.js compilation configs
  */
-const getCompilationConfigs = (variables) => {
-  return {
-    comment:            /<!--([\s\S]+?)-->/g,
-    evaluate:           /\{\{([\s\S]+?)\}\}/g,
-    interpolate:        /\{\{=([\s\S]+?)\}\}/g,
-    encode:             /\{\{!([\s\S]+?)\}\}/g,
-    use:                /\{\{#([\s\S]+?)\}\}/g,
-    define:             /\{\{##\s*([\w\.$]+)\s*(\:|=)([\s\S]+?)#\}\}/g,
-    conditional:        /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
-    iterate:            /\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
-    varname:            variables,
-    stripHTMLComment:   true,
-    strip:              true,
-    append:             true,
-    selfcontained:      false,
-  };
-};
+const getCompilationConfigs = (variables) => ({
+  comment:            /<!--([\s\S]+?)-->/g,
+  evaluate:           /\{\{([\s\S]+?)\}\}/g,
+  interpolate:        /\{\{=([\s\S]+?)\}\}/g,
+  encode:             /\{\{!([\s\S]+?)\}\}/g,
+  use:                /\{\{#([\s\S]+?)\}\}/g,
+  define:             /\{\{##\s*([\w\.$]+)\s*(\:|=)([\s\S]+?)#\}\}/g,
+  conditional:        /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
+  iterate:            /\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
+  varname:            variables,
+  stripHTMLComment:   true,
+  strip:              true,
+  append:             true,
+  selfcontained:      false,
+});
 
 
 /**

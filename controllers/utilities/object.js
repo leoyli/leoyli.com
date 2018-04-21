@@ -37,10 +37,10 @@ const cloneDeep = (source) => {
  * merge two object recursively                                                                                              // note: can be set to mutable
  * @param {object} target                   - target{object} to be operated
  * @param {object} source                   - reference object for target
- * @param {boolean} [mutate=false]          - allow to mutate the target object
+ * @param {boolean} [mutate = false]        - allow to mutate the target object
  * @return {object}                         - the merged object
  */
-const mergeDeep = (target, source, { mutate } = {}) => {
+const mergeDeep = (target, source, { mutate = false } = {}) => {
   const worker = mutate === true ? target : cloneDeep(target);
   const _mergeRecursion = (obj, source) => {
     for (const key in source) {
@@ -60,10 +60,10 @@ const mergeDeep = (target, source, { mutate } = {}) => {
  * @param {object} target                   - target{object} to be operated
  * @param {string|array} path               - referencing path of the object
  * @param {*} [value]                       - value{*} to be assigned
- * @param {boolean} [mutate=false]          - allow to mutate the target object
+ * @param {boolean} [mutate = false]        - allow to mutate the target object
  * @return {object}                         - the assigned object
  */
-const assignDeep = (target, path, value, { mutate } = {}) => {
+const assignDeep = (target, path, value, { mutate = false } = {}) => {
   const worker = mutate === true ? target : cloneDeep(target);
   const _assignRecursion = (obj, path, value) => {
     const keys = checkNativeBrand(path, 'string') ? require('./string').readObjPath(path) : path;
@@ -78,11 +78,11 @@ const assignDeep = (target, path, value, { mutate } = {}) => {
 
 /**
  * frozen the target and its property deeply
- * @param {object|array} target]]
- * @param {boolean} [mutate=false]          - allow to mutate the target object
+ * @param {object|array} target             - target{object} to be operated
+ * @param {boolean} [mutate = false]        - allow to mutate the target object
  * @return {object|array}                   - the deeply frozen object/array
  */
-const freezeDeep = (target, { mutate } = {}) => {
+const freezeDeep = (target, { mutate = false } = {}) => {
   const worker = mutate === true ? target : cloneDeep(target);
   const _freezeRecursion = (obj) => {
     if (['Object', 'Array'].includes(checkNativeBrand(obj))) {

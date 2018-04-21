@@ -61,8 +61,8 @@ const pullPipe_2_masking = (params) => {
   return { $project };
 };
 
-const pullPipe_3_sorting = (sort) => {
-  const $sort = Object.assign({ 'state.pinned': -1 }, sort || {});
+const pullPipe_3_sorting = (sort = {}) => {
+  const $sort = Object.assign({ 'state.pinned': -1 }, sort);
   if ($sort['time._updated'] !== 1) $sort['time._updated'] = -1;
   return { $sort };
 };
@@ -72,9 +72,9 @@ const pullPipe_4_counting = () => {
   return { $group };
 };
 
-const pullPipe_5_paginating = (query, sort, page, num) => {
-  const _$$page = (query['page'] > 1) ? parseInt(query['page']) : page || 1;
-  const _$$num = (query['num'] > 0) ? parseInt(query['num']) : num || 10;
+const pullPipe_5_paginating = (query, sort, page = 1, num = 10) => {
+  const _$$page = (query['page'] > 1) ? Number.parseInt(query['page']) : page;
+  const _$$num = (query['num'] > 0) ? Number.parseInt(query['num']) : num;
   const _$$end = { $ceil: { $divide: ['$count', _$$num] }};
   const _$$now = { $cond: { if: { $lt: [_$$page, _$$end] }, then: { $literal: _$$page }, else: _$$end }};
   const $project = {
