@@ -5,7 +5,7 @@ const errorCodeProxyAgent = require('./error-code/');
 // main
 class ExtendableError extends Error {
   constructor(...arg) {
-    if (new.target.__proto__.name === 'TransferableError') {
+    if (Object.getPrototypeOf(new.target).name === 'TransferableError') {
       super();
       this.name = this.constructor.name;
       this.message = errorCodeProxyAgent[this.name](...arg);

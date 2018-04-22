@@ -73,7 +73,7 @@ UsersSchema.plugin(passportLocalMongoose, {
 
 //// rewrite plugin methods as promises
 const selfPromisify = (fn, arg, THIS) => {
-  if (typeof arg[arg.length-1] === 'function') return fn.call(THIS, ...arg);
+  if (typeof arg[arg.length - 1] === 'function') return fn.call(THIS, ...arg);
   return new Promise((resolve, reject) => fn.call(THIS, ...arg, (err, result) => {
     if (err) return reject(err);
     return resolve(result);

@@ -16,8 +16,8 @@ const templateHandler = require('../views/handler');
  * @return {array|function}                 - task is triggered only when keyword 'async' is found
  */
 const asyncWrapper = (target) => {
-  const unnamedWrapper = (fn) => (req, res, next) => fn(req, res, next).catch(next);
-  const namedWrapper = (fn) => Object.defineProperty(unnamedWrapper(fn), 'name', { value: fn.name });
+  const unnamedWrapper = (fn) => (...arg) => fn(...arg).catch(arg.next);
+  const namedWrapper = (fn) => Object.defineProperty(unnamedWrapper(fn), 'name', { value: `WrappedAsync ${fn.name}` });
   const evaluator = (fn) => _U_.object.checkNativeBrand(fn, 'AsyncFunction') ? namedWrapper(fn) : fn;
   const type = _U_.object.checkNativeBrand(target);
   if (type === 'Array') return target.map(fn => evaluator(fn));

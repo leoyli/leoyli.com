@@ -62,7 +62,7 @@ const pullPipe_2_masking = (params) => {
 };
 
 const pullPipe_3_sorting = (sort = {}) => {
-  const $sort = Object.assign({ 'state.pinned': -1 }, sort);
+  const $sort = { 'state.pinned': -1 , ...sort };
   if ($sort['time._updated'] !== 1) $sort['time._updated'] = -1;
   return { $sort };
 };

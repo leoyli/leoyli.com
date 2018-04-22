@@ -35,7 +35,7 @@ const cloneDeep = (source) => {
 
 
 /**
- * merge two object recursively                                                                                         // note: can be set to mutable
+ * merge two object recursively                                                                                         // note: this function can not copy getter/setter properties
  * @param {object} target                   - target{object} to be operated
  * @param {object} source                   - reference object for target
  * @param {boolean} [mutate = false]        - allow to mutate the target object

@@ -1,3 +1,14 @@
+### 0.9.0-dev.6.4 / 2018-04-22
+> App
+- Replaced `Object.assign()` by object spread operator.
+  (benchmark shows both have no significant difference in terms of their performance in V8)
+- Revised `unnamedWrapper`:
+  - wrapped function would be prefixed with `WrappedAsync`;
+  - extended `unnamedWrapper` to wrap error middleware i.e. (err, req, res, next).
+- Replaced the use of `__proto__` by `Object.getPrototypeOf`.
+  (although V8 supports `__proto__` property, but it was recommended avoiding the use of such property other than web browsers)
+
+
 ### 0.9.0-dev.6.3 / 2018-04-21
 > App
 - Cleaned up codes so that `use strict` can be executed without errors.
