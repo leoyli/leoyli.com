@@ -5,7 +5,7 @@ const Router = require('express').Router;
 // modules
 const { _M_ } = require('../modules/');
 const { _U_ } = require('../utilities/');
-const templateHandler = require('../views/handler');
+const { templateHandler, handlerSymbols } = require('../views/handler');
 
 
 
@@ -73,6 +73,10 @@ class Device {
     this.rules = _U_.object.freezeDeep(rules);
     this.defaultSetting = {};
     this.queue = { pre: [], post: [] };
+  }
+
+  static get handler() {
+    return handlerSymbols;
   }
 
   get setting() {

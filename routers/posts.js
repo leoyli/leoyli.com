@@ -21,13 +21,13 @@ const PostRouter = new Device([{
 }, {
   route:          '/',
   controller:     posts.list,
-  setting:        { template: './theme/posts/', handler: 'posts.multiple' },
+  setting:        { template: './theme/posts/', handler: Device.handler.VIEW_POSTS_MULTIPLE },
 }]);
 
 
 
 // settings
-PostRouter.setting.handler = 'posts.singular';
+PostRouter.setting.handler = Device.handler.VIEW_POSTS_SINGLE;
 
 
 

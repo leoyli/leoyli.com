@@ -3,31 +3,17 @@ const { _M_ } = require('../modules/');
 
 
 
-// gateway
-const templateHandler = ({ template: $template, handler: $handler }) => function templateHandler(req, res) {
-  const { meta, post, list = [], template = $template } = req.session.chest ? req.session.chest : {};
-  const filename = template.replace(/\/:([a-z0-9-$]+)$/i, (match, key) => `/${req.params[key]}`);
-  delete req.session.chest;
-
-  switch ($handler) {
-    case 'posts.singular':
-      return handler.posts.singular(filename, post, meta)(req, res);
-    case 'posts.multiple':
-      return handler.posts.multiple(filename, list, meta)(req, res);
-    case 'stack':
-      return handler.posts.multiple(filename, list, meta)(req, res);
-    default: {
-      return res.render(filename);
-    }
-  }
-};
+// magic-strings
+const VIEW_POSTS_SINGLE = Symbol();
+const VIEW_POSTS_MULTIPLE = Symbol();
+const VIEW_STACK = Symbol();
 
 
 
 // handlers
-const handler = { posts: {}};
+const handler = { posts: {} };
 
-handler.posts.singular = (template, $$POST, $$META) => function singlePostHandler(req, res) {
+handler.posts.single = (template, $$POST, $$META) => function singlePostHandler(req, res) {
   if (!$$POST || $$POST.state && $$POST.state.recycled) throw new _U_.error.HttpError(404);
   else if (!req.session.user && $$POST.state && !$$POST.state.published) throw new _U_.error.HttpError(404);
   if ($$POST && $$POST.title) _M_.modifyHTMLTitleTag({ name: $$POST.title, root: true })(req, res);
@@ -45,5 +31,31 @@ handler.posts.multiple = (template, $$LIST, $$META) => function multiplePostHand
 
 
 
+// gateway
+const templateHandler = ({ template: $template, handler: $handler }) => function templateHandler(req, res) {
+  const { meta, post, list = [], template = $template } = req.session.chest ? req.session.chest : {};
+  const filename = template.replace(/\/:([a-z0-9-$]+)$/i, (match, key) => `/${req.params[key]}`);
+  delete req.session.chest;
+
+  switch ($handler) {
+    case VIEW_POSTS_SINGLE:
+      return handler.posts.single(filename, post, meta)(req, res);
+    case VIEW_POSTS_MULTIPLE:
+      return handler.posts.multiple(filename, list, meta)(req, res);
+    case VIEW_STACK:
+      return handler.posts.multiple(filename, list, meta)(req, res);
+    default: {
+      return res.render(filename);
+    }
+  }
+};
+
+
+
 // exports
-module.exports = templateHandler;
+module.exports = { templateHandler, handlerSymbols: {
+    VIEW_POSTS_SINGLE,
+    VIEW_POSTS_MULTIPLE,
+    VIEW_STACK,
+  },
+};

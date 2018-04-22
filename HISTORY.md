@@ -1,3 +1,10 @@
+### 0.9.0-dev.7 / 2018-04-22
+> App
+- Decoupled magic-strings from 'handler' view controllers via the use of ES6 Symbols.
+- Added a static getter method in 'Device' engine for referencing used handler.
+- Updated all routers.
+
+
 ### 0.9.0-dev.6.4 / 2018-04-22
 > App
 - Replaced `Object.assign()` by object spread operator.
