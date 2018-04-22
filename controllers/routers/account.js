@@ -5,7 +5,7 @@ const { ClientError } = require('../utilities/')._U_.error;
 
 
 // controllers
-module.exports = account = {};
+const account = {};
 
 account.signup = {
   GET: function account_signup_GET(req, res, next) {
@@ -55,3 +55,8 @@ account.signout = {
     return res.redirect('back');
   },
 };
+
+
+
+// exports
+module.exports = account;

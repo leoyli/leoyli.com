@@ -1,3 +1,9 @@
+### 0.9.0-dev.6.3 / 2018-04-21
+> App
+- Cleaned up codes so that `use strict` can be executed without errors.
+  (via a node flag `--use_strict`)
+
+
 ### 0.9.0-dev.6.2 / 2018-04-21
 > App
 - Revised 'object' utilities:
@@ -20,7 +26,7 @@
 
 ### 0.9.0-dev.6 / 2018-04-19
 > App
-- Added `_U_.object.freezeDeep` object utiltities.
+- Added `_U_.object.freezeDeep` object utilities.
 - Applied `_U_.object.freezeDeep` to prevent mutations of `Device.rules` in 'router' engine.
 - Extended `_U_.object.cloneDeep` to clone array object.
 

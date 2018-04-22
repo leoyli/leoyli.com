@@ -4,7 +4,7 @@ const modelIndex = require('../../models/');
 
 
 // controllers
-module.exports = api = {};
+const api = {};
 
 api.stack = {
   GET: async function API_stack_GET(req, res) {
@@ -25,3 +25,8 @@ api.stack = {
     return res.json({ modified: false });
   },
 };
+
+
+
+// exports
+module.exports = api;

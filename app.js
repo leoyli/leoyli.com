@@ -1,27 +1,25 @@
 // ==============================
 //  DEPENDENCIES
 // ==============================
-const
-  path                    = require('path'),
-  express                 = require('express'),
-  mongoose                = require('mongoose'),
-  session                 = require('express-session'),
-  MongoStore              = require('connect-mongo')(session),
-  passport                = require('passport'),
-  logger                  = require('morgan'),
-  bodyParser              = require('body-parser'),
-  flash                   = require('connect-flash'),
-  methodOverride          = require('method-override'),
-  favicon                 = require('serve-favicon');
-  app = express();
+const methodOverride = require('method-override');
+const session = require('express-session');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const MongoStore = require('connect-mongo')(session);
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const express = require('express');
+const path = require('path');
+const passport = require('passport');
+const flash = require('connect-flash');
 
 
 
 // ==============================
 //  SERVICES AGENT
 // ==============================
-const routerAgent         = require('./routers/');
-const passportAgent       = require('./services/passport');
+const routerAgent = require('./routers/');
+const passportAgent = require('./services/passport');
 const securityHeaderAgent = require('./services/security');
 
 
@@ -29,6 +27,9 @@ const securityHeaderAgent = require('./services/security');
 // ==============================
 //  SERVICES QUEUE
 // ==============================
+const app = express();
+
+
 /** security **/
 securityHeaderAgent(app);
 

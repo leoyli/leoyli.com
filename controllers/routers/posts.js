@@ -5,7 +5,7 @@ const { postsModel } = require('../../models/');
 
 
 // controllers
-module.exports = posts = { editor: {}, posts: {} };
+const posts = { editor: {}, posts: {} };
 
 posts.editor.post = {
   GET: function posts_editor_post_GET(req, res, next) {
@@ -57,3 +57,8 @@ posts.posts.show = {
 posts.posts.list = {
   GET: _M_.aggregateFetch('posts'),
 };
+
+
+
+// exports
+module.exports = posts;

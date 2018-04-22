@@ -4,7 +4,7 @@ const { usersModel } = require('../../models/');
 
 
 // controllers
-module.exports = home = {};
+const home = {};
 
 home.main = {
   GET: function home_main_GET(req, res, next) {
@@ -44,3 +44,7 @@ home.security = {
   }],
 };
 
+
+
+// exports
+module.exports = home;

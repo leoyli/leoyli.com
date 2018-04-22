@@ -3,7 +3,7 @@ const { _M_ } = require('../modules/');
 
 
 // controllers
-module.exports = pages = {};
+const pages = {};
 
 pages.landing = {
   GET: function pages_landing_GET(req, res, next) {
@@ -16,3 +16,8 @@ pages.search = {
     return _M_.aggregateFetch('posts')(req, res, next);
   },
 };
+
+
+
+// exports
+module.exports = pages;

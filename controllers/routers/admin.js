@@ -5,7 +5,7 @@ const { configsModel, mediaModel, postsModel } = require('../../models/');
 
 
 // controllers
-module.exports = admin = {};
+const admin = {};
 
 admin.main = {
   GET: function admin_main_GET(req, res, next) {
@@ -54,3 +54,8 @@ admin.stack = {
     return res.redirect('back');
   },
 };
+
+
+
+// exports
+module.exports = admin;
