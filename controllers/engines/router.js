@@ -64,11 +64,11 @@ const getMiddlewareChain = (protagonist, hooker, options) => {
 /**
  * a routing device takes input setting outputting Express.js routing objects
  * @constructor
- * @param {array} rules                     - an array that contains routing rule objects
+ * @param {array} rules = []                - an array that contains routing rule objects
  * @param {object} [option]                 - (see express.Router() API)
  */
 class Device {
-  constructor(rules, option) {
+  constructor(rules = [], option) {
     this.router = new Router(option);
     this.rules = _U_.object.freezeDeep(rules);
     this.defaultSetting = {};

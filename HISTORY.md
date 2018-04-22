@@ -1,3 +1,16 @@
+### 0.9.0-dev.6.2 / 2018-04-21
+> App
+- Revised 'object' utilities:
+  - revised `cloneDeep` for checking input types;
+  - enhanced `mergeDeep`, `freezeDeep`, `assignDeep` readability;
+  - enhanced `freezeDeep` recursion performance.
+    (use `for...in` loop instead of `Object.keys().forEach()`)
+- Assigned default value of `Device.rules` as `[]` for preventing errors.
+
+> Test
+- Updated 'object' unit tests.
+
+
 ### 0.9.0-dev.6.1 / 2018-04-21
 > App
 - Enhanced code maintainability and readability by using ES6 function default argument assignments.

@@ -47,17 +47,6 @@ describe('Bundle: Object methods', () => {
     expect(result[1]).toEqual({ a: 0, b: 1, c: { d: { e: 2, f: 3}, f: 6, g: 4 }});
   });
 
-  test('Fn: assignDeep: assigned the value to an object by path recursively', () => {
-    const mockTarget1 = {};
-    const mockTarget2 = {};
-    const mockPath = 'a[b].c.d[e][f]';
-    const result = [assignDeep(mockTarget1, mockPath, 0), assignDeep(mockTarget2, mockPath, 0, { mutate: true })];
-    //
-    expect(result[0]).not.toBe(result[1]);
-    expect(result[0]).toEqual({ a: { b: { c: { d: { e: { f: 0 }}}}}});
-    expect(result[1]).toEqual({ a: { b: { c: { d: { e: { f: 0 }}}}}});
-  });
-
   test('Fn: freezeDeep: frozen the target and its property deeply', () => {
     const mockTarget1 = { a: { b: { c: { d: { e: { f: 0 }}}}}};
     const mockTarget2 = { a: { b: { c: { d: { e: { f: 0 }}}}}};
@@ -71,6 +60,17 @@ describe('Bundle: Object methods', () => {
     expect(Object.getOwnPropertyDescriptors(result[1])).toHaveProperty('a.writable', false);
     expect(Object.getOwnPropertyDescriptors(result[0].a.b.c.d.e)).toHaveProperty('f.writable', false);
     expect(Object.getOwnPropertyDescriptors(result[1].a.b.c.d.e)).toHaveProperty('f.writable', false);
+  });
+
+  test('Fn: assignDeep: assigned the value to an object by path recursively', () => {
+    const mockTarget1 = {};
+    const mockTarget2 = {};
+    const mockPath = 'a[b].c.d[e][f]';
+    const result = [assignDeep(mockTarget1, mockPath, 0), assignDeep(mockTarget2, mockPath, 0, { mutate: true })];
+    //
+    expect(result[0]).not.toBe(result[1]);
+    expect(result[0]).toEqual({ a: { b: { c: { d: { e: { f: 0 }}}}}});
+    expect(result[1]).toEqual({ a: { b: { c: { d: { e: { f: 0 }}}}}});
   });
 
   test('Fn: proxyfiedForCaseInsensitiveAccess: proxyfy the object for allowing case-insensitive access', () => {

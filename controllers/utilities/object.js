@@ -29,12 +29,13 @@ const hasOwnProperty = (obj, prop) => {
  * @return {object|array}                   - cloned object which is allocated at different memory
  */
 const cloneDeep = (source) => {
+  if (!['Object', 'Array'].includes(checkNativeBrand(source))) throw new TypeError('Invalid arguments as input.');
   return mergeDeep(checkNativeBrand(source, 'Array') ? [] : {}, source, { mutate: true });
 };
 
 
 /**
- * merge two object recursively                                                                                              // note: can be set to mutable
+ * merge two object recursively                                                                                         // note: can be set to mutable
  * @param {object} target                   - target{object} to be operated
  * @param {object} source                   - reference object for target
  * @param {boolean} [mutate = false]        - allow to mutate the target object
@@ -42,15 +43,39 @@ const cloneDeep = (source) => {
  */
 const mergeDeep = (target, source, { mutate = false } = {}) => {
   const worker = mutate === true ? target : cloneDeep(target);
+
+  // non-tail-call recursion (parallel)
   const _mergeRecursion = (obj, source) => {
     for (const key in source) {
       if (hasOwnProperty(source, key) && checkNativeBrand(source[key], 'object')) {
-        if (!hasOwnProperty(obj, key)) obj[key] = {};
-        _mergeRecursion(obj[key], source[key]);
+        _mergeRecursion(hasOwnProperty(obj, key) ? obj[key] : (obj[key] = {}), source[key]);
       } else obj[key] = source[key];
     }
   };
+
   _mergeRecursion(worker, source);
+  return worker;
+};
+
+
+/**
+ * frozen the target and its property deeply
+ * @param {object|array} target             - target{object} to be operated
+ * @param {boolean} [mutate = false]        - allow to mutate the target object
+ * @return {object|array}                   - the deeply frozen object/array
+ */
+const freezeDeep = (target, { mutate = false } = {}) => {
+  const worker = mutate === true ? target : cloneDeep(target);
+
+  // non-tail-call recursion (parallel)
+  const _freezeRecursion = (obj) => {
+    if (['Object', 'Array'].includes(checkNativeBrand(obj))) {
+      for (const key in obj) if (hasOwnProperty(obj, key)) _freezeRecursion(obj[key]);
+      Object.freeze(obj);
+    }
+  };
+
+  _freezeRecursion(worker);
   return worker;
 };
 
@@ -65,32 +90,16 @@ const mergeDeep = (target, source, { mutate = false } = {}) => {
  */
 const assignDeep = (target, path, value, { mutate = false } = {}) => {
   const worker = mutate === true ? target : cloneDeep(target);
-  const _assignRecursion = (obj, path, value) => {
-    const keys = checkNativeBrand(path, 'string') ? require('./string').readObjPath(path) : path;
-    if (keys.length !== 1) {
-      _assignRecursion(obj[keys[0]] !== undefined ? obj[keys[0]] : (obj[keys[0]] = {}), keys.slice(1), value);
-    } else obj[keys[0]] = value !== undefined ? value : {};
-  };
-  _assignRecursion(worker, path, value);
-  return worker;
-};
+  const pathStack = checkNativeBrand(path, 'string') ? require('./string').readObjPath(path) : path;
 
-
-/**
- * frozen the target and its property deeply
- * @param {object|array} target             - target{object} to be operated
- * @param {boolean} [mutate = false]        - allow to mutate the target object
- * @return {object|array}                   - the deeply frozen object/array
- */
-const freezeDeep = (target, { mutate = false } = {}) => {
-  const worker = mutate === true ? target : cloneDeep(target);
-  const _freezeRecursion = (obj) => {
-    if (['Object', 'Array'].includes(checkNativeBrand(obj))) {
-      Object.keys(obj).forEach(property => hasOwnProperty(obj, property) && _freezeRecursion(obj[property]));
-      Object.freeze(obj);
-    }
+  // tail-call recursion (single-file)
+  const _assignRecursion = (obj, keys, value) => {
+    if (keys.length > 1) {
+      return _assignRecursion(obj[keys[0]] !== undefined ? obj[keys[0]] : (obj[keys[0]] = {}), keys.slice(1), value);
+    } else obj[keys[0]] = value;
   };
-  _freezeRecursion(worker);
+
+  _assignRecursion(worker, pathStack, value);
   return worker;
 };
 
@@ -101,7 +110,7 @@ const freezeDeep = (target, { mutate = false } = {}) => {
  * @return {object}                         - the proxyfied object
  */
 const proxyfiedForCaseInsensitiveAccess = (obj) => {
-  if (!checkNativeBrand(obj, 'Object')) throw new TypeError('The argument is not a valid object.');
+  if (!checkNativeBrand(obj, 'Object')) throw new TypeError('Invalid arguments as input.');
   return new Proxy(obj, {
     get: (target, name) => {
       if (!checkNativeBrand(name, 'String')) return target.name;
