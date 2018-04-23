@@ -1,35 +1,45 @@
+const { checkNativeBrand } = require('../object');
+
+
+
 class ErrorCodeDictionary {
   constructor(dictionary) {
-    this.index = dictionary;
+    this.dictionary = dictionary;
   }
 
-  lookup(code, ref) {
-    if (ref !== 0 && !ref) return this.index[code];
-    return this.index[code].replace(/\${([^}]*)}/g, (match, key) => {
-      const replace = (typeof ref === 'string' || typeof ref === 'number') ? ref : ref[key];
-      return (replace !== 0 && ref) ? replace.toString() : match;
+  lookup(entry, literals) {
+    if (this.dictionary[entry] === undefined) return null;
+    if (literals === undefined) return this.dictionary[entry];
+
+    // mapping with template literals
+    return this.dictionary[entry].replace(/\${([^}]*)}/g, (match, key) => {
+      const replacement = checkNativeBrand(literals, 'Object')
+        ? literals[key] || literals[key] === 0 ? literals[key] : match
+        : literals;
+      return `${replacement}`.trim();
     });
   }
 }
 
 
-// error codes
-const codeIndexes = {};
 
-codeIndexes.ServerError_en = new ErrorCodeDictionary({
+// dictionary collection
+const collection = {};
+
+collection.ServerError_en = new ErrorCodeDictionary({
   90001:  'Failed to load website configs, please contact the admin.',
   92001:  '[MultiPartUpload] Cannot create the folder (fs.mkdir, missing parent folder?): ${dirPath}',
   92002:  '[MultiPartUpload] Failed to clean up the truncated file...\n${errString}',
 });
 
-codeIndexes.TemplateError_en = new ErrorCodeDictionary({
+collection.TemplateError_en = new ErrorCodeDictionary({
   91001:  'Failed to compile template function: ${filePath}\n${err}',
   91002:  'Failed to render template function: ${filePath}\n${err}',
   91003:  'Failed to asynchronously lookup file (fs.readFile): ${filePath}',
   91004:  'Failed to synchronously lookup file (fs.readFileSync): ${filePath}',
 });
 
-codeIndexes.ClientError_en = new ErrorCodeDictionary({
+collection.ClientError_en = new ErrorCodeDictionary({
   10001:  'Please fill all required fields.',
   10002:  'Two new password does not the same.',
   10003:  'Password cannot be set to the same as the current.',
@@ -38,7 +48,7 @@ codeIndexes.ClientError_en = new ErrorCodeDictionary({
   20003:  'Please sign in first!',
 });
 
-codeIndexes.HttpError_en = new ErrorCodeDictionary({
+collection.HttpError_en = new ErrorCodeDictionary({
   400:    'HTTP 400 - Bad Request.',
   401:    'HTTP 401 - Unauthorized.',
   403:    'HTTP 403 - Forbidden.',
@@ -49,10 +59,10 @@ codeIndexes.HttpError_en = new ErrorCodeDictionary({
 
 
 // exports
-module.exports = new Proxy(codeIndexes, {
-  get: (target, name) => {
-    const dictionary = `${name}_${process.env['$WEBSITE_CONFIGS'].language || 'en'}`;
-    if (target.hasOwnProperty(dictionary)) return (...arg) => target[dictionary].lookup(...arg) || arg[0];
-    return arg => arg;
+module.exports = new Proxy(collection, {
+  get: (collection, errorType) => {
+    const dictionary = `${errorType}_${process.env['$WEBSITE_CONFIGS'].language || 'en'}`;
+    if (dictionary in collection) return (entry, literals) => collection[dictionary].lookup(entry, literals) || entry;
+    return (entry, literals) => entry;
   }
 });

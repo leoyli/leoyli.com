@@ -1,3 +1,7 @@
+const { readObjPath } = require('./string');
+
+
+
 /**
  * check the native brand(type) of objects                                                                              // note: `checkNativeBrand` can be generalized
  * @param {object} target                   - object to be checked
@@ -90,7 +94,7 @@ const freezeDeep = (target, { mutate = false } = {}) => {
  */
 const assignDeep = (target, path, value, { mutate = false } = {}) => {
   const worker = mutate === true ? target : cloneDeep(target);
-  const pathStack = checkNativeBrand(path, 'string') ? require('./string').readObjPath(path) : path;
+  const pathStack = checkNativeBrand(path, 'string') ? readObjPath(path) : path;
 
   // tail-call recursion (single-file)
   const _assignRecursion = (obj, keys, value) => {
@@ -113,7 +117,7 @@ const proxyfiedForCaseInsensitiveAccess = (obj) => {
   if (!checkNativeBrand(obj, 'Object')) throw new TypeError('Invalid arguments as input.');
   return new Proxy(obj, {
     get: (target, name) => {
-      if (!checkNativeBrand(name, 'String')) return target.name;
+      if (!checkNativeBrand(name, 'String')) return Reflect.get(target, name);
       return target[Object.keys(target).find(key => key.toLowerCase() === name.toLowerCase())];
     },
   });

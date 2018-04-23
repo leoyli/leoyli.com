@@ -1,3 +1,10 @@
+### 0.9.0-dev.8 / 2018-04-22
+> App
+- Revised 'error' utilities for improving readability and the use cases.
+- Limited code blocks to `require` modules from other files.
+- Replaced some `Object` method by `Reflect`.
+
+
 ### 0.9.0-dev.7 / 2018-04-22
 > App
 - Decoupled magic-strings from 'handler' view controllers via the use of ES6 Symbols.
