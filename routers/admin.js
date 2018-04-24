@@ -4,23 +4,28 @@ const admin = require('../controllers/routers/admin');
 
 
 // device
-const DashboardRouter = new Device([{
-  route:          '/',
-  controller:     admin.main,
-  setting:        { title: 'Dashboard', template: './__root__/' },
-}, {
-  route:          '/configs',
-  controller:     admin.configs,
-  setting:        { title: 'Website Settings', template: './__root__/admin/configs' },
-}, {
-  route:          '/upload',
-  controller:     admin.upload,
-  setting:        { title: 'Media Uploader', template: './__root__/admin/upload' },
-}, {
-  route:          '/stack/:stackType',
-  controller:     admin.stack,
-  setting:        { title: 'Stack', template: './__root__/admin/stack/:stackType', handler: Device.handler.VIEW_STACK },
-}]);
+const DashboardRouter = new Device([
+  {
+    route:        '/',
+    controller:   admin.main,
+    setting:      { title: 'Dashboard', template: './__root__/' },
+  },
+  {
+    route:        '/configs',
+    controller:   admin.configs,
+    setting:      { title: 'Website Settings', template: './__root__/admin/configs' },
+  },
+  {
+    route:        '/upload',
+    controller:   admin.upload,
+    setting:      { title: 'Media Uploader', template: './__root__/admin/upload' },
+  },
+  {
+    route:        '/stack/:stackType',
+    controller:   admin.stack,
+    setting:      { title: 'Stack', template: './__root__/admin/stack/:stackType', handler: Device.handler.VIEW_STACK },
+  },
+]);
 
 
 

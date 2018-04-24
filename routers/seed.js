@@ -42,10 +42,12 @@ const seed = {
 
 
 // device
-const SeedRouter = new Device([{
-  route: '/',
-  controller: seed,
-}]);
+const SeedRouter = new Device([
+  {
+    route: '/',
+    controller: seed,
+  },
+]);
 
 
 

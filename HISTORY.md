@@ -1,3 +1,8 @@
+### 0.9.0-dev.8.1 / 2018-04-24
+> App
+- Improved readability by unifying code style in all routers.
+
+
 ### 0.9.0-dev.8 / 2018-04-22
 > App
 - Revised 'error' utilities for improving readability and the use cases.

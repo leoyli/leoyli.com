@@ -5,10 +5,12 @@ const api = require('../controllers/routers/api');
 
 
 // device
-const APIRouter = new Device([{
-  route:          '/stack/:stackType',
-  controller:     api.stack,
-}]);
+const APIRouter = new Device([
+  {
+    route:        '/stack/:stackType',
+    controller:   api.stack,
+  },
+]);
 
 
 

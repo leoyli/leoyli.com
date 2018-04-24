@@ -4,15 +4,24 @@ const pages = require('../controllers/routers/pages');
 
 
 // device
-const PageRouter = new Device([{
-  route:          '/',
-  controller:     pages.landing,
-  setting:        { template: './theme/' },
-}, {
-  route:          '/search/:search',
-  controller:     pages.search,
-  setting:        { template: './theme/posts/search', crawler: false, handler: Device.handler.VIEW_POSTS_MULTIPLE },
-}]);
+const PageRouter = new Device([
+  {
+    route:        '/',
+    controller:   pages.landing,
+    setting:      { template: './theme/' },
+  },
+  {
+    route:        '/search/:search',
+    controller:   pages.search,
+    setting:      { template: './theme/posts/search', crawler: false, handler: Device.handler.VIEW_POSTS_MULTIPLE },
+  },
+  {
+    route:        '/search/:search',
+    controller:   pages.search,
+    setting:      { template: './theme/posts/search', crawler: false, handler: Device.handler.VIEW_POSTS_MULTIPLE },
+  },
+]);
+
 
 
 

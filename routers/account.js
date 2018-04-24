@@ -6,27 +6,30 @@ const account = require('../controllers/routers/account');
 
 
 // device
-const UserRouter = new Device([{
-  route:          '/signup',
-  controller:     account.signup,
-  setting:        { title: 'Sign Up', template: './__root__/account/signup' },
-}, {
-  route:          '/signin',
-  controller:     account.signin,
-  setting:        { title: 'Sign In', template: './__root__/account/signin' },
-}, {
-  route:          '/signout',
-  controller:     account.signout,
-}]);
+const UserRouter = new Device([
+  {
+    route:        '/signup',
+    controller:   account.signup,
+    setting:      { title: 'Sign Up', template: './__root__/account/signup' },
+  },
+  {
+    route:        '/signin',
+    controller:   account.signin,
+    setting:      { title: 'Sign In', template: './__root__/account/signin' },
+  },
+  {
+    route:        '/signout',
+    controller:   account.signout,
+  },
+]);
 
 
 
 // settings
-UserRouter
-  .hook('pre', usePassport)
-  .hook('post', function errorWrapper(err, req, res, next) {
-    return next(new ClientError(err));
-  });
+UserRouter.hook('pre', usePassport);
+UserRouter.hook('post', function errorWrapper(err, req, res, next) {
+  return next(new ClientError(err));
+});
 
 
 
