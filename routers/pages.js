@@ -15,11 +15,6 @@ const PageRouter = new Device([
     controller:   pages.search,
     setting:      { template: './theme/posts/search', crawler: false, handler: Device.handler.VIEW_POSTS_MULTIPLE },
   },
-  {
-    route:        '/search/:search',
-    controller:   pages.search,
-    setting:      { template: './theme/posts/search', crawler: false, handler: Device.handler.VIEW_POSTS_MULTIPLE },
-  },
 ]);
 
 

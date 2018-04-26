@@ -1,6 +1,6 @@
 // module
 const { checkNativeBrand, hasOwnProperty, cloneDeep, mergeDeep, assignDeep, freezeDeep,
-  proxyfiedForCaseInsensitiveAccess } = require('../../../controllers/utilities/')._test;
+  proxyfyInCaseInsensitiveKey } = require('../../../controllers/utilities/')._test;
 
 
 
@@ -73,9 +73,9 @@ describe('Bundle: Object methods', () => {
     expect(result[1]).toEqual({ a: { b: { c: { d: { e: { f: 0 }}}}}});
   });
 
-  test('Fn: proxyfiedForCaseInsensitiveAccess: proxyfy the object for allowing case-insensitive access', () => {
+  test('Fn: proxyfyInCaseInsensitiveKey: proxyfy the object for allowing case-insensitive access', () => {
     const mockTarget = { a: 1 };
-    const result = proxyfiedForCaseInsensitiveAccess(mockTarget);
+    const result = proxyfyInCaseInsensitiveKey(mockTarget);
     //
     expect(mockTarget.A).toBeUndefined();
     expect(result.A).toEqual(result.a);

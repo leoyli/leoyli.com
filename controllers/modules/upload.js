@@ -101,7 +101,7 @@ const fileParser = (req, res, configs, args) => {
 
 const fieldParser = (req, res, configs, args) => {
   const { 0: fieldName, 1: value, 2: truncatedName, 3: truncatedValue, 4: encoding, 5: MIME } = args;
-  if (value) _U_.object.assignDeep(req.body.busboySlip.raw, fieldName, _U_.string.escapeChars(value), { mutate: true });
+  if (value) _U_.object.assignDeep(req.body.busboySlip.raw, fieldName, _U_.string.toEscapedChars(value), { mutate: true });
 };
 
 

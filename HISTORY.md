@@ -1,3 +1,16 @@
+### 0.9.0-dev.8.1 / 2018-04-26
+> App
+- Revised 'error' utilities to avoid the magic string.
+- Revised 'string' utilities to return `null` if input string is `undefined`.
+- Used `typeof ...` only upon checking if a variable is a `function`.
+  (in other cases, preferred to use `checkNativeBrand` utility function)
+- Renamed some utilities function to be more semantic and consistent.
+- Minor code cleaned up.
+
+> Test
+- Updated unit tests in utilities.
+
+
 ### 0.9.0-dev.8.1 / 2018-04-24
 > App
 - Improved readability by unifying code style in all routers.

@@ -4,7 +4,7 @@
  * @return {string}                         - kebabCased string
  */
 const toKebabCase = (str) => {
-  return str === undefined ? undefined : str
+  return str === undefined ? null : str
     .replace(/([a-z])([A-Z])/g, '$1-$2')                                                                                // handle CamelCase
     .replace(/(-([A-Z])([A-Z]))/g, '-$2-$3')                                                                            // handle signal words in CamelCase
     .replace(/[`'":;,.?!@#$%^&*_=~(){}<>/\\\[\]\-\+\|\s]+/g, '-')                                                       // normalize special characters
@@ -18,12 +18,12 @@ const toKebabCase = (str) => {
  * @param {string} str                      - any arbitrary string
  * @return {string|undefined}               - escaped string, only key HTML entities are escaped
  */
-const escapeChars = (str) => {
+const toEscapedChars = (str) => {
   const charMap = {
     '=': '&#61;', "'": '&#39;', '"': '&#34;', '`': '&#96;', '.': '&#46;', ',': '&#44;',
     ':': '&#58;', ';': '&#59;', '<': '&#60;', '(': '&#40;', '[': '&#91;', '{': '&#123;',
   };
-  return str === undefined ? undefined : str.replace(/[='"`.,:;<([{]/g, char => charMap[char]);
+  return str === undefined ? null : str.replace(/[='"`.,:;<([{]/g, char => charMap[char]);
 };
 
 
@@ -33,7 +33,7 @@ const escapeChars = (str) => {
  * @return {string}                         - hexadecimal{string}
  */
 const readMongoId = (str) => {
-  const output = str === undefined ? undefined : /(?:\=|\/|^)([a-f\d]{24})(?:\?|\/|$)/i.exec(str);
+  const output = str === undefined ? null : /(?:\=|\/|^)([a-f\d]{24})(?:\?|\/|$)/i.exec(str);
   if (!output) throw new TypeError(`No Mongo ObjectId in ${str} can be read.`);
   return output[1].toLowerCase();
 };
@@ -45,7 +45,7 @@ const readMongoId = (str) => {
  * @return {array}                          - an array contains elements in ordered by nest keys (path)
  */
 const readObjPath = (str) => {
-  return str === undefined ? undefined : str.match(/[a-zA-Z0-9$_]+/g);
+  return str === undefined ? null : str.match(/[a-zA-Z0-9$_]+/g);
 };
 
 
@@ -57,13 +57,13 @@ const readObjPath = (str) => {
  * @param {string} [use]                    - set the use for the direct output
  * @return {string|array|null}              - direct outputted string or raw result or null
  */
-const inspectFileURL = (str, extName, { raw = true , use } = {}) => {
-  const protocolExp   = '(?:(https?):\/\/)';
-  const fileNameExp   = `([0-9a-z\\s\\._%-]+\.(?:${extName.join('|')})`;
-  const domainExp     = '((?:[0-9a-z%-]+\\.(?!\\.))+[a-z]+)';
-  const pathExp       = '(\\/(?:[0-9a-z\\/\\s\\._%-]+\\/)?)';
-  const URLExp        = `^${protocolExp}?${domainExp}${pathExp}${fileNameExp}$)`;
-  const result        = new RegExp(URLExp, 'i').exec(str);
+const inspectFileURL = (str, extName, { raw = true , use } = {}) => {                                                   // tofix: refactor may needed
+  const protocolExp  = '(?:(https?):\/\/)';
+  const fileNameExp  = `([0-9a-z\\s\\._%-]+\.(?:${extName.join('|')})`;
+  const domainExp    = '((?:[0-9a-z%-]+\\.(?!\\.))+[a-z]+)';
+  const pathExp      = '(\\/(?:[0-9a-z\\/\\s\\._%-]+\\/)?)';
+  const URLExp       = `^${protocolExp}?${domainExp}${pathExp}${fileNameExp}$)`;
+  const result       = new RegExp(URLExp, 'i').exec(str);
   const filtrate = Array.isArray(result) ? (use || result[1] || 'https') + '://' + result.slice(2, 5).join('') : null;
   return raw === false ? filtrate : result;
 };
@@ -71,4 +71,4 @@ const inspectFileURL = (str, extName, { raw = true , use } = {}) => {
 
 
 // exports
-module.exports = { escapeChars, toKebabCase, readMongoId, readObjPath, inspectFileURL };
+module.exports = { toKebabCase, toEscapedChars, readMongoId, readObjPath, inspectFileURL };

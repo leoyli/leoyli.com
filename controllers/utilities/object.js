@@ -51,7 +51,8 @@ const mergeDeep = (target, source, { mutate = false } = {}) => {
   // non-tail-call recursion (parallel)
   const _mergeRecursion = (obj, source) => {
     for (const key in source) {
-      if (hasOwnProperty(source, key) && checkNativeBrand(source[key], 'object')) {
+      if (hasOwnProperty(source, key) && checkNativeBrand(source[key], 'Object')) {
+        if (!hasOwnProperty(obj, key)) obj[key] = {};
         _mergeRecursion(hasOwnProperty(obj, key) ? obj[key] : (obj[key] = {}), source[key]);
       } else obj[key] = source[key];
     }
@@ -94,7 +95,7 @@ const freezeDeep = (target, { mutate = false } = {}) => {
  */
 const assignDeep = (target, path, value, { mutate = false } = {}) => {
   const worker = mutate === true ? target : cloneDeep(target);
-  const pathStack = checkNativeBrand(path, 'string') ? readObjPath(path) : path;
+  const pathStack = checkNativeBrand(path, 'String') ? readObjPath(path) : path;
 
   // tail-call recursion (single-file)
   const _assignRecursion = (obj, keys, value) => {
@@ -113,7 +114,7 @@ const assignDeep = (target, path, value, { mutate = false } = {}) => {
  * @param {object} obj                      - target{object} to be operated
  * @return {object}                         - the proxyfied object
  */
-const proxyfiedForCaseInsensitiveAccess = (obj) => {
+const proxyfyInCaseInsensitiveKey = (obj) => {
   if (!checkNativeBrand(obj, 'Object')) throw new TypeError('Invalid arguments as input.');
   return new Proxy(obj, {
     get: (target, name) => {
@@ -133,5 +134,5 @@ module.exports = {
   mergeDeep,
   assignDeep,
   freezeDeep,
-  proxyfiedForCaseInsensitiveAccess,
+  proxyfyInCaseInsensitiveKey,
 };

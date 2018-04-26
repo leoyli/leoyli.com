@@ -40,10 +40,10 @@ const postNormalizer = async (req, res, next) => {
   const normalizedPost = {
     ...post,
     featured  : _U_.string.inspectFileURL(post.featured, res.locals.$$SITE.sets.imageTypes, { raw: false }),
-    title     : _U_.string.escapeChars(post.title),
-    content   : _U_.string.escapeChars(post.content),
-    category  : _U_.string.toKebabCase(post.category) || undefined,
-    tags      : _U_.string.toKebabCase(post.tags) || undefined,
+    title     : _U_.string.toEscapedChars(post.title),
+    content   : _U_.string.toEscapedChars(post.content),
+    category  : _U_.string.toKebabCase(post.category) || null,
+    tags      : _U_.string.toKebabCase(post.tags) || null,
   };
   if (post.state) normalizedPost.state.forEach(state => normalizedPost[`state.${state}`] = true);
   if (req.method === 'POST') normalizedPost.canonical = await checkAndResolveConflict(_U_.string.toKebabCase(post.title));

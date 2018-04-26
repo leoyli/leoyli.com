@@ -1,5 +1,5 @@
 // module
-const { toKebabCase, escapeChars,
+const { toKebabCase, toEscapedChars,
   readMongoId, readObjPath, inspectFileURL } = require('../../../controllers/utilities/')._test;
 
 
@@ -22,12 +22,12 @@ describe('Bundle: String methods', () => {
     expect(result[2]).toBe('this-is-a-test');
   });
 
-  test('Fn: escapeChars', () => {
+  test('Fn: toEscapedChars', () => {
     const test = ['result- =\'"`.,:;<([{', undefined];
-    const result = test.map(str => escapeChars(str));
+    const result = test.map(str => toEscapedChars(str));
     //
     expect(result[0]).toBe('result- &#61;&#39;&#34;&#96;&#46;&#44;&#58;&#59;&#60;&#40;&#91;&#123;');
-    expect(result[1]).toBe(test[1]);
+    expect(result[1]).toBe(null);
   });
 
   test('Fn: readMongoId', () => {

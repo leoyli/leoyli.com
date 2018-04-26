@@ -27,7 +27,7 @@ const UserRouter = new Device([
 
 // settings
 UserRouter.hook('pre', usePassport);
-UserRouter.hook('post', function errorWrapper(err, req, res, next) {
+UserRouter.hook('post', function errorFilter(err, req, res, next) {
   return next(new ClientError(err));
 });
 

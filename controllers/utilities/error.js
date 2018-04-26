@@ -1,3 +1,4 @@
+const { checkNativeBrand } = require('./object');
 const errorCodeProxyAgent = require('./error-code/');
 
 
@@ -5,11 +6,11 @@ const errorCodeProxyAgent = require('./error-code/');
 // main
 class ExtendableError extends Error {
   constructor(entry, literals) {
-    if (Reflect.getPrototypeOf(new.target).name === 'TransferableError') {
+    if (Reflect.getPrototypeOf(new.target) === TransferableError) {                                                     // note: lock-in this parental class can be only extended by a special child class
       super();
       this.name = this.constructor.name;
       this.message = errorCodeProxyAgent[this.name](entry, literals);
-      if (typeof entry === 'number') this.code = entry;
+      if (checkNativeBrand(entry, 'Number')) this.code = entry;
       if (Error.captureStackTrace) Error.captureStackTrace(this, this.constructor);                                     // note: V8 JS-engine only
       else this.stack = (new Error(message)).stack;                                                                     // note: non-V8 browser only
     }

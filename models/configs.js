@@ -24,14 +24,14 @@ const configsSchema  = new mongoose.Schema({
 
 
 // static methods
-configsSchema.static('initialize', async function(next = () => {}) {
+configsSchema.static('initialize', async function (next = () => {}) {
   process.env['$WEBSITE_CONFIGS'] = JSON.stringify(await this.findOne({ active: true }));
   if (process.env['$WEBSITE_CONFIGS'] === 'null') {
     process.env['$WEBSITE_CONFIGS'] = JSON.stringify(await this.create({ active: true }));
   } return next();
 });
 
-configsSchema.static('updateSettings', async function(doc, next = () => {}) {
+configsSchema.static('updateSettings', async function (doc, next = () => {}) {
   process.env['$WEBSITE_CONFIGS'] = JSON.stringify(await this.findOneAndUpdate({ active: true }, doc, { new: true }));
   return next();
 });
