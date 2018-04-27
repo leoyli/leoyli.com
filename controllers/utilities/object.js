@@ -50,11 +50,14 @@ const mergeDeep = (target, source, { mutate = false } = {}) => {
 
   // non-tail-call recursion (parallel)
   const mergeRecursion = (obj, src) => {
-    for (const key in src) {
-      if (hasOwnKey(src, key) && checkNativeBrand(src[key], 'Object')) {
-        if (!hasOwnKey(obj, key)) obj[key] = {};
-        mergeRecursion(hasOwnKey(obj, key) ? obj[key] : (obj[key] = {}), src[key]);
-      } else obj[key] = src[key];
+    const srcKeys = Reflect.ownKeys(src);
+    const objKeys = Reflect.ownKeys(obj);
+    for (let i = srcKeys.length - 1; i > -1; i -= 1) {
+      const currentKey = srcKeys[i];
+      if (checkNativeBrand(src[currentKey], 'Object')) {
+        if (!objKeys.includes(currentKey)) obj[currentKey] = {};
+        mergeRecursion(obj[currentKey], src[currentKey]);
+      } else obj[currentKey] = src[currentKey];
     }
   };
 
@@ -75,7 +78,8 @@ const freezeDeep = (target, { mutate = false } = {}) => {
   // non-tail-call recursion (parallel)
   const freezeRecursion = (obj) => {
     if (['Object', 'Array'].includes(checkNativeBrand(obj))) {
-      for (const key in obj) if (hasOwnKey(obj, key)) freezeRecursion(obj[key]);
+      const objKeys = Reflect.ownKeys(obj);
+      for (let i = objKeys.length - 1; i > -1; i -= 1) freezeRecursion(obj[objKeys[i]]);
       Object.freeze(obj);
     }
   };

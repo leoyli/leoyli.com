@@ -13,12 +13,12 @@ const { _U_ } = require('../utilities/');
 const exp_dateRange = (start, end) => {
   const [A, Z] = [(start < end) ? start : end, (start < end) ? end : start];
   const [G, L] = [{ Y: A[0], M: A[1], D: A[2] }, { Y: Z[0], M: Z[1], D: Z[2] }];
-  G.D = G.Y ? G.M ? G.D ? G.D : ++G.D : ++G.D : L.M && L.D ? L.D : ++G.D;
-  G.M = G.Y ? G.M ? --G.M : G.M : L.M ? L.M - 1 : G.M;
+  G.D = G.Y ? G.M ? G.D ? G.D : (G.D += 1) : (G.D += 1) : L.M && L.D ? L.D : (G.D += 1);
+  G.M = G.Y ? G.M ? (G.M -= 1) : G.M : L.M ? L.M - 1 : G.M;
   G.Y = G.Y ? G.Y : L.Y;
-  L.Y = L.M ? L.Y : ++L.Y;
-  L.M = L.M && L.D ? --L.M : L.M;
-  L.D = ++L.D;
+  L.Y = L.M ? L.Y : (L.Y += 1);
+  L.M = L.M && L.D ? (L.M -= 1) : L.M;
+  L.D += 1;
   return { $gte: new Date(Date.UTC(G.Y, G.M, G.D)), $lt: new Date(Date.UTC(L.Y, L.M, L.D)) };
 };
 
@@ -155,7 +155,7 @@ const fetchController = (collection, { page, num, sort } = {}) => function fetch
 // exports
 module.exports = {
   fetchController,
-  _test: {
+  [Symbol.for('UNIT_TEST')]: {
     getAggregationQuery,
     getDateRangeArray,
     exp_dateRange,

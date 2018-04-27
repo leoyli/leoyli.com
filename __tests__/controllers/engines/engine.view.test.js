@@ -8,7 +8,8 @@ const fs = require('fs');
 
 // module
 const { getCompilationConfigs, getBlueprint, getRuntimeMethods,
-  getTemplate, buildTemplate, getFileString, render, Template } = require('../../../controllers/engines/view')._test;
+  getTemplate, buildTemplate, getFileString, render, Template,
+} = require('../../../controllers/engines/view')[Symbol.for('UNIT_TEST')];
 
 
 // test

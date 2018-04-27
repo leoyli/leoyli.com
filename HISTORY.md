@@ -1,3 +1,18 @@
+### 0.9.0-dev.10 / 2018-04-27
+> App
+- Used no plusplus operators (ESLint).
+- Extended the capability for `cloneDeep`, `mergedDeep`, and `freezeDeep` 'object' utilities of operating on `Symbol` primitives.
+- Used the reverse for-loop for improving the algorithm in `mergedDeep` and `freezeDeep`.
+- Used the global-registered `Symbol.for('UNIT_TEST')` symbol for accessing functions to be unit-tested.
+
+> Test
+- Added 5 more unit tests upon `cloneDeep` 'object' utility.
+- Loaded the tested module units only from `Symbol.for('UNIT_TEST')`.
+
+> UI
+- Used no plusplus operators (ESLint).
+
+
 ### 0.9.0-dev.9 / 2018-04-27
 > App
 - Updated all dependencies.

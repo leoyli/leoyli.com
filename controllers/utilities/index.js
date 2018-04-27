@@ -7,7 +7,7 @@ const utilities = {
 };
 
 
-utilities._test = {
+utilities[Symbol.for('UNIT_TEST')] = {
   ...utilities._U_.string,
   ...utilities._U_.object,
   ...utilities._U_.error,

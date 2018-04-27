@@ -133,7 +133,7 @@ const uploadController = (configs) => function uploadController(req, res, next) 
 // exports
 module.exports = {
   uploadController,
-  _test: {
+  [Symbol.for('UNIT_TEST')]: {
     checkStatus,
     getUploadPath,
     uploadFile,

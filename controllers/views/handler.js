@@ -48,7 +48,8 @@ const templateHandler = ({ template: $template, handler: $handler }) => function
 
 
 // exports
-module.exports = { templateHandler,
+module.exports = {
+  templateHandler,
   handlerSymbols: {
     VIEW_POSTS_SINGLE,
     VIEW_POSTS_MULTIPLE,

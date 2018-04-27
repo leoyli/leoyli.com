@@ -1,6 +1,6 @@
 /* eslint-disable space-in-parens, array-bracket-spacing, comma-spacing */
 // modules
-const { exp_dateRange, getDateRangeArray } = require('../../../controllers/modules/fetch')._test;
+const { exp_dateRange, getDateRangeArray } = require('../../../controllers/modules/fetch')[Symbol.for('UNIT_TEST')];
 
 
 // tests

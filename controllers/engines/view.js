@@ -186,9 +186,10 @@ const render = (filePath, locals, next) => {
 
 
 // exports
-module.exports = { __express: render,
+module.exports = {
+  __express: render,
   render,
-  _test: {
+  [Symbol.for('UNIT_TEST')]: {
     Template,
     render,
     getCompilationConfigs,

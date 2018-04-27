@@ -7,7 +7,7 @@ fs.unlink = jest.fn();
 
 // module
 const { checkStatus, getUploadPath, uploadFile,
-  transpileRaw, transpileMes } = require('../../../controllers/modules/upload')._test;
+  transpileRaw, transpileMes } = require('../../../controllers/modules/upload')[Symbol.for('UNIT_TEST')];
 
 
 // test

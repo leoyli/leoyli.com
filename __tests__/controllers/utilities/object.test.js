@@ -1,6 +1,6 @@
 // module
 const { checkNativeBrand, hasOwnKey, cloneDeep, mergeDeep, assignDeep, freezeDeep,
-  proxyfyInCaseInsensitiveKey } = require('../../../controllers/utilities/')._test;
+  proxyfyInCaseInsensitiveKey } = require('../../../controllers/utilities/')[Symbol.for('UNIT_TEST')];
 
 
 // test
@@ -27,12 +27,17 @@ describe('Bundle: Object methods', () => {
   test('Fn: cloneDeep: clone the object/array deeply by its value (reference decoupled)', () => {
     const mockSource1 = { test: 'test' };
     const mockSource2 = ['test'];
-    const result = [cloneDeep(mockSource1), cloneDeep(mockSource2)];
+    const mockSource3 = { a: { b: Symbol('test') } };
+    const result = [cloneDeep(mockSource1), cloneDeep(mockSource2), cloneDeep(mockSource3)];
     //
     expect(result[0]).not.toBe(mockSource1);
     expect(result[0]).toEqual(mockSource1);
     expect(result[1]).not.toBe(mockSource2);
-    expect(result[1]).toEqual(['test']);
+    expect(result[1]).toEqual(mockSource2);
+    expect(result[2]).not.toBe(mockSource3);
+    expect(result[2]).toEqual(mockSource3);
+    expect(result[2].a.b).toBe(mockSource3.a.b);
+    expect(result[2].a.b).not.toBe(Symbol('test'));
   });
 
   test('Fn: mergeDeep: merge two object recursively', () => {

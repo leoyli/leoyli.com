@@ -122,8 +122,9 @@ class Device {
 
 
 // exports
-module.exports = { Device,
-  _test: {
+module.exports = {
+  Device,
+  [Symbol.for('UNIT_TEST')]: {
     Device,
     asyncWrapper,
     getPreprocessor,
