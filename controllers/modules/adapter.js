@@ -1,30 +1,33 @@
 const { _U_ } = require('../utilities/');
 
 
+// modules
+const passport = require('passport');
+const { PostsModel } = require('../../models/');
+const { APIHeader } = require('./regulator');
+const { responseInitializer } = require('../views/responder');
+const { uploadController } = require('./upload');
+const { fetchController } = require('./fetch');
+const { noCrawlerHeader } = require('./regulator');
+
 
 /** HTML responder **/
-const { responseInitializer } = require('../views/responder');
 const responseHTMLRequest = (...arg) => responseInitializer(...arg);
 
 
 /** API responder **/
-const { APIHeader } = require('./regulator');
 const responseAPIRequest = (...arg) => APIHeader(...arg);
 
 
 /** busboy for multipart form parsing **/
-const { uploadController } = require('./upload');
 const parseMultipart = (...arg) => uploadController(...arg);
 
 
 /** Mongo aggregation for database fetching **/
-const { fetchController } = require('./fetch');
 const aggregateFetch = (...arg) => fetchController(...arg);
 
 
 /** passport: populating `req.user` **/
-const passport = require('passport');
-const { noCrawlerHeader } = require('./regulator');
 const usePassport = [noCrawlerHeader, passport.initialize(), passport.session()];
 
 
@@ -36,12 +39,11 @@ const isSignedIn = [...usePassport, function isSignedIn(req, res, next) {
 
 
 /** authorization **/
-const { postsModel } = require('../../models/');
 const isAuthorized = [...isSignedIn, async function isAuthorized(req, res, next) {
   const [field, val] = req.params.canonical !== undefined
     ? ['canonical', req.params.canonical]
     : ['_id', _U_.string.readMongoId(req.url)];
-  if (await postsModel.count({ [field]: val, 'author._id': req.user._id }) !== 1) throw new _U_.error.ClientError(20001);// tofix: find the post first then decide to give or not
+  if (await PostsModel.count({ [field]: val, 'author._id': req.user._id }) !== 1) throw new _U_.error.ClientError(20001);// tofix: find the post first then decide to give or not
   return next();
 }];
 
@@ -57,7 +59,6 @@ const passwordValidation = function passwordValidation(req, res, next) {
   }
   return next();
 };
-
 
 
 // exports

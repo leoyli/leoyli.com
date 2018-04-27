@@ -2,6 +2,5 @@ const regulator = require('./regulator');
 const adapter = require('./adapter');
 
 
-
 // exports
-module.exports = exports = { _M_: { ...regulator, ...adapter } };
+module.exports = { _M_: { ...regulator, ...adapter } };

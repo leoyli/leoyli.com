@@ -1,6 +1,6 @@
+/* eslint-disable key-spacing */
 const { Device } = require('../controllers/engines/router');
 const pages = require('../controllers/routers/pages');
-
 
 
 // device
@@ -16,8 +16,6 @@ const PageRouter = new Device([
     setting:      { template: './theme/posts/search', crawler: false, handler: Device.handler.VIEW_POSTS_MULTIPLE },
   },
 ]);
-
-
 
 
 // exports

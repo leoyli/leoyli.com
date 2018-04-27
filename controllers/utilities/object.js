@@ -1,5 +1,5 @@
+/* eslint-disable no-restricted-syntax */
 const { readObjPath } = require('./string');
-
 
 
 /**
@@ -10,7 +10,7 @@ const { readObjPath } = require('./string');
  */
 const checkNativeBrand = (target, str) => {
   const nativeBrandName = (obj) => Object.prototype.toString.call(obj).slice(8, -1);
-  if (str && nativeBrandName(str).toLowerCase() !== 'string') throw new TypeError(`Second argument is not a string.`);
+  if (str && nativeBrandName(str).toLowerCase() !== 'string') throw new TypeError('Second argument is not a string.');
   if (str) return nativeBrandName(target).toLowerCase() === str.toLowerCase();
   return nativeBrandName(target);
 };
@@ -22,7 +22,7 @@ const checkNativeBrand = (target, str) => {
  * @param {string} prop                     - name of the property
  * @return {boolean}                        - evaluation result
  */
-const hasOwnProperty = (obj, prop) => {
+const hasOwnKey = (obj, prop) => {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 };
 
@@ -49,16 +49,16 @@ const mergeDeep = (target, source, { mutate = false } = {}) => {
   const worker = mutate === true ? target : cloneDeep(target);
 
   // non-tail-call recursion (parallel)
-  const _mergeRecursion = (obj, source) => {
-    for (const key in source) {
-      if (hasOwnProperty(source, key) && checkNativeBrand(source[key], 'Object')) {
-        if (!hasOwnProperty(obj, key)) obj[key] = {};
-        _mergeRecursion(hasOwnProperty(obj, key) ? obj[key] : (obj[key] = {}), source[key]);
-      } else obj[key] = source[key];
+  const mergeRecursion = (obj, src) => {
+    for (const key in src) {
+      if (hasOwnKey(src, key) && checkNativeBrand(src[key], 'Object')) {
+        if (!hasOwnKey(obj, key)) obj[key] = {};
+        mergeRecursion(hasOwnKey(obj, key) ? obj[key] : (obj[key] = {}), src[key]);
+      } else obj[key] = src[key];
     }
   };
 
-  _mergeRecursion(worker, source);
+  mergeRecursion(worker, source);
   return worker;
 };
 
@@ -73,14 +73,14 @@ const freezeDeep = (target, { mutate = false } = {}) => {
   const worker = mutate === true ? target : cloneDeep(target);
 
   // non-tail-call recursion (parallel)
-  const _freezeRecursion = (obj) => {
+  const freezeRecursion = (obj) => {
     if (['Object', 'Array'].includes(checkNativeBrand(obj))) {
-      for (const key in obj) if (hasOwnProperty(obj, key)) _freezeRecursion(obj[key]);
+      for (const key in obj) if (hasOwnKey(obj, key)) freezeRecursion(obj[key]);
       Object.freeze(obj);
     }
   };
 
-  _freezeRecursion(worker);
+  freezeRecursion(worker);
   return worker;
 };
 
@@ -98,13 +98,15 @@ const assignDeep = (target, path, value, { mutate = false } = {}) => {
   const pathStack = checkNativeBrand(path, 'String') ? readObjPath(path) : path;
 
   // tail-call recursion (single-file)
-  const _assignRecursion = (obj, keys, value) => {
-    if (keys.length > 1) {
-      return _assignRecursion(obj[keys[0]] !== undefined ? obj[keys[0]] : (obj[keys[0]] = {}), keys.slice(1), value);
-    } else obj[keys[0]] = value;
+  const assignRecursion = (obj, keys) => {
+    if (keys.length === 1) obj[keys[0]] = value;
+    else {
+      if (obj[keys[0]] === undefined) obj[keys[0]] = {};
+      return assignRecursion(obj[keys[0]], keys.slice(1), value);
+    }
   };
 
-  _assignRecursion(worker, pathStack, value);
+  assignRecursion(worker, pathStack, value);
   return worker;
 };
 
@@ -125,11 +127,10 @@ const proxyfyInCaseInsensitiveKey = (obj) => {
 };
 
 
-
 // exports
 module.exports = {
   checkNativeBrand,
-  hasOwnProperty,
+  hasOwnKey,
   cloneDeep,
   mergeDeep,
   assignDeep,

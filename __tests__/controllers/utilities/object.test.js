@@ -1,13 +1,12 @@
 // module
-const { checkNativeBrand, hasOwnProperty, cloneDeep, mergeDeep, assignDeep, freezeDeep,
+const { checkNativeBrand, hasOwnKey, cloneDeep, mergeDeep, assignDeep, freezeDeep,
   proxyfyInCaseInsensitiveKey } = require('../../../controllers/utilities/')._test;
-
 
 
 // test
 describe('Check the ENV', () => {
   test('Should run in test mode', () => {
-    expect(process.env['NODE_ENV']).toEqual('test');
+    expect(process.env.NODE_ENV).toEqual('test');
   });
 });
 
@@ -19,10 +18,10 @@ describe('Bundle: Object methods', () => {
     expect(checkNativeBrand([() => {}], 'array')).toBeTruthy();
   });
 
-  test('Fn: hasOwnProperty: check if object has wwn a property', () => {
-    expect(hasOwnProperty({}, '')).toBeFalsy();
-    expect(hasOwnProperty({ a: 0}, 'a')).toBeTruthy();
-    expect(hasOwnProperty({ a: { b: 0 }}, 'b')).toBeFalsy();
+  test('Fn: hasOwnKey: check if object has wwn a property', () => {
+    expect(hasOwnKey({}, '')).toBeFalsy();
+    expect(hasOwnKey({ a: 0 }, 'a')).toBeTruthy();
+    expect(hasOwnKey({ a: { b: 0 } }, 'b')).toBeFalsy();
   });
 
   test('Fn: cloneDeep: clone the object/array deeply by its value (reference decoupled)', () => {
@@ -37,19 +36,19 @@ describe('Bundle: Object methods', () => {
   });
 
   test('Fn: mergeDeep: merge two object recursively', () => {
-    const mockTarget = { a: 0, b: 1, c: { d: { e: 2, f: 3 }, g: 4 }};
-    const mockSource = { c: { d: { e: 5 }, f: 6 }};
+    const mockTarget = { a: 0, b: 1, c: { d: { e: 2, f: 3 }, g: 4 } };
+    const mockSource = { c: { d: { e: 5 }, f: 6 } };
     const result = [mergeDeep(mockTarget, mockSource), mergeDeep(mockSource, mockTarget, { mutate: true })];
     //
     expect(result[0]).not.toEqual(mockTarget);
-    expect(result[0]).toEqual({ a: 0, b: 1, c: { d: { e: 5, f: 3}, f: 6, g: 4 }});
+    expect(result[0]).toEqual({ a: 0, b: 1, c: { d: { e: 5, f: 3 }, f: 6, g: 4 } });
     expect(result[1]).toBe(mockSource);
-    expect(result[1]).toEqual({ a: 0, b: 1, c: { d: { e: 2, f: 3}, f: 6, g: 4 }});
+    expect(result[1]).toEqual({ a: 0, b: 1, c: { d: { e: 2, f: 3 }, f: 6, g: 4 } });
   });
 
   test('Fn: freezeDeep: frozen the target and its property deeply', () => {
-    const mockTarget1 = { a: { b: { c: { d: { e: { f: 0 }}}}}};
-    const mockTarget2 = { a: { b: { c: { d: { e: { f: 0 }}}}}};
+    const mockTarget1 = { a: { b: { c: { d: { e: { f: 0 } } } } } };
+    const mockTarget2 = { a: { b: { c: { d: { e: { f: 0 } } } } } };
     const result = [freezeDeep(mockTarget1), freezeDeep(mockTarget2, { mutate: true })];
     //
     expect(result[0]).not.toBe(mockTarget1);
@@ -69,8 +68,8 @@ describe('Bundle: Object methods', () => {
     const result = [assignDeep(mockTarget1, mockPath, 0), assignDeep(mockTarget2, mockPath, 0, { mutate: true })];
     //
     expect(result[0]).not.toBe(result[1]);
-    expect(result[0]).toEqual({ a: { b: { c: { d: { e: { f: 0 }}}}}});
-    expect(result[1]).toEqual({ a: { b: { c: { d: { e: { f: 0 }}}}}});
+    expect(result[0]).toEqual({ a: { b: { c: { d: { e: { f: 0 } } } } } });
+    expect(result[1]).toEqual({ a: { b: { c: { d: { e: { f: 0 } } } } } });
   });
 
   test('Fn: proxyfyInCaseInsensitiveKey: proxyfy the object for allowing case-insensitive access', () => {
@@ -80,5 +79,5 @@ describe('Bundle: Object methods', () => {
     expect(mockTarget.A).toBeUndefined();
     expect(result.A).toEqual(result.a);
     expect(result.A).toBe(1);
-  })
+  });
 });

@@ -1,8 +1,7 @@
 const path = require('path');
 const request = require('supertest');
 const { app, mongoose } = require('../app');
-const { configsModel, usersModel, mediaModel, postsModel } = require('../models');
-
+const { ConfigsModel, UsersModel, MediaModel, PostsModel } = require('../models');
 
 
 // setup
@@ -11,21 +10,20 @@ const cookiesJar = [];
 
 
 beforeAll(done => {
-  if (process.env['NODE_ENV'] !== 'test') throw new Error('Should run in the test mode!');
-  return mongoose.connection.dropDatabase(configsModel.initialize(done));
+  if (process.env.NODE_ENV !== 'test') throw new Error('Should run in the test mode!');
+  return mongoose.connection.dropDatabase(ConfigsModel.initialize(done));
 });
 
 afterAll(done => mongoose.disconnect(done));
 
 
-
 // test
 describe('Server Initialization', () => {
   test('Should run in test mode', () => {
-    expect(process.env['NODE_ENV']).toEqual('test');
+    expect(process.env.NODE_ENV).toEqual('test');
   });
 
-  test('GET the root', async() => {
+  test('GET the root', async () => {
     const result = await request(app)
       .get('/');
     //
@@ -41,8 +39,8 @@ describe('Router - Seed', () => {
     //
     expect(result.statusCode).toBe(302);
     expect(result.headers.location).toBe('/posts');
-    expect(await usersModel.count({})).toBe(1);
-    expect(await postsModel.count({})).toBe(1);
+    expect(await UsersModel.count({})).toBe(1);
+    expect(await PostsModel.count({})).toBe(1);
   });
 });
 
@@ -97,18 +95,18 @@ describe('Router - Authentication', () => {
 
   test('POST a new user', async () => {
     const mocUserInput = {
-      email           : 'test@leoyli.com',
-      username        : 'test',
-      password        : { new : 'test', confirmed: 'test' },
-      picture         : '/media/201710/1509304639065.png',
+      email: 'test@leoyli.com',
+      username: 'test',
+      password: { new: 'test', confirmed: 'test' },
+      picture: '/media/201710/1509304639065.png',
       info: {
-        firstName   : 'test',
-        lastName    : 'test',
-        residence   : 'Test/test',
-        timeZone    : 'UTC−07:00 (MST)',
-        gender      : 'NA',
-        birthday    : Date.now(),
-      }
+        firstName: 'test',
+        lastName: 'test',
+        residence: 'Test/test',
+        timeZone: 'UTC−07:00 (MST)',
+        gender: 'NA',
+        birthday: Date.now(),
+      },
     };
     const result = await request(app)
       .post('/signup')
@@ -116,7 +114,7 @@ describe('Router - Authentication', () => {
     //
     expect(result.statusCode).toBe(302);
     expect(result.headers.location).toBe('/home');
-    expect(await usersModel.count({})).toBe(2);
+    expect(await UsersModel.count({})).toBe(2);
   });
 
   test('GET to sign-out from a session', async () => {
@@ -148,23 +146,23 @@ describe('Router - Home', () => {
   test('PATCH configs of the site', async () => {
     await agent
       .patch('/admin/configs')
-      .send({ configs: { title: 'Testing Website' }});
+      .send({ configs: { title: 'Testing Website' } });
     //
-    expect((await configsModel.findOne({ active: true })).title).toEqual('Testing Website');
+    expect((await ConfigsModel.findOne({ active: true })).title).toEqual('Testing Website');
   });
 
   test.skip('PATCH user nickname', async () => {
     await agent
       .patch('/home/profile')
-      .send({ profile: { nickname: 'test' }});
+      .send({ profile: { nickname: 'test' } });
     //
-    expect((await usersModel.findOne({ email: 'leo@leoyli.com' })).nickname).toContain('test');
+    expect((await UsersModel.findOne({ email: 'leo@leoyli.com' })).nickname).toContain('test');
   });
 
   test('PATCH user password', async () => {
     await agent
       .patch('/home/security')
-      .send({ password: { old: 'leo', new: 'test', confirmed: 'test' }});
+      .send({ password: { old: 'leo', new: 'test', confirmed: 'test' } });
     const req = doc => request(app).post('/signin').send(doc);
     const doc = [{ email: 'leo@leoyli.com', password: 'test' }, { email: 'leo@leoyli.com', password: 'leo' }];
     const result = await Promise.all([req(doc[0]), req(doc[1])]);
@@ -182,21 +180,21 @@ describe('Router - Home', () => {
     //
     expect(result.statusCode).toBe(302);
     expect(result.headers.location).toBe('/');
-    expect(await mediaModel.count({})).toBe(1);
+    expect(await MediaModel.count({})).toBe(1);
   });
 });
 
 
 describe('Router - Posts', () => {
   test('POST a new post', async () => {
-    const mockNewPost = { post: { title: 'TEST POST', category: 'test', featured: '', content: 'TEST CONTENT' }};
+    const mockNewPost = { post: { title: 'TEST POST', category: 'test', featured: '', content: 'TEST CONTENT' } };
     const result = await agent
       .post('/posts/edit')
       .send(mockNewPost);
     //
     expect(result.statusCode).toBe(302);
     expect(result.headers.location).toBe('/posts');
-    expect(await postsModel.count({ canonical: 'test-post' })).toBe(1);
+    expect(await PostsModel.count({ canonical: 'test-post' })).toBe(1);
   });
 
   test('GET access to the editor', async () => {
@@ -216,7 +214,7 @@ describe('Router - Posts', () => {
   });
 
   test('GET the created post via alias', async () => {
-    const post = await postsModel.findOne({ canonical: 'test-post' });
+    const post = await PostsModel.findOne({ canonical: 'test-post' });
     const result = await agent
       .get(`/posts/${post._id}`);
     //
@@ -225,23 +223,23 @@ describe('Router - Posts', () => {
   });
 
   test('PATCH the created post', async () => {
-    const mockEditedPost = { post: { title: 'EDITED', category: 'test', featured: '', content: 'CONTENT EDITED' }};
-    const post = await postsModel.findOne({ canonical: 'test-post' });
+    const mockEditedPost = { post: { title: 'EDITED', category: 'test', featured: '', content: 'CONTENT EDITED' } };
+    const post = await PostsModel.findOne({ canonical: 'test-post' });
     const result = await agent
       .patch(`/posts/edit/${post._id}`)
       .send(mockEditedPost);
     //
     expect(result.statusCode).toBe(302);
-    expect(await postsModel.count({ title: 'EDITED' })).toBe(1);
+    expect(await PostsModel.count({ title: 'EDITED' })).toBe(1);
   });
 
   test('DELETE the created new post', async () => {
-    const post = await postsModel.findOne({ canonical: 'test-post' });
+    const post = await PostsModel.findOne({ canonical: 'test-post' });
     const result = await agent
       .delete(`/posts/edit/${post._doc._id}`);
     //
     expect(result.statusCode).toBe(302);
     expect(result.headers.location).toBe('/posts/');
-    expect(await postsModel.count({ canonical: 'test-post' })).not.toBe(1);
+    expect(await PostsModel.count({ canonical: 'test-post' })).not.toBe(1);
   });
 });

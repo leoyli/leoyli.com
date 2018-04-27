@@ -1,6 +1,5 @@
 const { _M_ } = require('../modules/');
-const { usersModel } = require('../../models/');
-
+const { UsersModel } = require('../../models/');
 
 
 // controllers
@@ -20,7 +19,7 @@ home.profile = {
   PATCH: async function home_profile_PATCH(req, res) {
     const raw = { info: req.body.profile.info, nickname: req.body.profile.nickname };
     if (raw.info && raw.info.birthday) raw.info.birthday = new Date(raw.info.birthday);
-    await usersModel.update({ _id: req.user._id }, { $set: { ...raw, _nickname: req.user.nickname }});
+    await UsersModel.update({ _id: req.user._id }, { $set: { ...raw, _nickname: req.user.nickname } });
     req.flash('info', 'Your profile have been successfully updated!');
     return res.redirect('/home/profile');
   },
@@ -43,7 +42,6 @@ home.security = {
     return res.redirect('/home/profile');
   }],
 };
-
 
 
 // exports

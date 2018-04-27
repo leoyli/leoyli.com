@@ -1,8 +1,8 @@
+/* eslint-disable key-spacing */
 const { usePassport } = require('../controllers/modules/')._M_;
 const { ClientError } = require('../controllers/utilities/')._U_.error;
 const { Device } = require('../controllers/engines/router');
 const account = require('../controllers/routers/account');
-
 
 
 // device
@@ -24,13 +24,11 @@ const UserRouter = new Device([
 ]);
 
 
-
 // settings
 UserRouter.hook('pre', usePassport);
-UserRouter.hook('post', function errorFilter(err, req, res, next) {
+UserRouter.hook('post', (err, req, res, next) => {
   return next(new ClientError(err));
 });
-
 
 
 // exports

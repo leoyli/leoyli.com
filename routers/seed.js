@@ -1,5 +1,6 @@
+/* eslint-disable key-spacing */
 const { Device } = require('../controllers/engines/router');
-
+const { PostsModel, UsersModel } = require('../models/');
 
 
 // seed-data
@@ -10,13 +11,13 @@ const moc = {
     password    : 'leo',
     picture     : '/media/201801/1521405154605.png',
     info: {
-      firstName   : 'test',
-      lastName    : 'test',
-      residence   : 'Test/test',
-      timeZone    : 'UTC−07:00 (MST)',
-      gender      : 'NA',
-      birthday    : Date.now(),
-    }
+      firstName : 'test',
+      lastName  : 'test',
+      residence : 'Test/test',
+      timeZone  : 'UTC−07:00 (MST)',
+      gender    : 'NA',
+      birthday  : Date.now(),
+    },
   },
   post : {
     title       : 'New arrived: Custom E-liter 4K!',
@@ -27,28 +28,24 @@ const moc = {
 };
 
 
-
 // controllers
 const seed = {
   GET: async function seed_GET(req, res) {
-    const { postsModel, usersModel } = require('../models/');
-    const newUser = await usersModel.register(new usersModel(moc.user), moc.user.password);
-    await postsModel.create({ author: newUser, ...moc.post });
+    const newUser = await UsersModel.register(new UsersModel(moc.user), moc.user.password);
+    await PostsModel.create({ author: newUser, ...moc.post });
     req.flash('info', 'Successfully seeded.');
     res.redirect('/posts');
   },
 };
 
 
-
 // device
 const SeedRouter = new Device([
   {
-    route: '/',
-    controller: seed,
+    route:        '/',
+    controller:   seed,
   },
 ]);
-
 
 
 // exports

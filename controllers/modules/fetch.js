@@ -1,6 +1,6 @@
 // const { ObjectId } = require('mongodb');
-const modelIndex = require(`../../models/`);
-
+const modelIndex = require('../../models/');
+const { _U_ } = require('../utilities/');
 
 
 // helpers
@@ -11,16 +11,15 @@ const modelIndex = require(`../../models/`);
  * @return {{$gte: Date, $lt: Date}}        - part-of expression in $match stage
  */
 const exp_dateRange = (start, end) => {
-  const A = (start < end) ? start : end;
-  const Z = (start < end) ? end : start;
-  const G = { Y: A[0], M: A[1], D: A[2] }, L = { Y: Z[0], M: Z[1], D: Z[2] };
+  const [A, Z] = [(start < end) ? start : end, (start < end) ? end : start];
+  const [G, L] = [{ Y: A[0], M: A[1], D: A[2] }, { Y: Z[0], M: Z[1], D: Z[2] }];
   G.D = G.Y ? G.M ? G.D ? G.D : ++G.D : ++G.D : L.M && L.D ? L.D : ++G.D;
   G.M = G.Y ? G.M ? --G.M : G.M : L.M ? L.M - 1 : G.M;
   G.Y = G.Y ? G.Y : L.Y;
   L.Y = L.M ? L.Y : ++L.Y;
   L.M = L.M && L.D ? --L.M : L.M;
   L.D = ++L.D;
-  return { $gte: new Date(Date.UTC(G.Y, G.M, G.D)), $lt : new Date(Date.UTC(L.Y, L.M, L.D)) };
+  return { $gte: new Date(Date.UTC(G.Y, G.M, G.D)), $lt: new Date(Date.UTC(L.Y, L.M, L.D)) };
 };
 
 /**
@@ -29,7 +28,7 @@ const exp_dateRange = (start, end) => {
  * @return {array}                          - an array formatted as [[YYYY, MM, DD], [YYYY, MM, DD]]
  */
 const getDateRangeArray = (str) => {
-  const groupExp = `((?:\\d{4}(?:(?:0[1-9]|1[0-2])(?:0[1-9]|[1-2][0-9]|3[0-1])?)?)?)`;
+  const groupExp = '((?:\\d{4}(?:(?:0[1-9]|1[0-2])(?:0[1-9]|[1-2][0-9]|3[0-1])?)?)?)';
   const queryExp = new RegExp(`^(?!-?\\/?$)${groupExp}(?:-|\\/?$)${groupExp}\\/?$`);
   const rangeExp = new RegExp('(\\d{4})(\\d{2})(\\d{2})');
   return !str ? [] : (queryExp.exec(str) || []).slice(1, 3)
@@ -40,16 +39,14 @@ const getDateRangeArray = (str) => {
 
 // pipelines
 const pullPipe_1_matching = (collection, params, query) => {
-  const $match = params.hasOwnProperty('search')
-    ? { $text : { $search: params['search'] }}
-    : {};
-  if (query['date']) $match['time._created'] = exp_dateRange(...getDateRangeArray(query['date']));                      // tofix: query time zone problem
+  const $match = _U_.hasOwnKey(params, 'search') ? { $text: { $search: params.search } } : {};
+  if (query.date) $match['time._created'] = exp_dateRange(...getDateRangeArray(query.date));                            // tofix: query time zone problem
   if (collection === 'posts') {
-    if (!params['stackType']) {
+    if (!params.stackType) {
       $match['state.hidden'] = false;
       $match['state.published'] = true;
       $match['time._recycled'] = { $eq: null };
-    } else $match['time._recycled'] = query['access'] === 'bin' ? { $ne: null } : { $eq: null };
+    } else $match['time._recycled'] = query.access === 'bin' ? { $ne: null } : { $eq: null };
   }
   return { $match };
 };
@@ -57,36 +54,36 @@ const pullPipe_1_matching = (collection, params, query) => {
 const pullPipe_2_masking = (params) => {
   const _$$stackPicker = { content: 0, featured: 0 };
   const _$$contentMask = { content: 0 };
-  const $project = params['stackType'] === 'posts' ? _$$stackPicker : _$$contentMask;
+  const $project = params.stackType === 'posts' ? _$$stackPicker : _$$contentMask;
   return { $project };
 };
 
 const pullPipe_3_sorting = (sort = {}) => {
-  const $sort = { 'state.pinned': -1 , ...sort };
+  const $sort = { 'state.pinned': -1, ...sort };
   if ($sort['time._updated'] !== 1) $sort['time._updated'] = -1;
   return { $sort };
 };
 
 const pullPipe_4_counting = () => {
-  const $group = { _id: null, count: { $sum: 1 }, list: { $push: '$$ROOT' }};
+  const $group = { _id: null, count: { $sum: 1 }, list: { $push: '$$ROOT' } };
   return { $group };
 };
 
 const pullPipe_5_paginating = (query, sort, page = 1, num = 10) => {
-  const _$$page = (query['page'] > 1) ? Number.parseInt(query['page']) : page;
-  const _$$num = (query['num'] > 0) ? Number.parseInt(query['num']) : num;
-  const _$$end = { $ceil: { $divide: ['$count', _$$num] }};
-  const _$$now = { $cond: { if: { $lt: [_$$page, _$$end] }, then: { $literal: _$$page }, else: _$$end }};
+  const _$$page = (query.page > 1) ? Number.parseInt(query.page, 10) : page;
+  const _$$num = (query.num > 0) ? Number.parseInt(query.num, 10) : num;
+  const _$$end = { $ceil: { $divide: ['$count', _$$num] } };
+  const _$$now = { $cond: { if: { $lt: [_$$page, _$$end] }, then: { $literal: _$$page }, else: _$$end } };
   const $project = {
-    _id   : 0,
-    list  : { $slice: ['$list', { $multiply: [{ $add: [_$$now, -1] }, _$$num] }, _$$num] },
-    meta  : {
-      count : '$count',
-      num   : { $literal: _$$num },
-      now   : _$$now,
-      end   : _$$end,
-      sort  : { $literal: pullPipe_3_sorting(sort).$sort },
-      period: { $literal: query['date'] && exp_dateRange(...getDateRangeArray(query['date'])) },
+    _id: 0,
+    list: { $slice: ['$list', { $multiply: [{ $add: [_$$now, -1] }, _$$num] }, _$$num] },
+    meta: {
+      count: '$count',
+      num: { $literal: _$$num },
+      now: _$$now,
+      end: _$$end,
+      sort: { $literal: pullPipe_3_sorting(sort).$sort },
+      period: { $literal: query.date && exp_dateRange(...getDateRangeArray(query.date)) },
     },
   };
   return { $project };
@@ -118,13 +115,13 @@ const pullPipe_5_paginating = (query, sort, page = 1, num = 10) => {
 
 
 // query-builder
-const getAggregationQuery = (collection, params, query, page, num, sort/**, update **/) => {
+const getAggregationQuery = (collection, params, query, page, num, sort/** , update **/) => {
   const pullDocuments = [
     pullPipe_1_matching(collection, params, query),
     pullPipe_2_masking(params),
     pullPipe_3_sorting(sort),
     pullPipe_4_counting(),
-    pullPipe_5_paginating(query, sort, page, num)
+    pullPipe_5_paginating(query, sort, page, num),
   ];
 
   // const pushDocuments = [
@@ -155,9 +152,10 @@ const fetchController = (collection, { page, num, sort } = {}) => function fetch
 };
 
 
-
 // exports
-module.exports = { fetchController, _test: {
+module.exports = {
+  fetchController,
+  _test: {
     getAggregationQuery,
     getDateRangeArray,
     exp_dateRange,

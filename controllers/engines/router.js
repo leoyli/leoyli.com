@@ -1,12 +1,10 @@
-const Router = require('express').Router;
-
+const { Router } = require('express');
 
 
 // modules
 const { _M_ } = require('../modules/');
 const { _U_ } = require('../utilities/');
 const { templateHandler, handlerSymbols } = require('../views/handler');
-
 
 
 // helpers
@@ -18,7 +16,7 @@ const { templateHandler, handlerSymbols } = require('../views/handler');
 const asyncWrapper = (target) => {
   const unnamedWrapper = (fn) => (...arg) => fn(...arg).catch(arg.next);
   const namedWrapper = (fn) => Object.defineProperty(unnamedWrapper(fn), 'name', { value: `WrappedAsync ${fn.name}` });
-  const evaluator = (fn) => _U_.object.checkNativeBrand(fn, 'AsyncFunction') ? namedWrapper(fn) : fn;
+  const evaluator = (fn) => (_U_.object.checkNativeBrand(fn, 'AsyncFunction') ? namedWrapper(fn) : fn);
   const type = _U_.object.checkNativeBrand(target);
   if (type === 'Array') return target.map(fn => evaluator(fn));
   if (type.toLowerCase().includes('function')) return evaluator(target);
@@ -54,10 +52,9 @@ const getPreprocessor = (options) => {
 const getMiddlewareChain = (protagonist, hooker, options) => {
   const preprocessor = getPreprocessor(options);
   const renderer = !options.servingAPI ? templateHandler(options) : [];
-  const decorator = !options.servingAPI && options.title ? _M_.modifyHTMLTitleTag(options.title): [];
+  const decorator = !options.servingAPI && options.title ? _M_.modifyHTMLTitleTag(options.title) : [];
   return asyncWrapper([...new Set([].concat(preprocessor, hooker.pre, decorator, protagonist, hooker.post, renderer))]);
 };
-
 
 
 // main
@@ -87,13 +84,15 @@ class Device {
         return true;
       },
     });
-  };
-
-  set setting(options) {
-    Object.keys(options).forEach(key => this.setting[key] = options[key]);
   }
 
-  hook (position, fn) {
+  set setting(options) {
+    Object.keys(options).forEach(key => {
+      this.setting[key] = options[key];
+    });
+  }
+
+  hook(position, fn) {
     this.queue[position].push(...(_U_.object.checkNativeBrand(fn, 'Array') ? fn : [fn]));
     return this;
   }
@@ -122,9 +121,9 @@ class Device {
 }
 
 
-
 // exports
-module.exports = { Device, _test: {
+module.exports = { Device,
+  _test: {
     Device,
     asyncWrapper,
     getPreprocessor,

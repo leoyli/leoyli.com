@@ -1,7 +1,6 @@
+/* eslint-disable key-spacing */
 const { Device } = require('../controllers/engines/router');
-const { _M_ } = require('../controllers/modules/');
 const api = require('../controllers/routers/api');
-
 
 
 // device
@@ -13,10 +12,8 @@ const APIRouter = new Device([
 ]);
 
 
-
 // settings
 APIRouter.setting = { servingAPI: true, authentication: false };
-
 
 
 // exports

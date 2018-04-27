@@ -1,6 +1,6 @@
+/* eslint-disable key-spacing */
 const { Device } = require('../controllers/engines/router');
 const home = require('../controllers/routers/home');
-
 
 
 // device
@@ -28,10 +28,8 @@ const DashboardRouter = new Device([
 ]);
 
 
-
 // settings
-DashboardRouter.setting = { title: 'Account', authentication: true , cache: false };
-
+DashboardRouter.setting = { title: 'Account', authentication: true, cache: false };
 
 
 // exports

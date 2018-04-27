@@ -1,5 +1,5 @@
+/* eslint-disable key-spacing */
 const mongoose = require('mongoose');
-
 
 
 // schema
@@ -22,20 +22,18 @@ const configsSchema  = new mongoose.Schema({
 });
 
 
-
 // static methods
-configsSchema.static('initialize', async function (next = () => {}) {
-  process.env['$WEBSITE_CONFIGS'] = JSON.stringify(await this.findOne({ active: true }));
-  if (process.env['$WEBSITE_CONFIGS'] === 'null') {
-    process.env['$WEBSITE_CONFIGS'] = JSON.stringify(await this.create({ active: true }));
+configsSchema.static('initialize', async function configsSchema_initialize(next = () => {}) {
+  process.env.$WEBSITE_CONFIGS = JSON.stringify(await this.findOne({ active: true }));
+  if (process.env.$WEBSITE_CONFIGS === 'null') {
+    process.env.$WEBSITE_CONFIGS = JSON.stringify(await this.create({ active: true }));
   } return next();
 });
 
-configsSchema.static('updateSettings', async function (doc, next = () => {}) {
-  process.env['$WEBSITE_CONFIGS'] = JSON.stringify(await this.findOneAndUpdate({ active: true }, doc, { new: true }));
+configsSchema.static('updateConfigs', async function configsSchema_updateConfigs(doc, next = () => {}) {
+  process.env.$WEBSITE_CONFIGS = JSON.stringify(await this.findOneAndUpdate({ active: true }, doc, { new: true }));
   return next();
 });
-
 
 
 // exports

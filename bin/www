@@ -1,7 +1,4 @@
 #!/usr/bin/env node
-
-
-/** Module dependencies **/
 const fs = require('fs');
 const http2 = require('spdy');
 const debug = require('debug')('leoyli-main:server');
@@ -9,11 +6,12 @@ const { checkNativeBrand } = require('../controllers/utilities/')._U_.object;
 const app = require('../app');
 
 
+// helper functions
 /** Normalize a port into a number, string, or false **/
 const normalizePort = (val) => {
   const port = parseInt(val, 10);
 
-  if (isNaN(port)) {
+  if (Number.isNaN(port)) {
     // named pipe
     return val;
   }
@@ -27,6 +25,24 @@ const normalizePort = (val) => {
 };
 
 
+// server entity
+/** Get port from environment and store in Express **/
+const port = normalizePort(process.env.PORT || '3443');
+app.set('port', port);
+
+
+/** Get SSL credentials as options **/
+const options = {
+  key: fs.readFileSync(process.env.SSL_KEY, 'utf8'),
+  cert: fs.readFileSync(process.env.SSL_CRT, 'utf8'),
+};
+
+
+/** Create HTTP2 server **/
+const server = http2.createServer(options, app);
+
+
+// events handler
 /** Event listener for HTTP server "error" event **/
 const onError = (error) => {
   if (error.syscall !== 'listen') {
@@ -34,17 +50,17 @@ const onError = (error) => {
   }
 
   const bind = checkNativeBrand(port, 'String')
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+    ? `Pipe ${port}`
+    : `Port ${port}`;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
+      console.error(`${bind} requires elevated privileges`);
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
+      console.error(`${bind} is already in use`);
       process.exit(1);
       break;
     default: {
@@ -58,28 +74,13 @@ const onError = (error) => {
 const onListening = () => {
   const addr = server.address();
   const bind = checkNativeBrand(addr, 'String')
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+    ? `pipe ${addr}`
+    : `port ${addr.port}`;
+  debug(`Listening on ${bind}`);
 };
 
 
-/** Get SSL credentials as options **/
-const options = {
-  key: fs.readFileSync(process.env['SSL_KEY'], 'utf8'),
-  cert: fs.readFileSync(process.env['SSL_CRT'], 'utf8'),
-};
-
-
-/** Get port from environment and store in Express **/
-const port = normalizePort(process.env['PORT'] || '3443');
-app.set('port', port);
-
-
-/** Create HTTP2 server **/
-const server = http2.createServer(options, app);
-
-
+// events listener
 /** Listen on provided port, on all network interfaces **/
 server.listen(port);
 server.on('error', onError);

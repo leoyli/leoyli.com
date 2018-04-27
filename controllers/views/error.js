@@ -2,14 +2,21 @@ const { _U_ } = require('../utilities/');
 const { _M_ } = require('../modules/');
 
 
+// redirect
+const redirect = {};
 
-// gateway
-const errorHandler = function errorHandler(err, req, res, next) {
-  if (['dev', 'test'].includes(process.env['NODE_ENV'])) console.log(err.stack);
-  if (_U_.error.hasOwnProperty(err.name) && !!terminal[err.name]) return terminal[err.name](err, req, res, next);
-  return res.render('./theme/error', { err });
+redirect.signInRetry = function signInRetry(req, res) {
+  // if logout from a authentication required page
+  if (req.get('Referrer') && RegExp('^https?:\\/\\/[^\\/]+(.+$)').exec(req.get('Referrer'))[1] === req.originalUrl) {   // option: generalized this string reading method
+    req.flash('info', res.locals.$$VIEW.flash.info.toString());
+    delete req.flash('error');
+  }
+
+  // label the returning page which only be returned if action is 'retry'
+  req.session.returnTo = req.originalUrl;
+  req.flash('action', 'retry');
+  return res.redirect('/signin');
 };
-
 
 
 // terminals
@@ -54,24 +61,13 @@ terminal.TemplateError = function TemplateError(err, req, res, next) {
 };
 
 
-
-// redirect
-const redirect = {};
-
-redirect.signInRetry = function signInRetry(req, res) {
-  // if logout from a authentication required page
-  if (req.get('Referrer') && RegExp('^https?:\\/\\/[^\\/]+(.+$)').exec(req.get('Referrer'))[1] === req.originalUrl) {   // option: generalized this string reading method
-    req.flash('info', res.locals.$$VIEW.flash.info.toString());
-    delete req.flash('error');
-  }
-
-  // label the returning page which only be returned if action is 'retry'
-  req.session.returnTo = req.originalUrl;
-  req.flash('action', 'retry');
-  return res.redirect('/signin');
+// gateway
+const errorHandler = function errorHandler(err, req, res, next) {
+  if (['dev', 'test'].includes(process.env.NODE_ENV)) console.log(err.stack);
+  if (_U_.object.hasOwnKey(_U_.error, err.name) && !!terminal[err.name]) return terminal[err.name](err, req, res, next);
+  return res.render('./theme/error', { err });
 };
 
 
-
 // exports
-module.exports = exports = errorHandler;
+module.exports = errorHandler;

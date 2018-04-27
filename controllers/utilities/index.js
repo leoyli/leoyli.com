@@ -14,6 +14,5 @@ utilities._test = {
 };
 
 
-
 // exports
 module.exports = utilities;

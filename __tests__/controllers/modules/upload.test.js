@@ -1,18 +1,19 @@
+/* eslint-disable key-spacing */
 // mock
 const fs = require('fs');
+
 fs.unlink = jest.fn();
 
 
 // module
 const { checkStatus, getUploadPath, uploadFile,
-  transpileRaw ,transpileMes } = require('../../../controllers/modules/upload')._test;
-
+  transpileRaw, transpileMes } = require('../../../controllers/modules/upload')._test;
 
 
 // test
 describe('Check the ENV', () => {
   test('Should run in test mode', () => {
-    expect(process.env['NODE_ENV']).toEqual('test');
+    expect(process.env.NODE_ENV).toEqual('test');
   });
 });
 
@@ -30,11 +31,13 @@ describe('Bundle: upload.js', () => {
     MIME        : 'image/png',
     filePath    : '',
   };
-  const mocParserEx1 = { ...mocParser, stream: { truncated: true }};
-  const mocParserEx2 = { ...mocParser, MIME : 'unknown' };
-  const mocParserEx3 = { ...mocParser, fileName : undefined };
-  const mocParserEx4 = { ...mocParser, stream: fs.createReadStream('__tests__/test.png'),
-    time: new Date, filePath: 'public/media/__tests__/test.streamed.png' };
+  const mocParserEx1 = { ...mocParser, stream: { truncated: true } };
+  const mocParserEx2 = { ...mocParser, MIME: 'unknown' };
+  const mocParserEx3 = { ...mocParser, fileName: undefined };
+  const mocParserEx4 = { ...mocParser,
+    stream: fs.createReadStream('__tests__/test.png'),
+    time: new Date(),
+    filePath: 'public/media/__tests__/test.streamed.png' };
 
   test('Fn: checkStatus: Should check the current status of permission/condition', () => {
     const test = [mocParser, mocParserEx1, mocParserEx2];
@@ -49,7 +52,7 @@ describe('Bundle: upload.js', () => {
     const result = getUploadPath(mocParser, '__moc_UPLOAD_ROOT__');
     //
     expect(result).not.toContain(mocParser.fileName);
-    expect(result).toContain(((new Date).getUTCMonth()+1).toString());
+    expect(result).toContain(((new Date()).getUTCMonth() + 1).toString());
     expect(result).toContain('.png');
   });
 
@@ -71,8 +74,8 @@ describe('Bundle: upload.js', () => {
     const test = [mocParser, mocParserEx1];
     const result = test.map(fn => transpileRaw(fn, mocConfigs));
     //
-    expect(result[0]).toEqual({ media_test: { file: { name: '', path: '', type: '.png' }}});
-    expect(result[1]).toEqual({ media_test: { isSkipped: true }});
+    expect(result[0]).toEqual({ media_test: { file: { name: '', path: '', type: '.png' } } });
+    expect(result[1]).toEqual({ media_test: { isSkipped: true } });
   });
 
   test('Fn: transpileMes: Should transpile the raw document of media from parser', () => {
@@ -80,7 +83,7 @@ describe('Bundle: upload.js', () => {
     const result = test.map(fn => transpileMes(fn, mocConfigs));
     //
     expect(result[0].length).toBe(0);
-    expect(result[1]).toEqual([`test.png is too large (> ${mocConfigs.fileSize/1048576} MB)...`]);
+    expect(result[1]).toEqual([`test.png is too large (> ${mocConfigs.fileSize / 1048576} MB)...`]);
     expect(result[2]).toEqual(['types of \'test.png\' is not supported.']);
     expect(result[3]).toEqual(['No Files was found on media_test[file]...']);
   });

@@ -20,8 +20,18 @@ const toKebabCase = (str) => {
  */
 const toEscapedChars = (str) => {
   const charMap = {
-    '=': '&#61;', "'": '&#39;', '"': '&#34;', '`': '&#96;', '.': '&#46;', ',': '&#44;',
-    ':': '&#58;', ';': '&#59;', '<': '&#60;', '(': '&#40;', '[': '&#91;', '{': '&#123;',
+    '=': '&#61;',
+    "'": '&#39;',
+    '"': '&#34;',
+    '`': '&#96;',
+    '.': '&#46;',
+    ',': '&#44;',
+    ':': '&#58;',
+    ';': '&#59;',
+    '<': '&#60;',
+    '(': '&#40;',
+    '[': '&#91;',
+    '{': '&#123;',
   };
   return str === undefined ? null : str.replace(/[='"`.,:;<([{]/g, char => charMap[char]);
 };
@@ -57,18 +67,25 @@ const readObjPath = (str) => {
  * @param {string} [use]                    - set the use for the direct output
  * @return {string|array|null}              - direct outputted string or raw result or null
  */
-const inspectFileURL = (str, extName, { raw = true , use } = {}) => {                                                   // tofix: refactor may needed
-  const protocolExp  = '(?:(https?):\/\/)';
-  const fileNameExp  = `([0-9a-z\\s\\._%-]+\.(?:${extName.join('|')})`;
-  const domainExp    = '((?:[0-9a-z%-]+\\.(?!\\.))+[a-z]+)';
-  const pathExp      = '(\\/(?:[0-9a-z\\/\\s\\._%-]+\\/)?)';
-  const URLExp       = `^${protocolExp}?${domainExp}${pathExp}${fileNameExp}$)`;
-  const result       = new RegExp(URLExp, 'i').exec(str);
-  const filtrate = Array.isArray(result) ? (use || result[1] || 'https') + '://' + result.slice(2, 5).join('') : null;
+const inspectFileURL = (str, extName, { raw = true, use } = {}) => {                                                    // tofix: refactor may needed
+  const protocolExp = '(?:(https?):\/\/)';
+  const fileNameExp = `([0-9a-z\\s\\._%-]+\.(?:${extName.join('|')})`;
+  const domainExp = '((?:[0-9a-z%-]+\\.(?!\\.))+[a-z]+)';
+  const pathExp = '(\\/(?:[0-9a-z\\/\\s\\._%-]+\\/)?)';
+  const URLExp = `^${protocolExp}?${domainExp}${pathExp}${fileNameExp}$)`;
+  const result = new RegExp(URLExp, 'i').exec(str);
+  const filtrate = Array.isArray(result)
+    ? `${use || result[1] || 'https'}://${result.slice(2, 5).join('')}`
+    : null;
   return raw === false ? filtrate : result;
 };
 
 
-
 // exports
-module.exports = { toKebabCase, toEscapedChars, readMongoId, readObjPath, inspectFileURL };
+module.exports = {
+  toKebabCase,
+  toEscapedChars,
+  readMongoId,
+  readObjPath,
+  inspectFileURL,
+};

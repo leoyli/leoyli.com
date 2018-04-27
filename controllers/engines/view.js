@@ -5,10 +5,8 @@ const path = require('path');
 const marked = require('marked');
 
 
-
 // modules
 const { TemplateError } = require('../utilities/')._U_.error;
-
 
 
 // functions
@@ -18,19 +16,19 @@ const { TemplateError } = require('../utilities/')._U_.error;
  * @return {object}                         - return doT.js compilation configs
  */
 const getCompilationConfigs = (variables) => ({
-  comment:            /<!--([\s\S]+?)-->/g,
-  evaluate:           /\{\{([\s\S]+?)\}\}/g,
-  interpolate:        /\{\{=([\s\S]+?)\}\}/g,
-  encode:             /\{\{!([\s\S]+?)\}\}/g,
-  use:                /\{\{#([\s\S]+?)\}\}/g,
-  define:             /\{\{##\s*([\w\.$]+)\s*(\:|=)([\s\S]+?)#\}\}/g,
-  conditional:        /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
-  iterate:            /\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
-  varname:            variables,
-  stripHTMLComment:   true,
-  strip:              true,
-  append:             true,
-  selfcontained:      false,
+  comment: /<!--([\s\S]+?)-->/g,
+  evaluate: /\{\{([\s\S]+?)\}\}/g,
+  interpolate: /\{\{=([\s\S]+?)\}\}/g,
+  encode: /\{\{!([\s\S]+?)\}\}/g,
+  use: /\{\{#([\s\S]+?)\}\}/g,
+  define: /\{\{##\s*([\w\.$]+)\s*(\:|=)([\s\S]+?)#\}\}/g,
+  conditional: /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
+  iterate: /\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
+  varname: variables,
+  stripHTMLComment: true,
+  strip: true,
+  append: true,
+  selfcontained: false,
 });
 
 
@@ -115,7 +113,7 @@ const getBlueprint = ({ settings, ...locals }, source) => {
  * @return {Template}                       - return a new Template{object}
  */
 const buildTemplate = (filePath, blueprint, fileString) => {
-  const sections = { main : fileString };
+  const sections = { main: fileString };
   return new Template(filePath, blueprint, sections);
 };
 
@@ -131,7 +129,6 @@ const getTemplate = (filePath, blueprint, _SYNC) => {
   if (_SYNC === true) return buildTemplate(filePath, blueprint, getFileString(filePath, true));
   return getFileString(filePath).then(templateString => buildTemplate(filePath, blueprint, templateString));
 };
-
 
 
 // main
@@ -173,7 +170,6 @@ class Template {
 }
 
 
-
 // middleware
 /**
  * Should return the requested content in HTML
@@ -184,14 +180,15 @@ class Template {
  */
 const render = (filePath, locals, next) => {
   return getTemplate(filePath, getBlueprint(locals, filePath))
-    .then(Template => next(null, Template.render()))
+    .then(receivedTemplate => next(null, receivedTemplate.render()))
     .catch(err => next(new TemplateError(err)));
 };
 
 
-
 // exports
-module.exports = { __express: render, render, _test: {
+module.exports = { __express: render,
+  render,
+  _test: {
     Template,
     render,
     getCompilationConfigs,

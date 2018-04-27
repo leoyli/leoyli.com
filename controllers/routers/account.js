@@ -1,7 +1,6 @@
 const { _M_ } = require('../modules/');
-const { usersModel } = require('../../models/');
+const { UsersModel } = require('../../models/');
 const { ClientError } = require('../utilities/')._U_.error;
-
 
 
 // controllers
@@ -13,7 +12,7 @@ account.signup = {
     return next();
   },
   POST: [_M_.passwordValidation, async function account_signup_POST(req, res) {
-    const newUser = await usersModel.register(new usersModel(req.body), req.body.password.new);
+    const newUser = await UsersModel.register(new UsersModel(req.body), req.body.password.new);
     req.logIn(newUser, err => {
       if (err) throw err;
       req.flash('info', `Welcome new user: ${req.body.username}`);
@@ -24,19 +23,19 @@ account.signup = {
 
 account.signin = {
   GET: function account_signin_GET(req, res, next) {
-    if (res.locals.$$VIEW.flash.action[0] === 'retry' ) req.flash('action', 'retry');
+    if (res.locals.$$VIEW.flash.action[0] === 'retry') req.flash('action', 'retry');
     if (req.isAuthenticated() && req.session.user) return res.redirect('/home');
     return next();
   },
   POST: function account_signin_POST(req, res, next) {
     if (req.isAuthenticated() && req.session.user) return res.redirect('/home');
-    return require('passport').authenticate('local', (err, authUser) => {
-      if (err) return next(err);  // todo: throw an error
+    return require('passport').authenticate('local', (authErr, authUser) => {
+      if (authErr) return next(authErr);
       if (!authUser) return next(new ClientError(20002));
-      return req.logIn(authUser, err => {
-        if (err) return next(err); // todo: throw an error
+      return req.logIn(authUser, loginErr => {
+        if (loginErr) return next(loginErr);
         authUser.updateLastTimeLog('signIn');
-        req.session.cookie.expires = req.body.isPersisted ? new Date(Date.now() + 14 * 24 * 3600000) : false;
+        req.session.cookie.expires = req.body.isPersisted ? new Date(Date.now() + (14 * 24 * 3600000)) : false;
         req.session.user = { _id: authUser._id, picture: authUser.picture, nickname: authUser.nickname };
         req.flash('info', `Welcome back ${authUser.nickname}`);
         return res.redirect(req.session.returnTo || '/home');
@@ -55,7 +54,6 @@ account.signout = {
     return res.redirect('back');
   },
 };
-
 
 
 // exports

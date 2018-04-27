@@ -1,7 +1,6 @@
 const { _U_ } = require('../utilities/');
 
 
-
 /** HTTP headers: API services **/
 const APIHeader = function APIHeader(req, res, next) {
   res.set('x-robots-tag', 'none');
@@ -46,7 +45,6 @@ const modifyHTMLTitleTag = (options) => function modifyHTMLTitleTag(req, res, ne
   res.locals.$$VIEW.title = sequence.join(' - ');
   if (typeof next === 'function') return next();
 };
-
 
 
 // exports

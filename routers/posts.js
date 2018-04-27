@@ -1,6 +1,6 @@
+/* eslint-disable key-spacing */
 const { Device } = require('../controllers/engines/router');
 const { editor, posts } = require('../controllers/routers/posts');
-
 
 
 // device
@@ -30,10 +30,8 @@ const PostRouter = new Device([
 ]);
 
 
-
 // settings
 PostRouter.setting.handler = Device.handler.VIEW_POSTS_SINGLE;
-
 
 
 // exports

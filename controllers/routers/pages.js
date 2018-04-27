@@ -1,7 +1,6 @@
 const { _M_ } = require('../modules/');
 
 
-
 // controllers
 const pages = {};
 
@@ -16,7 +15,6 @@ pages.search = {
     return _M_.aggregateFetch('posts')(req, res, next);
   },
 };
-
 
 
 // exports

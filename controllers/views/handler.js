@@ -2,19 +2,17 @@ const { _U_ } = require('../utilities/');
 const { _M_ } = require('../modules/');
 
 
-
 // magic-strings
-const VIEW_POSTS_SINGLE = Symbol();
-const VIEW_POSTS_MULTIPLE = Symbol();
-const VIEW_STACK = Symbol();
-
+const VIEW_POSTS_SINGLE = Symbol('VIEW_POSTS_SINGLE');
+const VIEW_POSTS_MULTIPLE = Symbol('VIEW_POSTS_MULTIPLE');
+const VIEW_STACK = Symbol('VIEW_STACK');
 
 
 // handlers
 const handler = { posts: {} };
 
 handler.posts.single = (template, $$POST, $$META) => function singlePostHandler(req, res) {
-  if ($$POST && $$POST.state && $$POST.state.recycled || !$$POST) throw new _U_.error.HttpError(404);
+  if (($$POST && $$POST.state && $$POST.state.recycled) || !$$POST) throw new _U_.error.HttpError(404);
   else if (!req.session.user && $$POST.state && !$$POST.state.published) throw new _U_.error.HttpError(404);
   if ($$POST && $$POST.title) _M_.modifyHTMLTitleTag({ name: $$POST.title, root: true })(req, res);
   return res.render(template, { $$POST, $$META });
@@ -28,7 +26,6 @@ handler.posts.multiple = (template, $$LIST, $$META) => function multiplePostHand
   }
   return res.render(template, { $$LIST, $$META });
 };
-
 
 
 // gateway
@@ -50,9 +47,9 @@ const templateHandler = ({ template: $template, handler: $handler }) => function
 };
 
 
-
 // exports
-module.exports = { templateHandler, handlerSymbols: {
+module.exports = { templateHandler,
+  handlerSymbols: {
     VIEW_POSTS_SINGLE,
     VIEW_POSTS_MULTIPLE,
     VIEW_STACK,

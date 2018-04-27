@@ -1,10 +1,9 @@
 // mock
 jest.mock('fs', () => ({
-  readFileSync : jest.fn(),
-  readFile : jest.fn(),
+  readFileSync: jest.fn(),
+  readFile: jest.fn(),
 }));
 const fs = require('fs');
-
 
 
 // module
@@ -12,11 +11,10 @@ const { getCompilationConfigs, getBlueprint, getRuntimeMethods,
   getTemplate, buildTemplate, getFileString, render, Template } = require('../../../controllers/engines/view')._test;
 
 
-
 // test
 describe('Check the ENV', () => {
   test('Should run in test mode', () => {
-    expect(process.env['NODE_ENV']).toEqual('test');
+    expect(process.env.NODE_ENV).toEqual('test');
   });
 });
 
@@ -73,7 +71,7 @@ describe('Bundle: engine.js', () => {
   });
 
   test('Fn: render: Should return the requested content in HTML', async () => {
-    const result = await (render( '', mockLocals, (err, context) => {
+    const result = await (render('', mockLocals, (err, context) => {
       if (err) throw err;
       return context;
     })).then(string => {

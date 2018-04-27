@@ -1,3 +1,14 @@
+### 0.9.0-dev.9 / 2018-04-27
+> App
+- Updated all dependencies.
+- Renamed `hasOwnProperty` as `hasOwnKey` in 'object' utility function.
+- Renamed all model in uppercase for the convention as a constructor.
+- Rearranged code based on ESLint checking results.
+
+> Test
+- Rearranged code based on ESLint checking results.
+
+
 ### 0.9.0-dev.8.1 / 2018-04-26
 > App
 - Revised 'error' utilities to avoid the magic string.
@@ -416,7 +427,7 @@
 - Revised 'router' engine:
   - combined `pre` and `post` device method into `hook`.
   - updated 'account' router associated with the changes.
-  
+
 
 ### 0.8.0-dev.8 / 2018-03-16
 > App
@@ -710,7 +721,7 @@
 - Hooked ServerError around errors form 'fs' module.
 - Identified more client errors to be handled.
 - Simplified errorHandler core.
-- Simplified 'admin' router. 
+- Simplified 'admin' router.
 - Added 'TemplateError' terminal in error handler.
 - Added supporting of http code 500 in 'HttpError' error class.
 
@@ -1236,7 +1247,7 @@
 > App
 - Categorized 'middleware' based on the triggering positions as `._pre` or `._end`.
 - Greatly restructured many 'router' by using `async/await` ES2017 features to replace most of Promises.
-- Used `_end.error.clientError` end-ware to handle error messages. 
+- Used `_end.error.clientError` end-ware to handle error messages.
 - Used `res.locals._render` to collaborate with `_end.next.postRender` end-ware.
 
 > UI
