@@ -4,7 +4,7 @@ const { editor, posts } = require('../controllers/routers/posts');
 
 
 // device
-const PostRouter = new Device([
+const postRouter = new Device([
   {
     route:        ['/edit', '/edit/new'],
     controller:   editor.post,
@@ -31,8 +31,8 @@ const PostRouter = new Device([
 
 
 // settings
-PostRouter.setting.handler = Device.handler.VIEW_POSTS_SINGLE;
+postRouter.setting.handler = Device.handler.VIEW_POSTS_SINGLE;
 
 
 // exports
-module.exports = PostRouter.run();
+module.exports = postRouter.run();

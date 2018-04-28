@@ -1,3 +1,13 @@
+### 0.9.0-dev.11 / 2018-04-27
+> App
+- Fixed 'fetch' controller bugs.
+- Added `toCapitalized` 'string' utility function.
+- Unified the named of router devices.
+
+> Test
+- Added a unit test for `toCapitalized`.
+
+
 ### 0.9.0-dev.10 / 2018-04-27
 > App
 - Used no plusplus operators (ESLint).

@@ -4,7 +4,7 @@ const home = require('../controllers/routers/home');
 
 
 // device
-const DashboardRouter = new Device([
+const dashboardRouter = new Device([
   {
     route:        '/',
     controller:   home.main,
@@ -29,8 +29,8 @@ const DashboardRouter = new Device([
 
 
 // settings
-DashboardRouter.setting = { title: 'Account', authentication: true, cache: false };
+dashboardRouter.setting = { title: 'Account', authentication: true, cache: false };
 
 
 // exports
-module.exports = DashboardRouter.run();
+module.exports = dashboardRouter.run();

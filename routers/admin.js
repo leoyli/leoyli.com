@@ -4,7 +4,7 @@ const admin = require('../controllers/routers/admin');
 
 
 // device
-const DashboardRouter = new Device([
+const adminRouter = new Device([
   {
     route:        '/',
     controller:   admin.main,
@@ -29,8 +29,8 @@ const DashboardRouter = new Device([
 
 
 // settings
-DashboardRouter.setting = { title: 'Control', authentication: true, cache: false };
+adminRouter.setting = { title: 'Control', authentication: true, cache: false };
 
 
 // exports
-module.exports = DashboardRouter.run();
+module.exports = adminRouter.run();

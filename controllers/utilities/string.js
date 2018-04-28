@@ -14,6 +14,17 @@ const toKebabCase = (str) => {
 
 
 /**
+ * capitalize each words of a string
+ * @param {string} str                      - any arbitrary string
+ * @return {string}                         - capitalized string
+ */
+const toCapitalized = (str) => {
+  const stringArray = str.split(' ');
+  return stringArray.map(subStr => subStr.charAt(0).toUpperCase() + subStr.slice(1)).join(' ');
+};
+
+
+/**
  * convert matched context to HTML entity                                                                               // note: this method allows `null` or `undefined` argument
  * @param {string} str                      - any arbitrary string
  * @return {string|undefined}               - escaped string, only key HTML entities are escaped
@@ -84,6 +95,7 @@ const inspectFileURL = (str, extName, { raw = true, use } = {}) => {            
 // exports
 module.exports = {
   toKebabCase,
+  toCapitalized,
   toEscapedChars,
   readMongoId,
   readObjPath,

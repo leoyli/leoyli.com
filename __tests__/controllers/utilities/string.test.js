@@ -1,5 +1,5 @@
 // module
-const { toKebabCase, toEscapedChars,
+const { toKebabCase, toCapitalized, toEscapedChars,
   readMongoId, readObjPath, inspectFileURL } = require('../../../controllers/utilities/')[Symbol.for('UNIT_TEST')];
 
 
@@ -14,11 +14,19 @@ describe('Check the ENV', () => {
 describe('Bundle: String methods', () => {
   test('Fn: toKebabCase', () => {
     const test = ['~~THIS_IS_A_TEST~~', '  thisIsATest...', 'This Is A Test!'];
-    const result = test.map(test => toKebabCase(test));
+    const result = test.map(str => toKebabCase(str));
     //
     expect(result[0]).toBe('this-is-a-test');
     expect(result[1]).toBe('this-is-a-test');
     expect(result[2]).toBe('this-is-a-test');
+  });
+
+  test('Fn: toCapitalized', () => {
+    const test = ['This is a test, and can be tested.', 'test'];
+    const result = test.map(str => toCapitalized(str));
+    //
+    expect(result[0]).toBe('This Is A Test, And Can Be Tested.');
+    expect(result[1]).toBe('Test');
   });
 
   test('Fn: toEscapedChars', () => {

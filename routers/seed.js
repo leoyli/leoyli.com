@@ -40,7 +40,7 @@ const seed = {
 
 
 // device
-const SeedRouter = new Device([
+const seedRouter = new Device([
   {
     route:        '/',
     controller:   seed,
@@ -49,4 +49,4 @@ const SeedRouter = new Device([
 
 
 // exports
-module.exports = SeedRouter.run();
+module.exports = seedRouter.run();

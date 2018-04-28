@@ -6,7 +6,7 @@ const account = require('../controllers/routers/account');
 
 
 // device
-const UserRouter = new Device([
+const userRouter = new Device([
   {
     route:        '/signup',
     controller:   account.signup,
@@ -25,11 +25,11 @@ const UserRouter = new Device([
 
 
 // settings
-UserRouter.hook('pre', usePassport);
-UserRouter.hook('post', (err, req, res, next) => {
+userRouter.hook('pre', usePassport);
+userRouter.hook('post', (err, req, res, next) => {
   return next(new ClientError(err));
 });
 
 
 // exports
-module.exports = UserRouter.run();
+module.exports = userRouter.run();

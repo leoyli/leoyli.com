@@ -39,7 +39,7 @@ const getDateRangeArray = (str) => {
 
 // pipelines
 const pullPipe_1_matching = (collection, params, query) => {
-  const $match = _U_.hasOwnKey(params, 'search') ? { $text: { $search: params.search } } : {};
+  const $match = _U_.object.hasOwnKey(params, 'search') ? { $text: { $search: params.search } } : {};
   if (query.date) $match['time._created'] = exp_dateRange(...getDateRangeArray(query.date));                            // tofix: query time zone problem
   if (collection === 'posts') {
     if (!params.stackType) {
@@ -139,7 +139,7 @@ const getAggregationQuery = (collection, params, query, page, num, sort/** , upd
 
 // middleware
 const fetchController = (collection, { page, num, sort } = {}) => function fetchController(req, res, next) {
-  const $Model = modelIndex[`${collection}Model`];
+  const $Model = modelIndex[`${_U_.string.toCapitalized(collection)}Model`];
   return $Model
     .aggregate(getAggregationQuery(collection, req.params, req.query, page, num || res.locals.$$SITE.num, sort))
     .then(docs => docs[0])

@@ -4,7 +4,7 @@ const pages = require('../controllers/routers/pages');
 
 
 // device
-const PageRouter = new Device([
+const pageRouter = new Device([
   {
     route:        '/',
     controller:   pages.landing,
@@ -19,4 +19,4 @@ const PageRouter = new Device([
 
 
 // exports
-module.exports = PageRouter.run();
+module.exports = pageRouter.run();
