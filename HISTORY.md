@@ -1,3 +1,11 @@
+### 0.9.0-dev.12 / 2018-04-29
+> App
+- Revised and renamed `asyncWrapper` as `wrapAsync` in 'router' engine.
+- Fixed `unhandledPromiseRejection` error in 'fetch' module.
+- Used 'domain' to handle upload errors during the uploading stream.
+  (note: 'domain' is deprecated, may try `async_hook` to fix it.)
+
+
 ### 0.9.0-dev.11 / 2018-04-27
 > App
 - Fixed 'fetch' controller bugs.

@@ -144,11 +144,14 @@ const fetchController = (collection, { page, num, sort } = {}) => function fetch
     .aggregate(getAggregationQuery(collection, req.params, req.query, page, num || res.locals.$$SITE.num, sort))
     .then(docs => docs[0])
     .then(result => {
-      if (Array.isArray(result.list)) result.list = result.list.map(doc => $Model.hydrate(doc));
-      if (typeof next !== 'function') return result;
-      req.session.chest = result;
+      const output = result && _U_.object.checkNativeBrand(result.list, 'Array')
+        ? { ...result, list: result.list.map(doc => $Model.hydrate(doc)) }
+        : result;
+      if (typeof next !== 'function') return output;
+      req.session.chest = output;
       return next();
-    });
+    })
+    .catch(next);                                                                                                       // note: this error have to be explicitly handled, the outer `wrapAsync` won't work
 };
 
 

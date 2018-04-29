@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const domain = require('domain');                                                                                       // tofix: 'domain' is deprecated, may try `async_hook` to fix it
 const Busboy = require('busboy');
 
 
@@ -88,19 +89,16 @@ const transpileMes = (parser, configs) => {
 
 // workers
 const fileParser = (req, res, configs, args) => {
-  const {
-    0: fieldName, 1: stream, 2: fileName, 3: encoding, 4: MIME,
-  } = args;
-  const parser = {
-    fieldName, stream, fileName, encoding, MIME,
-  };
+  const { 0: fieldName, 1: stream, 2: fileName, 3: encoding, 4: MIME } = args;
+  const parser = { fieldName, stream, fileName, encoding, MIME };
   parser.filePath = getUploadPath(parser, req.app.get('upload'));
   parser.settings = configs;
   parser.stream.on('end', () => {
     _U_.object.mergeDeep(req.body.busboySlip.raw, transpileRaw(parser, configs), { mutate: true });
     req.body.busboySlip.mes.push(...transpileMes(parser, configs));
   });
-  checkStatus(parser, configs) ? uploadFile(parser) : parser.stream.resume();
+  if (checkStatus(parser, configs)) uploadFile(parser);
+  else parser.stream.resume();
 };
 
 
@@ -123,10 +121,12 @@ const uploadController = (configs) => function uploadController(req, res, next) 
   req.body.busboySlip = { raw: {}, mes: [] };
   if (!configs.fileSize) configs.fileSize = 25 * 1048576;
   if (!configs.MIME) configs.MIME = ['image/png', 'image/gif', 'image/jpeg', 'image/svg+xml', 'image/x-icon'];
-  return req.pipe(new Busboy({ headers: req.headers, limits: configs })
+  const reqPipeDomain = domain.create();
+  reqPipeDomain.on('error', next);
+  reqPipeDomain.run(() => req.pipe(new Busboy({ headers: req.headers, limits: configs })
     .on('file', (...args) => fileParser(req, res, configs, args))
     .on('field', (...args) => fieldParser(req, res, configs, args))
-    .on('finish', () => finishExport(req, res, configs, next)));
+    .on('finish', () => finishExport(req, res, configs, next))));
 };
 
 

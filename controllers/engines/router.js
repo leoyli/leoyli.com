@@ -13,8 +13,8 @@ const { templateHandler, handlerSymbols } = require('../views/handler');
  * @param {array|function} target           - fn may be wrapped
  * @return {array|function}                 - task is triggered only when keyword 'async' is found
  */
-const asyncWrapper = (target) => {
-  const unnamedWrapper = (fn) => (...arg) => fn(...arg).catch(arg.next);
+const wrapAsync = (target) => {
+  const unnamedWrapper = (fn) => (...arg) => fn.apply(this, arg).catch(arg.next);
   const namedWrapper = (fn) => Object.defineProperty(unnamedWrapper(fn), 'name', { value: `WrappedAsync ${fn.name}` });
   const evaluator = (fn) => (_U_.object.checkNativeBrand(fn, 'AsyncFunction') ? namedWrapper(fn) : fn);
   const type = _U_.object.checkNativeBrand(target);
@@ -53,7 +53,7 @@ const getMiddlewareChain = (protagonist, hooker, options) => {
   const preprocessor = getPreprocessor(options);
   const renderer = !options.servingAPI ? templateHandler(options) : [];
   const decorator = !options.servingAPI && options.title ? _M_.modifyHTMLTitleTag(options.title) : [];
-  return asyncWrapper([...new Set([].concat(preprocessor, hooker.pre, decorator, protagonist, hooker.post, renderer))]);
+  return wrapAsync([...new Set([].concat(preprocessor, hooker.pre, decorator, protagonist, hooker.post, renderer))]);
 };
 
 
@@ -126,7 +126,7 @@ module.exports = {
   Device,
   [Symbol.for('UNIT_TEST')]: {
     Device,
-    asyncWrapper,
+    wrapAsync,
     getPreprocessor,
     getMiddlewareChain,
   },
