@@ -3,12 +3,12 @@ const { readObjPath } = require('./string');
 
 
 /**
- * check the native brand(type) of objects                                                                              // note: `checkNativeBrand` can be generalized
+ * check the native brand(type) of objects                                                                              // note: `checkToStringTag` can be generalized
  * @param {object} target                   - object to be checked
  * @param {string} [str]                    - name to be matched (case insensitive)
  * @return {(boolean|string)}               - if no name given, the brand name of the object would be returned
  */
-const checkNativeBrand = (target, str) => {
+const checkToStringTag = (target, str) => {
   const nativeBrandName = (obj) => Object.prototype.toString.call(obj).slice(8, -1);
   if (str && nativeBrandName(str).toLowerCase() !== 'string') throw new TypeError('Second argument is not a string.');
   if (str) return nativeBrandName(target).toLowerCase() === str.toLowerCase();
@@ -33,8 +33,8 @@ const hasOwnKey = (obj, prop) => {
  * @return {object|array}                   - cloned object which is allocated at different memory
  */
 const cloneDeep = (source) => {
-  if (!['Object', 'Array'].includes(checkNativeBrand(source))) throw new TypeError('Invalid arguments as input.');
-  return mergeDeep(checkNativeBrand(source, 'Array') ? [] : {}, source, { mutate: true });
+  if (!['Object', 'Array'].includes(checkToStringTag(source))) throw new TypeError('Invalid arguments as input.');
+  return mergeDeep(checkToStringTag(source, 'Array') ? [] : {}, source, { mutate: true });
 };
 
 
@@ -54,7 +54,7 @@ const mergeDeep = (target, source, { mutate = false } = {}) => {
     const objKeys = Reflect.ownKeys(obj);
     for (let i = srcKeys.length - 1; i > -1; i -= 1) {
       const currentKey = srcKeys[i];
-      if (checkNativeBrand(src[currentKey], 'Object')) {
+      if (checkToStringTag(src[currentKey], 'Object')) {
         if (!objKeys.includes(currentKey)) obj[currentKey] = {};
         mergeRecursion(obj[currentKey], src[currentKey]);
       } else obj[currentKey] = src[currentKey];
@@ -77,7 +77,7 @@ const freezeDeep = (target, { mutate = false } = {}) => {
 
   // non-tail-call recursion (parallel)
   const freezeRecursion = (obj) => {
-    if (['Object', 'Array'].includes(checkNativeBrand(obj))) {
+    if (['Object', 'Array'].includes(checkToStringTag(obj))) {
       const objKeys = Reflect.ownKeys(obj);
       for (let i = objKeys.length - 1; i > -1; i -= 1) freezeRecursion(obj[objKeys[i]]);
       Object.freeze(obj);
@@ -99,7 +99,7 @@ const freezeDeep = (target, { mutate = false } = {}) => {
  */
 const assignDeep = (target, path, value, { mutate = false } = {}) => {
   const worker = mutate === true ? target : cloneDeep(target);
-  const pathStack = checkNativeBrand(path, 'String') ? readObjPath(path) : path;
+  const pathStack = checkToStringTag(path, 'String') ? readObjPath(path) : path;
 
   // tail-call recursion (single-file)
   const assignRecursion = (obj, keys) => {
@@ -121,10 +121,10 @@ const assignDeep = (target, path, value, { mutate = false } = {}) => {
  * @return {object}                         - the proxyfied object
  */
 const proxyfyInCaseInsensitiveKey = (obj) => {
-  if (!checkNativeBrand(obj, 'Object')) throw new TypeError('Invalid arguments as input.');
+  if (!checkToStringTag(obj, 'Object')) throw new TypeError('Invalid arguments as input.');
   return new Proxy(obj, {
     get: (target, name) => {
-      if (!checkNativeBrand(name, 'String')) return Reflect.get(target, name);
+      if (!checkToStringTag(name, 'String')) return Reflect.get(target, name);
       return target[Object.keys(target).find(key => key.toLowerCase() === name.toLowerCase())];
     },
   });
@@ -133,7 +133,7 @@ const proxyfyInCaseInsensitiveKey = (obj) => {
 
 // exports
 module.exports = {
-  checkNativeBrand,
+  checkToStringTag,
   hasOwnKey,
   cloneDeep,
   mergeDeep,

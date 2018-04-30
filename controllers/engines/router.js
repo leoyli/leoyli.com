@@ -16,8 +16,8 @@ const { templateHandler, handlerSymbols } = require('../views/handler');
 const wrapAsync = (target) => {
   const unnamedWrapper = (fn) => (...arg) => fn.apply(this, arg).catch(arg.next);
   const namedWrapper = (fn) => Object.defineProperty(unnamedWrapper(fn), 'name', { value: `WrappedAsync ${fn.name}` });
-  const evaluator = (fn) => (_U_.object.checkNativeBrand(fn, 'AsyncFunction') ? namedWrapper(fn) : fn);
-  const type = _U_.object.checkNativeBrand(target);
+  const evaluator = (fn) => (_U_.object.checkToStringTag(fn, 'AsyncFunction') ? namedWrapper(fn) : fn);
+  const type = _U_.object.checkToStringTag(target);
   if (type === 'Array') return target.map(fn => evaluator(fn));
   if (type.toLowerCase().includes('function')) return evaluator(target);
   throw new TypeError(`Argument is neither an Array nor an AsyncFunction but a ${type}.`);
@@ -93,7 +93,7 @@ class Device {
   }
 
   hook(position, fn) {
-    this.queue[position].push(...(_U_.object.checkNativeBrand(fn, 'Array') ? fn : [fn]));
+    this.queue[position].push(...(_U_.object.checkToStringTag(fn, 'Array') ? fn : [fn]));
     return this;
   }
 

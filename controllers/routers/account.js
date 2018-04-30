@@ -1,6 +1,6 @@
 const { _M_ } = require('../modules/');
 const { UsersModel } = require('../../models/');
-const { ClientError } = require('../utilities/')._U_.error;
+const { ClientException } = require('../utilities/')._U_.error;
 
 
 // controllers
@@ -31,7 +31,7 @@ account.signin = {
     if (req.isAuthenticated() && req.session.user) return res.redirect('/home');
     return require('passport').authenticate('local', (authErr, authUser) => {
       if (authErr) return next(authErr);
-      if (!authUser) return next(new ClientError(20002));
+      if (!authUser) return next(new ClientException(20002));
       return req.logIn(authUser, loginErr => {
         if (loginErr) return next(loginErr);
         authUser.updateLastTimeLog('signIn');

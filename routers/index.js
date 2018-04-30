@@ -1,6 +1,6 @@
 const { _M_ } = require('../controllers/modules');
 const { Device } = require('../controllers/engines/router');
-const { HttpError } = require('../controllers/utilities/')._U_.error;
+const { HttpException } = require('../controllers/utilities/')._U_.error;
 const errorHandler = require('../controllers/views/error');
 
 
@@ -22,7 +22,7 @@ const routerHub = new Device()
   .use('/posts', routerIndex.postsRouter)
   .use('/', routerIndex.accountRouter)
   .use('/', routerIndex.pagesRouter)
-  .use('*', [_M_.responseHTMLRequest, (req, res, next) => next(new HttpError(404))])
+  .use('*', [_M_.responseHTMLRequest, (req, res, next) => next(new HttpException(404))])
   .use(errorHandler)
   .router;
 

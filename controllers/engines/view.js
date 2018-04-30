@@ -6,7 +6,7 @@ const marked = require('marked');
 
 
 // modules
-const { TemplateError } = require('../utilities/')._U_.error;
+const { TemplateException } = require('../utilities/')._U_.error;
 
 
 // functions
@@ -41,7 +41,7 @@ const getCompilationConfigs = (variables) => ({
 const getFileString = (filePath, _SYNC) => {
   const readFileAsync = (file, option) => {
     return new Promise((resolve, reject) => fs.readFile(file, option, (err, content) => {
-      if (err) return reject(new TemplateError(91003, filePath));
+      if (err) return reject(new TemplateException(91003, filePath));
       return resolve(content);
     }));
   };
@@ -49,7 +49,7 @@ const getFileString = (filePath, _SYNC) => {
   try {
     return _SYNC !== true ? readFileAsync(filePath, 'utf8') : fs.readFileSync(filePath, 'utf8');
   } catch (err) {
-    throw new TemplateError(91004, filePath);
+    throw new TemplateException(91004, filePath);
   }
 };
 
@@ -156,7 +156,7 @@ class Template {
       });
       return compiledStack;
     } catch (err) {
-      throw new TemplateError(91001, { filePath: this.filePath, err });
+      throw new TemplateException(91001, { filePath: this.filePath, err });
     }
   }
 
@@ -164,7 +164,7 @@ class Template {
     try {
       return this._compileFn.main(...this._arguement);
     } catch (err) {
-      throw new TemplateError(91002, { filePath: this.filePath, err });
+      throw new TemplateException(91002, { filePath: this.filePath, err });
     }
   }
 }
@@ -181,7 +181,7 @@ class Template {
 const render = (filePath, locals, next) => {
   return getTemplate(filePath, getBlueprint(locals, filePath))
     .then(receivedTemplate => next(null, receivedTemplate.render()))
-    .catch(err => next(new TemplateError(err)));
+    .catch(err => next(new TemplateException(err)));
 };
 
 

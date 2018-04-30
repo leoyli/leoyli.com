@@ -41,7 +41,7 @@ admin.upload = {                                                                
 admin.stack = {
   GET: function admin_stack_GET(req, res, next) {
     const collection = req.params.stackType.toLowerCase();
-    if (!['posts', 'media'].includes(collection)) throw new _U_.error.HttpError(404);
+    if (!['posts', 'media'].includes(collection)) throw new _U_.error.HttpException(404);
     _M_.modifyHTMLTitleTag(collection)(req, res);                                                                       // todo: capitalize
     return _M_.aggregateFetch(collection, { num: 10 })(req, res, next);
   },

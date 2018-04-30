@@ -33,7 +33,7 @@ const usePassport = [noCrawlerHeader, passport.initialize(), passport.session()]
 
 /** authentication **/
 const isSignedIn = [...usePassport, function isSignedIn(req, res, next) {
-  if (!(req.isAuthenticated() && req.session.user)) throw new _U_.error.ClientError(20003);
+  if (!(req.isAuthenticated() && req.session.user)) throw new _U_.error.ClientException(20003);
   return next();
 }];
 
@@ -43,7 +43,7 @@ const isAuthorized = [...isSignedIn, async function isAuthorized(req, res, next)
   const [field, val] = req.params.canonical !== undefined
     ? ['canonical', req.params.canonical]
     : ['_id', _U_.string.readMongoId(req.url)];
-  if (await PostsModel.count({ [field]: val, 'author._id': req.user._id }) !== 1) throw new _U_.error.ClientError(20001);// tofix: find the post first then decide to give or not
+  if (await PostsModel.count({ [field]: val, 'author._id': req.user._id }) !== 1) throw new _U_.error.ClientException(20001);// tofix: find the post first then decide to give or not
   return next();
 }];
 
@@ -51,11 +51,11 @@ const isAuthorized = [...isSignedIn, async function isAuthorized(req, res, next)
 /** validation: password formats **/
 const passwordValidation = function passwordValidation(req, res, next) {
   if (!req.body.password.new || !req.body.password.confirmed) {
-    throw new _U_.error.ClientError(10001);
+    throw new _U_.error.ClientException(10001);
   } else if (req.body.password.new.toString() !== req.body.password.confirmed.toString()) {
-    throw new _U_.error.ClientError(10002);
+    throw new _U_.error.ClientException(10002);
   } else if (req.body.password.old && (req.body.password.old.toString() === req.body.password.new.toString())) {
-    throw new _U_.error.ClientError(10003);
+    throw new _U_.error.ClientException(10003);
   }
   return next();
 };

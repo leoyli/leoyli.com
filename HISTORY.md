@@ -1,3 +1,13 @@
+### 0.9.0-dev.13 / 2018-04-30
+> App
+- Used ES6 `Map` for hashing customized error messages.
+- Renamed some customized errors as `Exception` for better semantics.
+- Renamed `checkNativeBrand` as `checkToStringTag` for better semantics.
+
+> Test
+- Updated the existed tests w.r.t. the change.
+
+
 ### 0.9.0-dev.12 / 2018-04-29
 > App
 - Revised and renamed `asyncWrapper` as `wrapAsync` in 'router' engine.

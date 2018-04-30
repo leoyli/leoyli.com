@@ -42,7 +42,7 @@ posts.editor.edit = {
 posts.posts.show = {
   alias: async function posts_posts_show_alias(req, res) {                                                                                          // tofix: revise alias behavior (merged into `postHandler`)
     const post = await PostsModel.findOne({ ...req.params, 'time._recycled': { $eq: null } });
-    if (!post) throw new _U_.error.HttpError(404);
+    if (!post) throw new _U_.error.HttpException(404);
     else req.session.chest = { post };
     return res.redirect(`/posts/${req.session.chest.post.canonical}`);
   },

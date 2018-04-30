@@ -12,8 +12,8 @@ const VIEW_STACK = Symbol('VIEW_STACK');
 const handler = { posts: {} };
 
 handler.posts.single = (template, $$POST, $$META) => function singlePostHandler(req, res) {
-  if (($$POST && $$POST.state && $$POST.state.recycled) || !$$POST) throw new _U_.error.HttpError(404);
-  else if (!req.session.user && $$POST.state && !$$POST.state.published) throw new _U_.error.HttpError(404);
+  if (($$POST && $$POST.state && $$POST.state.recycled) || !$$POST) throw new _U_.error.HttpException(404);
+  else if (!req.session.user && $$POST.state && !$$POST.state.published) throw new _U_.error.HttpException(404);
   if ($$POST && $$POST.title) _M_.modifyHTMLTitleTag({ name: $$POST.title, root: true })(req, res);
   return res.render(template, { $$POST, $$META });
 };

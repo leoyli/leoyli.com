@@ -1,5 +1,5 @@
 // module
-const { checkNativeBrand, hasOwnKey, cloneDeep, mergeDeep, assignDeep, freezeDeep,
+const { checkToStringTag, hasOwnKey, cloneDeep, mergeDeep, assignDeep, freezeDeep,
   proxyfyInCaseInsensitiveKey } = require('../../../controllers/utilities/')[Symbol.for('UNIT_TEST')];
 
 
@@ -12,10 +12,10 @@ describe('Check the ENV', () => {
 
 
 describe('Bundle: Object methods', () => {
-  test('Fn: checkNativeBrand: check the native brand(type) of objects', () => {
-    expect(checkNativeBrand(async () => {})).toBe('AsyncFunction');
-    expect(checkNativeBrand(() => {}, 'AsyncFunction')).toBeFalsy();
-    expect(checkNativeBrand([() => {}], 'array')).toBeTruthy();
+  test('Fn: checkToStringTag: check the native brand(type) of objects', () => {
+    expect(checkToStringTag(async () => {})).toBe('AsyncFunction');
+    expect(checkToStringTag(() => {}, 'AsyncFunction')).toBeFalsy();
+    expect(checkToStringTag([() => {}], 'array')).toBeTruthy();
   });
 
   test('Fn: hasOwnKey: check if object has wwn a property', () => {

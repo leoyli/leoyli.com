@@ -1,6 +1,6 @@
 /* eslint-disable key-spacing */
 const { usePassport } = require('../controllers/modules/')._M_;
-const { ClientError } = require('../controllers/utilities/')._U_.error;
+const { ClientException } = require('../controllers/utilities/')._U_.error;
 const { Device } = require('../controllers/engines/router');
 const account = require('../controllers/routers/account');
 
@@ -27,7 +27,7 @@ const userRouter = new Device([
 // settings
 userRouter.hook('pre', usePassport);
 userRouter.hook('post', (err, req, res, next) => {
-  return next(new ClientError(err));
+  return next(new ClientException(err));
 });
 
 

@@ -1,4 +1,4 @@
-const { checkNativeBrand } = require('./object');
+const { checkToStringTag } = require('./object');
 const errorCodeProxyAgent = require('./error-code/');
 
 
@@ -9,7 +9,7 @@ class ExtendableError extends Error {
       super();
       this.name = this.constructor.name;
       this.message = errorCodeProxyAgent[this.name](entry, literals);
-      if (checkNativeBrand(entry, 'Number')) this.code = entry;
+      if (checkToStringTag(entry, 'Number')) this.code = entry;
       if (Error.captureStackTrace) Error.captureStackTrace(this, this.constructor);                                     // note: V8 JS-engine only
       else this.stack = (new Error(this.message)).stack;                                                                // note: non-V8 browser only
     }
@@ -36,15 +36,15 @@ class TransferableError extends ExtendableError {
 
 // extensions
 class ServerError extends TransferableError {}                                                                          // note: this type is not intended to handle by the middleware
-class TemplateError extends TransferableError {}
-class ClientError extends TransferableError {}
-class HttpError extends TransferableError {}
+class TemplateException extends TransferableError {}
+class ClientException extends TransferableError {}
+class HttpException extends TransferableError {}
 
 
 // exports
 module.exports = {
   ServerError,
-  ClientError,
-  TemplateError,
-  HttpError,
+  ClientException,
+  TemplateException,
+  HttpException,
 };

@@ -17,8 +17,8 @@ describe('Check the ENV', () => {
 //     const mockInput = [async (req, res, next) => {}, (req, res, next) => {}];
 //     const result = mockInput.map(fn => asyncWrapper(fn));
 //     //
-//     expect(_U_.object.checkNativeBrand(result[0], 'array')).toBeTruthy();
-//     expect(_U_.object.checkNativeBrand(result[1], 'array')).toBeTruthy();
+//     expect(_U_.object.checkToStringTag(result[0], 'array')).toBeTruthy();
+//     expect(_U_.object.checkToStringTag(result[1], 'array')).toBeTruthy();
 //     expect(result[0].toString()).toBe('(req, res, next) => fn(req, res, next).catch(next)');
 //     expect(result[1].toString()).toBe('(req, res, next) => {}');
 //   });

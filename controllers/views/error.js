@@ -22,7 +22,7 @@ redirect.signInRetry = function signInRetry(req, res) {
 // terminals
 const terminal = {};
 
-terminal.ClientError = function ClientError(err, req, res, next) {
+terminal.ClientException = function ClientException(err, req, res, next) {
   switch (err.from) {
     case 'UserExistsError':
       req.flash('error', 'This email have been used.');
@@ -46,17 +46,17 @@ terminal.MongoError = function MongoError(err, req, res, next) {
   return res.redirect('back');
 };
 
-terminal.HttpError = function HttpError(err, req, res, next) {
+terminal.HttpException = function HttpException(err, req, res, next) {
   return _M_.noCrawlerHeader(req, res, () => {
     return res.status(err.code).render('./theme/error', { err });
   });
 };
 
-terminal.TemplateError = function TemplateError(err, req, res, next) {
+terminal.TemplateException = function TemplateException(err, req, res, next) {
   return _M_.noCrawlerHeader(req, res, () => {
     // todo: log the message and call the admin
     // todo: guidance for the client
-    return res.status(500).send(`<h1>${new _U_.error.HttpError(500).message}</h1>`);
+    return res.status(500).send(`<h1>${new _U_.error.HttpException(500).message}</h1>`);
   });
 };
 

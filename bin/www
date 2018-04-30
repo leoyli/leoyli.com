@@ -2,7 +2,7 @@
 const fs = require('fs');
 const http2 = require('spdy');
 const debug = require('debug')('leoyli-main:server');
-const { checkNativeBrand } = require('../controllers/utilities/')._U_.object;
+const { checkToStringTag } = require('../controllers/utilities/')._U_.object;
 const app = require('../app');
 
 
@@ -49,7 +49,7 @@ const onError = (error) => {
     throw error;
   }
 
-  const bind = checkNativeBrand(port, 'String')
+  const bind = checkToStringTag(port, 'String')
     ? `Pipe ${port}`
     : `Port ${port}`;
 
@@ -73,7 +73,7 @@ const onError = (error) => {
 /** Event listener for HTTP server "listening" event **/
 const onListening = () => {
   const addr = server.address();
-  const bind = checkNativeBrand(addr, 'String')
+  const bind = checkToStringTag(addr, 'String')
     ? `pipe ${addr}`
     : `port ${addr.port}`;
   debug(`Listening on ${bind}`);
