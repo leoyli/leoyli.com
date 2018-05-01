@@ -1,3 +1,9 @@
+### 0.9.0-dev.13.1 / 2018-05-01
+> App
+- Used 'yarn' for package managements.
+- Updated 'mongoose' to v5.0.17.
+
+
 ### 0.9.0-dev.13 / 2018-04-30
 > App
 - Used ES6 `Map` for hashing customized error messages.
