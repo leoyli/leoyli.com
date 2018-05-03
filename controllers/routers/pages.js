@@ -1,22 +1,21 @@
-module.exports = pages = {};
+const { _M_ } = require('../modules/');
 
 
+// controllers
+const pages = {};
 
-// ==============================
-//  DEPENDENCIES
-// ==============================
-const { _U_ } = require('../utilities/');
-const { fetch } = require('../middleware/fetch');
-
-
-
-// ==============================
-//  CONTROLLERS
-// ==============================
 pages.landing = {
-  GET: (req, res, next) => next()
+  GET: function pages_landing_GET(req, res, next) {
+    return next();
+  },
 };
 
 pages.search = {
-  GET: (req, res, next) => fetch('posts')(req, res, next),
+  GET: function pages_search_GET(req, res, next) {
+    return _M_.aggregateFetch('posts')(req, res, next);
+  },
 };
+
+
+// exports
+module.exports = pages;

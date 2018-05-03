@@ -1,3 +1,257 @@
+### 0.9.0-dev.13.1 / 2018-05-01
+> App
+- Used 'yarn' for package managements.
+- Updated 'mongoose' to v5.0.17.
+
+
+### 0.9.0-dev.13 / 2018-04-30
+> App
+- Used ES6 `Map` for hashing customized error messages.
+- Renamed some customized errors as `Exception` for better semantics.
+- Renamed `checkNativeBrand` as `checkToStringTag` for better semantics.
+
+> Test
+- Updated the existed tests w.r.t. the change.
+
+
+### 0.9.0-dev.12 / 2018-04-29
+> App
+- Revised and renamed `asyncWrapper` as `wrapAsync` in 'router' engine.
+- Fixed `unhandledPromiseRejection` error in 'fetch' module.
+- Used 'domain' to handle upload errors during the uploading stream.
+  (note: 'domain' is deprecated, may try `async_hook` to fix it.)
+
+
+### 0.9.0-dev.11 / 2018-04-27
+> App
+- Fixed 'fetch' controller bugs.
+- Added `toCapitalized` 'string' utility function.
+- Unified the named of router devices.
+
+> Test
+- Added a unit test for `toCapitalized`.
+
+
+### 0.9.0-dev.10 / 2018-04-27
+> App
+- Used no plusplus operators (ESLint).
+- Extended the capability for `cloneDeep`, `mergedDeep`, and `freezeDeep` 'object' utilities of operating on `Symbol` primitives.
+- Used the reverse for-loop for improving the algorithm in `mergedDeep` and `freezeDeep`.
+- Used the global-registered `Symbol.for('UNIT_TEST')` symbol for accessing functions to be unit-tested.
+
+> Test
+- Added 5 more unit tests upon `cloneDeep` 'object' utility.
+- Loaded the tested module units only from `Symbol.for('UNIT_TEST')`.
+
+> UI
+- Used no plusplus operators (ESLint).
+
+
+### 0.9.0-dev.9 / 2018-04-27
+> App
+- Updated all dependencies.
+- Renamed `hasOwnProperty` as `hasOwnKey` in 'object' utility function.
+- Renamed all model in uppercase for the convention as a constructor.
+- Rearranged code based on ESLint checking results.
+
+> Test
+- Rearranged code based on ESLint checking results.
+
+
+### 0.9.0-dev.8.1 / 2018-04-26
+> App
+- Revised 'error' utilities to avoid the magic string.
+- Revised 'string' utilities to return `null` if input string is `undefined`.
+- Used `typeof ...` only upon checking if a variable is a `function`.
+  (in other cases, preferred to use `checkNativeBrand` utility function)
+- Renamed some utilities function to be more semantic and consistent.
+- Minor code cleaned up.
+
+> Test
+- Updated unit tests in utilities.
+
+
+### 0.9.0-dev.8.1 / 2018-04-24
+> App
+- Improved readability by unifying code style in all routers.
+
+
+### 0.9.0-dev.8 / 2018-04-22
+> App
+- Revised 'error' utilities for improving readability and the use cases.
+- Limited code blocks to `require` modules from other files.
+- Replaced some `Object` method by `Reflect`.
+
+
+### 0.9.0-dev.7 / 2018-04-22
+> App
+- Decoupled magic-strings from 'handler' view controllers via the use of ES6 Symbols.
+- Added a static getter method in 'Device' engine for referencing used handler.
+- Updated all routers.
+
+
+### 0.9.0-dev.6.4 / 2018-04-22
+> App
+- Replaced `Object.assign()` by object spread operator.
+  (benchmark shows both have no significant difference in terms of their performance in V8)
+- Revised `unnamedWrapper`:
+  - wrapped function would be prefixed with `WrappedAsync`;
+  - extended `unnamedWrapper` to wrap error middleware i.e. (err, req, res, next).
+- Replaced the use of `__proto__` by `Object.getPrototypeOf`.
+  (although V8 supports `__proto__` property, but it was recommended avoiding the use of such property other than web browsers)
+
+
+### 0.9.0-dev.6.3 / 2018-04-21
+> App
+- Cleaned up codes so that `use strict` can be executed without errors.
+  (via a node flag `--use_strict`)
+
+
+### 0.9.0-dev.6.2 / 2018-04-21
+> App
+- Revised 'object' utilities:
+  - revised `cloneDeep` for checking input types;
+  - enhanced `mergeDeep`, `freezeDeep`, `assignDeep` readability;
+  - enhanced `freezeDeep` recursion performance.
+    (use `for...in` loop instead of `Object.keys().forEach()`)
+- Assigned default value of `Device.rules` as `[]` for preventing errors.
+
+> Test
+- Updated 'object' unit tests.
+
+
+### 0.9.0-dev.6.1 / 2018-04-21
+> App
+- Enhanced code maintainability and readability by using ES6 function default argument assignments.
+- Revised 'string' utilities for handling empty arguments properly.
+- Used ES6 destruction syntax to simplify 'upload' module.
+
+
+### 0.9.0-dev.6 / 2018-04-19
+> App
+- Added `_U_.object.freezeDeep` object utilities.
+- Applied `_U_.object.freezeDeep` to prevent mutations of `Device.rules` in 'router' engine.
+- Extended `_U_.object.cloneDeep` to clone array object.
+
+> Test
+- Added `_U_.object.freezeDeep` unit test
+- Added more test for `_U_.object.cloneDeep`.
+- Updated testing descriptions.
+
+
+### 0.9.0-dev.5.1 / 2018-04-19
+> App
+- Fixed API service breakdown.
+- Fixed unfulfilled short cut in `Device.use`.
+- Integrated 'service/router' into 'router/index'.
+- Updated 'app' settings.
+
+
+### 0.9.0-dev.5 / 2018-04-18
+> App
+- Revised 'router' engine:
+  - introduced `defaultSetting` device attribute;
+    (`defaultSetting` can be overwritten by more specific routing rules)
+  - merged `handler` into `defaultSetting`;
+  - revised `getMiddlewareChain` for decorating routing HTML title tag value;
+  - revised `get setting()` in `Device` class;
+    (only `setting.title` method would pre-populated middleware in `this.queue.pre`)
+  - revised `getPreprocessor` and improved readability.
+    (only property with `boolean` value would be preprocessed)
+- Revised 'app' setting file:
+  - decoupled the use of 'initial' middleware;
+    (handled by routing engine instead)
+  - added `upload` property for configuring 'upload' module;
+  - updated 'upload' module so the uploading path is independent of the file location.
+- Renamed 'middleware' folder as 'modules'.
+- Revised `modifyHTMLTitleTag` module for accepting `object/string` in `options`.
+- Moved and renamed 'middleware/initial' as 'view/responder'.
+- Updated routers w.r.t. the changes.
+
+> Test
+- Updated file paths.
+
+
+### 0.9.0-dev.4 / 2018-04-17
+> App
+- Extracted middleware as 'adapter' and 'regulator' from 'middleware/index'.
+- Renamed some variables and middleware for being more semantic.
+- Improved line readability and code style consistency.
+- Improved error stack trace readability by assigning middleware names explicitly:
+  - router controllers were named after their object path.
+  - plugged middleware are named after their accessing name.
+- Revised 'router' engine:
+  - name of async functions wrapped by `asyncWrapper` are preserved.
+  - members in the array returned by `getMiddlewareChain` are unique.
+    (ensured by `[...new Set()]` ES6 feature)
+
+> Test
+- Updated file paths.
+
+
+### 0.9.0-dev.3 / 2018-04-16
+> App
+- Revised `proxyfiedForCaseInsensitiveAccess` in 'object' utilities.
+- Refracted 'router' engine:
+  - simplified codes from the need for argument normalization;
+  - restricted `controller` parameter, which must be a object that mapped with its method;
+  - restricted pseudo method `alias` have to be handled and `alias` parameter have to be provided;
+  - enhanced `asyncWrapper` to process both array and function types;
+  - renamed `loadRoutePlugins` as `getPreprocessor`;
+  - mingled `stackHttpMethods`, `loadViewRenderer` and `Device.run` into `getMiddlewareChain`.
+- Updated 'seed' route.
+
+
+### 0.9.0-dev.2.1 / 2018-04-13
+> App
+- Revised 'plugin' middleware:
+  - renamed file as 'index';
+  - reorganized codes;
+  - updated 'upload' middleware;
+  - encapsulated 'fetch' in `_M_.aggregateFetch` middleware.
+
+
+### 0.9.0-dev.2.1 / 2018-04-13
+> App
+- Replaced `array.indexOf('val') !== -1` by `array.includes('val')`. (The ES7 feature)
+- Updated CSP rules.
+
+> UI
+- CDN source file updates.
+- Upgraded from Bootstrap v4.0 to v4.1.
+
+
+### 0.9.0-dev.2 / 2018-04-12
+> App
+- Removed unnecessary comments.
+- Refactored codes in accordance with code styles:
+  - used 'function expressions' over 'function declarations';
+    (leveraged 'function name inference' from V8 in using arrow functions)
+  - return `this` in `class` methods whenever applicable;
+    (allow methods to be chained)
+  - removed redundant `else` from `else return` pattern;
+  - renamed some variables for better readability;
+  - avoided argument mutations;
+  - wrapped `default` case by `{}` in all `switch`.
+- Refactored `postNormalizer` in 'initial' middleware.
+- Refactored 'fetch' middleware and removed 'aggregation.exp' engine.
+- Refactored `checkNativeBrand` object utility.
+- Added `hasOwnProperty` object utility.
+
+> Test
+- Updated tests.
+- Added `hasOwnProperty` object utility unit test.
+
+
+### 0.9.0-dev.1 / 2018-04-12
+> App
+- Changed from 'API/POST' to 'API/PUT'.
+
+
+### 0.9.0-dev.0 / 2018-04-09
+- Initiated v0.9: 'CMS & UI' development.
+
+
 ### 0.8.0 / 2018-04-09
 > Completed v0.8: 'CMS-Panel' development
 - Added 'widget' feature in view engine.
@@ -222,7 +476,7 @@
 - Revised 'router' engine:
   - combined `pre` and `post` device method into `hook`.
   - updated 'account' router associated with the changes.
-  
+
 
 ### 0.8.0-dev.8 / 2018-03-16
 > App
@@ -516,7 +770,7 @@
 - Hooked ServerError around errors form 'fs' module.
 - Identified more client errors to be handled.
 - Simplified errorHandler core.
-- Simplified 'admin' router. 
+- Simplified 'admin' router.
 - Added 'TemplateError' terminal in error handler.
 - Added supporting of http code 500 in 'HttpError' error class.
 
@@ -1042,7 +1296,7 @@
 > App
 - Categorized 'middleware' based on the triggering positions as `._pre` or `._end`.
 - Greatly restructured many 'router' by using `async/await` ES2017 features to replace most of Promises.
-- Used `_end.error.clientError` end-ware to handle error messages. 
+- Used `_end.error.clientError` end-ware to handle error messages.
 - Used `res.locals._render` to collaborate with `_end.next.postRender` end-ware.
 
 > UI

@@ -1,22 +1,20 @@
+/* eslint-disable key-spacing */
 const { Device } = require('../controllers/engines/router');
-const { _M_ } = require('../controllers/middleware/plugins');
 const api = require('../controllers/routers/api');
 
 
-
-// ==============================
-//  ROUTE HUB
-// ==============================
-const APIRouter = new Device([{
-  route:          '/stack/:stackType',
-  controller:     api.stack,
-}]);
-
-
-// pre-used middleware
-APIRouter.setting = { authenticated : false };
-APIRouter.use(_M_.APIHttpHeaders);
+// device
+const APIRouter = new Device([
+  {
+    route:        '/stack/:stackType',
+    controller:   api.stack,
+  },
+]);
 
 
-// router exports
+// settings
+APIRouter.setting = { servingAPI: true, authentication: false };
+
+
+// exports
 module.exports = APIRouter.run();

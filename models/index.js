@@ -1,6 +1,6 @@
 module.exports = {
-  configsModel        : require('./configs'),
-  usersModel          : require('./users'),
-  postsModel          : require('./posts'),
-  mediaModel          : require('./media'),
+  ConfigsModel: require('./configs'),
+  UsersModel: require('./users'),
+  PostsModel: require('./posts'),
+  MediaModel: require('./media'),
 };

@@ -1,10 +1,9 @@
+/* eslint-disable key-spacing */
 const { Device } = require('../controllers/engines/router');
+const { PostsModel, UsersModel } = require('../models/');
 
 
-
-// ==============================
-//  CONTROLLERS
-// ==============================
+// seed-data
 const moc = {
   user: {
     email       : 'leo@leoyli.com',
@@ -12,13 +11,13 @@ const moc = {
     password    : 'leo',
     picture     : '/media/201801/1521405154605.png',
     info: {
-      firstName   : 'test',
-      lastName    : 'test',
-      residence   : 'Test/test',
-      timeZone    : 'UTC−07:00 (MST)',
-      gender      : 'NA',
-      birthday    : Date.now(),
-    }
+      firstName : 'test',
+      lastName  : 'test',
+      residence : 'Test/test',
+      timeZone  : 'UTC−07:00 (MST)',
+      gender    : 'NA',
+      birthday  : Date.now(),
+    },
   },
   post : {
     title       : 'New arrived: Custom E-liter 4K!',
@@ -29,25 +28,25 @@ const moc = {
 };
 
 
-const seed = async (req, res) => {
-  const { postsModel, usersModel } = require('../models/');
-  const newUser = await usersModel.register(new usersModel(moc.user), moc.user.password);
-  await postsModel.create({ author: newUser, ...moc.post });
-  req.flash('info', 'Successfully seeded.');
-  res.redirect('/posts');
+// controllers
+const seed = {
+  GET: async function seed_GET(req, res) {
+    const newUser = await UsersModel.register(new UsersModel(moc.user), moc.user.password);
+    await PostsModel.create({ author: newUser, ...moc.post });
+    req.flash('info', 'Successfully seeded.');
+    res.redirect('/posts');
+  },
 };
 
 
-
-// ==============================
-//  ROUTER HUB
-// ==============================
-const SeedRouter = new Device([{
-  route: '/',
-  controller: seed,
-}]);
-
+// device
+const seedRouter = new Device([
+  {
+    route:        '/',
+    controller:   seed,
+  },
+]);
 
 
-// router exports
-module.exports = SeedRouter.run();
+// exports
+module.exports = seedRouter.run();

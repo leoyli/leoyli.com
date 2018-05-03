@@ -1,46 +1,50 @@
+const { checkToStringTag } = require('./object');
 const errorCodeProxyAgent = require('./error-code/');
 
 
-
-// ==============================
-//  CORE
-// ==============================
+// main
 class ExtendableError extends Error {
-  constructor(...arg) {
-    if (new.target.__proto__.name === 'TransferableError') {
+  constructor(entry, literals) {
+    if (Reflect.getPrototypeOf(new.target) === TransferableError) {                                                     // note: lock-in this parental class can be only extended by a special child class
       super();
       this.name = this.constructor.name;
-      this.message = errorCodeProxyAgent[this.name](...arg);
-      if (typeof arg[0] === 'number') this.code = arg[0];
+      this.message = errorCodeProxyAgent[this.name](entry, literals);
+      if (checkToStringTag(entry, 'Number')) this.code = entry;
       if (Error.captureStackTrace) Error.captureStackTrace(this, this.constructor);                                     // note: V8 JS-engine only
-      else this.stack = (new Error(message)).stack;                                                                     // note: non-V8 browser only
+      else this.stack = (new Error(this.message)).stack;                                                                // note: non-V8 browser only
     }
   }
 }
 
+
 class TransferableError extends ExtendableError {
-  constructor(arg, ...ref) {
-    if (new.target !== TransferableError) if (arg instanceof ExtendableError) return arg;
-    else if (arg instanceof Error) {
-      super(arg.message);
-      this.code = arg.code;
-      this.from = arg.name;
-      this.stack = `${this.name} (transferred):${new RegExp(/\s+at.+[^\n]/).exec(this.stack)[0]}\n${arg.stack}`;
-    } else super(arg, ...ref);
+  constructor(entry, literals) {
+    if (new.target !== TransferableError) {
+      if (entry instanceof ExtendableError) return entry;
+      if (entry instanceof Error) {
+        super(entry.message);
+        this.code = entry.code;
+        this.from = entry.name;
+        this.stack = `${this.name} (transferred):${new RegExp(/\s+at.+[^\n]/).exec(this.stack)[0]}\n${entry.stack}`;
+      } else {
+        super(entry, literals);
+      }
+    }
   }
 }
 
 
-
-// ==============================
-//  ERROR CLASSES
-// ==============================
-class ServerError       extends TransferableError {}                                                                    // note: this error cannot be handled by middleware
-class TemplateError     extends TransferableError {}
-class ClientError       extends TransferableError {}
-class HttpError         extends TransferableError {}
-
+// extensions
+class ServerError extends TransferableError {}                                                                          // note: this type is not intended to handle by the middleware
+class TemplateException extends TransferableError {}
+class ClientException extends TransferableError {}
+class HttpException extends TransferableError {}
 
 
 // exports
-module.exports = { ServerError, ClientError, TemplateError, HttpError };
+module.exports = {
+  ServerError,
+  ClientException,
+  TemplateException,
+  HttpException,
+};

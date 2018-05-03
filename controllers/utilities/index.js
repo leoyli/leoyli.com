@@ -1,9 +1,18 @@
-module.exports = exports = { _U_: {
-    string  : require('./string'),
-    object  : require('./object'),
-    error   : require('./error'),
-  }};
+const utilities = {
+  _U_: {
+    string: require('./string'),
+    object: require('./object'),
+    error: require('./error'),
+  },
+};
 
 
-// exports (test)
-exports._test = { ...exports._U_.schema, ...exports._U_.string, ...exports._U_.object, ...exports.error };
+utilities[Symbol.for('UNIT_TEST')] = {
+  ...utilities._U_.string,
+  ...utilities._U_.object,
+  ...utilities._U_.error,
+};
+
+
+// exports
+module.exports = utilities;

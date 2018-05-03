@@ -1,82 +1,143 @@
+/* eslint-disable no-restricted-syntax */
+const { readObjPath } = require('./string');
+
+
 /**
- * check the native brand(type) of objects                                                                              // note: `checkNativeBrand` can be generalized
+ * check the native brand(type) of objects                                                                              // note: `checkToStringTag` can be generalized
  * @param {object} target                   - object to be checked
  * @param {string} [str]                    - name to be matched (case insensitive)
  * @return {(boolean|string)}               - if no name given, the brand name of the object would be returned
  */
-function checkNativeBrand(target, str) {
-  if (str && typeof str !== 'string') throw new TypeError(`${str} is not a string.`);
-  if (str) return Object.prototype.toString.call(target).slice(8, -1).toLowerCase() === str.toLowerCase();
-  else return Object.prototype.toString.call(target).slice(8, -1);
-}
+const checkToStringTag = (target, str) => {
+  const nativeBrandName = (obj) => Object.prototype.toString.call(obj).slice(8, -1);
+  if (str && nativeBrandName(str).toLowerCase() !== 'string') throw new TypeError('Second argument is not a string.');
+  if (str) return nativeBrandName(target).toLowerCase() === str.toLowerCase();
+  return nativeBrandName(target);
+};
 
 
 /**
- * clone the object totally into different memory
- * @param {object} source                   - source{object} to be cloned, not support to an Array object
- * @return {object}                         - cloned object which is allocated at different memory
+ * check if object has wwn a property
+ * @param {object} obj                      - target{object} to be evaluate
+ * @param {string} prop                     - name of the property
+ * @return {boolean}                        - evaluation result
  */
-function cloneDeep(source) {
-  return mergeDeep({}, source, { mutate: true });
-}
+const hasOwnKey = (obj, prop) => {
+  return Object.prototype.hasOwnProperty.call(obj, prop);
+};
 
 
 /**
- * merge two object deeply                                                                                              // note: can be set to mutable
+ * clone the object/array deeply by its value (reference decoupled)
+ * @param {object|array} source             - source{object} to be cloned, not support to an Array object
+ * @return {object|array}                   - cloned object which is allocated at different memory
+ */
+const cloneDeep = (source) => {
+  if (!['Object', 'Array'].includes(checkToStringTag(source))) throw new TypeError('Invalid arguments as input.');
+  return mergeDeep(checkToStringTag(source, 'Array') ? [] : {}, source, { mutate: true });
+};
+
+
+/**
+ * merge two object recursively                                                                                         // note: this function can not copy getter/setter properties
  * @param {object} target                   - target{object} to be operated
  * @param {object} source                   - reference object for target
- * @param {boolean} [mutate=false]          - allow to mutate the target object
+ * @param {boolean} [mutate = false]        - allow to mutate the target object
  * @return {object}                         - the merged object
  */
-function mergeDeep(target, source, { mutate } = {}) {
-  function mergeRecursion(obj, source) {
-    for(const key in source) if (source.hasOwnProperty(key) && checkNativeBrand(source[key], 'object')) {
-      if (!obj.hasOwnProperty(key)) obj[key] = {};
-      mergeRecursion(obj[key], source[key]);
-    } else obj[key] = source[key];
-  }
-  const obj = mutate === true ? target : cloneDeep(target);
-  mergeRecursion(obj, source);
-  return obj;
-}
+const mergeDeep = (target, source, { mutate = false } = {}) => {
+  const worker = mutate === true ? target : cloneDeep(target);
+
+  // non-tail-call recursion (parallel)
+  const mergeRecursion = (obj, src) => {
+    const srcKeys = Reflect.ownKeys(src);
+    const objKeys = Reflect.ownKeys(obj);
+    for (let i = srcKeys.length - 1; i > -1; i -= 1) {
+      const currentKey = srcKeys[i];
+      if (checkToStringTag(src[currentKey], 'Object')) {
+        if (!objKeys.includes(currentKey)) obj[currentKey] = {};
+        mergeRecursion(obj[currentKey], src[currentKey]);
+      } else obj[currentKey] = src[currentKey];
+    }
+  };
+
+  mergeRecursion(worker, source);
+  return worker;
+};
 
 
 /**
- * assigned the value to an object by path                                                                              // note: (1) can be set to mutable; (2) value could be 0{number}
+ * frozen the target and its property deeply
+ * @param {object|array} target             - target{object} to be operated
+ * @param {boolean} [mutate = false]        - allow to mutate the target object
+ * @return {object|array}                   - the deeply frozen object/array
+ */
+const freezeDeep = (target, { mutate = false } = {}) => {
+  const worker = mutate === true ? target : cloneDeep(target);
+
+  // non-tail-call recursion (parallel)
+  const freezeRecursion = (obj) => {
+    if (['Object', 'Array'].includes(checkToStringTag(obj))) {
+      const objKeys = Reflect.ownKeys(obj);
+      for (let i = objKeys.length - 1; i > -1; i -= 1) freezeRecursion(obj[objKeys[i]]);
+      Object.freeze(obj);
+    }
+  };
+
+  freezeRecursion(worker);
+  return worker;
+};
+
+
+/**
+ * assigned the value to an object by path recursively                                                                  // note: (1) can be set to mutable; (2) value could be 0{number}
  * @param {object} target                   - target{object} to be operated
  * @param {string|array} path               - referencing path of the object
  * @param {*} [value]                       - value{*} to be assigned
- * @param {boolean} [mutate=false]          - allow to mutate the target object
+ * @param {boolean} [mutate = false]        - allow to mutate the target object
  * @return {object}                         - the assigned object
  */
-function assignDeep(target, path, value, { mutate } = {}) {
-  function assignRecursion(obj, path, value) {
-    const keys = checkNativeBrand(path, 'string') ? require('./string').readObjPath(path) : path;
-    if (keys.length !== 1) {
-      assignRecursion(obj[keys[0]] !== undefined ? obj[keys[0]] : (obj[keys[0]] = {}), keys.slice(1), value);
-    } else obj[keys[0]] = value !== undefined ? value : {};
-  }
-  const obj = mutate === true ? target : cloneDeep(target);
-  assignRecursion(obj, path, value);
-  return obj;
-}
+const assignDeep = (target, path, value, { mutate = false } = {}) => {
+  const worker = mutate === true ? target : cloneDeep(target);
+  const pathStack = checkToStringTag(path, 'String') ? readObjPath(path) : path;
+
+  // tail-call recursion (single-file)
+  const assignRecursion = (obj, keys) => {
+    if (keys.length === 1) obj[keys[0]] = value;
+    else {
+      if (obj[keys[0]] === undefined) obj[keys[0]] = {};
+      return assignRecursion(obj[keys[0]], keys.slice(1), value);
+    }
+  };
+
+  assignRecursion(worker, pathStack, value);
+  return worker;
+};
 
 
 /**
- * convert the object for allowing case-insensitive access
+ * proxyfy the object for allowing case-insensitive access
  * @param {object} obj                      - target{object} to be operated
  * @return {object}                         - the proxyfied object
  */
-function proxyfiedForCaseInsensitiveAccess(obj) {
-  if (checkNativeBrand(obj, 'Object')) return new Proxy(obj, {
+const proxyfyInCaseInsensitiveKey = (obj) => {
+  if (!checkToStringTag(obj, 'Object')) throw new TypeError('Invalid arguments as input.');
+  return new Proxy(obj, {
     get: (target, name) => {
-      if (!checkNativeBrand(name, 'String')) return target;
-      else return target[Object.keys(target).find(key => key.toLowerCase() === name.toLowerCase())];
+      if (!checkToStringTag(name, 'String')) return Reflect.get(target, name);
+      return target[Object.keys(target).find(key => key.toLowerCase() === name.toLowerCase())];
     },
   });
-  else return obj;
-}
+};
 
 
 // exports
-module.exports = { checkNativeBrand, cloneDeep, mergeDeep, assignDeep, proxyfiedForCaseInsensitiveAccess };
+module.exports = {
+  checkToStringTag,
+  hasOwnKey,
+  cloneDeep,
+  mergeDeep,
+  assignDeep,
+  freezeDeep,
+  proxyfyInCaseInsensitiveKey,
+};
