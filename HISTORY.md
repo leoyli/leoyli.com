@@ -1,3 +1,11 @@
+### 0.9.0 / 2018-05-03
+> App
+- Replaced v0.9: 'CMS & UI' by v0.9: 'code: styling and refracting' development.
+- Finished v0.9: 'code: styling and refracting' development.
+- Refactored 'router' engine.
+- Refactored 'utilities' modules.
+
+
 ### 0.9.0-dev.13.1 / 2018-05-01
 > App
 - Used 'yarn' for package managements.
