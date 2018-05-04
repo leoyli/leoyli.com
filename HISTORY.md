@@ -1,3 +1,9 @@
+### 0.10.0-dev / 2018-05-03
+> App
+- Initiated v0.10 dev-branch.
+  (goal: Revised CMS routing)
+
+
 ### 0.9.0 / 2018-05-03
 > App
 - Replaced v0.9: 'CMS & UI' by v0.9: 'code: styling and refracting' development.
