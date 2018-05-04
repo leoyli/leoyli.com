@@ -1,6 +1,6 @@
 /* eslint-disable key-spacing */
-const { Device } = require('../controllers/engines/router');
-const home = require('../controllers/routers/home');
+const { Device } = require('../../controllers/engines/router');
+const home = require('../../controllers/routers/home');
 
 
 // device
@@ -11,14 +11,14 @@ const dashboardRouter = new Device([
     setting:      { title: 'Dashboard', template: './__root__/' },
   },
   {
-    route:        '/profile',
-    controller:   home.profile,
-    setting:      { title: 'Profile', template: './__root__/home/profile/info' },
-  },
-  {
     route:        '/profile/edit',
     controller:   home.profile_editor,
     setting:      { title: 'Edit Your Profile', template: './__root__/home/profile/profile_editor' },
+  },
+  {
+    route:        '/profile',
+    controller:   home.profile,
+    setting:      { title: 'Profile', template: './__root__/home/profile/info' },
   },
   {
     route:        '/security',

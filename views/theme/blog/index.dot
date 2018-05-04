@@ -17,13 +17,13 @@
             <h2 class="_title">
                 {{? post.state.pinned }} [PINNED] {{?}}
                 {{? post.state.pended }} [DRAFT] {{?}}
-                <a href="/posts/{{= post.canonical }}">{{= post.title }}</a>
+                <a href="/blog/{{= post.canonical }}">{{= post.title }}</a>
             </h2>
             <header class="row">
                 <div class="col-md-9">
                     {{= post.author.nickname }}
-                    ｜<a href="/posts/edit/{{= post._id }}">(edit)</a>
-                    ｜<a href="/posts/class/{{= post.category }}">{{= post.category }}</a>
+                    ｜<a href="/blog/{{= post._id }}/edit">(edit)</a>
+                    ｜<a href="/blog/class/{{= post.category }}">{{= post.category }}</a>
                     ｜Revised: {{= post._revised }}
                     {{? post.state.pended }}｜<i class="fa fa-hourglass-half"></i>{{?}}
                     {{? post.state.hidden }}｜<i class="fa fa-eye-slash"></i>{{?}}
@@ -33,7 +33,7 @@
             </header>
             {{? post.featured }}
             <figure class="_featured py-2">
-                <a href="/posts/{{= post.canonical }}">
+                <a href="/blog/{{= post.canonical }}">
                     <img class="img-fluid" src="{{= post.featured }}" alt="{{= post.title }}" />
                 </a>
             </figure>

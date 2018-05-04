@@ -33,7 +33,7 @@ home.profile_editor = {
 };
 
 home.security = {
-  GET: function admin_security_GET(req, res, next) {
+  GET: function home_security_GET(req, res, next) {
     return next();
   },
   PATCH: [_M_.passwordValidation, async function home_security_PATCH(req, res) {

@@ -3,7 +3,7 @@
 <h1 class="container mb-4">Media Uploader</h1>
 
 <div class="container">
-    <form class="col-lg-9" action="/admin/upload" method="POST" enctype="multipart/form-data">
+    <form class="col-lg-9" action="/site/upload" method="POST" enctype="multipart/form-data">
         <div class="h3">First Media</div>
         <div class="form-row">
             <div class="form-group col-5">

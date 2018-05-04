@@ -16,7 +16,7 @@
 
     <!-- Local stylesheets -->
     <!--<link rel="stylesheet" href="/lib/highlightJS/styles/androidstudio.css" />-->
-    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/src/stylesheets/style.css" />
 </head>
 
 

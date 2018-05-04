@@ -29,24 +29,24 @@ const moc = {
 
 
 // controllers
-const seed = {
+const init = {
   GET: async function seed_GET(req, res) {
     const newUser = await UsersModel.register(new UsersModel(moc.user), moc.user.password);
     await PostsModel.create({ author: newUser, ...moc.post });
     req.flash('info', 'Successfully seeded.');
-    res.redirect('/posts');
+    res.redirect('/blog');
   },
 };
 
 
 // device
-const seedRouter = new Device([
+const initRouter = new Device([
   {
     route:        '/',
-    controller:   seed,
+    controller:   init,
   },
 ]);
 
 
 // exports
-module.exports = seedRouter.run();
+module.exports = initRouter.run();

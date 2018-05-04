@@ -38,7 +38,7 @@ describe('Router - Seed', () => {
       .get('/seed');
     //
     expect(result.statusCode).toBe(302);
-    expect(result.headers.location).toBe('/posts');
+    expect(result.headers.location).toBe('/blog');
     expect(await UsersModel.count({})).toBe(1);
     expect(await PostsModel.count({})).toBe(1);
   });
@@ -145,7 +145,7 @@ describe('Router - Home', () => {
 
   test('PATCH configs of the site', async () => {
     await agent
-      .patch('/admin/configs')
+      .patch('/site/configs')
       .send({ configs: { title: 'Testing Website' } });
     //
     expect((await ConfigsModel.findOne({ active: true })).title).toEqual('Testing Website');
@@ -173,7 +173,7 @@ describe('Router - Home', () => {
 
   test('POST to upload a test file', async () => {
     const result = await agent
-      .post('/admin/upload')
+      .post('/site/upload')
       .attach('media[file]', path.join(__dirname, 'test.png'))
       .field('media[title]', 'test')
       .field('media[description]', 'user profile picture for the test');
@@ -189,16 +189,16 @@ describe('Router - Posts', () => {
   test('POST a new post', async () => {
     const mockNewPost = { post: { title: 'TEST POST', category: 'test', featured: '', content: 'TEST CONTENT' } };
     const result = await agent
-      .post('/posts/edit')
+      .post('/blog/edit')
       .send(mockNewPost);
     //
     expect(result.statusCode).toBe(302);
-    expect(result.headers.location).toBe('/posts');
+    expect(result.headers.location).toBe('/blog');
     expect(await PostsModel.count({ canonical: 'test-post' })).toBe(1);
   });
 
   test('GET access to the editor', async () => {
-    const result = await Promise.all([agent.get('/posts/edit'), agent.get('/posts/edit/test-post')]);
+    const result = await Promise.all([agent.get('/blog/edit'), agent.get('/blog/test-post/edit')]);
     result.push(await agent.get(result[1].headers.location));
     //
     expect(result[0].statusCode).toBe(200);
@@ -208,7 +208,7 @@ describe('Router - Posts', () => {
 
   test('GET the created post', async () => {
     const result = await agent
-      .get('/posts/test-post');
+      .get('/blog/test-post');
     //
     expect(result.statusCode).toBe(200);
   });
@@ -216,17 +216,17 @@ describe('Router - Posts', () => {
   test('GET the created post via alias', async () => {
     const post = await PostsModel.findOne({ canonical: 'test-post' });
     const result = await agent
-      .get(`/posts/${post._id}`);
+      .get(`/blog/${post._id}`);
     //
     expect(result.statusCode).toBe(302);
-    expect(result.headers.location).toBe('/posts/test-post');
+    expect(result.headers.location).toBe('/blog/test-post');
   });
 
   test('PATCH the created post', async () => {
     const mockEditedPost = { post: { title: 'EDITED', category: 'test', featured: '', content: 'CONTENT EDITED' } };
     const post = await PostsModel.findOne({ canonical: 'test-post' });
     const result = await agent
-      .patch(`/posts/edit/${post._id}`)
+      .patch(`/blog/${post._id}/edit`)
       .send(mockEditedPost);
     //
     expect(result.statusCode).toBe(302);
@@ -236,10 +236,10 @@ describe('Router - Posts', () => {
   test('DELETE the created new post', async () => {
     const post = await PostsModel.findOne({ canonical: 'test-post' });
     const result = await agent
-      .delete(`/posts/edit/${post._doc._id}`);
+      .delete(`/blog/${post._doc._id}/edit`);
     //
     expect(result.statusCode).toBe(302);
-    expect(result.headers.location).toBe('/posts/');
+    expect(result.headers.location).toBe('/blog/');
     expect(await PostsModel.count({ canonical: 'test-post' })).not.toBe(1);
   });
 });

@@ -1,4 +1,21 @@
-### 0.10.0-dev / 2018-05-03
+### 0.10.0-dev.1 / 2018-05-03
+> App
+- Prefixed static router under '/src' path.
+- Added a new static router for 'private' documents hosting.
+- Renamed 'seed', 'admin', 'account', 'posts', and 'pages' router as 'init', 'site', 'auth', 'blog', 'page', respectively.
+- Separated 'api-type' and 'html-type' routers.
+- Added two new sub routing paths in 'page' router.
+- Revised `post.show` and `editor.edit` route`{RegExp}` path in 'blog' router.
+- Updated `.gitignore`.
+
+> Test
+- Updated w.r.t. the changes.
+
+> UI
+- Updated w.r.t. the changes.
+
+
+### 0.10.0-dev.0 / 2018-05-03
 > App
 - Initiated v0.10 dev-branch.
   (goal: Revised CMS routing)

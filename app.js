@@ -24,7 +24,15 @@ const securityHeaderAgent = require('./services/security');
 
 
 // ==============================
-//  SERVICES QUEUE
+//  DATABASE
+// ==============================
+/** database **/
+mongoose.connect(process.env.DB);
+if (process.env.NODE_ENV !== 'test') require('./models/').ConfigsModel.initialize();
+
+
+// ==============================
+//  CONNECTION
 // ==============================
 const app = express();
 
@@ -33,15 +41,10 @@ const app = express();
 securityHeaderAgent(app);
 
 
-/** static **/
-app.use(express.static(path.join(__dirname, './public'), {
+/** static public resources **/
+app.use('/src', express.static(path.join(__dirname, './src/public'), {
   setHeaders: (res) => res.set('x-robots-tag', 'none'),
 }));
-
-
-/** database **/
-mongoose.connect(process.env.DB);
-if (process.env.NODE_ENV !== 'test') require('./models/').ConfigsModel.initialize();
 
 
 /** session **/
@@ -62,6 +65,13 @@ app.use(session({
 passportAgent(passport);
 
 
+/** static private resources **/
+// todo: handle the authentication for the resources
+app.use('/src', express.static(path.join(__dirname, './src/private'), {
+  setHeaders: (res) => res.set('x-robots-tag', 'none'),
+}));
+
+
 /** debugger **/
 if (process.env.NODE_ENV === 'dev') app.use(logger('dev'));
 
@@ -76,10 +86,10 @@ app.use('/api', routingService.APIRouter);
 app.engine('dot', viewEngineService.__express);
 app.set('view engine', 'dot');
 app.set('views', path.join(__dirname, './views'));
-app.set('upload', path.join(__dirname, './public/media'));
+app.set('upload', path.join(__dirname, './src/public/media'));
 app.use(flash());
 app.use(methodOverride('_method'));
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, './src/public', 'favicon.ico')));
 app.use('/', routingService.HTMLRouter);
 
 

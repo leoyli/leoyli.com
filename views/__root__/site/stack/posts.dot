@@ -17,7 +17,7 @@
 
         </select>
         <button class="btn btn-sm btn-outline-primary" aria-label="Apply"
-                formaction="/admin/stack/posts?_method=PATCH" >Apply</button>
+                formaction="/site/stack/blog?_method=PATCH" >Apply</button>
         <div class="ml-auto">
             {{? $$VIEW.query.access !== 'bin' }}
             <a class="btn btn-sm btn-outline-success" href="{{= $$VIEW.route }}?access=bin">RECYCLE BIN</a>
@@ -50,7 +50,7 @@
             </th>
             <td>
                 {{? !post.time._recycled }}
-                <a href="/posts/edit/{{= post._id }}">{{= post.title }}</a>
+                <a href="/blog/{{= post._id }}/edit">{{= post.title }}</a>
                 {{??}}
                 {{= post.title }}
                 {{?}}{{? post.state.pended }}<i class="fa fa-hourglass-half"></i>{{?}}                                   <!-- tofix: mongo virtual properties are not functioned here -->

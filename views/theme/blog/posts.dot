@@ -12,8 +12,8 @@
         <header class="row">
             <div class="col-md-9">
                 {{= $$POST.author.nickname }}
-                ｜<a href="/posts/edit/{{= $$POST._id }}">(edit)</a>
-                ｜<a href="/posts/class/{{= $$POST.category }}">{{= $$POST.category }}</a>
+                ｜<a href="/blog/{{= $$POST._id }}/edit">(edit)</a>
+                ｜<a href="/blog/class/{{= $$POST.category }}">{{= $$POST.category }}</a>
                 ｜Revised: {{= $$POST._revised }}
                 {{? $$POST.state.pended }}｜<i class="fa fa-hourglass-half"></i>{{?}}
                 {{? $$POST.state.hidden }}｜<i class="fa fa-eye-slash"></i>{{?}}

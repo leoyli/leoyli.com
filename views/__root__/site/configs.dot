@@ -53,7 +53,7 @@
             </div>
             <div>&nbsp;</div>
             <button class="btn btn-outline-primary text-uppercase float-right mx-1" aria-label="Update"
-                    formaction="/admin/configs?_method=PATCH">Update
+                    formaction="/site/configs?_method=PATCH">Update
             </button>
         </form>
     </div>
