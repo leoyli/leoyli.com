@@ -1,3 +1,4 @@
+
 /* eslint-disable key-spacing */
 const mongoose = require('mongoose');
 
@@ -51,6 +52,7 @@ PostsSchema.pre('findOneAndUpdate', function PostsSchema_findOneAndUpdate() {
   this.findOneAndUpdate({}, { $inc: { _revised: 1 } });
 });
 
+
 // // recycle setter (pre-hook)
 PostsSchema.pre('update', function PostsSchema_update() {
   const _$update = this.getUpdate();
@@ -65,9 +67,11 @@ PostsSchema.virtual('state.pended').get(function () {
   return !this.state.published;
 });
 
+
 PostsSchema.virtual('state.recycled').get(function () {
   return !!this.time._recycled;
 });
+
 
 PostsSchema.virtual('time._expired').get(function () {
   return this.time._recycled ? new Date(this.time._recycled.getTime() + (14 * 24 * 3600 * 1000)) : null;

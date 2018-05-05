@@ -138,7 +138,7 @@ const getAggregationQuery = (collection, params, query, page, num, sort/** , upd
 
 
 // middleware
-const fetchController = (collection, { page, num, sort } = {}) => function fetchController(req, res, next) {
+const aggregateFetch = (collection, { page, num, sort } = {}) => function fetchController(req, res, next) {
   const $Model = modelIndex[`${_U_.string.toCapitalized(collection)}Model`];
   return $Model
     .aggregate(getAggregationQuery(collection, req.params, req.query, page, num || res.locals.$$SITE.num, sort))
@@ -151,13 +151,13 @@ const fetchController = (collection, { page, num, sort } = {}) => function fetch
       req.session.chest = output;
       return next();
     })
-    .catch(next);                                                                                                       // note: this error have to be explicitly handled, the outer `wrapAsync` won't work
+    .catch(next);
 };
 
 
 // exports
 module.exports = {
-  fetchController,
+  aggregateFetch,
   [Symbol.for('UNIT_TEST')]: {
     getAggregationQuery,
     getDateRangeArray,

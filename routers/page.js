@@ -1,6 +1,6 @@
 /* eslint-disable key-spacing */
-const { Device } = require('../../controllers/engines/router');
-const page = require('../../controllers/routers/page');
+const { Device } = require('../controllers/engines/router');
+const page = require('../controllers/routers/page');
 
 
 // device
@@ -8,7 +8,12 @@ const pageRouter = new Device([
   {
     route:        '/search/:search',
     controller:   page.search,
-    setting:      { template: './theme/search', crawler: false, handler: Device.handler.VIEW_POSTS_MULTIPLE },
+    setting: {
+      template:     './theme/search',
+      handler:      Device.renderer.VIEW_POSTS_MULTIPLE,
+      crawler:      false,
+      servingAPI:   true,
+    },
   },
   {
     route:        '/:page/edit',
@@ -17,6 +22,7 @@ const pageRouter = new Device([
   {
     route:        '/:page',
     controller:   page.edit,
+    setting:      { servingAPI: true },
   },
   {
     route:        '/',
@@ -27,4 +33,4 @@ const pageRouter = new Device([
 
 
 // exports
-module.exports = pageRouter.run();
+module.exports = pageRouter;

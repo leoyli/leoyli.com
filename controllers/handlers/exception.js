@@ -41,16 +41,19 @@ terminal.ClientException = function ClientException(err, req, res, next) {
   return res.redirect('back');
 };
 
+
 terminal.MongoError = function MongoError(err, req, res, next) {
   if (err.code === 11000) req.flash('error', 'This username is not available.');
   return res.redirect('back');
 };
+
 
 terminal.HttpException = function HttpException(err, req, res, next) {
   return _M_.noCrawlerHeader(req, res, () => {
     return res.status(err.code).render('./theme/error', { err });
   });
 };
+
 
 terminal.TemplateException = function TemplateException(err, req, res, next) {
   return _M_.noCrawlerHeader(req, res, () => {
@@ -62,7 +65,8 @@ terminal.TemplateException = function TemplateException(err, req, res, next) {
 
 
 // gateway
-const errorHandler = function errorHandler(err, req, res, next) {
+const exceptionHandler = function exceptionHandler(err, req, res, next) {
+  console.error(9);
   if (['dev', 'test'].includes(process.env.NODE_ENV)) console.log(err.stack);
   if (_U_.object.hasOwnKey(_U_.error, err.name) && !!terminal[err.name]) return terminal[err.name](err, req, res, next);
   return res.render('./theme/error', { err });
@@ -70,4 +74,4 @@ const errorHandler = function errorHandler(err, req, res, next) {
 
 
 // exports
-module.exports = errorHandler;
+module.exports = exceptionHandler;

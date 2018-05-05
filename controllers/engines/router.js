@@ -4,35 +4,18 @@ const { Router } = require('express');
 // modules
 const { _M_ } = require('../modules/');
 const { _U_ } = require('../utilities/');
-const { templateHandler, handlerSymbols } = require('../views/handler');
+const { exportHTML, exportJSON, rendererSymbols } = require('../handlers/exporter');
+const { BrowserReceptor, APIReceptor } = require('../handlers/receptor');
 
 
 // helpers
-/**
- * wrap asyncfunctions with an error catcher
- * @param {array|function} target           - fn may be wrapped
- * @return {array|function}                 - task is triggered only when keyword 'async' is found
- */
-const wrapAsync = (target) => {
-  const unnamedWrapper = (fn) => (...arg) => fn.apply(this, arg).catch(arg.next);
-  const namedWrapper = (fn) => Object.defineProperty(unnamedWrapper(fn), 'name', { value: `WrappedAsync ${fn.name}` });
-  const evaluator = (fn) => (_U_.object.checkToStringTag(fn, 'AsyncFunction') ? namedWrapper(fn) : fn);
-  const type = _U_.object.checkToStringTag(target);
-  if (type === 'Array') return target.map(fn => evaluator(fn));
-  if (type.toLowerCase().includes('function')) return evaluator(target);
-  throw new TypeError(`Argument is neither an Array nor an AsyncFunction but a ${type}.`);
-};
-
-
 /**
  * stack a queue from setting options
  * @param {object} options                  - setting options
  * @return {array}                          - ordering of the result is important
  */
-const getPreprocessor = (options) => {
+const getProcessingPipes = (options) => {
   const queue = [];
-  if (options.servingAPI      !== true)     queue.push(_M_.responseHTMLRequest);
-  if (options.servingAPI      === true)     queue.push(_M_.responseAPIRequest);
   if (options.sensitive       !== true)     queue.push(_M_.caseInsensitiveProxy);
   if (options.authorization   === true)     queue.push(..._M_.isAuthorized);
   if (options.authentication  === true)     queue.push(..._M_.isSignedIn);
@@ -44,16 +27,19 @@ const getPreprocessor = (options) => {
 
 /**
  * compose an ordered, unique middleware firing chain
- * @param {array|function} protagonist      - the main controlling logic
+ * @param {string} mode                     - routing mode
+ * @param {array|function} main             - the main controlling logic
  * @param {object} hooker                   - pre/post hooked middleware on the device
  * @param {object} options                  - router settings
  * @return {array}
  */
-const getMiddlewareChain = (protagonist, hooker, options) => {
-  const preprocessor = getPreprocessor(options);
-  const renderer = !options.servingAPI ? templateHandler(options) : [];
-  const decorator = !options.servingAPI && options.title ? _M_.modifyHTMLTitleTag(options.title) : [];
-  return wrapAsync([...new Set([].concat(preprocessor, hooker.pre, decorator, protagonist, hooker.post, renderer))]);
+const getMiddlewareChain = (mode, main, hooker, options) => {
+  const pipeline = getProcessingPipes(options);
+  const receptor = mode !== 'api' ? BrowserReceptor : APIReceptor;
+  const exporter = mode !== 'api' ? exportHTML(options) : exportJSON;
+  const titleModifier = mode !== 'api' && options.title ? _M_.modifyHTMLTitleTag(options.title) : [];
+  const chain = [receptor, pipeline, hooker.pre, titleModifier, main, hooker.post, exporter];
+  return _U_.express.wrapAsync([...new Set([].concat(...chain))]);
 };
 
 
@@ -66,20 +52,26 @@ const getMiddlewareChain = (protagonist, hooker, options) => {
  */
 class Device {
   constructor(rules = [], option) {
-    this.router = new Router(option);
+    this._base = new Router(option);
+    this._hook = { pre: [], post: [] };
     this.rules = _U_.object.freezeDeep(rules);
     this.defaultSetting = {};
-    this.queue = { pre: [], post: [] };
   }
 
-  static get handler() {
-    return handlerSymbols;
+  static load(mode, cluster) {
+    const router = new Router('/');
+    cluster.forEach(([path, device]) => router.use(path, device.exec(mode)));
+    return router;
+  }
+
+  static get renderer() {
+    return rendererSymbols;
   }
 
   get setting() {
     return new Proxy(this.defaultSetting, {
       set: (defaultSetting, option, value) => {
-        if (option === 'title') this.queue.pre.push(_M_.modifyHTMLTitleTag(value));
+        if (option === 'title') this._hook.pre.push(_M_.modifyHTMLTitleTag(value));
         else defaultSetting[option] = value;
         return true;
       },
@@ -93,18 +85,21 @@ class Device {
   }
 
   hook(position, fn) {
-    this.queue[position].push(...(_U_.object.checkToStringTag(fn, 'Array') ? fn : [fn]));
+    this._hook[position].push(...(_U_.object.checkToStringTag(fn, 'Array') ? fn : [fn]));
     return this;
   }
 
   use(...arg) {
-    this.router.use(...arg);
+    this._base.use(...arg);
     return this;
   }
 
-  run() {
+  exec(mode) {
+    const router = new Router('/').use(this._base);
+
     // router registrations
-    this.rules.forEach(({ route, alias, controller, setting }) => {
+    const matrix = this.rules.filter(({ setting = {} }) => (mode.toLowerCase() === 'api' ? setting.servingAPI : true));
+    matrix.forEach(({ route, alias, controller, setting }) => {
       const controlKeys = Object.keys(controller).sort();
       const options = { ...this.defaultSetting, ...setting };
 
@@ -113,10 +108,11 @@ class Device {
         if (key === 'alias' && !alias) throw new ReferenceError('Parameter "alias" have to be provided.');
         const path = key === 'alias' ? alias : route;
         const method = key === 'alias' ? 'get' : key.toLowerCase();
-        this.router[method](path, getMiddlewareChain(controller[key], this.queue, options));
+        router[method](path, getMiddlewareChain(mode.toLowerCase(), controller[key], this._hook, options));
       });
     });
-    return this.router;
+
+    return router;
   }
 }
 
@@ -126,8 +122,7 @@ module.exports = {
   Device,
   [Symbol.for('UNIT_TEST')]: {
     Device,
-    wrapAsync,
-    getPreprocessor,
+    getProcessingPipes,
     getMiddlewareChain,
   },
 };

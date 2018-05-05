@@ -6,11 +6,6 @@ const { ConfigsModel, MediaModel, PostsModel } = require('../../models/');
 // controllers
 const site = {};
 
-site.main = {
-  GET: function site_main_GET(req, res, next) {
-    return next();
-  },
-};
 
 site.configs = {
   GET: function site_configs_GET(req, res, next) {
@@ -23,7 +18,8 @@ site.configs = {
   },
 };
 
-site.upload = {                                                                                                        // todo: to be integrated in profile and media manager
+
+site.upload = {                                                                                                         // todo: to be integrated in profile and media manager
   GET: function site_upload_GET(req, res, next) {
     return next();
   },
@@ -38,12 +34,15 @@ site.upload = {                                                                 
   }],
 };
 
+
 site.stack = {
-  GET: function site_stack_GET(req, res, next) {
+  GET: async function site_stack_GET(req, res, next) {
     const collection = req.params.stackType.toLowerCase();
     if (!['posts', 'media'].includes(collection)) throw new _U_.error.HttpException(404);
-    _M_.modifyHTMLTitleTag(collection)(req, res);                                                                       // todo: capitalize
-    return _M_.aggregateFetch(collection, { num: 10 })(req, res, next);
+    return _U_.express.insertMiddleware([
+      _M_.modifyHTMLTitleTag(collection),
+      _M_.aggregateFetch(collection, { num: 10 }),
+    ])(req, res, next);
   },
   PATCH: async function site_stack_PATCH(req, res) {
     const $update = { $set: {} };
@@ -51,6 +50,13 @@ site.stack = {
     else $update.$set = { [`state.${req.body.action}`]: true };
     if (req.body.action) await PostsModel.update({ _id: { $in: req.body.target } }, $update, { multi: true });
     return res.redirect('back');
+  },
+};
+
+
+site.root = {
+  GET: function site_main_GET(req, res, next) {
+    return next();
   },
 };
 

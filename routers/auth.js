@@ -2,7 +2,7 @@
 const { usePassport } = require('../controllers/modules/')._M_;
 const { ClientException } = require('../controllers/utilities/')._U_.error;
 const { Device } = require('../controllers/engines/router');
-const auth = require('../controllers/routers/account');
+const auth = require('../controllers/routers/auth');
 
 
 // device
@@ -32,4 +32,4 @@ authRouter.hook('post', (err, req, res, next) => {
 
 
 // exports
-module.exports = authRouter.run();
+module.exports = authRouter;

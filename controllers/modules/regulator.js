@@ -38,6 +38,8 @@ const caseInsensitiveProxy = function caseInsensitiveProxy(req, res, next) {
  * @param {(object|string)} options
  */
 const modifyHTMLTitleTag = (options) => function modifyHTMLTitleTag(req, res, next) {
+  if (res.locals.$$MODE === 'api') return next();
+
   const sequence = [];
   if (options.root !== false) sequence.push(res.locals.$$VIEW.title);
   if (options.append === true) sequence.push(options.name || options);

@@ -1,3 +1,41 @@
+### 0.10.0-dev.1 / 2018-05-05
+> App
+- Upgraded 'router' engine:
+  - renamed `Device.run` as `Device.exec`;
+  - renamed `getPreprocessor` as `getProcessingPipes`;
+  - added `static load` for clustering multiple devices;
+  - integrated 'api' routing by introducing routing 'mode';
+  - removed 'api' controller and router;
+  - revised `getMiddlewareChain` for processing different modes;
+  - removed `servingAPI` option from `getProcessingPipes`;
+  - extracted `wrapAsync`: @'engine/router' -> @'utilities/express'.
+- Added `insertMiddleware` 'express' utilities.
+- @('controllers/handlers/'):
+  - renamed `errorHandler` as `exceptionHandler` (@'exception');
+  - renamed `templateHandler` as `exportHTML` (@'exporter');
+  - added `exportJSON` in 'exporters' handler (@'exporter');
+  - renamed `responseInitializer` as `BrowserReceptor` (@'receptor');
+  - added `APIReceptor` (@'receptors');
+  - added `res.locals.$$MODE` local parameter (@'receptor').
+- @('controllers/modules/'):
+  - renamed `fetchController` as `aggregateFetch` (@'fetch');
+  - renamed `uploadController` as `parseMultipart` (@'upload');
+  - removed unnecessary `require()` (@'adaptor');
+  - moved in `postNormalizer` from 'responder' (@'adaptor');
+  - added mode checking in `modifyHTMLTitleTag` middleware (@'regulator').
+- @('controllers/routers/'):
+  - ensured the consistence of name referencing among router controllers;
+  - moved sub-routers to meet RESTful API standard (in progress);
+  - removed `home.main` router;
+  - renamed `site.main as ``site.root`.
+- @('routers/')
+  - used `setting.servingAPI` as a flag for the 'API' mode;
+  - simplified `routingService` in @'routers/index'.
+- @('app')
+  - Introduced `errorHandlingAgent` as a service;
+  - Integrated with `routingService` and `errorHandlingAgent`.
+
+
 ### 0.10.0-dev.1 / 2018-05-03
 > App
 - Prefixed static router under '/src' path.

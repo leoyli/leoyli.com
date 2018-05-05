@@ -1,15 +1,10 @@
 /* eslint-disable key-spacing */
-const { Device } = require('../../controllers/engines/router');
-const site = require('../../controllers/routers/site');
+const { Device } = require('../controllers/engines/router');
+const site = require('../controllers/routers/site');
 
 
 // device
 const siteRouter = new Device([
-  {
-    route:        '/',
-    controller:   site.main,
-    setting:      { title: 'Dashboard', template: './__root__/' },
-  },
   {
     route:        '/configs',
     controller:   site.configs,
@@ -23,7 +18,17 @@ const siteRouter = new Device([
   {
     route:        '/stack/:stackType',
     controller:   site.stack,
-    setting:      { title: 'Stack', template: './__root__/site/stack/:stackType', handler: Device.handler.VIEW_STACK },
+    setting: {
+      title:        'Stack',
+      template:     './__root__/site/stack/:stackType',
+      renderer:     Device.renderer.VIEW_STACK,
+      servingAPI:   true,
+    },
+  },
+  {
+    route:        '/',
+    controller:   site.root,
+    setting:      { title: 'Dashboard', template: './__root__/' },
   },
 ]);
 
@@ -33,4 +38,4 @@ siteRouter.setting = { title: 'Control', authentication: true, cache: false };
 
 
 // exports
-module.exports = siteRouter.run();
+module.exports = siteRouter;

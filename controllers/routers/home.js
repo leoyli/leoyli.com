@@ -5,11 +5,13 @@ const { UsersModel } = require('../../models/');
 // controllers
 const home = {};
 
-home.main = {
-  GET: function home_main_GET(req, res, next) {
+home.profile_editor = {
+  GET: function home_profile_editor_GET(req, res, next) {
+    res.locals.$$VIEW.user = req.user._doc;
     return next();
   },
 };
+
 
 home.profile = {
   GET: function home_profile_GET(req, res, next) {
@@ -25,12 +27,6 @@ home.profile = {
   },
 };
 
-home.profile_editor = {
-  GET: function home_profile_editor_GET(req, res, next) {
-    res.locals.$$VIEW.user = req.user._doc;
-    return next();
-  },
-};
 
 home.security = {
   GET: function home_security_GET(req, res, next) {

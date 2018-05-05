@@ -1,6 +1,3 @@
-// ==============================
-//  DEPENDENCIES
-// ==============================
 const methodOverride = require('method-override');
 const session = require('express-session');
 const favicon = require('serve-favicon');
@@ -14,27 +11,21 @@ const passport = require('passport');
 const flash = require('connect-flash');
 
 
-// ==============================
-//  SERVICES
-// ==============================
+// MODULE
+const { _M_ } = require('./controllers/modules/');
 const routingService = require('./routers/');
 const viewEngineService = require('./controllers/engines/view');
 const passportAgent = require('./services/passport');
 const securityHeaderAgent = require('./services/security');
+const errorHandlingAgent = require('./services/error');
 
 
-// ==============================
-//  DATABASE
-// ==============================
+// CONNECTION
+const app = express();
+
 /** database **/
 mongoose.connect(process.env.DB);
 if (process.env.NODE_ENV !== 'test') require('./models/').ConfigsModel.initialize();
-
-
-// ==============================
-//  CONNECTION
-// ==============================
-const app = express();
 
 
 /** security **/
@@ -66,8 +57,7 @@ passportAgent(passport);
 
 
 /** static private resources **/
-// todo: handle the authentication for the resources
-app.use('/src', express.static(path.join(__dirname, './src/private'), {
+app.use('/src', _M_.isSignedIn, express.static(path.join(__dirname, './src/private'), {
   setHeaders: (res) => res.set('x-robots-tag', 'none'),
 }));
 
@@ -79,7 +69,7 @@ if (process.env.NODE_ENV === 'dev') app.use(logger('dev'));
 /** API **/
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ type: 'application/json' }));
-app.use('/api', routingService.APIRouter);
+app.use('/api', routingService('api'));
 
 
 /** HTML **/
@@ -90,14 +80,11 @@ app.set('upload', path.join(__dirname, './src/public/media'));
 app.use(flash());
 app.use(methodOverride('_method'));
 app.use(favicon(path.join(__dirname, './src/public', 'favicon.ico')));
-app.use('/', routingService.HTMLRouter);
+app.use('/', routingService('html'));
 
 
-/** Last-ditch **/
-app.use((err, req, res, next) => {
-  console.log(err);
-  return res.sendStatus(500);
-});
+/** error **/
+errorHandlingAgent(app);
 
 
 // exports

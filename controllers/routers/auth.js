@@ -4,9 +4,9 @@ const { ClientException } = require('../utilities/')._U_.error;
 
 
 // controllers
-const account = {};
+const auth = {};
 
-account.signup = {
+auth.signup = {
   GET: function account_signup_GET(req, res, next) {
     if (req.isAuthenticated() && req.session.user) return res.redirect('/home');
     return next();
@@ -21,7 +21,8 @@ account.signup = {
   }],
 };
 
-account.signin = {
+
+auth.signin = {
   GET: function account_signin_GET(req, res, next) {
     if (res.locals.$$VIEW.flash.action[0] === 'retry') req.flash('action', 'retry');
     if (req.isAuthenticated() && req.session.user) return res.redirect('/home');
@@ -44,7 +45,8 @@ account.signin = {
   },
 };
 
-account.signout = {
+
+auth.signout = {
   GET: function account_signout_GET(req, res) {
     if (req.isAuthenticated() && req.session.user) {
       req.logout();
@@ -57,4 +59,4 @@ account.signout = {
 
 
 // exports
-module.exports = account;
+module.exports = auth;

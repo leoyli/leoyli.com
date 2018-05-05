@@ -19,7 +19,7 @@ const moc = {
       birthday  : Date.now(),
     },
   },
-  post : {
+  post: {
     title       : 'New arrived: Custom E-liter 4K!',
     featured    : 'http://www.perfectly-nintendo.com/wp-content/gallery/splatoon-2-13-10-2017/1.jpg',
     content     : 'New arrived: <strong>Custom E-liter 4K!</strong><script>alert("WARNING");</script>',
@@ -49,4 +49,4 @@ const initRouter = new Device([
 
 
 // exports
-module.exports = initRouter.run();
+module.exports = initRouter;
