@@ -66,7 +66,6 @@ terminal.TemplateException = function TemplateException(err, req, res, next) {
 
 // gateway
 const exceptionHandler = function exceptionHandler(err, req, res, next) {
-  console.error(9);
   if (['dev', 'test'].includes(process.env.NODE_ENV)) console.log(err.stack);
   if (_U_.object.hasOwnKey(_U_.error, err.name) && !!terminal[err.name]) return terminal[err.name](err, req, res, next);
   return res.render('./theme/error', { err });

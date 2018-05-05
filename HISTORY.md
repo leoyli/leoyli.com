@@ -1,4 +1,10 @@
-### 0.10.0-dev.1 / 2018-05-05
+### 0.10.0-dev.2.1 / 2018-05-05
+> App
+- Fixed argument bug in `catch` in `wrapAsync`.
+- Used `switch` expression for better readability in `wrapAsync`.
+
+
+### 0.10.0-dev.2 / 2018-05-05
 > App
 - Upgraded 'router' engine:
   - renamed `Device.run` as `Device.exec`;
