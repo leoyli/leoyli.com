@@ -35,10 +35,9 @@ const getProcessingPipes = (options) => {
  */
 const getMiddlewareChain = (mode, main, hooker, options) => {
   const pipeline = getProcessingPipes(options);
-  const receptor = mode !== 'api' ? BrowserReceptor : APIReceptor;
   const exporter = mode !== 'api' ? exportHTML(options) : exportJSON;
   const titleModifier = mode !== 'api' && options.title ? _M_.modifyHTMLTitleTag(options.title) : [];
-  const chain = [receptor, pipeline, hooker.pre, titleModifier, main, hooker.post, exporter];
+  const chain = [pipeline, hooker.pre, titleModifier, main, hooker.post, exporter];
   return _U_.express.wrapAsync([...new Set([].concat(...chain))]);
 };
 
@@ -60,6 +59,7 @@ class Device {
 
   static load(mode, cluster) {
     const router = new Router('/');
+    router.use(mode !== 'api' ? BrowserReceptor : APIReceptor);
     cluster.forEach(([path, device]) => router.use(path, device.exec(mode)));
     return router;
   }

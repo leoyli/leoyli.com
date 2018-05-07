@@ -1,3 +1,8 @@
+### 0.10.0-dev.2.2 / 2018-05-07
+> App
+- Fixed the unresolved variable bugs in 'router' engine.
+
+
 ### 0.10.0-dev.2.1 / 2018-05-05
 > App
 - Fixed argument bug in `catch` in `wrapAsync`.
@@ -19,7 +24,7 @@
 - @('controllers/handlers/'):
   - renamed `errorHandler` as `exceptionHandler` (@'exception');
   - renamed `templateHandler` as `exportHTML` (@'exporter');
-  - added `exportJSON` in 'exporters' handler (@'exporter');
+  - added `exportJSON` (@'exporter');
   - renamed `responseInitializer` as `BrowserReceptor` (@'receptor');
   - added `APIReceptor` (@'receptors');
   - added `res.locals.$$MODE` local parameter (@'receptor').
