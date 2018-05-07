@@ -1,4 +1,4 @@
-const { checkToStringTag } = require('./object');
+const { checkToStringTag } = require('./string');
 const errorCodeProxyAgent = require('./error-code/');
 
 

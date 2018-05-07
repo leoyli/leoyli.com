@@ -30,7 +30,7 @@ const isSignedIn = [...usePassport, function isSignedIn(req, res, next) {
 const isAuthorized = [...isSignedIn, async function isAuthorized(req, res, next) {
   const [field, val] = req.params.canonical !== undefined
     ? ['canonical', req.params.canonical]
-    : ['_id', _U_.string.readMongoId(req.url)];
+    : ['_id', _U_.string.parseMongoObjectId(req.url)];
   if (await PostsModel.count({ [field]: val, 'author._id': req.user._id }) !== 1) {                                     // tofix: find the post first then decide to give or not
     throw new _U_.error.ClientException(20001);
   }
@@ -67,7 +67,7 @@ const postNormalizer = async (req, res, next) => {
   // normalize                                                                                                          // todo: only normalize for POST, PATCH (different logic)
   const normalizedPost = {
     ...post,
-    featured: _U_.string.inspectFileURL(post.featured, res.locals.$$SITE.sets.imageTypes, { raw: false }),
+    // featured: _U_.string.inspectFileURL(post.featured, res.locals.$$SITE.sets.imageTypes),                             // tofix: `inspectFileURL` have been deprecated
     category: _U_.string.toKebabCase(post.category) || null,
     content: _U_.string.toEscapedChars(post.content),
     title: _U_.string.toEscapedChars(post.title),

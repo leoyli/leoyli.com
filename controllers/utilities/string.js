@@ -1,13 +1,30 @@
+const { ObjectId } = require('mongodb');
+
+
+/**
+ * check the object type via `Object.prototype.toString`
+ * @param {object} target                   - object to be checked
+ * @param {string} [str]                    - name to be matched (case insensitive)
+ * @return {(boolean|string)}               - if no name given, the brand name of the object would be returned
+ */
+const checkToStringTag = (target, str) => {
+  const name = (obj) => Object.prototype.toString.call(obj).slice(8, -1);
+  if (str && name(str).toLowerCase() !== 'string') throw new TypeError('Second argument is not a string.');
+  if (str) return name(target).toLowerCase() === str.toLowerCase();
+  return name(target);
+};
+
+
 /**
  * convert string to kebabCase
  * @param {string} str                      - any arbitrary string
  * @return {string}                         - kebabCased string
  */
 const toKebabCase = (str) => {
-  return str === undefined ? null : str
+  return !checkToStringTag(str, 'String') || !str ? null : str
     .replace(/([a-z])([A-Z])/g, '$1-$2')                                                                                // handle CamelCase
-    .replace(/(-([A-Z])([A-Z]))/g, '-$2-$3')                                                                            // handle signal words in CamelCase
     .replace(/[`'":;,.?!@#$%^&*_=~(){}<>/\\\[\]\-\+\|\s]+/g, '-')                                                       // normalize special characters
+    .replace(/(-[A-Z])([A-Z][a-z])/g, '$1-$2')                                                                         // handle signal words in CamelCase
     .replace(/^-+|-+$/g, '')                                                                                            // cleanup endpoints
     .toLowerCase();
 };
@@ -19,8 +36,8 @@ const toKebabCase = (str) => {
  * @return {string}                         - capitalized string
  */
 const toCapitalized = (str) => {
-  const stringArray = str.split(' ');
-  return stringArray.map(subStr => subStr.charAt(0).toUpperCase() + subStr.slice(1)).join(' ');
+  return !checkToStringTag(str, 'String') || !str  ? null : str.split(' ')
+    .map(subStr => subStr.charAt(0).toUpperCase() + subStr.slice(1)).join(' ');
 };
 
 
@@ -44,60 +61,67 @@ const toEscapedChars = (str) => {
     '[': '&#91;',
     '{': '&#123;',
   };
-  return str === undefined ? null : str.replace(/[='"`.,:;<([{]/g, char => charMap[char]);
+  return !checkToStringTag(str, 'String') || !str  ? null : str.replace(/[='"`.,:;<([{]/g, char => charMap[char]);
+};
+
+
+/**
+ * parse a string to object path array
+ * @param {string} str                      - any arbitrary string
+ * @return {array}                          - an array contains elements in ordered by nest keys (path)
+ */
+const parseObjPath = (str) => {
+  return !checkToStringTag(str, 'String') || !str  ? null : str.match(/[a-zA-Z0-9$_]+/g);
 };
 
 
 /**
  * parse Mongo ObjectId (hexadecimal)                                                                                   // todo: option to output ObjectId obj.
  * @param {string} str                      - any arbitrary string
- * @return {string}                         - hexadecimal{string}
+ * @return {object}                         - hexadecimal Mongo `ObjectId` object
  */
-const readMongoId = (str) => {
-  const output = str === undefined ? null : /(?:\=|\/|^)([a-f\d]{24})(?:\?|\/|$)/i.exec(str);
-  if (!output) throw new TypeError(`No Mongo ObjectId in ${str} can be read.`);
-  return output[1].toLowerCase();
+const parseMongoObjectId = (str) => {
+  const val = !checkToStringTag(str, 'String') || !str ? null : /(?:\=|\/|^)([a-f\d]{24})(?:\?|\/|$)/i.exec(str);
+  return val ? ObjectId(val[1].toLowerCase()) : null;
 };
 
 
 /**
- * transpile string to object path array
+ * parse a given file path
  * @param {string} str                      - any arbitrary string
- * @return {array}                          - an array contains elements in ordered by nest keys (path)
+ * @return {object}                         - parsed result
  */
-const readObjPath = (str) => {
-  return str === undefined ? null : str.match(/[a-zA-Z0-9$_]+/g);
-};
+const parseFilePath = (str) => {
+  if (!checkToStringTag(str, 'String') || !str) return null;
+  const protocol = str.split('://').reverse()[1] || null;
+  const hash = str.split('#')[1] || null;
+  const query = str.replace(`#${hash}`, '').split('?')[1] || null;
 
+  // check and handle the rest of path
+  const location = str.replace(/^\w*:?\/\//, '').replace(`#${hash}`, '').replace(`?${query}`, '');
+  if (location.includes('//')) return null;
 
-/**
- * inspect the given file URL
- * @param {string} str                      - any arbitrary string
- * @param {array|*} extName                 - accepted file extension names
- * @param {boolean} [raw=true]              - give the raw result(true) or string(false)
- * @param {string} [use]                    - set the use for the direct output
- * @return {string|array|null}              - direct outputted string or raw result or null
- */
-const inspectFileURL = (str, extName, { raw = true, use } = {}) => {                                                    // tofix: refactor may needed
-  const protocolExp = '(?:(https?):\/\/)';
-  const fileNameExp = `([0-9a-z\\s\\._%-]+\.(?:${extName.join('|')})`;
-  const domainExp = '((?:[0-9a-z%-]+\\.(?!\\.))+[a-z]+)';
-  const pathExp = '(\\/(?:[0-9a-z\\/\\s\\._%-]+\\/)?)';
-  const URLExp = `^${protocolExp}?${domainExp}${pathExp}${fileNameExp}$)`;
-  const result = new RegExp(URLExp, 'i').exec(str);
-  const filtrate = Array.isArray(result)
-    ? `${use || result[1] || 'https'}://${result.slice(2, 5).join('')}`
-    : null;
-  return raw === false ? filtrate : result;
+  const _split = location.split('/');
+  const hostname = _split.find(frag => frag.includes('.')) || null;
+  const filename = (_split[_split.length - 1] !== hostname && _split[_split.length - 1]) || null;
+  const extension = (filename && filename.split('.')[1]) || null;
+  const path = `/${_split.slice(
+    _split.indexOf(hostname) + 1,
+    _split.indexOf(filename),
+  ).join('/')}/`.replace('//', '') || null;
+
+  // return parsed result
+  return { input: str, protocol, hostname, path, filename, extension, query, hash };
 };
 
 
 // exports
 module.exports = {
+  checkToStringTag,
   toKebabCase,
   toCapitalized,
   toEscapedChars,
-  readMongoId,
-  readObjPath,
-  inspectFileURL,
+  parseMongoObjectId,
+  parseObjPath,
+  parseFilePath,
 };

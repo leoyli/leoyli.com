@@ -63,7 +63,7 @@ const transpileRaw = (parser, configs) => {
       { type: path.extname(parser.fileName), path: parser.filePath, name: path.basename(parser.filePath) },
     );
   }
-  return _U_.object.assignDeep({}, _U_.string.readObjPath(parser.fieldName)[0], { isSkipped: true });
+  return _U_.object.assignDeep({}, _U_.string.parseObjPath(parser.fieldName)[0], { isSkipped: true });
 };
 
 

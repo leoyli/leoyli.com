@@ -7,7 +7,7 @@
     "db-shell": "/Volumes/Data/_db/bin/mongo",
     "db-sev": "/Volumes/Data/_db/bin/mongod",
     "start": "node ./bin/www",
-    "test": "jest"
+    "test": "jest --config __tests__/__configs__/jest.config.js --watch"
   },
   "dependencies": {
     "body-parser": "^1.18.2",

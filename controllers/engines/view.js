@@ -180,7 +180,7 @@ class Template {
  */
 const render = (filePath, locals, next) => {
   return getTemplate(filePath, getBlueprint(locals, filePath))
-    .then(receivedTemplate => next(null, receivedTemplate.render()))
+    .then(template => next(null, template.render()))
     .catch(err => next(new TemplateException(err)));
 };
 

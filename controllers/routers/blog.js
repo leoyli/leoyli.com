@@ -25,7 +25,7 @@ editor.post = {
     return res.redirect(`/blog/${req.session.chest.post._id}/edit`);
   },
   GET: async function blog_editor_edit_GET(req, res, next) {
-    if (!req.session.chest) req.session.chest = { post: await PostsModel.findById(_U_.string.readMongoId(req.url)) };
+    if (!req.session.chest) req.session.chest = { post: await PostsModel.findById(_U_.string.parseMongoObjectId(req.url)) };
     return next();
   },
 
@@ -50,12 +50,12 @@ blog.post = {
     return next();
   },
   PATCH: async function blog_post_PATCH(req, res) {
-    await PostsModel.update({ _id: _U_.string.readMongoId(req.url) }, { $set: req.body.post }, { new: true });
+    await PostsModel.update({ _id: _U_.string.parseMongoObjectId(req.url) }, { $set: req.body.post }, { new: true });
     req.flash('info', 'post have been successfully updated!');
-    return res.redirect(`/blog/${_U_.string.readMongoId(req.url)}`);
+    return res.redirect(`/blog/${_U_.string.parseMongoObjectId(req.url)}`);
   },
   DELETE: async function blog_post_DELETE(req, res) {
-    await PostsModel.remove({ _id: _U_.string.readMongoId(req.url) });
+    await PostsModel.remove({ _id: _U_.string.parseMongoObjectId(req.url) });
     req.flash('info', 'post have been successfully deleted!');
     return res.redirect('/blog/');
   },

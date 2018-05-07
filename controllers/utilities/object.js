@@ -1,23 +1,9 @@
 /* eslint-disable no-restricted-syntax */
-const { readObjPath } = require('./string');
+const { checkToStringTag, parseObjPath } = require('./string');
 
 
 /**
- * check the native brand(type) of objects                                                                              // note: `checkToStringTag` can be generalized
- * @param {object} target                   - object to be checked
- * @param {string} [str]                    - name to be matched (case insensitive)
- * @return {(boolean|string)}               - if no name given, the brand name of the object would be returned
- */
-const checkToStringTag = (target, str) => {
-  const nativeBrandName = (obj) => Object.prototype.toString.call(obj).slice(8, -1);
-  if (str && nativeBrandName(str).toLowerCase() !== 'string') throw new TypeError('Second argument is not a string.');
-  if (str) return nativeBrandName(target).toLowerCase() === str.toLowerCase();
-  return nativeBrandName(target);
-};
-
-
-/**
- * check if object has wwn a property
+ * check if object has the property
  * @param {object} obj                      - target{object} to be evaluate
  * @param {string} prop                     - name of the property
  * @return {boolean}                        - evaluation result
@@ -99,7 +85,7 @@ const freezeDeep = (target, { mutate = false } = {}) => {
  */
 const assignDeep = (target, path, value, { mutate = false } = {}) => {
   const worker = mutate === true ? target : cloneDeep(target);
-  const pathStack = checkToStringTag(path, 'String') ? readObjPath(path) : path;
+  const pathStack = checkToStringTag(path, 'String') ? parseObjPath(path) : path;
 
   // tail-call recursion (single-file)
   const assignRecursion = (obj, keys) => {
@@ -133,7 +119,6 @@ const proxyfyInCaseInsensitiveKey = (obj) => {
 
 // exports
 module.exports = {
-  checkToStringTag,
   hasOwnKey,
   cloneDeep,
   mergeDeep,

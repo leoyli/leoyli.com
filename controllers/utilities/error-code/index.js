@@ -1,5 +1,5 @@
 /* eslint-disable no-shadow, no-template-curly-in-string */
-const { checkToStringTag } = require('../object');
+const { checkToStringTag } = require('../string');
 
 
 class ErrorCodeDictionary {

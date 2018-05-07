@@ -1,3 +1,18 @@
+### 0.10.0-dev.3 / 2018-05-07
+> App
+- Refactored 'utilities':
+  - moved `checkToStringTag` @'object' -> @'string';
+  - check as if receiving (1) an empty string; or (2) an invalid `str` @'string';
+  - renamed `readObjPath`, `readMongoId`  as `parseObjPath`, `parseMongoObjectId`, respectively @'string';
+  - `parseMongoObjectId` now returns native mongo `ObjectId` object @'string';
+  - replaced `inspectFileURL` by `parseFilePath` @'string'.
+  - updated depended files.
+
+> Test
+- Added '__configs__/jest.config.js'.
+- Updated 'object.test.js' and 'string.test.js'.
+
+
 ### 0.10.0-dev.2.2 / 2018-05-07
 > App
 - Fixed the unresolved variable bugs in 'router' engine.
