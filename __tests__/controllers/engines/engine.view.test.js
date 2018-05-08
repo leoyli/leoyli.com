@@ -1,6 +1,6 @@
 const {
   getCompilationConfigs, getBlueprint, getRuntimeMethods, getTemplate, buildTemplate, getFileString, render, Template,
-} = require('../../../controllers/engines/view')[Symbol.for('UNIT_TEST')];
+} = require(`${__ROOT__}/controllers/engines/view`)[Symbol.for('__TEST__')];
 
 
 // mock

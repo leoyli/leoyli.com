@@ -197,14 +197,17 @@ const render = (filePath, locals, cb) => {
 module.exports = {
   __express: render,
   render,
-  [Symbol.for('UNIT_TEST')]: {
-    Template,
-    render,
+};
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
     getCompilationConfigs,
-    getBlueprint,
+    getFileString,
     getRuntimeMethods,
+    getBlueprint,
     getTemplate,
     buildTemplate,
-    getFileString,
+    Template,
+    render,
   },
-};
+});

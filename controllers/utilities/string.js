@@ -125,3 +125,9 @@ module.exports = {
   parseObjPath,
   parseFilePath,
 };
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});

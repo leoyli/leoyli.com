@@ -64,7 +64,7 @@ blog.post = {
 
 blog.list = {
   GET: function blog_list_GET(req, res, next) {
-    return _U_.express.insertMiddleware(_M_.aggregateFetch('posts'))(req, res, next);
+    return _U_.express.wrapMiddleware(_M_.aggregateFetch('posts'))(req, res, next);
   },
 };
 

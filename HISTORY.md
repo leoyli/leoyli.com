@@ -1,3 +1,15 @@
+### 0.10.0-dev.6 / 2018-05-08
+> App
+- Unified `Symbol.for('__TEST__')` channel in all files.
+- Reanmed `injectMiddleware` as `wrapMiddleware` @'utilities/express'.
+- Updated ESLint configs.
+
+> Test
+- Added `__ROOT__` in `global` testing environment.
+- Added `env.config.js` to load environment variables.
+- Updated all tests.
+
+
 ### 0.10.0-dev.5 / 2018-05-07
 > App
 - Revised and added JSDoc for 'router' engine.

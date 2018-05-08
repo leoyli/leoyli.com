@@ -154,9 +154,12 @@ class Device {
 // exports
 module.exports = {
   Device,
-  [Symbol.for('UNIT_TEST')]: {
+};
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
     getProcessingPipes,
     getMiddlewareChain,
-    Device,
+    ...module.exports,
   },
-};
+});

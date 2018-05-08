@@ -1,6 +1,6 @@
 const {
   checkToStringTag, toKebabCase, toCapitalized, toEscapedChars, parseMongoObjectId, parseObjPath, parseFilePath,
-} = require('../../../controllers/utilities/')[Symbol.for('UNIT_TEST')];
+} = require(`${__ROOT__}/controllers/utilities/string`)[Symbol.for('__TEST__')];
 
 
 // test
@@ -112,9 +112,8 @@ describe('Utilities: String', () => {
       undefined,
     ];
     //
-    const result = target.map(str => parseFilePath(str));
-    //
-    expect(result[0]).toEqual({
+    const test = target.map(str => parseFilePath(str));
+    expect(test[0]).toEqual({
       input: '//some.domain.com/a/b/c/d/e/test.pdf?s=na#top',
       protocol: null,
       hostname: 'some.domain.com',
@@ -124,7 +123,7 @@ describe('Utilities: String', () => {
       query: 's=na',
       hash: 'top',
     });
-    expect(result[1]).toEqual({
+    expect(test[1]).toEqual({
       input: 'https://some.domain.com/abc/test.pdf',
       protocol: 'https',
       hostname: 'some.domain.com',
@@ -134,7 +133,7 @@ describe('Utilities: String', () => {
       query: null,
       hash: null,
     });
-    expect(result[2]).toEqual({
+    expect(test[2]).toEqual({
       input: 'test.pdf#end_point',
       protocol: null,
       filename: null,
@@ -144,7 +143,7 @@ describe('Utilities: String', () => {
       query: null,
       hash: 'end_point',
     });
-    expect(result[3]).toBeNull();
-    expect(result[4]).toBeNull();
+    expect(test[3]).toBeNull();
+    expect(test[4]).toBeNull();
   });
 });

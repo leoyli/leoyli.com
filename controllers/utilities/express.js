@@ -3,7 +3,7 @@ const { Router } = require('express');
 
 
 /**
- * (wrapper) handle asyncfunction for error bubbling
+ * (decorator) handle asyncfunction for error bubbling
  * @param {array|function} target           - fn may be wrapped
  * @return {array|function}                 - task is triggered only when keyword 'async' is found
  */
@@ -30,7 +30,7 @@ const wrapAsync = (target) => {
  * @param {array|map|function} queue        - fn may be wrapped
  * @return {function}                       - middleware chain with insertion
  */
-const insertMiddleware = (queue) => {
+const wrapMiddleware = (queue) => {
   const router = new Router({ mergeParams: true });
   const type = checkToStringTag(queue);
   switch (type) {
@@ -53,5 +53,11 @@ const insertMiddleware = (queue) => {
 // exports
 module.exports = {
   wrapAsync,
-  insertMiddleware,
+  wrapMiddleware,
 };
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});

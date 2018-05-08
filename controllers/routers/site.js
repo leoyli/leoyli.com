@@ -39,7 +39,7 @@ site.stack = {
   GET: async function site_stack_GET(req, res, next) {
     const collection = req.params.stackType.toLowerCase();
     if (!['posts', 'media'].includes(collection)) throw new _U_.error.HttpException(404);
-    return _U_.express.insertMiddleware([
+    return _U_.express.wrapMiddleware([
       _M_.modifyHTMLTitleTag(collection),
       _M_.aggregateFetch(collection, { num: 10 }),
     ])(req, res, next);

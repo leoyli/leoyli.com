@@ -1,6 +1,6 @@
 const {
   hasOwnKey, cloneDeep, mergeDeep, assignDeep, freezeDeep, proxyfyInCaseInsensitiveKey,
-} = require('../../../controllers/utilities/')[Symbol.for('UNIT_TEST')];
+} = require(`${__ROOT__}/controllers/utilities/object`)[Symbol.for('__TEST__')];
 
 
 // test

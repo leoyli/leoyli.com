@@ -48,3 +48,11 @@ module.exports = {
   TemplateException,
   HttpException,
 };
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ExtendableError,
+    TransferableError,
+    ...module.exports,
+  },
+});

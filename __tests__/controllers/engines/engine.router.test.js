@@ -1,6 +1,6 @@
 const {
   getProcessingPipes, getMiddlewareChain, Device,
-} = require('../../../controllers/engines/router')[Symbol.for('UNIT_TEST')];
+} = require(`${__ROOT__}/controllers/engines/router`)[Symbol.for('__TEST__')];
 
 
 // test
@@ -98,6 +98,5 @@ describe('Engines: Router', () => {
 
     // static get renderer
     expect(Object.values(Device.renderer).map(ele => typeof ele === 'symbol')).toBeTruthy();
-
   });
 });
