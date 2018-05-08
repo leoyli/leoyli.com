@@ -1,10 +1,8 @@
-// module
 const { checkToStringTag, toKebabCase, toCapitalized, toEscapedChars, parseMongoObjectId, parseObjPath,
   parseFilePath } = require('../../controllers/utilities/')[Symbol.for('UNIT_TEST')];
 
 
 // test
-
 describe('Utilities: String', () => {
   test('Fn: checkToStringTag', () => {
     const target = [

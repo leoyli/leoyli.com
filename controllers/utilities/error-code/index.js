@@ -9,7 +9,7 @@ class ErrorCodeDictionary {
 
   lookup(entry, literals) {
     if (!this.dictionary.has(entry)) return null;
-    if (!checkToStringTag(literals, 'String')) return this.dictionary.get(entry);
+    if (!checkToStringTag(literals, 'Object')) return this.dictionary.get(entry);
 
     // replacing with template literals
     return this.dictionary.get(entry).replace(/\${([^}]*)}/g, (match, key) => {

@@ -1,3 +1,14 @@
+### 0.10.0-dev.4 / 2018-05-07
+> App
+- Revised 'view' engine.
+- Fixed a reference bug in 'router' engine and 'fetch' module.
+- Fixed a type bug @'utilities/error-code/index'.
+
+> Test
+- Revised 'engine.view.test'.
+- Updated test @'utilities/'.
+
+
 ### 0.10.0-dev.3 / 2018-05-07
 > App
 - Refactored 'utilities':

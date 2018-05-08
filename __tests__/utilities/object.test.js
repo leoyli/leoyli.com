@@ -1,4 +1,3 @@
-// module
 const { hasOwnKey, cloneDeep, mergeDeep, assignDeep, freezeDeep,
   proxyfyInCaseInsensitiveKey } = require('../../controllers/utilities/')[Symbol.for('UNIT_TEST')];
 

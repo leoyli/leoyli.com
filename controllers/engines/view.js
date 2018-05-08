@@ -11,7 +11,7 @@ const { TemplateException } = require('../utilities/')._U_.error;
 
 // functions
 /**
- * generate doT configs on-the-fly
+ * get a doT configuration object
  * @param {string} variables                - names to be registered into the runtime scope
  * @return {object}                         - return doT.js compilation configs
  */
@@ -78,14 +78,14 @@ const getRuntimeMethods = (blueprint, settings, source = '') => {
 
 
 /**
- * transpile Express.js meta into the blueprint of Template{object}
+ * transpile Express.js meta into the blueprint of the template
  * @param {object} {*}                      - local populations from the Express.js object
  * @param {object} settings                 - destructed parameters from locals{object}
  * @param {string} [source]                 - pass down the caller (point to the source file)
  * @return {object}                         - return a transipiled blueprint
  */
 const getBlueprint = ({ settings, ...locals }, source) => {
-  const loadWidget = (blueprint, settings) => {
+  const loadWidget = (blueprint) => {
     return new Proxy(this, {
       get: (target, name) => {
         const filePath = path.join(settings.views, '__root__/_widgets', `${name}.${settings['view engine'] || 'dot'}`);
@@ -100,17 +100,17 @@ const getBlueprint = ({ settings, ...locals }, source) => {
 
   const blueprint = _.omit(locals, ['settings', 'cache', '_locals']);
   blueprint._fn = getRuntimeMethods(blueprint, settings, source);
-  blueprint._widget = loadWidget(blueprint, settings);
+  blueprint._widget = loadWidget(blueprint);
   return blueprint;
 };
 
 
 /**
- * construct a new Template{object}                                                                                     // todo: added multiple sections support
+ * construct a new Template instance                                                                                    // todo: added multiple sections support
  * @param {string} filePath                 - template file path to be passed
  * @param {object} blueprint                - runtime objects to be passed
  * @param {string} fileString               - raw template context
- * @return {Template}                       - return a new Template{object}
+ * @return {Template}                       - return a new Template{class}
  */
 const buildTemplate = (filePath, blueprint, fileString) => {
   const sections = { main: fileString };
@@ -119,12 +119,11 @@ const buildTemplate = (filePath, blueprint, fileString) => {
 
 
 /**
- * get a compiled Template{object}
+ * get a Template instance
  * @param {string} filePath                 - template file path to be passed
  * @param {object} blueprint                - runtime objects to be passed
  * @param {boolean} [_SYNC=null]            - change the state of the function to be sync
  * @return {(Promise|Template)}             - return a Promise(async) or object(sync)
- */
 const getTemplate = (filePath, blueprint, _SYNC) => {
   if (_SYNC === true) return buildTemplate(filePath, blueprint, getFileString(filePath, true));
   return getFileString(filePath).then(templateString => buildTemplate(filePath, blueprint, templateString));
@@ -133,7 +132,7 @@ const getTemplate = (filePath, blueprint, _SYNC) => {
 
 // main
 /**
- * define the scheme of Template{object}
+ * define the scheme of Template{class}
  * @constructor
  * @param {string} filePath                 - reserved for error messaging
  * @param {object} blueprint                - blueprint to be decoded
@@ -172,16 +171,16 @@ class Template {
 
 // middleware
 /**
- * Should return the requested content in HTML
+ * render on demand in HTML
  * @param {string} filePath                 - template file path to be passed
  * @param {object} locals                   - local populations from the Express.js object
- * @param {function} next                   - callback function
+ * @param {function} cb                     - callback function
  * @return {Promise}                        - return the executable HTML string
  */
-const render = (filePath, locals, next) => {
+const render = (filePath, locals, cb) => {
   return getTemplate(filePath, getBlueprint(locals, filePath))
-    .then(template => next(null, template.render()))
-    .catch(err => next(new TemplateException(err)));
+    .then(template => cb(null, template.render()))
+    .catch(err => cb(new TemplateException(err)));
 };
 
 

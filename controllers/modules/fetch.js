@@ -144,7 +144,7 @@ const aggregateFetch = (collection, { page, num, sort } = {}) => function fetchC
     .aggregate(getAggregationQuery(collection, req.params, req.query, page, num || res.locals.$$SITE.num, sort))
     .then(docs => docs[0])
     .then(result => {
-      const output = result && _U_.object.checkToStringTag(result.list, 'Array')
+      const output = result && _U_.string.checkToStringTag(result.list, 'Array')
         ? { ...result, list: result.list.map(doc => $Model.hydrate(doc)) }
         : result;
       if (typeof next !== 'function') return output;
