@@ -1,71 +1,103 @@
-// // module
-// const { _U_ } = require('../../../controllers/utilities/');
-// const { asyncWrapper, stackHttpMethods,
-//   loadRoutePlugins, loadMainControls, loadViewRenderer } = require('../../../controllers/engines/router')._test;
-//
-//
+const {
+  getProcessingPipes, getMiddlewareChain, Device,
+} = require('../../../controllers/engines/router')[Symbol.for('UNIT_TEST')];
+
+
 // test
-describe('Check the ENV', () => {
-  test('Should run in test mode', () => {
-    expect(process.env.NODE_ENV).toEqual('test');
+describe('Engines: Router', () => {
+  test('Fn: getProcessingPipes', () => {
+    const target = [
+      { sensitive: true, authorization: true, authentication: true, crawler: false, cache: false },
+      { authentication: true, cache: false },
+      {},
+    ];
+    //
+    const test = target.map(option => getProcessingPipes(option).map(fn => fn.name));
+    expect(test[0]).toEqual([
+      'noCrawlerHeader',
+      'initialize',
+      'authenticate',
+      'isSignedIn',
+      'isAuthorized',
+      'noStoreCacheHeader',
+    ]);
+    expect(test[1]).toEqual([
+      'caseInsensitiveProxy',
+      'noCrawlerHeader',
+      'initialize',
+      'authenticate',
+      'isSignedIn',
+      'noStoreCacheHeader',
+    ]);
+    expect(test[2]).toEqual([
+      'caseInsensitiveProxy',
+    ]);
+  });
+
+
+  test('Fn: getMiddlewareChain', () => {
+    const mockMain = () => {};
+    const mockHooker = { pre: [], post: [] };
+    const mockOption = {};
+    const thunk = (mode) => getMiddlewareChain(mode, mockMain, mockHooker, mockOption);
+    //
+    const test = (mode) => thunk(mode).map(fn => fn.name);
+    expect(test('html')).toEqual([
+      'caseInsensitiveProxy',
+      'mockMain',
+      'templateLoader',
+    ]);
+    expect(test('api')).toEqual([
+      'caseInsensitiveProxy',
+      'mockMain',
+      'exportJSON',
+    ]);
+  });
+
+
+  test('Class: Device', () => {
+    const mockRule = [{ route: '/', controller: { GET: jest.fn() } }];
+    const mockSetting = { sensitive: true, cache: false };
+    const mockMiddleware = () => {};
+    const testDevice = new Device(mockRule);
+
+    // constructor
+    expect(testDevice.rules).not.toBe(mockRule);
+    expect(testDevice.rules).toEqual(mockRule);
+    expect(Object.keys(testDevice).length).toBe(4);
+    expect(Object.isFrozen(testDevice.rules)).toBeTruthy();
+
+    // get/set setting
+    testDevice.setting.crawler = true;
+    testDevice.setting = mockSetting;
+    expect(testDevice.setting).toEqual({ ...mockSetting, crawler: true });
+
+    // use
+    const spy_1 = jest.spyOn(testDevice._base, 'use');
+    testDevice.use(mockMiddleware);
+    expect(spy_1).toBeCalledWith(mockMiddleware);
+
+    // hook
+    testDevice.hook('pre', mockMiddleware);
+    testDevice.hook('post', mockMiddleware);
+    testDevice.hook('some', mockMiddleware);
+    expect(testDevice._hook).toEqual({
+      post: [mockMiddleware],
+      pre: [mockMiddleware],
+    });
+
+    // exec
+    expect(() => testDevice.exec('html')).not.toThrow();
+    expect(() => testDevice.exec('api')).not.toThrow();
+    expect(() => testDevice.exec(undefined)).toThrow();
+
+    // static exec
+    const spy_2 = jest.spyOn(testDevice, 'exec');
+    Device.exec('html', [['/', testDevice], ['/test', testDevice]]);
+    expect(spy_2).toHaveBeenCalledTimes(2);
+
+    // static get renderer
+    expect(Object.values(Device.renderer).map(ele => typeof ele === 'symbol')).toBeTruthy();
+
   });
 });
-
-//
-// describe('Fn: asyncWrapper', () => {
-//   test('Should wrap asyncfunctions with an error catcher', () => {
-//     const mockInput = [async (req, res, next) => {}, (req, res, next) => {}];
-//     const result = mockInput.map(fn => asyncWrapper(fn));
-//     //
-//     expect(_U_.object.checkToStringTag(result[0], 'array')).toBeTruthy();
-//     expect(_U_.object.checkToStringTag(result[1], 'array')).toBeTruthy();
-//     expect(result[0].toString()).toBe('(req, res, next) => fn(req, res, next).catch(next)');
-//     expect(result[1].toString()).toBe('(req, res, next) => {}');
-//   });
-// });
-//
-//
-// describe('Bundle: router.js', () => {
-//   const mockMethod = ['get', 'pull'];
-//   const mockController1 = { get: () => { return false }, pull: () => { return true } };
-//   const mockController2 = [() => { return 0 }, () => { return 1 }];
-//   const mockSetting1 = { title: 'test', authenticated: true, authorized: true, template: './test' };
-//   const mockSetting2 = { title: 'test', titleOption: { root: true }, crawler: false };
-//   const mockSetting3 = { cache: false };
-//
-//   test('Fn: stackHttpMethods: Should normalize into a method array in the anti-alphabetical order', () => {
-//     const test = [{ controller: mockController1 }, { controller: mockController1, method: ['pull'], alias: '/' }];
-//     const result = test.map(obj => stackHttpMethods(obj));
-//     //
-//     expect(result[0]).toEqual(['get','pull']);
-//     expect(result[1]).toEqual(['alias','pull']);
-//   });
-//
-//   test('Fn: loadRoutePlugins: Should stack a queue from settings', () => {
-//     const test = [mockSetting1, mockSetting2, mockSetting3];
-//     const result = test.map(obj => loadRoutePlugins(obj));
-//     //
-//     expect(result[0].length).toBe(7);
-//     expect(result[1].length).toBe(3);
-//     expect(result[2].length).toBe(2);
-//   });
-//
-//   test('Fn: loadMainControls: Should stack a queue from controllers with normalization', () => {
-//     const test = [mockController1, mockController2];
-//     const result = test.map(fn => loadMainControls(fn, mockMethod[1]));
-//     //
-//     expect(result[0][0]()).toBeTruthy();
-//     expect(result[1].length).toBe(2);
-//   });
-//
-//   test('Fn: loadViewRenderer: Should stack a queue with a given template when HTTP method is \'get\'', () => {
-//     const test = [mockSetting1, mockSetting2];
-//     const result1 = test.map(fn => loadViewRenderer(fn, mockMethod[0]));
-//     const result2 = test.map(fn => loadViewRenderer(fn, mockMethod[1]));
-//     //
-//     expect(result1[0].length).toBe(1);
-//     expect(result1[1].length).toBe(0);
-//     expect(result2[0].length).toBe(0);
-//     expect(result1[1].length).toBe(0);
-//   });
-// });

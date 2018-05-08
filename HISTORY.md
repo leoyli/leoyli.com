@@ -1,3 +1,13 @@
+### 0.10.0-dev.5 / 2018-05-07
+> App
+- Revised and added JSDoc for 'router' engine.
+- Added JSDoc for 'view' engine.
+
+> Test
+- Added new 'router.engine.test.js'.
+- Moved @'utilities/' -> @'controller/utilities/'.
+
+
 ### 0.10.0-dev.4 / 2018-05-07
 > App
 - Revised 'view' engine.

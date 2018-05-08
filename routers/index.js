@@ -12,7 +12,7 @@ const pageRouter = require('./page');
 
 // service
 const routingService = (mode) => {
-  return Device.load(mode, [
+  return Device.exec(mode, [
     ['/', authRouter],
     ['/init', initRouter],
     ['/site', siteRouter],

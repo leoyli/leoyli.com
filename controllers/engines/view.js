@@ -124,21 +124,21 @@ const buildTemplate = (filePath, blueprint, fileString) => {
  * @param {object} blueprint                - runtime objects to be passed
  * @param {boolean} [_SYNC=null]            - change the state of the function to be sync
  * @return {(Promise|Template)}             - return a Promise(async) or object(sync)
+ */
 const getTemplate = (filePath, blueprint, _SYNC) => {
   if (_SYNC === true) return buildTemplate(filePath, blueprint, getFileString(filePath, true));
   return getFileString(filePath).then(templateString => buildTemplate(filePath, blueprint, templateString));
 };
 
 
-// main
-/**
- * define the scheme of Template{class}
- * @constructor
- * @param {string} filePath                 - reserved for error messaging
- * @param {object} blueprint                - blueprint to be decoded
- * @param {object} sections                 - section to be complied by `doT.template`
- */
 class Template {
+  /**
+   * define the scheme of Template{class}
+   * @constructor
+   * @param {string} filePath               - reserved for error messaging
+   * @param {object} blueprint              - blueprint to be decoded
+   * @param {object} sections               - section to be complied by `doT.template`
+   */
   constructor(filePath, blueprint, sections) {                                                                          // todo: [private] make these private once JS supports
     this.filePath = filePath;
     this.settings = getCompilationConfigs(Object.keys(_.omit(blueprint, 'set')).toString());
@@ -146,9 +146,15 @@ class Template {
     this._compileFn = this.compile(sections, this.settings);
   }
 
+  /**
+   * compile the template into template runtime function
+   * @param sections                        - section to be compiled
+   * @param settings                        - complication settings
+   * @return {object}                       - template runtime function paired by section key
+   */
   compile(sections, settings) {
     try {
-      const compiledStack = {};
+      const compiledStack = Object.create(null);
       Object.keys(sections).forEach(item => {
         if (settings.stripHTMLComment === true) sections[item] = sections[item].replace(settings.comment, '');
         compiledStack[item] = doT.template(sections[item], settings);
@@ -159,6 +165,10 @@ class Template {
     }
   }
 
+  /**
+   * render the template runtime function
+   * @return {string}                       - browser readable HTML string
+   */
   render() {
     try {
       return this._compileFn.main(...this._arguement);
@@ -169,7 +179,6 @@ class Template {
 }
 
 
-// middleware
 /**
  * render on demand in HTML
  * @param {string} filePath                 - template file path to be passed
