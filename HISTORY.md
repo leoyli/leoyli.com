@@ -1,3 +1,11 @@
+### 0.10.0-dev.7 / 2018-05-08
+> App
+- Ensured `this.message` will contain only `String` primitive @'utilities/error'.
+
+> Test
+- Added 'utilities/error.test.js'.
+
+
 ### 0.10.0-dev.6 / 2018-05-08
 > App
 - Unified `Symbol.for('__TEST__')` channel in all files.
