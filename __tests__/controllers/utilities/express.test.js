@@ -6,38 +6,50 @@ const {
 // test
 describe('Utilities: Express', () => {
   test('Fn: wrapAsync', async () => {
-    const mockAsyncMiddleware = async (req, res, next) => next();
-    const mockMiddleware = (req, res, next) => next();
-    const target = [mockAsyncMiddleware, mockMiddleware, [mockAsyncMiddleware, mockMiddleware]];
+    const someAsyncMiddleware = async (req, res, next) => next();
+    const someMiddleware = (req, res, next) => next();
+    const target = [someAsyncMiddleware, someMiddleware, [someAsyncMiddleware, someMiddleware]];
 
     // async function should be wrapped with prefixed name
     const test = target.map(fn => wrapAsync(fn));
-    expect(test[0].name).toBe('wrappedAsync mockAsyncMiddleware');
-    expect(test[1].name).toBe('mockMiddleware');
-    expect(test[2].map(fn => fn.name)).toEqual(['wrappedAsync mockAsyncMiddleware', 'mockMiddleware']);
+    expect(test[0].name).toBe('wrappedAsync someAsyncMiddleware');
+    expect(test[1].name).toBe('someMiddleware');
+    expect(test[2].map(fn => fn.name)).toEqual(['wrappedAsync someAsyncMiddleware', 'someMiddleware']);
 
     // only async function should be wrapped
-    expect(test[0]).not.toBe(mockAsyncMiddleware);
-    expect(test[1]).toBe(mockMiddleware);
+    expect(test[0]).not.toBe(someAsyncMiddleware);
+    expect(test[1]).toBe(someMiddleware);
 
     // error should be cached and passed to `next`
-    const mockError = new Error();
-    const mockNext = jest.fn();
-    const mockAsyncMiddlewareThatThrowsError = async (req, res, next) => { throw mockError; };
-    await wrapAsync(mockAsyncMiddlewareThatThrowsError)(null, null, mockNext);
-    expect(mockNext).toHaveBeenCalledWith(mockError);
+    const someError = new Error();
+    const spyNext = jest.fn();
+    const someAsyncMiddlewareThatThrowsError = async (req, res, next) => { throw someError; };
+    await wrapAsync(someAsyncMiddlewareThatThrowsError)(null, null, spyNext);
+    expect(spyNext).toHaveBeenCalledWith(someError);
   });
 
 
   test('Fn: wrapMiddleware', async () => {
-    const mockNext = jest.fn(cb => cb());
-    const mockMiddlewareA = (req, res, next) => mockNext(next);
-    const mockMiddlewareB = (req, res, next) => mockNext(next);
-    const mockMiddlewareC = (req, res, next) => mockNext(next);
-    //
-    const test = wrapMiddleware([mockMiddlewareA, mockMiddlewareB, mockMiddlewareC]);
-    await wrapMiddleware([mockMiddlewareA, mockMiddlewareB, mockMiddlewareC]).handle({ url: '/' }, {}, () => {});
-    expect(mockNext).toHaveBeenCalledTimes(3);
-    expect(test.stack.length).toBe(3);
+    const spyNext = jest.fn(cb => cb());
+    const someMiddlewareA = (req, res, next) => spyNext(next);
+    const someMiddlewareB = (req, res, next) => spyNext(next);
+    const someMiddlewareC = (req, res, next) => spyNext(next);
+
+    // should accept array input
+    spyNext.mockClear();
+    const test_1 = wrapMiddleware([someMiddlewareA, someMiddlewareB, someMiddlewareC]);
+    expect(test_1.stack.length).toBe(3);
+    await test_1.handle({ url: '/' }, {}, () => {});
+    expect(spyNext).toHaveBeenCalledTimes(3);
+
+    // should accept map for conditional input
+    spyNext.mockClear();
+    const test_2 = wrapMiddleware(new Map([[someMiddlewareA, true], [someMiddlewareB, false], [someMiddlewareC, true]]));
+    expect(test_2.stack.length).toBe(2);
+    await test_2.handle({ url: '/' }, {}, () => {});
+    expect(spyNext).toHaveBeenCalledTimes(2);
+
+    // should not accept invalid types
+    expect(() => wrapMiddleware(undefined)).toThrow(TypeError);
   });
 });

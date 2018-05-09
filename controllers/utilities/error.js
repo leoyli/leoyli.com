@@ -10,8 +10,8 @@ class ExtendableError extends Error {
       this.name = this.constructor.name;
       this.message = String(errorCodeProxyAgent[this.name](entry, literals));
       if (checkToStringTag(entry, 'Number')) this.code = entry;
-      if (Error.captureStackTrace) Error.captureStackTrace(this, this.constructor);                                     // note: V8 JS-engine only
-      else this.stack = (new Error(this.message)).stack;                                                                // note: non-V8 browser only
+      if (!Error.captureStackTrace) this.stack = (new Error(this.message)).stack;                                       // note: V8 JS-engine only
+      else Error.captureStackTrace(this, this.constructor);                                                             // note: non-V8 browser only
     }
   }
 }

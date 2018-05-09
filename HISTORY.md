@@ -1,6 +1,17 @@
-### 0.10.0-dev.7 / 2018-05-08
+### 0.10.0-dev.8.1 / 2018-05-09
 > App
-- Removed undesired type checking in 'wrapAsync' @'utilities/express'
+- Fixed argument displacement in `wrapMiddleware` @'utilities/express'.
+- Fixed missing type check in `ErrorCodeDictionary.lookup` @'utilities/error-code'.
+- Adjusted `ExtendableError` for beeter test coverage.
+
+> Test
+- Configured jest to report the testing coverage.
+- Added more tests against `wrapMiddleware` @'utilities/express'(100%).
+
+
+### 0.10.0-dev.8 / 2018-05-08
+> App
+- Removed undesired type checking in 'wrapAsync' @'utilities/express'.
 
 > Test
 - Added 'utilities/express.test.js'.

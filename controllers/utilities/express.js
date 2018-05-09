@@ -31,7 +31,7 @@ const wrapMiddleware = (queue) => {
     case 'AsyncFunction':
       return router.use(wrapAsync(queue));
     case 'Map':
-      queue.forEach((middleware, condition) => {
+      queue.forEach((condition, middleware) => {
         if (condition) router.use(wrapAsync(middleware));
       });
       return router;
