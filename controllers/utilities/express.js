@@ -9,19 +9,11 @@ const { Router } = require('express');
  */
 const wrapAsync = (target) => {
   const unnamedWrapper = (fn) => (...arg) => fn.apply(this, arg).catch(arg[arg.length - 1]);
-  const namedWrapper = (fn) => Object.defineProperty(unnamedWrapper(fn), 'name', { value: `WrappedAsync ${fn.name}` });
+  const namedWrapper = (fn) => Object.defineProperty(unnamedWrapper(fn), 'name', { value: `wrappedAsync ${fn.name}` });
   const evaluator = (fn) => (checkToStringTag(fn, 'AsyncFunction') ? namedWrapper(fn) : fn);
   const type = checkToStringTag(target);
-  switch (type) {
-    case 'Function':
-    case 'AsyncFunction':
-      return evaluator(target);
-    case 'Array':
-      return target.map(fn => evaluator(fn));
-    default: {
-      throw new TypeError(`Argument is neither an Array nor an AsyncFunction but ${type}.`);
-    }
-  }
+  if (type === 'Array') return target.map(fn => evaluator(fn));
+  return evaluator(target);
 };
 
 

@@ -22,6 +22,7 @@ const exp_dateRange = (start, end) => {
   return { $gte: new Date(Date.UTC(G.Y, G.M, G.D)), $lt: new Date(Date.UTC(L.Y, L.M, L.D)) };
 };
 
+
 /**
  * translate into an array that contains a time range from a string
  * @param {string} str                      - query string
@@ -51,6 +52,7 @@ const pullPipe_1_matching = (collection, params, query) => {
   return { $match };
 };
 
+
 const pullPipe_2_masking = (params) => {
   const _$$stackPicker = { content: 0, featured: 0 };
   const _$$contentMask = { content: 0 };
@@ -58,16 +60,19 @@ const pullPipe_2_masking = (params) => {
   return { $project };
 };
 
+
 const pullPipe_3_sorting = (sort = {}) => {
   const $sort = { 'state.pinned': -1, ...sort };
   if ($sort['time._updated'] !== 1) $sort['time._updated'] = -1;
   return { $sort };
 };
 
+
 const pullPipe_4_counting = () => {
   const $group = { _id: null, count: { $sum: 1 }, list: { $push: '$$ROOT' } };
   return { $group };
 };
+
 
 const pullPipe_5_paginating = (query, sort, page = 1, num = 10) => {
   const _$$page = (query.page > 1) ? Number.parseInt(query.page, 10) : page;
@@ -89,6 +94,7 @@ const pullPipe_5_paginating = (query, sort, page = 1, num = 10) => {
   return { $project };
 };
 
+
 // const pushPipe_1_modifying = (body) => {
 //   const _$$filter = { $filter: { input: '$list', as: 'doc', cond: {
 //         $and: [{ $in: ['$$doc._id', [ObjectId('5ab33bec53da62203f81676d')] /** body.list.map(i => ObjectId(i)) **/] } /** ,additional matcher **/]}
@@ -98,15 +104,18 @@ const pullPipe_5_paginating = (query, sort, page = 1, num = 10) => {
 //   return { $project };
 // };
 //
+//
 // const pushPipe_2_splitting = () => {
 //   const $unwind = '$list';
 //   return { $unwind };
 // };
 //
+//
 // const pushPipe_3_destructuring = () => {
 //   const $replaceRoot = { newRoot: '$list' };
 //   return { $replaceRoot };
 // };
+//
 //
 // const pushPipe_4_overwriting = (collection) => {
 //   const $out = collection;                                                                                              // todo: note: <CURRENT MONGODB IS NOT SUPPORTED> current (v3.6): overwrite the whole collection (x)
@@ -158,7 +167,7 @@ const aggregateFetch = (collection, { page, num, sort } = {}) => function fetchC
 // exports
 module.exports = {
   aggregateFetch,
-  [Symbol.for('UNIT_TEST')]: {
+  [Symbol.for('__TEST__')]: {
     getAggregationQuery,
     getDateRangeArray,
     exp_dateRange,

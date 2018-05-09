@@ -133,7 +133,7 @@ const parseMultipart = (configs) => function uploadController(req, res, next) {
 // exports
 module.exports = {
   parseMultipart,
-  [Symbol.for('UNIT_TEST')]: {
+  [Symbol.for('__TEST__')]: {
     checkStatus,
     getUploadPath,
     uploadFile,

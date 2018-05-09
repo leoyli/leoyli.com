@@ -1,5 +1,14 @@
 ### 0.10.0-dev.7 / 2018-05-08
 > App
+- Removed undesired type checking in 'wrapAsync' @'utilities/express'
+
+> Test
+- Added 'utilities/express.test.js'.
+- Specified `__ROOT__` as `global.__ROOT__`.
+
+
+### 0.10.0-dev.7 / 2018-05-08
+> App
 - Ensured `this.message` will contain only `String` primitive @'utilities/error'.
 
 > Test

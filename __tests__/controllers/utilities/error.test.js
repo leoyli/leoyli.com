@@ -1,6 +1,6 @@
 const {
   ExtendableError, TransferableError, ServerError, ClientException, TemplateException, HttpException,
-} = require(`${__ROOT__}/controllers/utilities/error`)[Symbol.for('__TEST__')];
+} = require(`${global.__ROOT__}/controllers/utilities/error`)[Symbol.for('__TEST__')];
 
 
 // test

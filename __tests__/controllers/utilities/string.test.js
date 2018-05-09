@@ -1,6 +1,6 @@
 const {
   checkToStringTag, toKebabCase, toCapitalized, toEscapedChars, parseMongoObjectId, parseObjPath, parseFilePath,
-} = require(`${__ROOT__}/controllers/utilities/string`)[Symbol.for('__TEST__')];
+} = require(`${global.__ROOT__}/controllers/utilities/string`)[Symbol.for('__TEST__')];
 
 
 // test
