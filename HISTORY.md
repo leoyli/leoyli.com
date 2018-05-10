@@ -1,3 +1,13 @@
+### 0.10.0-dev.9 / 2018-05-09
+> App
+- Moved 'fetch' and 'upload' @'modules' -> 'interfaces'.
+- Updated 'adapter' module and 'media' model.
+- Refactored 'upload' @'interface'.
+
+> Test
+- Refactored 'upload' interface unit testing.
+
+
 ### 0.10.0-dev.8.1 / 2018-05-09
 > App
 - Fixed argument displacement in `wrapMiddleware` @'utilities/express'.

@@ -8,11 +8,11 @@ const { noCrawlerHeader } = require('./regulator');
 
 
 /** busboy for multipart form parsing **/
-const { parseMultipart } = require('./upload');
+const { parseMultipart } = require('../interfaces/upload');
 
 
 /** Mongo aggregation for database fetching **/
-const { aggregateFetch } = require('./fetch');
+const { aggregateFetch } = require('../interfaces/fetch');
 
 
 /** passport: populating `req.user` **/
