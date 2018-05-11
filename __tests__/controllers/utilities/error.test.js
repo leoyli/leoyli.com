@@ -6,21 +6,23 @@ const {
 // test
 describe('Utilities: Error', () => {
   test('Class: ExtendableError', () => {
+    // should be an instance and behave as an Error
     expect(ExtendableError.prototype instanceof Error).toBeTruthy();
     expect(() => new ExtendableError()).toThrow(ReferenceError);
   });
 
 
   test('Class: TransferableError', () => {
+    // should be an instance and behave as an ExtendableError
     expect(TransferableError.prototype instanceof ExtendableError).toBeTruthy();
     expect(() => new TransferableError()).toThrow(ReferenceError);
 
-    // subclass should not be further extended
+    // should not able to further extend a subclass
     class TestException extends TransferableError {}
     class FurtherExtendedException extends TestException {}
     expect(() => new FurtherExtendedException()).toThrow(ReferenceError);
 
-    // subclass should wrap non-ExtendableErrors
+    // should create error instance from a given argument
     const mockErrorMessage = 'message';
     const target = [
       new ReferenceError(mockErrorMessage),
@@ -29,17 +31,17 @@ describe('Utilities: Error', () => {
     ];
     const test = target.map(err => new TestException(err));
 
-    // wrapping mode: an non-ExtendableError instance
+    // // if constructed with an non-ExtendableError instance
     expect(test[0]).not.toBe(target[0]);
     expect(test[0].from).toBe(target[0].name);
     expect(test[0].message).toBe(mockErrorMessage);
 
-    // passing mode: an ExtendableErrors instance
+    // // if constructed with an ExtendableErrors instance
     expect(test[1]).toBe(target[1]);
     expect(test[1].from).toBeUndefined();
     expect(test[1].message).toBe(mockErrorMessage);
 
-    // normal mode: an object{toString}
+    // // if constructed with an object{toString}
     expect(test[2]).not.toBe(target[1]);
     expect(test[2].from).toBeUndefined();
     expect(test[2].message).toBe(mockErrorMessage);

@@ -13,6 +13,8 @@ describe('Engines: Router', () => {
     ];
     //
     const test = target.map(option => getProcessingPipes(option).map(fn => fn.name));
+
+    // should print out the stacked middleware name based on the given options
     expect(test[0]).toEqual([
       'noCrawlerHeader',
       'initialize',
@@ -40,13 +42,16 @@ describe('Engines: Router', () => {
     const mockHooker = { pre: [], post: [] };
     const mockOption = {};
     const thunk = (mode) => getMiddlewareChain(mode, mockMain, mockHooker, mockOption);
-    //
     const test = (mode) => thunk(mode).map(fn => fn.name);
+
+    // should print out the stacked middleware name in 'html' mode
     expect(test('html')).toEqual([
       'caseInsensitiveProxy',
       'mockMain',
       'templateLoader',
     ]);
+
+    // should print out the stacked middleware name in 'api' mode
     expect(test('api')).toEqual([
       'caseInsensitiveProxy',
       'mockMain',

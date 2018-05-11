@@ -28,7 +28,7 @@ const noStoreCacheHeader = function noStoreCacheHeader(req, res, next) {
 
 /** Object proxy for case insensitive access **/
 const caseInsensitiveProxy = function caseInsensitiveProxy(req, res, next) {
-  req.query = _U_.object.proxyfyInCaseInsensitiveKey(req.query);
+  req.query = _U_.object.createCaseInsensitiveProxy(req.query);
   if (typeof next === 'function') return next();
 };
 

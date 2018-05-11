@@ -1,3 +1,4 @@
+/* eslint-disable no-bitwise */
 const { ObjectId } = require('mongodb');
 
 
@@ -24,7 +25,7 @@ const toKebabCase = (str) => {
   return !checkToStringTag(str, 'String') || !str ? null : str
     .replace(/([a-z])([A-Z])/g, '$1-$2')                                                                                // handle CamelCase
     .replace(/[`'":;,.?!@#$%^&*_=~(){}<>/\\\[\]\-\+\|\s]+/g, '-')                                                       // normalize special characters
-    .replace(/(-[A-Z])([A-Z][a-z])/g, '$1-$2')                                                                         // handle signal words in CamelCase
+    .replace(/(-[A-Z])([A-Z][a-z])/g, '$1-$2')                                                                          // handle signal words in CamelCase
     .replace(/^-+|-+$/g, '')                                                                                            // cleanup endpoints
     .toLowerCase();
 };
@@ -66,16 +67,6 @@ const toEscapedChars = (str) => {
 
 
 /**
- * parse a string to object path array
- * @param {string} str                      - any arbitrary string
- * @return {array}                          - an array contains elements in ordered by nest keys (path)
- */
-const parseObjPath = (str) => {
-  return !checkToStringTag(str, 'String') || !str  ? null : str.match(/[a-zA-Z0-9$_]+/g);
-};
-
-
-/**
  * parse Mongo ObjectId (hexadecimal)                                                                                   // todo: option to output ObjectId obj.
  * @param {string} str                      - any arbitrary string
  * @return {object}                         - hexadecimal Mongo `ObjectId` object
@@ -87,31 +78,53 @@ const parseMongoObjectId = (str) => {
 
 
 /**
+ * parse a string to object path array
+ * @param {string} str                      - any arbitrary string
+ * @return {array}                          - an array contains elements in ordered by nest keys (path)
+ */
+const parseObjPath = (str) => {
+  return !checkToStringTag(str, 'String') || !str  ? null : str.match(/[a-zA-Z0-9$_]+/g);
+};
+
+
+/**
  * parse a given file path
  * @param {string} str                      - any arbitrary string
  * @return {object}                         - parsed result
  */
-const parseFilePath = (str) => {
+const parsePath = (str) => {
   if (!checkToStringTag(str, 'String') || !str) return null;
-  const protocol = str.split('://').reverse()[1] || null;
-  const hash = str.split('#')[1] || null;
-  const query = str.replace(`#${hash}`, '').split('?')[1] || null;
 
-  // check and handle the rest of path
-  const location = str.replace(/^\w*:?\/\//, '').replace(`#${hash}`, '').replace(`?${query}`, '');
-  if (location.includes('//')) return null;
+  // decode url
+  const _decoded = decodeURIComponent(str);
+  if (~_decoded.search(/([@#?]|\/\/).*\1/)) return null;
 
-  const _split = location.split('/');
-  const hostname = _split.find(frag => frag.includes('.')) || null;
-  const filename = (_split[_split.length - 1] !== hostname && _split[_split.length - 1]) || null;
-  const extension = (filename && filename.split('.')[1]) || null;
-  const path = `/${_split.slice(
-    _split.indexOf(hostname) + 1,
-    _split.indexOf(filename),
-  ).join('/')}/`.replace('//', '') || null;
+  // extract special components in a url
+  const protocol  = _decoded.split('://').reverse()[1];
+  const hash      = _decoded.includes('/') && _decoded.split('#')[1];
+  const query     = _decoded.includes('/') && _decoded.replace(`#${hash}`, '').split('?')[1];
 
-  // return parsed result
-  return { input: str, protocol, hostname, path, filename, extension, query, hash };
+  // check location
+  const _slug     = _decoded.replace(/^\w*:?\/\//, '').replace(`#${hash}`, '').replace(`?${query}`, '').split('/');
+  const _host     = _decoded.includes('/') && _slug[0].includes('.') && _slug[0];
+
+  // check port
+  const port      = _host && _host.includes(':') && +_host.split(':')[1];
+  if (Number.isNaN(port) || port < -1 || port > 65536) return null;
+
+  // check base
+  const base      = (_slug[_slug.length - 1] !== _host && _slug[_slug.length - 1]) || '';
+  if (~base.search(/[@#?:]/)) return null;
+
+  const username  = _host && _host.split('@').reverse()[1];
+  const hostname  = _host && _host.replace(`${username}@`, '').split(':')[0];
+  const ext       = base.includes('.') && base.split('.').reverse()[0];
+  const dir       = `/${_slug.slice(_slug.indexOf(_host) + 1, _slug.indexOf(base)).join('/')}`.replace('//', '');
+
+  // normalize result
+  const result = { input: str, protocol, hostname, username, port, dir, base, ext, query, hash };
+  for (let keys = Object.keys(result), i = keys.length - 1; i > -1; i -= 1) result[keys[i]] = result[keys[i]] || null;
+  return result;
 };
 
 
@@ -123,7 +136,7 @@ module.exports = {
   toEscapedChars,
   parseMongoObjectId,
   parseObjPath,
-  parseFilePath,
+  parsePath,
 };
 
 Object.defineProperty(module.exports, Symbol.for('__TEST__'), {

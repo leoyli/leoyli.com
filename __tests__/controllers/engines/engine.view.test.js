@@ -24,19 +24,22 @@ fs.readFile.mockImplementation((file, option, cb) => cb(null, mockString));
 // test
 describe('Engines: View', () => {
   test('Fn: getCompilationConfigs', () => {
-    const test = getCompilationConfigs('a, b, c');
-    expect(test.varname).toBe('a, b, c');
+    // should return object with `varname` property consisted with argument
+    expect(getCompilationConfigs('a, b, c').varname).toBe('a, b, c');
   });
 
 
   test('Fn: getFileString', async () => {
-    const test = await Promise.all([getFileString('test', true), getFileString('test').then(str => str)]);
-    expect(test[0]).toEqual(mockString);
-    expect(test[1]).toEqual(mockString);
+    // should return file string synchronously
+    expect(getFileString('test', true)).toEqual(mockString);
+
+    // should return file string in Promise
+    expect(await getFileString('test').then(str => str)).toEqual(mockString);
   });
 
 
   test('Fn: getRuntimeMethods', () => {
+    // should return object with run-time view methods
     const test = getRuntimeMethods({}, {}, '');
     expect(test).toHaveProperty('useMarkdown');
     expect(test).toHaveProperty('loadPartial');
@@ -44,7 +47,7 @@ describe('Engines: View', () => {
 
 
   test('Fn: getBlueprint', () => {
-    //
+    // should return a blueprint object
     const test = getBlueprint(mockLocals);
     expect(test).toHaveProperty('_fn');
     expect(test).toHaveProperty('test');
@@ -55,6 +58,7 @@ describe('Engines: View', () => {
 
 
   test('Fn: buildTemplate', () => {
+    // should construct a `Template` object
     const test = buildTemplate('', {}, mockString);
     expect(test instanceof Template).toBeTruthy();
     expect(test.compile instanceof Function).toBeTruthy();
@@ -63,6 +67,7 @@ describe('Engines: View', () => {
 
 
   test('Fn: getTemplate', async () => {
+    // should return a `Template` object
     const test = await Promise.all([getTemplate('test', {}, true), getTemplate('test', {}).then(template => template)]);
     expect(test[0] instanceof Template).toBeTruthy();
     expect(test[1] instanceof Template).toBeTruthy();
@@ -70,6 +75,7 @@ describe('Engines: View', () => {
 
 
   test('Fn: render', async () => {
+    // should return the rendering result
     const test = await (render('', mockLocals, mockCallback));
     expect(test).toEqual(mockString);
   });

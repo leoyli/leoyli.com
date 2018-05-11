@@ -1,3 +1,14 @@
+### 0.10.0-dev.10 / 2018-05-10
+> App
+- Replaced `parseFilePath` by `parsePath` @'utilities/string'.
+- Renamed `proxyfyInCaseInsensitiveKey` as `createCaseInsensitiveProxy` @'utilities/object'.
+
+> Test
+- Turned off testing coverage report.
+- Added more tests for `parsePath` @'utilities/string'.
+- Used assertion style of comment for managing all tests.
+
+
 ### 0.10.0-dev.9 / 2018-05-09
 > App
 - Moved 'fetch' and 'upload' @'modules' -> 'interfaces'.

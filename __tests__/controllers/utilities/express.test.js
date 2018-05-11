@@ -10,17 +10,17 @@ describe('Utilities: Express', () => {
     const someMiddleware = (req, res, next) => next();
     const target = [someAsyncMiddleware, someMiddleware, [someAsyncMiddleware, someMiddleware]];
 
-    // async function should be wrapped with prefixed name
+    // should wrap async function prefixed with `wrappedAsync`
     const test = target.map(fn => wrapAsync(fn));
     expect(test[0].name).toBe('wrappedAsync someAsyncMiddleware');
     expect(test[1].name).toBe('someMiddleware');
     expect(test[2].map(fn => fn.name)).toEqual(['wrappedAsync someAsyncMiddleware', 'someMiddleware']);
 
-    // only async function should be wrapped
+    // should wrap with only async function
     expect(test[0]).not.toBe(someAsyncMiddleware);
     expect(test[1]).toBe(someMiddleware);
 
-    // error should be cached and passed to `next`
+    // should cache error and pass it to `next`
     const someError = new Error();
     const spyNext = jest.fn();
     const someAsyncMiddlewareThatThrowsError = async (req, res, next) => { throw someError; };

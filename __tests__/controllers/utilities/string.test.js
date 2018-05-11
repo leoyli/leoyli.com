@@ -1,5 +1,5 @@
 const {
-  checkToStringTag, toKebabCase, toCapitalized, toEscapedChars, parseMongoObjectId, parseObjPath, parseFilePath,
+  checkToStringTag, toKebabCase, toCapitalized, toEscapedChars, parseMongoObjectId, parseObjPath, parsePath,
 } = require(`${global.__ROOT__}/controllers/utilities/string`)[Symbol.for('__TEST__')];
 
 
@@ -16,12 +16,14 @@ describe('Utilities: String', () => {
       'Object',
       'AsyncFunction',
     ];
-    //
+
+    // should use `Object.prototype.toString` to get the object type
     const test_1 = target.map(obj => checkToStringTag(obj));
     expect(test_1[0]).toBe(result[0]);
     expect(test_1[1]).toBe(result[1]);
     expect(test_1[2]).toBe(result[2]);
-    //
+
+    // should check if object match with a type name
     const test_2 = target.map((obj, index) => checkToStringTag(obj, result[index]));
     expect(test_2[0]).toBeTruthy();
     expect(test_2[1]).toBeTruthy();
@@ -36,114 +38,155 @@ describe('Utilities: String', () => {
       undefined,
     ];
     const result = 'this-is-a-test';
-    //
+
+    // should convert the target string to the kebab-case
     const test = target.map(str => toKebabCase(str));
     expect(test[0]).toBe(result);
     expect(test[1]).toBe(result);
+
+    // should return `null` if target is not a string
     expect(test[2]).toBeNull();
   });
 
 
   test('Fn: toCapitalized', () => {
-    const target = [
-      'test',
-      'This is a test, and can be tested.',
-      undefined,
-    ];
-    //
-    const test = target.map(str => toCapitalized(str));
-    expect(test[0]).toBe('Test');
-    expect(test[1]).toBe('This Is A Test, And Can Be Tested.');
-    expect(test[2]).toBeNull();
+    // should capitalize the target string
+    expect(toCapitalized('test')).toBe('Test');
+    expect(toCapitalized('This is a test, and can be tested.')).toBe('This Is A Test, And Can Be Tested.');
+
+    // should return `null` if failed
+    expect(toCapitalized(undefined)).toBeNull();
   });
 
 
   test('Fn: toEscapedChars', () => {
-    const target = [
-      'result- =\'"`.,:;<([{',
-      'This is a test...',
-      undefined,
-    ];
-    //
-    const test = target.map(str => toEscapedChars(str));
-    expect(test[0]).toBe('result- &#61;&#39;&#34;&#96;&#46;&#44;&#58;&#59;&#60;&#40;&#91;&#123;');
-    expect(test[1]).toBe('This is a test&#46;&#46;&#46;');
-    expect(test[2]).toBeNull();
+    // should escape special characters in the target string
+    expect(toEscapedChars('result- =\'"`.,:;<([{'))
+      .toBe('result- &#61;&#39;&#34;&#96;&#46;&#44;&#58;&#59;&#60;&#40;&#91;&#123;');
+    expect(toEscapedChars('This is a test...'))
+      .toBe('This is a test&#46;&#46;&#46;');
+
+    // should return `null` if failed
+    expect(toEscapedChars(undefined)).toBeNull();
   });
 
 
   test('Fn: parseObjPath', () => {
-    const target = [
-      'a[b].c.d[e][f]',
-      'a[b[c]].d[e.f]',
-      undefined,
-    ];
-    const result = ['a', 'b', 'c', 'd', 'e', 'f'];
-    //
-    const test = target.map(str => parseObjPath(str));
-    expect(test[0]).toEqual(result);
-    expect(test[1]).toEqual(result);
-    expect(test[2]).toBeNull();
+    const expectation = ['a', 'b', 'c', 'd', 'e', 'f'];
+
+    // should parse a target string into an ordered array
+    expect(parseObjPath('a[b].c.d[e][f]')).toEqual(expectation);
+    expect(parseObjPath('a[b[c]].d[e.f]')).toEqual(expectation);
+
+    // should return `null` if failed
+    expect(parseObjPath(undefined)).toBeNull();
   });
 
 
   test('Fn: parseMongoObjectId', () => {
-    const target = [
-      'http://(url)/5a167966807c57204ef40cdd?page=1',
-      '5a167966807c57204ef40cdd0',
-      undefined,
-    ];
-    const result = '5a167966807c57204ef40cdd';
-    //
-    const test = target.map(str => parseMongoObjectId(str));
-    expect(checkToStringTag(test[0])).toBe('Object');
-    expect(test[0].toString()).toEqual(result);
-    expect(test[1]).toBeNull();
-    expect(test[2]).toBeNull();
+    const expectation = '5a167966807c57204ef40cdd';
+
+    // should parse a target string into a mongo ObjectId
+    const test = parseMongoObjectId('http://(url)/5a167966807c57204ef40cdd?page=1');
+    expect(checkToStringTag(test)).toBe('Object');
+    expect(test.toString()).toEqual(expectation);
+
+    // should return `null` if failed
+    expect(parseMongoObjectId('5a167966807c57204ef40cdd0')).toBeNull();
+    expect(parseMongoObjectId(undefined)).toBeNull();
   });
 
 
-  test('Fn: parseFilePath', () => {
-    const target = [
-      '//some.domain.com/a/b/c/d/e/test.pdf?s=na#top',
-      'https://some.domain.com/abc/test.pdf',
-      'test.pdf#end_point',
-      'test.me//test.pdf',
-      undefined,
-    ];
-    //
-    const test = target.map(str => parseFilePath(str));
-    expect(test[0]).toEqual({
-      input: '//some.domain.com/a/b/c/d/e/test.pdf?s=na#top',
-      protocol: null,
+  test('Fn: parsePath', () => {
+    // should fail to parse
+    // // if is invalid argument
+    expect(parsePath(undefined)).toBeNull();
+    expect(parsePath('')).toBeNull();
+
+    // // if contains more than one (//, @, #, ?)
+    expect(parsePath('https://some@domain.com:8080/t@st.pdf')).toBeNull();
+    expect(parsePath('https://some.domain.com:8080/test.pdf?abc?def')).toBeNull();
+    expect(parsePath('https://some.domain.com:8080/test.pdf#abc#def')).toBeNull();
+    expect(parsePath('https://some.domain.com:8080//test.pdf')).toBeNull();
+
+    // // if contains invalid port
+    expect(parsePath('https://some.domain.com:99999/')).toBeNull();
+    expect(parsePath('https://some.domain.com:abcde/')).toBeNull();
+
+    // // if contains base
+    expect(parsePath('https://some.domain.com/some:test.js')).toBeNull();
+    expect(parsePath('some:test.js')).toBeNull();
+    expect(parsePath('some@test.js')).toBeNull();
+    expect(parsePath('some?test.js')).toBeNull();
+
+    // should parse full URL
+    expect(parsePath('https://name@some.domain.com:8080/a/b/c/test.pdf?s=na#top')).toEqual({
+      input: 'https://name@some.domain.com:8080/a/b/c/test.pdf?s=na#top',
+      protocol: 'https',
       hostname: 'some.domain.com',
-      path: '/a/b/c/d/e/',
-      filename: 'test.pdf',
-      extension: 'pdf',
+      username: 'name',
+      port: 8080,
+      dir: '/a/b/c',
+      base: 'test.pdf',
+      ext: 'pdf',
       query: 's=na',
       hash: 'top',
     });
-    expect(test[1]).toEqual({
-      input: 'https://some.domain.com/abc/test.pdf',
-      protocol: 'https',
+
+    // should parse hostname with no protocol
+    expect(parsePath('//some.domain.com:8080')).toEqual({
+      input: '//some.domain.com:8080',
+      protocol: null,
       hostname: 'some.domain.com',
-      path: '/abc/',
-      filename: 'test.pdf',
-      extension: 'pdf',
+      username: null,
+      port: 8080,
+      dir: '/',
+      base: null,
+      ext: null,
       query: null,
       hash: null,
     });
-    expect(test[2]).toEqual({
-      input: 'test.pdf#end_point',
+
+    // should parse directory with no protocol
+    expect(parsePath('//some/')).toEqual({
+      input: '//some/',
       protocol: null,
-      filename: null,
-      path: null,
-      hostname: 'test.pdf',
-      extension: null,
+      hostname: null,
+      username: null,
+      port: null,
+      dir: '/some',
+      base: null,
+      ext: null,
       query: null,
-      hash: 'end_point',
+      hash: null,
     });
-    expect(test[3]).toBeNull();
-    expect(test[4]).toBeNull();
+
+    // should parse as file if not wrapped by slash
+    expect(parsePath('//some')).toEqual({
+      input: '//some',
+      protocol: null,
+      hostname: null,
+      username: null,
+      port: null,
+      dir: '/',
+      base: 'some',
+      ext: null,
+      query: null,
+      hash: null,
+    });
+
+    // should parse as file if not contain any slash
+    expect(parsePath('some.test.js')).toEqual({
+      input: 'some.test.js',
+      protocol: null,
+      hostname: null,
+      username: null,
+      port: null,
+      dir: '/',
+      base: 'some.test.js',
+      ext: 'js',
+      query: null,
+      hash: null,
+    });
   });
 });

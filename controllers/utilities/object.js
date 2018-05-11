@@ -53,7 +53,7 @@ const mergeDeep = (target, source, { mutate = false } = {}) => {
 
 
 /**
- * frozen the target and its property deeply
+ * (*pure) frozen the target and its property deeply
  * @param {object|array} target             - target{object} to be operated
  * @param {boolean} [mutate = false]        - allow to mutate the target object
  * @return {object|array}                   - the deeply frozen object/array
@@ -102,11 +102,11 @@ const assignDeep = (target, path, value, { mutate = false } = {}) => {
 
 
 /**
- * proxyfy the object for allowing case-insensitive access
+ * (pure)(decorator) proxyfy the object for allowing case-insensitive access
  * @param {object} obj                      - target{object} to be operated
  * @return {object}                         - the proxyfied object
  */
-const proxyfyInCaseInsensitiveKey = (obj) => {
+const createCaseInsensitiveProxy = (obj) => {
   if (!checkToStringTag(obj, 'Object')) throw new TypeError('Invalid arguments as input.');
   return new Proxy(obj, {
     get: (target, name) => {
@@ -124,7 +124,7 @@ module.exports = {
   mergeDeep,
   assignDeep,
   freezeDeep,
-  proxyfyInCaseInsensitiveKey,
+  createCaseInsensitiveProxy,
 };
 
 Object.defineProperty(module.exports, Symbol.for('__TEST__'), {

@@ -49,19 +49,20 @@ describe('Bundle: upload.js', () => {
 
 
   test('Fn: fetchMessage', () => {
-    // Should return no error messages
+    // should return no error messages
     expect(fetchMessage({ ...someBusboy }, someConfig))
       .toBe('');
 
-    // If no file Name (empty filed)
+    // should return error messages
+    // // if no file Name (empty filed)
     expect(fetchMessage({ ...someBusboy, fileName: '' }, someConfig))
       .toBe('No files were uploaded.');
 
-    // If file type is not supported
+    // // if file type is not supported
     expect(fetchMessage({ ...someBusboy, MIME: '' }, someConfig))
       .toBe('"test.png" is in a unsupported file type.');
 
-    // If file too big
+    // // if file too big
     expect(fetchMessage({ ...someBusboy, stream: { truncated: true } }, someConfig))
       .toBe('"test.png" exceed the file size limit (25MB).');
   });
@@ -85,7 +86,7 @@ describe('Bundle: upload.js', () => {
       // should be newly uploaded
       expect(stats.mtime - anotherBusboy.time).toBeGreaterThan(0);
 
-      // delete the testing file
+      // should delete the testing file
       fs.unlink(anotherBusboy.filePath, () => fs.rmdir(`${__dirname}/_tempt`, done));
     }));
   });

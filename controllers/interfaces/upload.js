@@ -10,7 +10,7 @@ const { _U_ } = require('../utilities/');
 
 // components
 /**
- * (pure) compose the upload path and saving file name                                                                  // note: can only be called once in a stream
+ * compose the upload path and saving file name                                                                         // note: can only be called once in a stream
  * @param {object} pathBase                 - default path
  * @param {object} fileName                 - original filename
  * @return {string}                         - file saving path
@@ -24,7 +24,7 @@ const getSavingPath = (pathBase, fileName) => {
 
 
 /**
- * (pure) check if the file is uploadable
+ * check if the file is uploadable
  * @param {object} busboy                   - busboy emitted object
  * @param {object} configs                  - object contains the key as criteria
  * @return {boolean}                        - action passed(true) / blocked(false)
@@ -51,7 +51,7 @@ const fetchRawDoc = (busboy, configs) => {
 
 
 /**
- * (pure) parse to stack messages
+ * parse to stack messages
  * @param {object} busboy                   - busboy emitted object
  * @param {object} configs                  - received configurations
  * @return {string}                         - message to be stacked
