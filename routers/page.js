@@ -10,7 +10,7 @@ const pageRouter = new Device([
     controller:   page.search,
     setting: {
       template:     './theme/search',
-      handler:      Device.renderer.VIEW_POSTS_MULTIPLE,
+      renderer:      Device.renderer.VIEW_POSTS_MULTIPLE,
       crawler:      false,
       servingAPI:   true,
     },

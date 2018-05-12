@@ -1,3 +1,12 @@
+### 0.10.0-dev.10 / 2018-05-11
+> App
+- Fixed setting bug in `page.search` route.
+- Handled the invalid date query exception in `aggregateFetch`.
+
+> Test
+- Revised `fetch.test.js`.
+
+
 ### 0.10.0-dev.10 / 2018-05-10
 > App
 - Replaced `parseFilePath` by `parsePath` @'utilities/string'.

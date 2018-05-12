@@ -8,7 +8,7 @@ const fs = require('fs');
 
 
 // test
-describe('Bundle: upload.js', () => {
+describe('Interface: Upload', () => {
   const someConfig = { fileSize: 25 * 1000000, MIME: ['image/png', 'image/gif'] };
   const someBusboy = { fieldName: 'media_test[file]', fileName: 'test.png', MIME: 'image/png', stream: {} };
 

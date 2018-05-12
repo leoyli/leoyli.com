@@ -8,9 +8,10 @@ const { _U_ } = require('../utilities/');
  * construct Mongo query expression based on a time range from an array
  * @param {array} start                     - an array formatted as [YYYY, MM, DD]
  * @param {array} end                       - an array formatted as [YYYY, MM, DD]
- * @return {{$gte: Date, $lt: Date}}        - part-of expression in $match stage
+ * @return {object}                         - part-of expression in $match stage
  */
-const exp_dateRange = (start, end) => {
+const queryDateExpression = (start, end) => {
+  if (!start || !end || start.length !== 3 || end.length !== 3) return null;
   const [A, Z] = [(start < end) ? start : end, (start < end) ? end : start];
   const [G, L] = [{ Y: A[0], M: A[1], D: A[2] }, { Y: Z[0], M: Z[1], D: Z[2] }];
   G.D = G.Y ? G.M ? G.D ? G.D : (G.D += 1) : (G.D += 1) : L.M && L.D ? L.D : (G.D += 1);
@@ -28,20 +29,21 @@ const exp_dateRange = (start, end) => {
  * @param {string} str                      - query string
  * @return {array}                          - an array formatted as [[YYYY, MM, DD], [YYYY, MM, DD]]
  */
-const getDateRangeArray = (str) => {
-  const groupExp = '((?:\\d{4}(?:(?:0[1-9]|1[0-2])(?:0[1-9]|[1-2][0-9]|3[0-1])?)?)?)';
-  const queryExp = new RegExp(`^(?!-?\\/?$)${groupExp}(?:-|\\/?$)${groupExp}\\/?$`);
-  const rangeExp = new RegExp('(\\d{4})(\\d{2})(\\d{2})');
-  return !str ? [] : (queryExp.exec(str) || []).slice(1, 3)
-    .map(date => rangeExp.exec(date.padEnd(8, '0')).slice(1, 4)
+const parseQueryDate = (str) => {
+  const group = '((?:\\d{4}(?:(?:0[1-9]|1[0-2])(?:0[1-9]|[1-2][0-9]|3[0-1])?)?)?)';
+  const query = new RegExp(`^(?!-?\\/?$)${group}(?:-|\\/?$)${group}\\/?$`);
+  const range = new RegExp('(\\d{4})(\\d{2})(\\d{2})');
+  return !str && !_U_.string.checkToStringTag(str, 'String') ? [] : (query.exec(str) || []).slice(1, 3)
+    .map(date => range.exec(date.padEnd(8, '0')).slice(1, 4)
       .map(value => Number(value)));
 };
 
 
-// pipelines
+// aggregations
 const pullPipe_1_matching = (collection, params, query) => {
   const $match = _U_.object.hasOwnKey(params, 'search') ? { $text: { $search: params.search } } : {};
-  if (query.date) $match['time._created'] = exp_dateRange(...getDateRangeArray(query.date));                            // tofix: query time zone problem
+  const _$$date = query.date ? queryDateExpression(...parseQueryDate(query.date)) : null;                               // tofix: query time zone problem
+  if (_$$date) $match['time._created'] = _$$date;
   if (collection === 'posts') {
     if (!params.stackType) {
       $match['state.hidden'] = false;
@@ -88,7 +90,7 @@ const pullPipe_5_paginating = (query, sort, page = 1, num = 10) => {
       now: _$$now,
       end: _$$end,
       sort: { $literal: pullPipe_3_sorting(sort).$sort },
-      period: { $literal: query.date && exp_dateRange(...getDateRangeArray(query.date)) },
+      period: { $literal: query.date && queryDateExpression(...parseQueryDate(query.date)) },
     },
   };
   return { $project };
@@ -148,13 +150,13 @@ const getAggregationQuery = (collection, params, query, page, num, sort/** , upd
 
 // middleware
 const aggregateFetch = (collection, { page, num, sort } = {}) => function fetchController(req, res, next) {
-  const $Model = modelIndex[`${_U_.string.toCapitalized(collection)}Model`];
-  return $Model
+  const Model = modelIndex[`${_U_.string.toCapitalized(collection)}Model`];
+  return Model
     .aggregate(getAggregationQuery(collection, req.params, req.query, page, num || res.locals.$$SITE.num, sort))
     .then(docs => docs[0])
     .then(result => {
       const output = result && _U_.string.checkToStringTag(result.list, 'Array')
-        ? { ...result, list: result.list.map(doc => $Model.hydrate(doc)) }
+        ? { ...result, list: result.list.map(doc => Model.hydrate(doc)) }
         : result;
       if (typeof next !== 'function') return output;
       req.session.chest = output;
@@ -168,8 +170,8 @@ const aggregateFetch = (collection, { page, num, sort } = {}) => function fetchC
 module.exports = {
   aggregateFetch,
   [Symbol.for('__TEST__')]: {
+    queryDateExpression,
+    parseQueryDate,
     getAggregationQuery,
-    getDateRangeArray,
-    exp_dateRange,
   },
 };
