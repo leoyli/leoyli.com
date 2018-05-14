@@ -1,6 +1,7 @@
+/* global __ROOT__ */
 const {
   checkToStringTag, toKebabCase, toCapitalized, toEscapedChars, parseMongoObjectId, parseObjPath, parsePath,
-} = require(`${global.__ROOT__}/controllers/utilities/string`)[Symbol.for('__TEST__')];
+} = require(`${__ROOT__}/controllers/utilities/string`)[Symbol.for('__TEST__')];
 
 
 // test
@@ -44,7 +45,7 @@ describe('Utilities: String', () => {
     expect(test[0]).toBe(expectation);
     expect(test[1]).toBe(expectation);
 
-    // should returns `null` if target is not a string
+    // should return `null` if target is not a string
     expect(test[2]).toBeNull();
   });
 
@@ -54,7 +55,7 @@ describe('Utilities: String', () => {
     expect(toCapitalized('test')).toBe('Test');
     expect(toCapitalized('This is a test, and can be tested.')).toBe('This Is A Test, And Can Be Tested.');
 
-    // should returns `null` if failed
+    // should return `null` if failed
     expect(toCapitalized(undefined)).toBeNull();
   });
 
@@ -66,7 +67,7 @@ describe('Utilities: String', () => {
     expect(toEscapedChars('This is a test...'))
       .toBe('This is a test&#46;&#46;&#46;');
 
-    // should returns `null` if failed
+    // should return `null` if failed
     expect(toEscapedChars(undefined)).toBeNull();
   });
 
@@ -78,7 +79,7 @@ describe('Utilities: String', () => {
     expect(parseObjPath('a[b].c.d[e][f]')).toEqual(expectation);
     expect(parseObjPath('a[b[c]].d[e.f]')).toEqual(expectation);
 
-    // should returns `null` if failed
+    // should return `null` if failed
     expect(parseObjPath(undefined)).toBeNull();
   });
 
@@ -91,7 +92,7 @@ describe('Utilities: String', () => {
     expect(checkToStringTag(test)).toBe('Object');
     expect(test.toString()).toEqual(expectation);
 
-    // should returns `null` if failed
+    // should return `null` if failed
     expect(parseMongoObjectId('5a167966807c57204ef40cdd0')).toBeNull();
     expect(parseMongoObjectId(undefined)).toBeNull();
   });

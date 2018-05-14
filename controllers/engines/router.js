@@ -5,7 +5,7 @@ const { Router } = require('express');
 const { _M_ } = require('../modules/');
 const { _U_ } = require('../utilities/');
 const { exportHTML, exportJSON, rendererSymbols } = require('../handlers/exporter');
-const { BrowserReceptor, APIReceptor } = require('../handlers/receptor');
+const { browserReceptor, APIReceptor } = require('../handlers/receptor');
 
 
 // helpers
@@ -136,7 +136,7 @@ class Device {
    */
   static exec(mode, clusterPairs) {
     const router = new Router('/');
-    router.use(mode !== 'api' ? BrowserReceptor : APIReceptor);
+    router.use(mode !== 'api' ? browserReceptor : APIReceptor);
     clusterPairs.forEach(([path, device]) => router.use(path, device.exec(mode)));
     return router;
   }

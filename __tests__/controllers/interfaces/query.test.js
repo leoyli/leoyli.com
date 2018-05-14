@@ -1,15 +1,15 @@
-/* eslint-disable space-in-parens, array-bracket-spacing, comma-spacing */
+/* global __ROOT__ *//* eslint-disable space-in-parens, array-bracket-spacing, comma-spacing */
 const {
   paginatedMetaExpression, queryDateExpression, parseQueryDate, parseQuerySort,
   pullPipe_1_matching, pullPipe_2_masking, pullPipe_3_sorting, pullPipe_4_grouping, pullPipe_5_paginating,
   getAggregationQuery,
-} = require(`${global.__ROOT__}/controllers/interfaces/query`)[Symbol.for('__TEST__')];
+} = require(`${__ROOT__}/controllers/interfaces/query`)[Symbol.for('__TEST__')];
 
 
 // tests
 describe('Interface: Query', () => {
   test('Fn: paginatedMetaExpression', () => {
-    // should returns an object as $$meta
+    // should return an object as $$meta
     // // if all argument are "empty"
     expect(paginatedMetaExpression({})).toEqual({
       end: { $ceil: { $divide: ['$count', 10] } },
@@ -95,7 +95,7 @@ describe('Interface: Query', () => {
       $lt: new Date('2019-01-02T00:00:00.000Z'),
     });
 
-    // should returns `null` for invalid arguments
+    // should return `null` for invalid arguments
     expect(queryDateExpression([0, 0], [0, 0, 0, 0])).toBeNull();
     expect(queryDateExpression(undefined, undefined)).toBeNull();
     expect(queryDateExpression(undefined, [0, 0, 0])).toBeNull();
@@ -104,7 +104,7 @@ describe('Interface: Query', () => {
 
 
   test('Fn: parseQueryDate', () => {
-    // should returns empty array for the invalid input or empty string
+    // should return empty array for the invalid input or empty string
     // // if contains no ranges
     expect(parseQueryDate(undefined)            ).toEqual([]);
     expect(parseQueryDate('')                   ).toEqual([]);
@@ -143,11 +143,11 @@ describe('Interface: Query', () => {
 
 
   test('Fn: parseQuerySort', () => {
-    // should returns empty array for the invalid input or empty string
+    // should return empty array for the invalid input or empty string
     expect(parseQuerySort(undefined)).toEqual([]);
     expect(parseQuerySort('')).toEqual([]);
 
-    // should returns entries in terms of `[key, weight]`
+    // should return entries in terms of `[key, weight]`
     const someQueryStr = 'date,view:a, author:d, revised: 2, comment counts:-2';
 
     // // if no oder `flag`, and no `preset` (preset as -1)
@@ -198,7 +198,7 @@ describe('Interface: Query', () => {
 
 
   test('Fn: pullPipe_1_matching', () => {
-    // should returns an object with `$match` property
+    // should return an object with `$match` property
     // // if all argument are "empty"
     expect(pullPipe_1_matching('', {}, {}))
       .toHaveProperty('$match', {});
@@ -227,7 +227,7 @@ describe('Interface: Query', () => {
 
 
   test('Fn: pullPipe_2_masking', () => {
-    // should returns an object with `$project` property
+    // should return an object with `$project` property
     // // if param is "empty"
     expect(pullPipe_2_masking({}))
       .toHaveProperty('$project', { content: 0 });
@@ -239,7 +239,7 @@ describe('Interface: Query', () => {
 
 
   test('Fn: pullPipe_3_sorting', () => {
-    // should returns an object with `$sort` property
+    // should return an object with `$sort` property
     // // if all argument are "empty"
     expect(pullPipe_3_sorting({}))
       .toHaveProperty('$sort', { 'state.pinned': -1, 'time._updated': -1 });
@@ -322,14 +322,14 @@ describe('Interface: Query', () => {
 
 
   test('Fn: pullPipe_4_grouping', () => {
-    // should returns an object with `$group` property
+    // should return an object with `$group` property
     expect(pullPipe_4_grouping())
       .toHaveProperty('$group', { _id: null, count: { $sum: 1 }, list: { $push: '$$ROOT' } });
   });
 
 
   test('Fn: pullPipe_5_paginating', () => {
-    // should returns an object with `$project` property
+    // should return an object with `$project` property
     expect(pullPipe_5_paginating({}, {})).toHaveProperty('$project');
     expect(pullPipe_5_paginating({}, {})).toMatchSnapshot();
   });
@@ -338,7 +338,7 @@ describe('Interface: Query', () => {
   test('Fn: pullPipe_5_paginating', () => {
     const test = pullPipe_5_paginating({}, {});
 
-    // should returns an object with `$project` property
+    // should return an object with `$project` property
     expect(test).toHaveProperty('$project');
 
     // (*) should match with the snapshot
@@ -349,7 +349,7 @@ describe('Interface: Query', () => {
   test('Fn: getAggregationQuery', () => {
     const test = getAggregationQuery('', {}, {}, 10, {}).length;
 
-    // should returns an object with `$project` property
+    // should return an object with `$project` property
     expect(test).toBe(5);
 
     // (*) should match with the snapshot

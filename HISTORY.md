@@ -1,3 +1,15 @@
+### 0.10.0-dev.13 / 2018-05-13
+> App
+- Revised `browserReceptor` @'handlers/receptor'.
+
+> Test (75%)
+- Fixed typos.
+- Configured used preset global variable via `ESLint`.
+- Updated some environment variables.
+- Depended `node-mocks-http` lib.
+- Added 'handlers/receptor.test.js' unit tests.
+
+
 ### 0.10.0-dev.12 / 2018-05-13
 > App
 - @'utilities/object':

@@ -1,6 +1,7 @@
+/* global __ROOT__ */
 const {
   getProcessingPipes, getMiddlewareChain, Device,
-} = require(`${global.__ROOT__}/controllers/engines/router`)[Symbol.for('__TEST__')];
+} = require(`${__ROOT__}/controllers/engines/router`)[Symbol.for('__TEST__')];
 
 
 // test

@@ -1,6 +1,7 @@
+/* global __ROOT__ */
 const {
   getSavingPath, isUploadable, fetchRawDoc, fetchMessage, upload,
-} = require(`${global.__ROOT__}/controllers/interfaces/upload`)[Symbol.for('__TEST__')];
+} = require(`${__ROOT__}/controllers/interfaces/upload`)[Symbol.for('__TEST__')];
 
 
 // module
@@ -49,11 +50,11 @@ describe('Interface: Upload', () => {
 
 
   test('Fn: fetchMessage', () => {
-    // should returns no error messages
+    // should return no error messages
     expect(fetchMessage({ ...someBusboy }, someConfig))
       .toBe('');
 
-    // should returns error messages
+    // should return error messages
     // // if no file Name (empty filed)
     expect(fetchMessage({ ...someBusboy, fileName: '' }, someConfig))
       .toBe('No files were uploaded.');
