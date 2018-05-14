@@ -1,5 +1,5 @@
 const {
-  hasOwnKey, cloneDeep, mergeDeep, assignDeep, freezeDeep, createCaseInsensitiveProxy,
+  hasOwnKey, cloneDeep, mergeDeep, assignDeep, freezeDeep, burstArrayDeep, createCaseInsensitiveProxy,
 } = require(`${global.__ROOT__}/controllers/utilities/object`)[Symbol.for('__TEST__')];
 
 
@@ -45,17 +45,35 @@ describe('Utilities: Object', () => {
   test('Fn: mergeDeep', () => {
     const target = { a: 0, b: 1, c: { d: { e: 2, f: 3 }, g: 4 } };
     const source = { c: { d: { e: 5 }, f: 6 } };
-    const result = { a: 0, b: 1, c: { d: { e: 5, f: 3 }, f: 6, g: 4 } };
+    const expectation = { a: 0, b: 1, c: { d: { e: 5, f: 3 }, f: 6, g: 4 } };
 
-    // should immutably merge the source into the target deeply
+    // should immutably merge the source into the target deeply (default)
     const test_1 = mergeDeep(target, source);
-    expect(test_1).toEqual(result);
-    expect(target).not.toEqual(result);
+    expect(test_1).toEqual(expectation);
+    expect(target).not.toEqual(expectation);
 
     // should mutably merge the source into the target deeply
     const test_2 = mergeDeep(target, source, { mutate: true });
-    expect(test_2).toEqual(result);
-    expect(target).toEqual(result);
+    expect(test_2).toEqual(expectation);
+    expect(target).toEqual(expectation);
+  });
+
+
+  test('Fn: assignDeep', () => {
+    const target = { a: { b: { g: 'g' } } };
+    const path = 'a[b].c.d[e][f]';
+    const value = 'f';
+    const expectation = { a: { b: { c: { d: { e: { f: 'f' } } }, g: 'g' } } };
+
+    // should immutably assign value by object path in depth (default)
+    const test_1 = assignDeep(target, path, value);
+    expect(test_1).not.toBe(target);
+    expect(test_1).toEqual(expectation);
+
+    // should mutably assign value by object path in depth
+    const test_2 = assignDeep(target, path, value, { mutate: true });
+    expect(test_2).toBe(target);
+    expect(test_2).toEqual(expectation);
   });
 
 
@@ -64,7 +82,7 @@ describe('Utilities: Object', () => {
     expect(Object.getOwnPropertyDescriptors(target)).toHaveProperty('a.writable', true);
     expect(Object.getOwnPropertyDescriptors(target.a.b.c.d.e)).toHaveProperty('f.writable', true);
 
-    // should immutably freeze the target deeply
+    // should immutably freeze the target deeply (default)
     const test_1 = freezeDeep(target);
     expect(test_1).not.toBe(target);
     expect(Object.getOwnPropertyDescriptors(test_1)).toHaveProperty('a.writable', false);
@@ -78,21 +96,25 @@ describe('Utilities: Object', () => {
   });
 
 
-  test('Fn: assignDeep', () => {
-    const target = { a: { b: { g: 'g' } } };
-    const path = 'a[b].c.d[e][f]';
-    const value = 'f';
-    const result = { a: { b: { c: { d: { e: { f: 'f' } } }, g: 'g' } } };
+  test('Fn: burstArrayDeep', () => {
+    const target = { a: [1, 2], b: [1, 2, 3], c: [1, 2, [1, 2]], d: { e: { f: [1, 2] } } };
+    const expectLastOneWin = { a: 2, b: 3, c: [1, 2], d: { e: { f: 2 } } };
+    const expectFirstOneWin = { a: 1, b: 1, c: 1, d: { e: { f: 1 } } };
 
-    // should immutably assign value by object path in depth
-    const test_1 = assignDeep(target, path, value);
+    // should immutably burst the nested array deeply based on the first element (expectLastOneWin, default)
+    const test_1 = burstArrayDeep(target);
     expect(test_1).not.toBe(target);
-    expect(test_1).toEqual(result);
+    expect(test_1).toEqual(expectLastOneWin);
 
-    // should mutably assign value by object path in depth
-    const test_2 = assignDeep(target, path, value, { mutate: true });
+    // should immutably burst the nested array deeply based on the first element (expectFirstOneWin)
+    const test_3 = burstArrayDeep(target, { position: 0 });
+    expect(test_3).not.toBe(target);
+    expect(test_3).toEqual(expectFirstOneWin);
+
+    // should immutably burst the nested array deeply
+    const test_2 = burstArrayDeep(target, { mutate: true });
     expect(test_2).toBe(target);
-    expect(test_2).toEqual(result);
+    expect(test_2).toEqual(expectLastOneWin);
   });
 
 

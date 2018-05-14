@@ -41,7 +41,7 @@ site.stack = {
     if (!['posts', 'media'].includes(collection)) throw new _U_.error.HttpException(404);
     return _U_.express.wrapMiddleware([
       _M_.modifyHTMLTitleTag(collection),
-      _M_.aggregateFetch(collection, { num: 10 }),
+      _M_.paginatedQuery(collection, { num: 10 }),
     ])(req, res, next);
   },
   PATCH: async function site_stack_PATCH(req, res) {

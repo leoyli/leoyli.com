@@ -1,3 +1,4 @@
+const qs = require('qs');
 const methodOverride = require('method-override');
 const session = require('express-session');
 const favicon = require('serve-favicon');
@@ -13,6 +14,7 @@ const flash = require('connect-flash');
 
 // MODULE
 const { _M_ } = require('./controllers/modules/');
+const { _U_ } = require('./controllers/utilities/');
 const routingService = require('./routers/');
 const viewEngineService = require('./controllers/engines/view');
 const passportAgent = require('./services/passport');
@@ -22,6 +24,14 @@ const errorHandlingAgent = require('./services/error');
 
 // CONNECTION
 const app = express();
+
+
+/** setting **/
+app.set('env', 'dev');
+app.set('query parser', str => {
+  return _U_.object.burstArrayDeep(qs.parse(str, { parseArrays: false, depth: 0 }), { mutate: true, position: -1 });
+});
+
 
 /** database **/
 mongoose.connect(process.env.DB);

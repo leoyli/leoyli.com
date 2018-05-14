@@ -1,4 +1,28 @@
-### 0.10.0-dev.10 / 2018-05-11
+### 0.10.0-dev.12 / 2018-05-13
+> App
+- @'utilities/object':
+  - simplified `mergeDeep` @'utilities/object';
+  - added `burstArrayDeep` object method @'utilities/object'.
+- @'app':
+  - depended `qs` lib;
+    (the same lib used in express.js)
+  - added `env` and `query parser` customized configurations @'app'.
+  - used `burstArrayDeep` to modify `qs.parse` result.
+- revised and renamed 'interfaces/fetch` as 'interfaces/query':
+  - added JSDoc for all functions;
+  - added `parseQuerySort` helper;
+  - isolated `paginatedMetaExpression` helper;
+  - revised `parseQueryDate`;
+  - enhanced `pullPipe_3_sorting` sorting capabilities;
+  - renamed `aggregateFetch` as `paginatedQuery`.
+
+> Test
+- Added more tests upon 'query' interfaces.
+- Added `burstArrayDeep` unit test @'utilities/object'.
+- Fixed typos and variable naming in other tests.
+
+
+### 0.10.0-dev.11 / 2018-05-11
 > App
 - Fixed setting bug in `page.search` route.
 - Handled the invalid date query exception in `aggregateFetch`.

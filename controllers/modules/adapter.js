@@ -12,7 +12,7 @@ const { parseMultipart } = require('../interfaces/upload');
 
 
 /** Mongo aggregation for database fetching **/
-const { aggregateFetch } = require('../interfaces/fetch');
+const { paginatedQuery } = require('../interfaces/query');
 
 
 /** passport: populating `req.user` **/
@@ -93,7 +93,7 @@ const postNormalizer = async (req, res, next) => {
 module.exports = {
   postNormalizer,
   parseMultipart,
-  aggregateFetch,
+  paginatedQuery,
   usePassport,
   isSignedIn,
   isAuthorized,

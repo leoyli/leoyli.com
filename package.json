@@ -27,6 +27,7 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^4.5.0",
+    "qs": "^6.5.2",
     "serve-favicon": "^2.5.0",
     "spdy": "^3.4.7",
     "validator": "^9.4.1"

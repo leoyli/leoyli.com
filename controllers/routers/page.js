@@ -6,7 +6,7 @@ const page = {};
 
 page.search = {
   GET: function page_search_GET(req, res, next) {
-    return _M_.aggregateFetch('posts')(req, res, next);
+    return _M_.paginatedQuery('posts')(req, res, next);
   },
 };
 

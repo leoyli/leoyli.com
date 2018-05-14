@@ -38,8 +38,7 @@ const mergeDeep = (target, source, { mutate = false } = {}) => {
   const mergeRecursion = (obj, src) => {
     const srcKeys = Reflect.ownKeys(src);
     const objKeys = Reflect.ownKeys(obj);
-    for (let i = srcKeys.length - 1; i > -1; i -= 1) {
-      const currentKey = srcKeys[i];
+    for (let i = srcKeys.length - 1, currentKey = srcKeys[i]; i > -1; currentKey = srcKeys[i -= 1]) {
       if (checkToStringTag(src[currentKey], 'Object')) {
         if (!objKeys.includes(currentKey)) obj[currentKey] = {};
         mergeRecursion(obj[currentKey], src[currentKey]);
@@ -48,29 +47,6 @@ const mergeDeep = (target, source, { mutate = false } = {}) => {
   };
 
   mergeRecursion(worker, source);
-  return worker;
-};
-
-
-/**
- * (*pure) frozen the target and its property deeply
- * @param {object|array} target             - target{object} to be operated
- * @param {boolean} [mutate = false]        - allow to mutate the target object
- * @return {object|array}                   - the deeply frozen object/array
- */
-const freezeDeep = (target, { mutate = false } = {}) => {
-  const worker = mutate === true ? target : cloneDeep(target);
-
-  // non-tail-call recursion (parallel)
-  const freezeRecursion = (obj) => {
-    if (['Object', 'Array'].includes(checkToStringTag(obj))) {
-      const objKeys = Reflect.ownKeys(obj);
-      for (let i = objKeys.length - 1; i > -1; i -= 1) freezeRecursion(obj[objKeys[i]]);
-      Object.freeze(obj);
-    }
-  };
-
-  freezeRecursion(worker);
   return worker;
 };
 
@@ -102,6 +78,55 @@ const assignDeep = (target, path, value, { mutate = false } = {}) => {
 
 
 /**
+ * (*pure) frozen the target and its property deeply
+ * @param {object|array} target             - target{object} to be operated
+ * @param {boolean} [mutate = false]        - allow to mutate the target object
+ * @return {object|array}                   - the deeply frozen object/array
+ */
+const freezeDeep = (target, { mutate = false } = {}) => {
+  const worker = mutate === true ? target : cloneDeep(target);
+
+  // non-tail-call recursion (parallel)
+  const freezeRecursion = (obj) => {
+    if (['Object', 'Array'].includes(checkToStringTag(obj))) {
+      const objKeys = Reflect.ownKeys(obj);
+      for (let i = objKeys.length - 1; i > -1; i -= 1) freezeRecursion(obj[objKeys[i]]);
+      Object.freeze(obj);
+    }
+  };
+
+  freezeRecursion(worker);
+  return worker;
+};
+
+
+/**
+ * burst array object in a nested object based on a given position in all Array
+ * @param {object} target                   - target{object} to be operated
+ * @param {boolean} [mutate = false]        - allow to mutate the target object
+ * @param {number} [position = -1]          - position = 0 (first-one-win) or = -1 (last-one-win)
+ * @return {object}                         - the resulted object
+ */
+const burstArrayDeep = (target, { mutate = false, position = -1 } = {}) => {
+  const worker = mutate === true ? target : cloneDeep(target);
+  const index = Number(position);
+
+  // non-tail-call recursion (parallel)
+  const burstArrayRecursion = (obj) => {
+    const keys = Object.keys(obj);
+    for (let i = keys.length - 1, key = keys[i]; i > -1; key = keys[i -= 1]) {
+      const type = checkToStringTag(obj[key]);
+      if (type === 'Array') obj[key] = obj[key][index < 0 ? obj[key].length + index : index];
+      if (type === 'Object') burstArrayRecursion(obj[key]);
+    }
+  };
+
+  burstArrayRecursion(worker);
+  return worker;
+};
+
+
+/**
  * (pure)(decorator) proxyfy the object for allowing case-insensitive access
  * @param {object} obj                      - target{object} to be operated
  * @return {object}                         - the proxyfied object
@@ -124,6 +149,7 @@ module.exports = {
   mergeDeep,
   assignDeep,
   freezeDeep,
+  burstArrayDeep,
   createCaseInsensitiveProxy,
 };
 

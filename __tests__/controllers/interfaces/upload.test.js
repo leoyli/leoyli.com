@@ -49,11 +49,11 @@ describe('Interface: Upload', () => {
 
 
   test('Fn: fetchMessage', () => {
-    // should return no error messages
+    // should returns no error messages
     expect(fetchMessage({ ...someBusboy }, someConfig))
       .toBe('');
 
-    // should return error messages
+    // should returns error messages
     // // if no file Name (empty filed)
     expect(fetchMessage({ ...someBusboy, fileName: '' }, someConfig))
       .toBe('No files were uploaded.');

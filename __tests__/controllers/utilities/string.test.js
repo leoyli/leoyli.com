@@ -11,7 +11,7 @@ describe('Utilities: String', () => {
       {},
       async () => {},
     ];
-    const result = [
+    const expectation = [
       'Array',
       'Object',
       'AsyncFunction',
@@ -19,12 +19,12 @@ describe('Utilities: String', () => {
 
     // should use `Object.prototype.toString` to get the object type
     const test_1 = target.map(obj => checkToStringTag(obj));
-    expect(test_1[0]).toBe(result[0]);
-    expect(test_1[1]).toBe(result[1]);
-    expect(test_1[2]).toBe(result[2]);
+    expect(test_1[0]).toBe(expectation[0]);
+    expect(test_1[1]).toBe(expectation[1]);
+    expect(test_1[2]).toBe(expectation[2]);
 
     // should check if object match with a type name
-    const test_2 = target.map((obj, index) => checkToStringTag(obj, result[index]));
+    const test_2 = target.map((obj, index) => checkToStringTag(obj, expectation[index]));
     expect(test_2[0]).toBeTruthy();
     expect(test_2[1]).toBeTruthy();
     expect(test_2[2]).toBeTruthy();
@@ -37,14 +37,14 @@ describe('Utilities: String', () => {
       'This Is A Test!',
       undefined,
     ];
-    const result = 'this-is-a-test';
+    const expectation = 'this-is-a-test';
 
     // should convert the target string to the kebab-case
     const test = target.map(str => toKebabCase(str));
-    expect(test[0]).toBe(result);
-    expect(test[1]).toBe(result);
+    expect(test[0]).toBe(expectation);
+    expect(test[1]).toBe(expectation);
 
-    // should return `null` if target is not a string
+    // should returns `null` if target is not a string
     expect(test[2]).toBeNull();
   });
 
@@ -54,7 +54,7 @@ describe('Utilities: String', () => {
     expect(toCapitalized('test')).toBe('Test');
     expect(toCapitalized('This is a test, and can be tested.')).toBe('This Is A Test, And Can Be Tested.');
 
-    // should return `null` if failed
+    // should returns `null` if failed
     expect(toCapitalized(undefined)).toBeNull();
   });
 
@@ -66,7 +66,7 @@ describe('Utilities: String', () => {
     expect(toEscapedChars('This is a test...'))
       .toBe('This is a test&#46;&#46;&#46;');
 
-    // should return `null` if failed
+    // should returns `null` if failed
     expect(toEscapedChars(undefined)).toBeNull();
   });
 
@@ -78,7 +78,7 @@ describe('Utilities: String', () => {
     expect(parseObjPath('a[b].c.d[e][f]')).toEqual(expectation);
     expect(parseObjPath('a[b[c]].d[e.f]')).toEqual(expectation);
 
-    // should return `null` if failed
+    // should returns `null` if failed
     expect(parseObjPath(undefined)).toBeNull();
   });
 
@@ -91,7 +91,7 @@ describe('Utilities: String', () => {
     expect(checkToStringTag(test)).toBe('Object');
     expect(test.toString()).toEqual(expectation);
 
-    // should return `null` if failed
+    // should returns `null` if failed
     expect(parseMongoObjectId('5a167966807c57204ef40cdd0')).toBeNull();
     expect(parseMongoObjectId(undefined)).toBeNull();
   });
