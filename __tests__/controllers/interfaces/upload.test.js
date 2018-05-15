@@ -16,7 +16,7 @@ describe('Interface: Upload', () => {
 
   test('Fn: getSavingPath', () => {
     // stub out Date.now
-    global.Date.now = () => new Date('2018-01-01T00:00:00');
+    Date.now = () => new Date('2018-01-01T00:00:00.000Z');
 
     // should take the current time as the saving file name
     expect(getSavingPath('__PATH__', 'someFile.png')).toBe(`__PATH__/201801/${+Date.now()}.png`);

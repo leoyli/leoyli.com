@@ -5,12 +5,13 @@ const {
 
 
 // mock
+const calledWithNext = Symbol('done');
 const httpMocks = require('node-mocks-http');
 
 beforeEach(() => {
   global.res = httpMocks.createResponse();
   global.req = httpMocks.createRequest({ session: {} });
-  global.next = () => 'passed';
+  global.next = () => calledWithNext;
 });
 
 
@@ -21,7 +22,7 @@ describe('Middleware: Receptor', () => {
     req.session.returnTo = '/';
 
     // should success and call with the next middleware
-    expect(browserReceptor(req, res, next)).toBe('passed');
+    expect(browserReceptor(req, res, next)).toBe(calledWithNext);
 
     // should set $$MODE to 'html'
     expect(res.locals.$$MODE).toBe('html');
@@ -31,14 +32,14 @@ describe('Middleware: Receptor', () => {
     expect(req.flash).toHaveBeenCalledWith('error');
     expect(req.flash).toHaveBeenCalledWith('info');
 
-    // should not run housekeeping with `retry` in `flash.action`
+    // should not do housekeeping whenever `retry` existed in `flash.action`
     expect(req.session).toHaveProperty('returnTo', '/');
   });
 
 
   test('Fn: APIReceptor', () => {
     // should success and call with the next middleware
-    expect(APIReceptor(req, res, next)).toBe('passed');
+    expect(APIReceptor(req, res, next)).toBe(calledWithNext);
 
     // should set $$MODE to 'html'
     expect(res.locals.$$MODE).toBe('api');

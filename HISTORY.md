@@ -1,4 +1,17 @@
-### 0.10.0-dev.13 / 2018-05-13
+### 0.10.0-dev.14 / 2018-05-14
+> App
+- @'handlers/exportor' and @'handlers/receptor'
+  - added JSDocs;
+  - revised most handlers for better conssitency and readability;
+
+> Test (79%)
+- Added 'handlers/exporter.test.js' unit tests.
+- Enhanced semantic assertions @'handlers/receptor'.
+- Removed duplicated test @'interfaces/query'.
+- Revised `Date.now()` stub @'interfaces/upload'.
+
+
+### 0.10.0-dev.13 / 2018-05-14
 > App
 - Revised `browserReceptor` @'handlers/receptor'.
 

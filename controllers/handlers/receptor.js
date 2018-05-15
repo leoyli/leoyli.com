@@ -1,14 +1,17 @@
+/**
+ * start to handle an HTML(browser) request
+ */
 const browserReceptor = (req, res, next) => {                                                                           // todo: start to load template file from fs? (concurrency)
   // populating variables
   res.locals.$$MODE = 'html';
   res.locals.$$SITE = JSON.parse(process.env.$WEBSITE_CONFIGS);
   res.locals.$$VIEW = {
-    params: req.params,
-    query: req.query,
+    flash: { error: req.flash('error'), info: req.flash('info'), action: req.flash('action') },
     route: req.baseUrl + req.path,
     title: res.locals.$$SITE.title,
-    flash: { error: req.flash('error'), info: req.flash('info'), action: req.flash('action') },
     user: req.session.user,
+    params: req.params,
+    query: req.query,
   };
 
   // housekeeping sessions
@@ -19,6 +22,9 @@ const browserReceptor = (req, res, next) => {                                   
 };
 
 
+/**
+ * start to handle an API request
+ */
 const APIReceptor = (req, res, next) => {
   // populating variables
   res.locals.$$MODE = 'api';

@@ -329,13 +329,6 @@ describe('Interface: Query', () => {
 
 
   test('Fn: pullPipe_5_paginating', () => {
-    // should return an object with `$project` property
-    expect(pullPipe_5_paginating({}, {})).toHaveProperty('$project');
-    expect(pullPipe_5_paginating({}, {})).toMatchSnapshot();
-  });
-
-
-  test('Fn: pullPipe_5_paginating', () => {
     const test = pullPipe_5_paginating({}, {});
 
     // should return an object with `$project` property
