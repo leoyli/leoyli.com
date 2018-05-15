@@ -1,3 +1,13 @@
+### 0.10.0-dev.15 / 2018-05-15
+> App
+- @'handlers/exception' -> 'handlers/error':
+  - merged `terminal.MongoError` into `terminal.ClientException`;
+  - simplified `terminal.TemplateException` and `terminal.HttpException`.
+
+> Test (78%)
+- Added `redirect.signInRetry` unit test.
+
+
 ### 0.10.0-dev.14.1 / 2018-05-15
 > App
 - Fixed bugs @'handlers/exporter'.

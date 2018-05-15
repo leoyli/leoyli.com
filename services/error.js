@@ -1,5 +1,5 @@
 const { HttpException } = require('../controllers/utilities/')._U_.error;
-const exceptionHandler = require('../controllers/handlers/exception');
+const { exceptionHandler } = require('../controllers/handlers/error');
 
 
 const errorHandlingAgent = app => {
