@@ -28,6 +28,7 @@ const browserReceptor = (req, res, next) => {                                   
 const APIReceptor = (req, res, next) => {
   // populating variables
   res.locals.$$MODE = 'api';
+  res.locals.$$SITE = JSON.parse(process.env.$WEBSITE_CONFIGS);
 
   return next();
 };

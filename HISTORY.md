@@ -1,3 +1,12 @@
+### 0.10.0-dev.14.1 / 2018-05-15
+> App
+- Fixed bugs @'handlers/exporter'.
+- Populated website settings in `APIReceptor` @'hanlders/receptor'.
+
+> Test
+- Enhanced the testing quality @'handlers/exporter'.
+
+
 ### 0.10.0-dev.14 / 2018-05-14
 > App
 - @'handlers/exportor' and @'handlers/receptor'

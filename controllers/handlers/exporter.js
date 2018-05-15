@@ -15,13 +15,13 @@ const renderer = { posts: {} };
  * (factory) handle a single post document
  * @return {string|*}
  */
-renderer.posts.single = ({ template, post = {}, meta = {} } = {}) => function singlePostHandler(req, res) {
-  if (!post.state
+renderer.posts.single = ({ filename, post = null, meta = {} } = {}) => function singlePostRenderer(req, res) {
+  if (!post
       || post.state.recycled
-      || (!post.state.published && !req.session.user)                                                                 // todo: wired up with authorization
+      || (!post.state.published && !req.session.user)                                                                   // todo: wired up with authorization
   ) throw new _U_.error.HttpException(404);
   if (post.title) _M_.modifyHTMLTitleTag({ name: post.title, root: true })(req, res);
-  return res.render(template, { $POST: post, $$META: meta });
+  return res.render(filename, { $$POST: post, $$META: meta });
 };
 
 
@@ -29,11 +29,11 @@ renderer.posts.single = ({ template, post = {}, meta = {} } = {}) => function si
  * (factory) handle a multiple post document list
  * @return {string|*}
  */
-renderer.posts.multiple = ({ template, list = [], meta = {} } = {}) => function multiplePostHandler(req, res) {
+renderer.posts.multiple = ({ filename, list = [], meta = {} } = {}) => function multiplePostRenderer(req, res) {
   const paginatedURL = `${res.locals.$$VIEW.route}?num=${meta.num}&page='`;
   if (meta.now > 1) res.locals.$$VIEW.prev = paginatedURL + (meta.now - 1);
   if (meta.now < meta.end) res.locals.$$VIEW.next = paginatedURL + (meta.now + 1);
-  return res.render(template, { $$LIST: list, $$META: meta });
+  return res.render(filename, { $$LIST: list, $$META: meta });
 };
 
 

@@ -239,7 +239,7 @@ const getAggregationQuery = (collection, params, query, num, sort/** , update **
 
 
 // middleware
-const paginatedQuery = (collection, { num, sort } = {}) => function fetchController(req, res, next) {
+const paginatedQuery = (collection, { num, sort } = {}) => function queryController(req, res, next) {
   const Model = modelIndex[`${_U_.string.toCapitalized(collection)}Model`];
   return Model
     .aggregate(getAggregationQuery(collection, req.params, req.query, num || res.locals.$$SITE.num, sort))

@@ -21,7 +21,7 @@ describe('Middleware: Receptor', () => {
     req.flash = jest.fn(call => (call === 'action' ? ['retry'] : []));
     req.session.returnTo = '/';
 
-    // should success and call with the next middleware
+    // should call with the next middleware
     expect(browserReceptor(req, res, next)).toBe(calledWithNext);
 
     // should set $$MODE to 'html'
@@ -38,7 +38,7 @@ describe('Middleware: Receptor', () => {
 
 
   test('Fn: APIReceptor', () => {
-    // should success and call with the next middleware
+    // should call with the next middleware
     expect(APIReceptor(req, res, next)).toBe(calledWithNext);
 
     // should set $$MODE to 'html'
