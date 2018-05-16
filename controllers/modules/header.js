@@ -1,5 +1,5 @@
 /**
- * prohibit crawlers
+ * prevent from parsing by crawlers
  */
 const noCrawlerHeader = function noCrawlerHeader(req, res, next) {
   res.set('Cache-Control', 'private, max-age=0');
@@ -9,10 +9,10 @@ const noCrawlerHeader = function noCrawlerHeader(req, res, next) {
 
 
 /**
- * prevent from caches storage
+ * prevent data storage from caches
  */
 const noStoreCacheHeader = function noStoreCacheHeader(req, res, next) {
-  res.set('Cache-Control', 'no-store');
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
   if (typeof next === 'function') return next();
 };
 

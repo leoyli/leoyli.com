@@ -11,13 +11,13 @@ const httpMocks = require('node-mocks-http');
 beforeEach(() => {
   global.res = httpMocks.createResponse();
   global.req = httpMocks.createRequest({ session: {} });
-  global.next = () => calledWithNext;
+  global.next = jest.fn(() => calledWithNext);
 });
 
 
 // test
-describe('Middleware: Exporter', () => {
-  test('Fn: renderer.posts.single', () => {
+describe('Handlers: Exporter', () => {
+  test('Middleware: renderer.posts.single', () => {
     res.render = jest.fn();
 
     // should throw an Error (HTTPException(404))
@@ -47,7 +47,7 @@ describe('Middleware: Exporter', () => {
   });
 
 
-  test('Fn: renderer.posts.multiple', () => {
+  test('Middleware: renderer.posts.multiple', () => {
     res.locals.$$VIEW = { route: '' };
     res.render = jest.fn();
 
@@ -67,7 +67,7 @@ describe('Middleware: Exporter', () => {
   });
 
 
-  test('Fn: exportHTML', () => {
+  test('Middleware: exportHTML', () => {
     req.session.chest = { doc: 'test' };
     renderer.posts.single = jest.fn(() => () => {});
     renderer.posts.multiple = jest.fn(() => () => {});
@@ -93,13 +93,13 @@ describe('Middleware: Exporter', () => {
   });
 
 
-  test('Fn: exportJSON', () => {
+  test('Middleware: exportJSON', () => {
     Date.now = () => new Date('2018-01-01T00:00:00.000Z');
     req.session.chest = { doc: 'test' };
     res.json = jest.fn();
 
     // should NOT call with the next middleware
-    expect(exportJSON(req, res, next)).not.toBe(calledWithNext);
+    expect(exportJSON()(req, res, next)).not.toBe(calledWithNext);
 
     // should call `res.json`
     expect(res.json).toHaveBeenCalledTimes(1);

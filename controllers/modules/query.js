@@ -1,14 +1,13 @@
-// const { ObjectId } = require('mongodb');
-const modelIndex = require('../../models/');
 const { _U_ } = require('../utilities/');
+const modelIndex = require('../../models/');
 
 
 // helpers
 /**
- * construct Mongo query expression for pagination
- * @param {object} query                    - express.js url query object
- * @param num                               - preset value of num (/page)
- * @return {object}                         - a collection of mongo expressions contains paginating variables
+ * compose a hashed object containing Mongo query expressions for pagination
+ * @param {object} query                    - express.js query object
+ * @param {number} [num]                    - preset numbers of document per page
+ * @return {object}                         - a collection of Mongo expressions contains paginating variables
  */
 const paginatedMetaExpression = (query, num = 10) => {
   const $$page = Math.trunc(query.page > 1 ? query.page : 1);
@@ -20,7 +19,7 @@ const paginatedMetaExpression = (query, num = 10) => {
 
 
 /**
- * construct Mongo query expression based on a time range from an array
+ * compose Mongo query expression based on a time range from an array
  * @param {array} start                     - an array formatted as [YYYY, MM, DD]
  * @param {array} end                       - an array formatted as [YYYY, MM, DD]
  * @return {object}                         - part-of expression in $match stage
@@ -40,7 +39,7 @@ const queryDateExpression = (start, end) => {
 
 
 /**
- * parse date query into an array that contains a time range from a string
+ * parse date query into an date array
  * @param {string} str                      - query string
  * @return {array}                          - an array shaped as [[YYYY, MM, DD], [YYYY, MM, DD]]
  */
@@ -57,10 +56,10 @@ const parseQueryDate = (str) => {
 
 
 /**
- * parse sorting query into a collection of fieldName-direction entries
+ * parse sorting query into fieldName-direction entries
  * @param {string} str                      - query string
- * @param {string} order                    - contains information about sorting direction
- * @param {number} preset                   - default sorting direction (as descending direction)
+ * @param {string} [order]                  - contains information about sorting direction
+ * @param {number} [preset]                 - default sorting direction (as descending direction)
  * @return {array}                          - an array shaped as [[fieldName, direction], ...]
  */
 const parseQuerySort = (str, order = '', preset = -1) => {
@@ -85,9 +84,9 @@ const parseQuerySort = (str, order = '', preset = -1) => {
 // aggregations
 /**
  * pull-pipeline stage 1: matching rules
- * @param {string} collection               - mongoDB collection name
- * @param {object} params                   - express.js routing param object
- * @param {object} query                    - express.js url query object
+ * @param {string} collection               - MongoDB collection name
+ * @param {object} params                   - express.js param object
+ * @param {object} query                    - express.js query object
  * @return {{$match}}
  */
 const pullPipe_1_matching = (collection, params, query) => {
@@ -105,7 +104,7 @@ const pullPipe_1_matching = (collection, params, query) => {
 
 /**
  * pull-pipeline stage 2: fields masking
- * @param {object} params                   - express.js routing param object
+ * @param {object} params                   - express.js param object
  * @return {{$project}}
  */
 const pullPipe_2_masking = (params) => {
@@ -119,8 +118,8 @@ const pullPipe_2_masking = (params) => {
 
 /**
  * pull-pipeline stage 3: fields sorting
- * @param {object} query                    - express.js url query object
- * @param {object} sort                     - preset sorting configurations
+ * @param {object} query                    - express.js query object
+ * @param {object} [sort]                   - preset sorting configurations
  * @return {{$project}}
  */
 const pullPipe_3_sorting = (query, sort = {}) => {
@@ -155,8 +154,8 @@ const pullPipe_4_grouping = () => {
 
 /**
  * pull-pipeline stage 5: paginating projection
- * @param {object} query                    - express.js url query object
- * @param {object} num                      - preset num number
+ * @param {object} query                    - express.js query object
+ * @param {number} num                      - preset numbers of document per page
  * @param {object} sort                     - preset sorting configurations
  * @return {{$project}}
  */
@@ -209,12 +208,12 @@ const pullPipe_5_paginating = (query, num, sort) => {
 // query-builder
 /**
  * combined all pipeline stages into an Mongo aggregation query
- * @param {string} collection               - mongoDB collection name
- * @param {object} params                   - express.js routing param object
- * @param {object} query                    - express.js url query object
- * @param {object} num                      - preset num number
+ * @param {string} collection               - MongoDB collection name
+ * @param {object} params                   - express.js param object
+ * @param {object} query                    - express.js query object
+ * @param {number} num                      - preset numbers of document per page
  * @param {object} sort                     - preset sorting configurations
- * @return {[]}                             - Mongo aggregation query
+ * @return {array}                          - Mongo aggregation query
  */
 const getAggregationQuery = (collection, params, query, num, sort/** , update **/) => {
   const pullDocuments = [
@@ -239,17 +238,21 @@ const getAggregationQuery = (collection, params, query, num, sort/** , update **
 
 
 // middleware
+/**
+ * (factory) populate paginated query result via Mongo aggregation
+ * @param {string} collection               - MongoDB collection name
+ * @param {number} [num]                    - preset numbers of document per page
+ * @param {object} [sort]                   - preset sorting configurations
+ * @return {function}
+ */
 const paginatedQuery = (collection, { num, sort } = {}) => function queryController(req, res, next) {
   const Model = modelIndex[`${_U_.string.toCapitalized(collection)}Model`];
   return Model
     .aggregate(getAggregationQuery(collection, req.params, req.query, num || res.locals.$$SITE.num, sort))
     .then(docs => docs[0])
     .then(result => {
-      const output = result && _U_.string.checkToStringTag(result.list, 'Array')
-        ? { ...result, list: result.list.map(doc => Model.hydrate(doc)) }
-        : result;
-      if (typeof next !== 'function') return output;
-      req.session.chest = output;
+      req.session.chest = result;
+      if (result.list) req.session.chest.list = result.list.map(doc => Model.hydrate(doc));
       return next();
     })
     .catch(next);

@@ -4,8 +4,8 @@ const { Router } = require('express');
 
 /**
  * (decorator) handle asyncfunction for error bubbling
- * @param {array|function} target           - fn may be wrapped
- * @return {array|function}                 - task is triggered only when keyword 'async' is found
+ * @param {array|function} target           - fn to be wrapped
+ * @return {array|function}                 - wrapped middleware
  */
 const wrapAsync = (target) => {
   const unnamedWrapper = (fn) => (...arg) => fn.apply(this, arg).catch(arg[arg.length - 1]);
@@ -19,8 +19,8 @@ const wrapAsync = (target) => {
 
 /**
  * (factory) insert additional middleware into the chain
- * @param {array|map|function} queue        - fn may be wrapped
- * @return {function}                       - middleware chain with insertion
+ * @param {array|function} target           - fn to be wrapped
+ * @return {function}                       - repacked middleware
  */
 const wrapMiddleware = (queue) => {
   const router = new Router({ mergeParams: true });

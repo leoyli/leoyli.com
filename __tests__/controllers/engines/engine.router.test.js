@@ -49,14 +49,14 @@ describe('Engines: Router', () => {
     expect(test('html')).toEqual([
       'caseInsensitiveProxy',
       'mockMain',
-      'templateLoader',
+      'templateHandler',
     ]);
 
     // should print out the stacked middleware name in 'api' mode
     expect(test('api')).toEqual([
       'caseInsensitiveProxy',
       'mockMain',
-      'exportJSON',
+      'JSONHandler',
     ]);
   });
 

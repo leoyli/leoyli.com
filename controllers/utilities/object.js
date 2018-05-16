@@ -4,7 +4,7 @@ const { checkToStringTag, parseObjPath } = require('./string');
 
 /**
  * check if object has the property
- * @param {object} obj                      - target{object} to be evaluate
+ * @param {object} obj                      - object to be evaluate
  * @param {string} prop                     - name of the property
  * @return {boolean}                        - evaluation result
  */
@@ -15,7 +15,7 @@ const hasOwnKey = (obj, prop) => {
 
 /**
  * clone the object/array deeply by its value (reference decoupled)
- * @param {object|array} source             - source{object} to be cloned, not support to an Array object
+ * @param {object|array} source             - referencing object
  * @return {object|array}                   - cloned object which is allocated at different memory
  */
 const cloneDeep = (source) => {
@@ -26,9 +26,9 @@ const cloneDeep = (source) => {
 
 /**
  * merge two object recursively                                                                                         // note: this function can not copy getter/setter properties
- * @param {object} target                   - target{object} to be operated
- * @param {object} source                   - reference object for target
- * @param {boolean} [mutate = false]        - allow to mutate the target object
+ * @param {object} target                   - object to be operated
+ * @param {object|array} source             - referencing object
+ * @param {boolean} [mutate = false]        - mutation setting
  * @return {object}                         - the merged object
  */
 const mergeDeep = (target, source, { mutate = false } = {}) => {
@@ -53,10 +53,10 @@ const mergeDeep = (target, source, { mutate = false } = {}) => {
 
 /**
  * assigned the value to an object by path recursively                                                                  // note: (1) can be set to mutable; (2) value could be 0{number}
- * @param {object} target                   - target{object} to be operated
- * @param {string|array} path               - referencing path of the object
- * @param {*} [value]                       - value{*} to be assigned
- * @param {boolean} [mutate = false]        - allow to mutate the target object
+ * @param {object} target                   - object to be operated
+ * @param {string|array} path               - assigning object path
+ * @param {*} [value]                       - value to be assigned (by reference)
+ * @param {boolean} [mutate = false]        - mutation setting
  * @return {object}                         - the assigned object
  */
 const assignDeep = (target, path, value, { mutate = false } = {}) => {
@@ -78,10 +78,10 @@ const assignDeep = (target, path, value, { mutate = false } = {}) => {
 
 
 /**
- * (*pure) frozen the target and its property deeply
- * @param {object|array} target             - target{object} to be operated
- * @param {boolean} [mutate = false]        - allow to mutate the target object
- * @return {object|array}                   - the deeply frozen object/array
+ * frozen the target and its property deeply
+ * @param {object|array} target             - object to be operated
+ * @param {boolean} [mutate = false]        - mutation setting
+ * @return {object|array}                   - the frozen object/array
  */
 const freezeDeep = (target, { mutate = false } = {}) => {
   const worker = mutate === true ? target : cloneDeep(target);
@@ -101,10 +101,10 @@ const freezeDeep = (target, { mutate = false } = {}) => {
 
 
 /**
- * burst array object in a nested object based on a given position in all Array
- * @param {object} target                   - target{object} to be operated
- * @param {boolean} [mutate = false]        - allow to mutate the target object
- * @param {number} [position = -1]          - position = 0 (first-one-win) or = -1 (last-one-win)
+ * burst array in a nested object based on a given position in all array
+ * @param {object} target                   - object to be operated
+ * @param {boolean} [mutate = false]        - mutation setting
+ * @param {number} [position = -1]          - position in the array (0 = first-one-win; -1 = last-one-win)
  * @return {object}                         - the resulted object
  */
 const burstArrayDeep = (target, { mutate = false, position = -1 } = {}) => {
@@ -127,9 +127,9 @@ const burstArrayDeep = (target, { mutate = false, position = -1 } = {}) => {
 
 
 /**
- * (pure)(decorator) proxyfy the object for allowing case-insensitive access
- * @param {object} obj                      - target{object} to be operated
- * @return {object}                         - the proxyfied object
+ * (decorator) proxyfy the object for allowing case-insensitive access
+ * @param {object} obj                      - object to be delegated
+ * @return {object}                         - the resulted proxy
  */
 const createCaseInsensitiveProxy = (obj) => {
   if (!checkToStringTag(obj, 'Object')) throw new TypeError('Invalid arguments as input.');

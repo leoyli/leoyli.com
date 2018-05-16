@@ -11,13 +11,13 @@ const httpMocks = require('node-mocks-http');
 beforeEach(() => {
   global.res = httpMocks.createResponse();
   global.req = httpMocks.createRequest({ session: {} });
-  global.next = () => calledWithNext;
+  global.next = jest.fn(() => calledWithNext);
 });
 
 
 // test
-describe('Middleware: Receptor', () => {
-  test('Fn: browserReceptor', () => {
+describe('Handlers: Receptor', () => {
+  test('Middleware: browserReceptor', () => {
     req.flash = jest.fn(call => (call === 'action' ? ['retry'] : []));
     req.session.returnTo = '/';
 
@@ -37,7 +37,7 @@ describe('Middleware: Receptor', () => {
   });
 
 
-  test('Fn: APIReceptor', () => {
+  test('Middleware: APIReceptor', () => {
     const arbitraryStringValue = expect.stringMatching('');
     res.set = jest.fn();
 

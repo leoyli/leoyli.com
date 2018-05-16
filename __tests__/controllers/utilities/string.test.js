@@ -87,7 +87,7 @@ describe('Utilities: String', () => {
   test('Fn: parseMongoObjectId', () => {
     const expectation = '5a167966807c57204ef40cdd';
 
-    // should parse a target string into a mongo ObjectId
+    // should parse a target string into a Mongo ObjectId
     const test = parseMongoObjectId('http://(url)/5a167966807c57204ef40cdd?page=1');
     expect(checkToStringTag(test)).toBe('Object');
     expect(test.toString()).toEqual(expectation);

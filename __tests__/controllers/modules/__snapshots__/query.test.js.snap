@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Module: Query Fn: getAggregationQuery 1`] = `5`;
+exports[`Modules: Query Fn: getAggregationQuery 1`] = `5`;
 
-exports[`Module: Query Fn: pullPipe_5_paginating 1`] = `
+exports[`Modules: Query Fn: pullPipe_5_paginating 1`] = `
 Object {
   "$project": Object {
     "_id": 0,

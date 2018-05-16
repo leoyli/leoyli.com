@@ -11,13 +11,13 @@ const httpMocks = require('node-mocks-http');
 beforeEach(() => {
   global.res = httpMocks.createResponse();
   global.req = httpMocks.createRequest({ session: {} });
-  global.next = () => calledWithNext;
+  global.next = jest.fn(() => calledWithNext);
 });
 
 
 // test
-describe('Middleware: Exception', () => {
-  test('Fn: redirect.signInRetry', () => {
+describe('Handlers: Exception', () => {
+  test('Middleware: redirect.signInRetry', () => {
     req._setHeadersVariable('Referrer', '/samePage');
     res.locals.$$VIEW = { flash: { info: ['info_A', 'info_B'] } };
     req.flash = jest.fn();

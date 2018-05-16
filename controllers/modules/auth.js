@@ -5,7 +5,7 @@ const { noCrawlerHeader } = require('./header');
 
 
 /**
- * passport for `req.user`
+ * passport
  */
 const usePassport = [noCrawlerHeader, passport.initialize(), passport.session()];
 

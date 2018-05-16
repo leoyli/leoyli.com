@@ -3,7 +3,7 @@ const { ObjectId } = require('mongodb');
 
 
 /**
- * check the object type via `Object.prototype.toString`
+ * check the object type with `Object.prototype.toString`
  * @param {object} target                   - object to be checked
  * @param {string} [str]                    - name to be matched (case insensitive)
  * @return {(boolean|string)}               - if no name given, the brand name of the object would be returned
@@ -19,7 +19,7 @@ const checkToStringTag = (target, str) => {
 /**
  * convert string to kebabCase
  * @param {string} str                      - any arbitrary string
- * @return {string}                         - kebabCased string
+ * @return {string|null}                    - kebabCased string
  */
 const toKebabCase = (str) => {
   return !checkToStringTag(str, 'String') || !str ? null : str
@@ -32,9 +32,9 @@ const toKebabCase = (str) => {
 
 
 /**
- * capitalize each words of a string
+ * convert string to capitalize sentence
  * @param {string} str                      - any arbitrary string
- * @return {string}                         - capitalized string
+ * @return {string|null}                    - capitalized string
  */
 const toCapitalized = (str) => {
   return !checkToStringTag(str, 'String') || !str  ? null : str.split(' ')
@@ -45,7 +45,7 @@ const toCapitalized = (str) => {
 /**
  * convert matched context to HTML entity                                                                               // note: this method allows `null` or `undefined` argument
  * @param {string} str                      - any arbitrary string
- * @return {string|undefined}               - escaped string, only key HTML entities are escaped
+ * @return {string|null}                    - escaped string, only key HTML entities are escaped
  */
 const toEscapedChars = (str) => {
   const charMap = {
@@ -69,7 +69,7 @@ const toEscapedChars = (str) => {
 /**
  * parse Mongo ObjectId (hexadecimal)                                                                                   // todo: option to output ObjectId obj.
  * @param {string} str                      - any arbitrary string
- * @return {object}                         - hexadecimal Mongo `ObjectId` object
+ * @return {object|null}                    - hexadecimal Mongo `ObjectId` object
  */
 const parseMongoObjectId = (str) => {
   const val = !checkToStringTag(str, 'String') || !str ? null : /(?:\=|\/|^)([a-f\d]{24})(?:\?|\/|$)/i.exec(str);
@@ -80,7 +80,7 @@ const parseMongoObjectId = (str) => {
 /**
  * parse a string to object path array
  * @param {string} str                      - any arbitrary string
- * @return {array}                          - an array contains elements in ordered by nest keys (path)
+ * @return {array|null}                     - an array contains elements in ordered by nest keys (path)
  */
 const parseObjPath = (str) => {
   return !checkToStringTag(str, 'String') || !str  ? null : str.match(/[a-zA-Z0-9$_]+/g);
@@ -90,7 +90,7 @@ const parseObjPath = (str) => {
 /**
  * parse a given file path
  * @param {string} str                      - any arbitrary string
- * @return {object}                         - parsed result
+ * @return {object|null}                    - parsed result
  */
 const parsePath = (str) => {
   if (!checkToStringTag(str, 'String') || !str) return null;

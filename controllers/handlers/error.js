@@ -4,6 +4,9 @@ const { _M_ } = require('../modules/');
 // redirect
 const redirect = {};
 
+/**
+ * redirect to sign-in page
+ */
 redirect.signInRetry = function signInRetry(req, res) {
   // if signed-out from a authentication required page (silent the resulted error flash)
   if (req.header('Referrer').includes(req.originalUrl)) {

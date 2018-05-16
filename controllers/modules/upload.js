@@ -8,7 +8,7 @@ const Busboy = require('busboy');
 const { _U_ } = require('../utilities/');
 
 
-// components
+// helpers
 /**
  * compose the upload path and saving file name                                                                         // note: can only be called once in a stream
  * @param {object} pathBase                 - default path
@@ -26,8 +26,8 @@ const getSavingPath = (pathBase, fileName) => {
 /**
  * check if the file is uploadable
  * @param {object} busboy                   - busboy emitted object
- * @param {object} configs                  - object contains the key as criteria
- * @return {boolean}                        - action passed(true) / blocked(false)
+ * @param {object} configs                  - upload configurations
+ * @return {boolean}                        - uploadable(true) / in-uploadable(false)
  */
 const isUploadable = (busboy, configs) => {
   return !(!busboy.fileName || !configs.MIME.includes(busboy.MIME) || busboy.stream.truncated);
@@ -37,8 +37,8 @@ const isUploadable = (busboy, configs) => {
 /**
  * parse to give a raw document
  * @param {object} busboy                   - busboy emitted object
- * @param {object} configs                  - received configurations
- * @return {object}                         - document to be merged
+ * @param {object} configs                  - upload configurations
+ * @return {object}                         - parsed document to be merged
  */
 const fetchRawDoc = (busboy, configs) => {
   if (isUploadable(busboy, configs)) {
@@ -68,7 +68,6 @@ const fetchMessage = (busboy, configs) => {
 /**
  * pipe the busboy readable stream with fs writable stream to upload the file
  * @param {object} busboy                   - busboy emitted object
- * @return {undefined}                      - the uploaded file is not returned
  */
 const upload = (busboy) => {
   busboy.stream.pipe(fs.createWriteStream(busboy.filePath).on('error', streamError => {

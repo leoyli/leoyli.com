@@ -12,7 +12,10 @@ const VIEW_STACK = Symbol('VIEW_STACK');
 const renderer = { posts: {} };
 
 /**
- * (factory) handle a single post document
+ * #(factory) handle a single post document
+ * @param {string} filename                 - template name
+ * @param {object} [post]                   - post document
+ * @param {object} [meta]                   - meta object
  * @return {string|*}
  */
 renderer.posts.single = ({ filename, post = null, meta = {} } = {}) => function singlePostRenderer(req, res) {
@@ -26,7 +29,10 @@ renderer.posts.single = ({ filename, post = null, meta = {} } = {}) => function 
 
 
 /**
- * (factory) handle a multiple post document list
+ * #(factory) handle a multiple post document list
+ * @param {string} filename                 - template name
+ * @param {array} [list]                    - list of post documents
+ * @param {object} [meta]                   - meta object
  * @return {string|*}
  */
 renderer.posts.multiple = ({ filename, list = [], meta = {} } = {}) => function multiplePostRenderer(req, res) {
@@ -37,12 +43,13 @@ renderer.posts.multiple = ({ filename, list = [], meta = {} } = {}) => function 
 };
 
 
-// main handlers
 /**
- * (factory) export HTML string with proper renderer
+ * (factory) export HTML string via proper renderer
+ * @param {string} [$template]              - template name
+ * @param {symbol} [$renderer]              - renderer symbol
  * @return {string|*}
  */
-const exportHTML = ({ template: $template, renderer: $renderer } = {}) => function templateLoader(req, res) {
+const exportHTML = ({ template: $template, renderer: $renderer } = {}) => function templateHandler(req, res) {
   const { post, list, meta, template = $template, renderer: renderingSymbol = $renderer } = req.session.chest
     ? req.session.chest
     : {};
@@ -63,10 +70,11 @@ const exportHTML = ({ template: $template, renderer: $renderer } = {}) => functi
 
 
 /**
- * export and clean up json file stored in a session
- * @return {JSON}
+ * (factory) export json document
+ * @param {object} option                  - option (place holder)
+ * @return {JSON|*}
  */
-const exportJSON = (req, res) => {
+const exportJSON = (option) => function JSONHandler(req, res) {
   const doc = {
     ...(req.session.chest ? req.session.chest : {}),
     _execution_time: new Date(Date.now()).toISOString(),

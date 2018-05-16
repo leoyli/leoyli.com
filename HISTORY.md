@@ -1,3 +1,15 @@
+### 0.10.0-dev.17 / 2018-05-16
+> App
+- Improved readability in all JSDocs.
+- Revised `exportJSON` to be consisted with other handlers @'handlers/exporter'.
+- Simplified `paginatedQuery` @'modules/query'.
+
+> Test (81%)
+- Added 'modules/header.test.js' unit tests.
+- Added `paginatedQuery unit test`.
+- Updated `exportJSON` and `getMiddlewareChain` tests.
+
+
 ### 0.10.0-dev.16 / 2018-05-15
 > App
 - Merged `APIHeader` into `APIReceptor` @'modules/header' -> 'handlers/receptor'.

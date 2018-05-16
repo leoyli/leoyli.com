@@ -1,13 +1,25 @@
-/* global __ROOT__ *//* eslint-disable space-in-parens, array-bracket-spacing, comma-spacing */
+/* global __ROOT__, req, res, next *//* eslint-disable space-in-parens, array-bracket-spacing, comma-spacing */
 const {
   paginatedMetaExpression, queryDateExpression, parseQueryDate, parseQuerySort,
   pullPipe_1_matching, pullPipe_2_masking, pullPipe_3_sorting, pullPipe_4_grouping, pullPipe_5_paginating,
-  getAggregationQuery,
+  getAggregationQuery, paginatedQuery,
 } = require(`${__ROOT__}/controllers/modules/query`)[Symbol.for('__TEST__')];
 
 
+// mock
+const calledWithNext = Symbol('done');
+const modelIndex = require(`${__ROOT__}/models/`);
+const httpMocks = require('node-mocks-http');
+
+beforeEach(() => {
+  global.res = httpMocks.createResponse();
+  global.req = httpMocks.createRequest({ session: {} });
+  global.next = jest.fn(() => calledWithNext);
+});
+
+
 // tests
-describe('Module: Query', () => {
+describe('Modules: Query', () => {
   test('Fn: paginatedMetaExpression', () => {
     // should return an object as $$meta
     // // if all argument are "empty"
@@ -203,7 +215,7 @@ describe('Module: Query', () => {
     expect(pullPipe_1_matching('', {}, {}))
       .toHaveProperty('$match', {});
 
-    // // if params have `search` key (mongo full text search)
+    // // if params have `search` key (Mongo full text search)
     expect(pullPipe_1_matching('', { search: 'test' }, {}))
       .toHaveProperty('$match', { $text: { $search: 'test' } });
 
@@ -347,5 +359,27 @@ describe('Module: Query', () => {
 
     // (*) should match with the snapshot
     expect(test).toMatchSnapshot();
+  });
+
+
+  test('Middleware: paginatedQuery', async () => {
+    const result = { list: ['some_docs'], meta: {} };
+    res.locals.$$SITE = { num: 10 };
+
+    // stub the model index
+    modelIndex.SomeCollectionModel = {
+      aggregate: jest.fn(() => Promise.resolve([result])),
+      hydrate: jest.fn(item => item),
+    };
+
+    // should call with the next middleware
+    expect(await paginatedQuery('SomeCollection')(req, res, next)).toBe(calledWithNext);
+    expect(modelIndex.SomeCollectionModel.aggregate).toHaveBeenCalled();
+
+    // should `hydrate` resulted documents
+    expect(modelIndex.SomeCollectionModel.hydrate).toHaveBeenCalledWith(result.list[0]);
+
+    // should store data into session chest
+    expect(req.session.chest).toEqual(result);
   });
 });

@@ -35,7 +35,7 @@ const getProcessingPipes = (option) => {
  */
 const getMiddlewareChain = (mode, main, hooker, option) => {
   const pipeline = getProcessingPipes(option);
-  const exporter = mode !== 'api' ? exportHTML(option) : exportJSON;
+  const exporter = mode !== 'api' ? exportHTML(option) : exportJSON(option);
   const titleModifier = mode !== 'api' && option.title ? _M_.modifyHTMLTitleTag(option.title) : [];
   const chain = [pipeline, hooker.pre, titleModifier, main, hooker.post, exporter];
   return _U_.express.wrapAsync([...new Set([].concat(...chain))]);

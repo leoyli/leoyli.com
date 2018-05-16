@@ -3,31 +3,32 @@ const { PostsModel } = require('../../models/');
 
 
 /**
- * Object proxy for case insensitive access
+ * allow case insensitive accessing of `req.query`
  */
-const caseInsensitiveProxy = function caseInsensitiveProxy(req, res, next) {
+const caseInsensitiveProxy = (req, res, next) => {
   req.query = _U_.object.createCaseInsensitiveProxy(req.query);
   if (typeof next === 'function') return next();
 };
 
 
 /**
- * HTML title tag modification
+ * modify HTML title tag
+ * @param {object} option                   - option for modifications
  */
-const modifyHTMLTitleTag = (options) => function modifyHTMLTitleTag(req, res, next) {
-  if (res.locals.$$MODE === 'api') return next();
-
+const modifyHTMLTitleTag = (option) => function _modifyHTMLTitleTag(req, res, next) {
+  if (res.locals.$$MODE !== 'html') return next();
+  //
   const sequence = [];
-  if (options.root !== false) sequence.push(res.locals.$$VIEW.title);
-  if (options.append === true) sequence.push(options.name || options);
-  else sequence.unshift(options.name || options);
+  if (option.root !== false) sequence.push(res.locals.$$VIEW.title);
+  if (option.append === true) sequence.push(option.name || option);
+  else sequence.unshift(option.name || option);
   res.locals.$$VIEW.title = sequence.join(' - ');
   if (typeof next === 'function') return next();
 };
 
 
 /**
- * parsed body normalizer
+ * normalize body parser result
  */
 const postNormalizer = async (req, res, next) => {
   if (req.method === 'GET' || !req.body.post) return next();
