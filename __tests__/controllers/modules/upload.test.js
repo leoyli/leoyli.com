@@ -1,7 +1,7 @@
 /* global __ROOT__ */
 const {
   getSavingPath, isUploadable, fetchRawDoc, fetchMessage, upload,
-} = require(`${__ROOT__}/controllers/interfaces/upload`)[Symbol.for('__TEST__')];
+} = require(`${__ROOT__}/controllers/modules/upload`)[Symbol.for('__TEST__')];
 
 
 // module
@@ -9,7 +9,7 @@ const fs = require('fs');
 
 
 // test
-describe('Interface: Upload', () => {
+describe('Module: Upload', () => {
   const someConfig = { fileSize: 25 * 1000000, MIME: ['image/png', 'image/gif'] };
   const someBusboy = { fieldName: 'media_test[file]', fileName: 'test.png', MIME: 'image/png', stream: {} };
 

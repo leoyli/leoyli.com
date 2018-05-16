@@ -259,7 +259,10 @@ const paginatedQuery = (collection, { num, sort } = {}) => function queryControl
 // exports
 module.exports = {
   paginatedQuery,
-  [Symbol.for('__TEST__')]: {
+};
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
     paginatedMetaExpression,
     queryDateExpression,
     parseQueryDate,
@@ -270,5 +273,6 @@ module.exports = {
     pullPipe_4_grouping,
     pullPipe_5_paginating,
     getAggregationQuery,
+    ...module.exports,
   },
-};
+});

@@ -1,3 +1,13 @@
+### 0.10.0-dev.15.5 / 2018-05-15
+> App
+- Merged @'controllers/interfaces' -> 'controllers/modules'.
+  - split 'regulator', 'adaptor' into multiple submodules;
+  - renamed files @'adaptor' -> 'helper'.
+
+> Test (78%)
+- Rearranged files w.r.t. changes.
+
+
 ### 0.10.0-dev.15 / 2018-05-15
 > App
 - @'handlers/exception' -> 'handlers/error':
