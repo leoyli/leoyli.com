@@ -8,14 +8,14 @@ const {
 describe('Utilities: Error', () => {
   test('Class: ExtendableError', () => {
     // should be an instance and behave as an Error
-    expect(ExtendableError.prototype instanceof Error).toBeTruthy();
+    expect(ExtendableError.prototype).toBeInstanceOf(Error);
     expect(() => new ExtendableError()).toThrow(ReferenceError);
   });
 
 
   test('Class: TransferableError', () => {
     // should be an instance and behave as an ExtendableError
-    expect(TransferableError.prototype instanceof ExtendableError).toBeTruthy();
+    expect(TransferableError.prototype).toBeInstanceOf(ExtendableError);
     expect(() => new TransferableError()).toThrow(ReferenceError);
 
     // should not able to further extend a subclass

@@ -26,9 +26,16 @@ const browserReceptor = (req, res, next) => {                                   
  * start to handle an API request
  */
 const APIReceptor = (req, res, next) => {
-  // populating variables
+  // populate variables
   res.locals.$$MODE = 'api';
   res.locals.$$SITE = JSON.parse(process.env.$WEBSITE_CONFIGS);
+
+  // setup required headers
+  res.set('Access-Control-Allow-Origin', '*');                                                                          // todo: set to allowed domain list
+  res.set('Access-Control-Allow-Methods', 'GET, PUT, HEAD, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Content-Type, Cache-Control');
+  // res.set('Access-Control-Allow-Credentials', 'true');
+  res.set('Access-Control-Max-Age', '600');
 
   return next();
 };

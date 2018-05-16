@@ -40,8 +40,10 @@ describe('Middleware: Exporter', () => {
 
     // should call `res.render`
     expect(res.render).toHaveBeenCalledTimes(1);
-    expect(res.render.mock.calls[0][1]).toHaveProperty('$$POST');
-    expect(res.render.mock.calls[0][1]).toHaveProperty('$$META');
+    expect(res.render).toHaveBeenCalledWith(undefined, expect.objectContaining({
+      $$POST: expect.any(Object),
+      $$META: expect.any(Object),
+    }));
   });
 
 
@@ -54,8 +56,10 @@ describe('Middleware: Exporter', () => {
 
     // should call `res.render`
     expect(res.render).toHaveBeenCalledTimes(1);
-    expect(res.render.mock.calls[0][1]).toHaveProperty('$$LIST');
-    expect(res.render.mock.calls[0][1]).toHaveProperty('$$META');
+    expect(res.render).toHaveBeenCalledWith(undefined, expect.objectContaining({
+      $$LIST: expect.any(Array),
+      $$META: expect.any(Object),
+    }));
 
     // should have populate meta properties into `res.locals.$$VIEW` based on a given meta
     expect(renderer.posts.multiple({ meta: { num: 2, now: 4, end: 6 } })(req, res, next)).not.toBe(calledWithNext);

@@ -26,7 +26,7 @@ describe('Utilities: Express', () => {
     const spyNext = jest.fn();
     const someAsyncMiddlewareThatThrowsError = async (req, res, next) => { throw someError; };
     await wrapAsync(someAsyncMiddlewareThatThrowsError)(null, null, spyNext);
-    expect(spyNext).toHaveBeenCalledWith(someError);
+    expect(spyNext).toBeCalledWith(someError);
   });
 
 

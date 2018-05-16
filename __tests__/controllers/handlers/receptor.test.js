@@ -28,9 +28,9 @@ describe('Middleware: Receptor', () => {
     expect(res.locals.$$MODE).toBe('html');
 
     // should create flash containers
-    expect(req.flash).toHaveBeenCalledWith('action');
-    expect(req.flash).toHaveBeenCalledWith('error');
-    expect(req.flash).toHaveBeenCalledWith('info');
+    expect(req.flash).toBeCalledWith('action');
+    expect(req.flash).toBeCalledWith('error');
+    expect(req.flash).toBeCalledWith('info');
 
     // should not do housekeeping whenever `retry` existed in `flash.action`
     expect(req.session).toHaveProperty('returnTo', '/');
@@ -38,10 +38,20 @@ describe('Middleware: Receptor', () => {
 
 
   test('Fn: APIReceptor', () => {
+    const arbitraryStringValue = expect.stringMatching('');
+    res.set = jest.fn();
+
     // should call with the next middleware
     expect(APIReceptor(req, res, next)).toBe(calledWithNext);
 
     // should set $$MODE to 'html'
     expect(res.locals.$$MODE).toBe('api');
+
+    // should set CORS headers
+    expect(res.set).toBeCalledWith('Access-Control-Allow-Origin', arbitraryStringValue);
+    expect(res.set).toBeCalledWith('Access-Control-Allow-Methods', arbitraryStringValue);
+    expect(res.set).toBeCalledWith('Access-Control-Allow-Headers', arbitraryStringValue);
+    // expect(res.set).toBeCalledWith('Access-Control-Allow-Credentials', arbitraryStringValue);
+    expect(res.set).toBeCalledWith('Access-Control-Max-Age', arbitraryStringValue);
   });
 });

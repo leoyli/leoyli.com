@@ -7,16 +7,10 @@ const {
 // test
 describe('Utilities: Object', () => {
   test('Fn: hasOwnKey', () => {
-    const target = [
-      {},
-      { a: 0 },
-      { b: { a: 0 } },
-    ];
-    //
-    const test = target.map(obj => hasOwnKey(obj, 'a'));
-    expect(test[0]).toBeFalsy();
-    expect(test[1]).toBeTruthy();
-    expect(test[2]).toBeFalsy();
+    // should check if object has own a key
+    expect(hasOwnKey({}, 'a')).toBeFalsy();
+    expect(hasOwnKey({ a: 0 }, 'a')).toBeTruthy();
+    expect(hasOwnKey({ b: { a: 0 } }, 'a')).toBeFalsy();
   });
 
 
@@ -26,18 +20,19 @@ describe('Utilities: Object', () => {
       { a: 'a' },
       { c: [{ b: { a: ['a'] } }] },
     ];
-    //
+
+    // should clone deeply
     const test = target.map(obj => cloneDeep(obj));
 
-    // should clone an array deeply
+    // // if is an array
     expect(test[0]).toEqual(target[0]);
     expect(test[0]).not.toBe(target[0]);
 
-    // should clone an object deeply
+    // // if is an object
     expect(test[1]).toEqual(target[1]);
     expect(test[1]).not.toBe(target[1]);
 
-    // should clone an array/object mixture deeply
+    // // an array/object mixture
     expect(test[2]).toEqual(target[2]);
     expect(test[2]).not.toBe(target[2]);
   });
@@ -80,8 +75,6 @@ describe('Utilities: Object', () => {
 
   test('Fn: freezeDeep', () => {
     const target = { a: { b: { c: { d: { e: { f: 0 } } } } } };
-    expect(Object.getOwnPropertyDescriptors(target)).toHaveProperty('a.writable', true);
-    expect(Object.getOwnPropertyDescriptors(target.a.b.c.d.e)).toHaveProperty('f.writable', true);
 
     // should immutably freeze the target deeply (default)
     const test_1 = freezeDeep(target);
@@ -121,9 +114,9 @@ describe('Utilities: Object', () => {
 
   test('Fn: createCaseInsensitiveProxy', () => {
     const target = { a: 1 };
-    const test = createCaseInsensitiveProxy(target);
 
     // should create a case-insensitive proxy for the target
+    const test = createCaseInsensitiveProxy(target);
     expect(test).not.toBe(target);
     expect(test).toEqual(target);
     expect(target.A).toBeUndefined();

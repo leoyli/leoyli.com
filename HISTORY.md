@@ -1,3 +1,12 @@
+### 0.10.0-dev.16 / 2018-05-15
+> App
+- Merged `APIHeader` into `APIReceptor` @'modules/header' -> 'handlers/receptor'.
+
+> Test (79%)
+- Added corresponding unit tests into `APIReceptor`.
+- Improved some readiablity of assertions.
+
+
 ### 0.10.0-dev.15.5 / 2018-05-15
 > App
 - Merged @'controllers/interfaces' -> 'controllers/modules'.

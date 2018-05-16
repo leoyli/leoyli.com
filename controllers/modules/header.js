@@ -1,16 +1,4 @@
 /**
- * API services
- */
-const APIHeader = function APIHeader(req, res, next) {
-  res.set('x-robots-tag', 'none');
-  res.set('Access-Control-Allow-Origin', '*');
-  res.set('Access-Control-Allow-Methods', 'GET, PUT, HEAD, OPTIONS');
-  res.set('Access-Control-Allow-Headers', 'Content-Type, Cache-Control');
-  if (typeof next === 'function') return next();
-};
-
-
-/**
  * prohibit crawlers
  */
 const noCrawlerHeader = function noCrawlerHeader(req, res, next) {
@@ -21,7 +9,7 @@ const noCrawlerHeader = function noCrawlerHeader(req, res, next) {
 
 
 /**
- * prevent from caches stoage
+ * prevent from caches storage
  */
 const noStoreCacheHeader = function noStoreCacheHeader(req, res, next) {
   res.set('Cache-Control', 'no-store');
@@ -31,7 +19,6 @@ const noStoreCacheHeader = function noStoreCacheHeader(req, res, next) {
 
 // exports
 module.exports = {
-  APIHeader,
   noCrawlerHeader,
   noStoreCacheHeader,
 };
