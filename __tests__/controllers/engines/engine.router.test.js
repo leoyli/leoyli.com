@@ -93,9 +93,9 @@ describe('Engines: Router', () => {
     });
 
     // exec
-    expect(() => testDevice.exec('html')).not.toThrow();
-    expect(() => testDevice.exec('api')).not.toThrow();
-    expect(() => testDevice.exec(undefined)).toThrow();
+    expect(() => testDevice.exec('html')).not.toThrowError();
+    expect(() => testDevice.exec('api')).not.toThrowError();
+    expect(() => testDevice.exec(undefined)).toThrowError(ReferenceError);
 
     // static exec
     const spy_2 = jest.spyOn(testDevice, 'exec');

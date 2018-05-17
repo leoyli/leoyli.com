@@ -21,7 +21,7 @@ describe('Modules: Query', () => {
     const arbitraryStringValue = expect.stringMatching('');
     res.set = jest.fn();
 
-    // should call with the next middleware
+    // should call `next`
     expect(noCrawlerHeader(req, res, next)).toBe(calledWithNext);
 
     // should set headers
@@ -33,7 +33,7 @@ describe('Modules: Query', () => {
   test('Middleware: noStoreCacheHeader', () => {
     res.set = jest.fn();
 
-    // should call with the next middleware
+    // should call `next`
     expect(noStoreCacheHeader(req, res, next)).toBe(calledWithNext);
 
     // should set headers

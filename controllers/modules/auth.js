@@ -5,22 +5,22 @@ const { noCrawlerHeader } = require('./header');
 
 
 /**
- * passport
+ * (plugin) use passport to populate `req.user`
  */
 const usePassport = [noCrawlerHeader, passport.initialize(), passport.session()];
 
 
 /**
- * authentication
+ * validate if client is authenticated
  */
 const isSignedIn = [...usePassport, function isSignedIn(req, res, next) {
-  if (!(req.isAuthenticated() && req.session.user)) throw new _U_.error.ClientException(20003);
+  if (!(req.isAuthenticated() && req.session.user)) throw new _U_.error.ClientException(20000);
   return next();
 }];
 
 
 /**
- * authorization
+ * validate if client is authorized
  */
 const isAuthorized = [...isSignedIn, async function isAuthorized(req, res, next) {
   const [field, val] = req.params.canonical !== undefined
@@ -34,16 +34,13 @@ const isAuthorized = [...isSignedIn, async function isAuthorized(req, res, next)
 
 
 /**
- * password validation
+ * validate if resetting password is acceptable
  */
-const passwordValidation = function passwordValidation(req, res, next) {
-  if (!req.body.password.new || !req.body.password.confirmed) {
-    throw new _U_.error.ClientException(10001);
-  } else if (req.body.password.new.toString() !== req.body.password.confirmed.toString()) {
-    throw new _U_.error.ClientException(10002);
-  } else if (req.body.password.old && (req.body.password.old.toString() === req.body.password.new.toString())) {
-    throw new _U_.error.ClientException(10003);
-  }
+const isValidPasswordReset = (req, res, next) => {
+  const { password } = req.body;
+  if (!password.old || !password.new || !password.confirmed) throw new _U_.error.ClientException(10001);
+  if (password.new !== password.confirmed) throw new _U_.error.ClientException(10002);
+  if (password.new === password.old) throw new _U_.error.ClientException(10003);
   return next();
 };
 
@@ -53,7 +50,7 @@ module.exports = {
   usePassport,
   isSignedIn,
   isAuthorized,
-  passwordValidation,
+  isValidPasswordReset,
 };
 
 Object.defineProperty(module.exports, Symbol.for('__TEST__'), {

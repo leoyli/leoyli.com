@@ -5,13 +5,12 @@ const {
 
 
 // mock
-const calledWithNext = Symbol('done');
 const httpMocks = require('node-mocks-http');
 
 beforeEach(() => {
   global.res = httpMocks.createResponse();
   global.req = httpMocks.createRequest({ session: {} });
-  global.next = jest.fn(() => calledWithNext);
+  global.next = jest.fn();
 });
 
 
@@ -22,21 +21,21 @@ describe('Handlers: Exporter', () => {
 
     // should throw an Error (HTTPException(404))
     // // if no given `$$post` (i.e. no $$post.state)
-    expect(() => renderer.posts.single()(req, res))
+    expect(() => renderer.posts.single()(req, res, next))
       .toThrowError('HTTP 404');
 
     // // if `post` is recycled
-    expect(() => renderer.posts.single({ post: { state: { recycled: true } } })(req, res))
+    expect(() => renderer.posts.single({ post: { state: { recycled: true } } })(req, res, next))
       .toThrowError('HTTP 404');
 
     // // if `post` is unpublished, and user is not signed-in
-    expect(() => renderer.posts.single({ post: { state: { published: false } } })(req, res))
+    expect(() => renderer.posts.single({ post: { state: { published: false } } })(req, res, next))
       .toThrowError('HTTP 404');
 
     // should NOT call with the next middleware
     const someSignedInReq = httpMocks.createRequest({ session: { user: 'some_user_obj' } });
-    expect(renderer.posts.single({ post: { state: { published: false } } })(someSignedInReq, res))
-      .not.toBe(calledWithNext);
+    expect(() => renderer.posts.single({ post: { state: { published: false } } })(someSignedInReq, res))
+      .not.toThrowError();
 
     // should call `res.render`
     expect(res.render).toHaveBeenCalledTimes(1);
@@ -44,6 +43,9 @@ describe('Handlers: Exporter', () => {
       $$POST: expect.any(Object),
       $$META: expect.any(Object),
     }));
+
+    // should NOT call `next`
+    expect(next).not.toBeCalled();
   });
 
 
@@ -51,10 +53,8 @@ describe('Handlers: Exporter', () => {
     res.locals.$$VIEW = { route: '' };
     res.render = jest.fn();
 
-    // should NOT call with the next middleware
-    expect(renderer.posts.multiple()(req, res, next)).not.toBe(calledWithNext);
-
     // should call `res.render`
+    renderer.posts.multiple()(req, res, next);
     expect(res.render).toHaveBeenCalledTimes(1);
     expect(res.render).toHaveBeenCalledWith(undefined, expect.objectContaining({
       $$LIST: expect.any(Array),
@@ -62,8 +62,11 @@ describe('Handlers: Exporter', () => {
     }));
 
     // should have populate meta properties into `res.locals.$$VIEW` based on a given meta
-    expect(renderer.posts.multiple({ meta: { num: 2, now: 4, end: 6 } })(req, res, next)).not.toBe(calledWithNext);
+    renderer.posts.multiple({ meta: { num: 2, now: 4, end: 6 } })(req, res, next);
     expect(res.locals.$$VIEW).toEqual({ route: '', prev: "?num=2&page='3", next: "?num=2&page='5" });
+
+    // should NOT call `next`
+    expect(next).not.toBeCalled();
   });
 
 
@@ -73,23 +76,24 @@ describe('Handlers: Exporter', () => {
     renderer.posts.multiple = jest.fn(() => () => {});
     res.render = jest.fn();
 
-    // should NOT call with the next middleware
-    // // if renderer is bound to `VIEW_POSTS_SINGLE`
-    expect(exportHTML({ renderer: rendererSymbols.VIEW_POSTS_SINGLE })(req, res, next)).not.toBe(calledWithNext);
-
-    // // if renderer is bound to `VIEW_POSTS_MULTIPLE`
-    expect(exportHTML({ renderer: rendererSymbols.VIEW_POSTS_MULTIPLE })(req, res, next)).not.toBe(calledWithNext);
-
-    // // if no explicitly issued with a renderer
-    expect(exportHTML()(req, res, next)).not.toBe(calledWithNext);
-
-    // should evoke only once
+    // should handle based on a given renderer symbol
+    // // if is `VIEW_POSTS_SINGLE`
+    exportHTML({ renderer: rendererSymbols.VIEW_POSTS_SINGLE })(req, res, next);
     expect(renderer.posts.single).toHaveBeenCalledTimes(1);
+
+    // // if is `VIEW_POSTS_MULTIPLE`
+    exportHTML({ renderer: rendererSymbols.VIEW_POSTS_MULTIPLE })(req, res, next);
     expect(renderer.posts.multiple).toHaveBeenCalledTimes(1);
+
+    // // if any other cases
+    exportHTML()(req, res, next);
     expect(res.render).toHaveBeenCalledTimes(1);
 
     // should do housekeeping on session
     expect(req.session).not.toHaveProperty('chest');
+
+    // should NOT call `next`
+    expect(next).not.toBeCalled();
   });
 
 
@@ -97,14 +101,15 @@ describe('Handlers: Exporter', () => {
     Date.now = () => new Date('2018-01-01T00:00:00.000Z');
     req.session.chest = { doc: 'test' };
     res.json = jest.fn();
-
-    // should NOT call with the next middleware
-    expect(exportJSON()(req, res, next)).not.toBe(calledWithNext);
+    exportJSON()(req, res, next);
 
     // should call `res.json`
     expect(res.json).toHaveBeenCalledTimes(1);
 
     // should do housekeeping on session
     expect(req.session).not.toHaveProperty('chest');
+
+    // should NOT call `next`
+    expect(next).not.toBeCalled();
   });
 });

@@ -51,6 +51,6 @@ describe('Utilities: Express', () => {
     expect(spyNext).toHaveBeenCalledTimes(2);
 
     // should not accept invalid types
-    expect(() => wrapMiddleware(undefined)).toThrow(TypeError);
+    expect(() => wrapMiddleware(undefined)).toThrowError(TypeError);
   });
 });

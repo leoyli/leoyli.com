@@ -5,13 +5,12 @@ const {
 
 
 // mock
-const calledWithNext = Symbol('done');
 const httpMocks = require('node-mocks-http');
 
 beforeEach(() => {
   global.res = httpMocks.createResponse();
   global.req = httpMocks.createRequest({ session: {} });
-  global.next = jest.fn(() => calledWithNext);
+  global.next = jest.fn();
 });
 
 
@@ -22,12 +21,6 @@ describe('Handlers: Exception', () => {
     res.locals.$$VIEW = { flash: { info: ['info_A', 'info_B'] } };
     req.flash = jest.fn();
     res.redirect = jest.fn();
-
-    // should NOT call with the next middleware
-    expect(redirect.signInRetry(req, res, next)).not.toBe(calledWithNext);
-
-    // should redirect client to '/signin'
-    expect(res.redirect).toBeCalledWith('/signin');
 
     // should behave differently based on referrer
     // // if self-referred
@@ -47,5 +40,12 @@ describe('Handlers: Exception', () => {
     // should store redirecting address
     expect(req.flash).toBeCalledWith('action', 'retry');
     expect(req.session).toHaveProperty('returnTo', req.originalUrl);
+
+    // should redirect client to '/signin'
+    expect(res.redirect).toHaveBeenCalledTimes(2);
+    expect(res.redirect).toBeCalledWith('/signin');
+
+    // should NOT call `next`
+    expect(next).not.toBeCalled();
   });
 });

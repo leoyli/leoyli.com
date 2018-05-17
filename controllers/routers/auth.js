@@ -11,7 +11,7 @@ auth.signup = {
     if (req.isAuthenticated() && req.session.user) return res.redirect('/home');
     return next();
   },
-  POST: [_M_.passwordValidation, async function account_signup_POST(req, res) {
+  POST: [_M_.isValidPasswordReset, async function account_signup_POST(req, res) {
     const newUser = await UsersModel.register(new UsersModel(req.body), req.body.password.new);
     req.logIn(newUser, err => {
       if (err) throw err;

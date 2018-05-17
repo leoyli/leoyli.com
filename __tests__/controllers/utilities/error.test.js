@@ -9,19 +9,19 @@ describe('Utilities: Error', () => {
   test('Class: ExtendableError', () => {
     // should be an instance and behave as an Error
     expect(ExtendableError.prototype).toBeInstanceOf(Error);
-    expect(() => new ExtendableError()).toThrow(ReferenceError);
+    expect(() => new ExtendableError()).toThrowError(ReferenceError);
   });
 
 
   test('Class: TransferableError', () => {
     // should be an instance and behave as an ExtendableError
     expect(TransferableError.prototype).toBeInstanceOf(ExtendableError);
-    expect(() => new TransferableError()).toThrow(ReferenceError);
+    expect(() => new TransferableError()).toThrowError(ReferenceError);
 
     // should not able to further extend a subclass
     class TestException extends TransferableError {}
     class FurtherExtendedException extends TestException {}
-    expect(() => new FurtherExtendedException()).toThrow(ReferenceError);
+    expect(() => new FurtherExtendedException()).toThrowError(ReferenceError);
 
     // should create error instance from a given argument
     const mockErrorMessage = 'message';
@@ -51,21 +51,21 @@ describe('Utilities: Error', () => {
 
   // todo: (?) error code testing
   test('Class: ServerError', () => {
-    expect(() => new ServerError()).not.toThrow();
+    expect(() => new ServerError()).not.toThrowError();
   });
 
 
   test('Class: ClientException', () => {
-    expect(() => new ClientException()).not.toThrow();
+    expect(() => new ClientException()).not.toThrowError();
   });
 
 
   test('Class: TemplateException', () => {
-    expect(() => new TemplateException()).not.toThrow();
+    expect(() => new TemplateException()).not.toThrowError();
   });
 
 
   test('Class: HttpException', () => {
-    expect(() => new HttpException()).not.toThrow();
+    expect(() => new HttpException()).not.toThrowError();
   });
 });

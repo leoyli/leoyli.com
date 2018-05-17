@@ -7,14 +7,13 @@ const {
 
 
 // mock
-const calledWithNext = Symbol('done');
 const modelIndex = require(`${__ROOT__}/models/`);
 const httpMocks = require('node-mocks-http');
 
 beforeEach(() => {
   global.res = httpMocks.createResponse();
   global.req = httpMocks.createRequest({ session: {} });
-  global.next = jest.fn(() => calledWithNext);
+  global.next = jest.fn();
 });
 
 
@@ -366,14 +365,14 @@ describe('Modules: Query', () => {
     const result = { list: ['some_docs'], meta: {} };
     res.locals.$$SITE = { num: 10 };
 
-    // stub the model index
+    // stub the modelIndex
     modelIndex.SomeCollectionModel = {
       aggregate: jest.fn(() => Promise.resolve([result])),
       hydrate: jest.fn(item => item),
     };
+    await paginatedQuery('SomeCollection')(req, res, next);
 
-    // should call with the next middleware
-    expect(await paginatedQuery('SomeCollection')(req, res, next)).toBe(calledWithNext);
+    // should perform query via `SomeCollectionModel.aggregate`
     expect(modelIndex.SomeCollectionModel.aggregate).toHaveBeenCalled();
 
     // should `hydrate` resulted documents
@@ -381,5 +380,8 @@ describe('Modules: Query', () => {
 
     // should store data into session chest
     expect(req.session.chest).toEqual(result);
+
+    // should call `next`
+    expect(next).toHaveBeenCalledTimes(1);
   });
 });

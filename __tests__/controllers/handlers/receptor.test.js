@@ -5,13 +5,12 @@ const {
 
 
 // mock
-const calledWithNext = Symbol('done');
 const httpMocks = require('node-mocks-http');
 
 beforeEach(() => {
   global.res = httpMocks.createResponse();
   global.req = httpMocks.createRequest({ session: {} });
-  global.next = jest.fn(() => calledWithNext);
+  global.next = jest.fn();
 });
 
 
@@ -20,9 +19,7 @@ describe('Handlers: Receptor', () => {
   test('Middleware: browserReceptor', () => {
     req.flash = jest.fn(call => (call === 'action' ? ['retry'] : []));
     req.session.returnTo = '/';
-
-    // should call with the next middleware
-    expect(browserReceptor(req, res, next)).toBe(calledWithNext);
+    browserReceptor(req, res, next);
 
     // should set $$MODE to 'html'
     expect(res.locals.$$MODE).toBe('html');
@@ -34,15 +31,16 @@ describe('Handlers: Receptor', () => {
 
     // should not do housekeeping whenever `retry` existed in `flash.action`
     expect(req.session).toHaveProperty('returnTo', '/');
+
+    // should call `next`
+    expect(next).toHaveBeenCalledTimes(1);
   });
 
 
   test('Middleware: APIReceptor', () => {
     const arbitraryStringValue = expect.stringMatching('');
     res.set = jest.fn();
-
-    // should call with the next middleware
-    expect(APIReceptor(req, res, next)).toBe(calledWithNext);
+    APIReceptor(req, res, next);
 
     // should set $$MODE to 'html'
     expect(res.locals.$$MODE).toBe('api');
@@ -53,5 +51,8 @@ describe('Handlers: Receptor', () => {
     expect(res.set).toBeCalledWith('Access-Control-Allow-Headers', arbitraryStringValue);
     // expect(res.set).toBeCalledWith('Access-Control-Allow-Credentials', arbitraryStringValue);
     expect(res.set).toBeCalledWith('Access-Control-Max-Age', arbitraryStringValue);
+
+    // should call `next`
+    expect(next).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,3 +1,14 @@
+### 0.10.0-dev.18 / 2018-05-16
+> App
+- Revised and renamed `passwordValidation` as `isValidPasswordReset` @'modules/auth'.
+- Reordered error codes in `ClientException_en` @'utilities/error-code'.
+
+> Test (83%)
+- Added 'modules/auth.test.js'.
+- Removed redundant `calledWithNext` symbool.
+- Improved testing resolutions.
+
+
 ### 0.10.0-dev.17 / 2018-05-16
 > App
 - Improved readability in all JSDocs.
