@@ -113,13 +113,17 @@ describe('Utilities: Object', () => {
 
 
   test('Fn: createCaseInsensitiveProxy', () => {
-    const target = { a: 1 };
+    const target = { a: 1, A: 2 };
 
     // should create a case-insensitive proxy for the target
-    const test = createCaseInsensitiveProxy(target);
-    expect(test).not.toBe(target);
-    expect(test).toEqual(target);
-    expect(target.A).toBeUndefined();
-    expect(test.A).toEqual(test.a);
+    // // if is default order (last-one-win)
+    const test_1 = createCaseInsensitiveProxy(target);
+    expect(test_1).not.toBe(target);
+    expect(test_1).toEqual({ a: 2, A: 2 });
+
+    // // if is reverse order (first-one-win)
+    const test_2 = createCaseInsensitiveProxy(target, { reverse: false });
+    expect(test_2).not.toBe(target);
+    expect(test_2).toEqual({ a: 1, A: 1 });
   });
 });

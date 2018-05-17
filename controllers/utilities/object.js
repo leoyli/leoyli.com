@@ -129,14 +129,16 @@ const burstArrayDeep = (target, { mutate = false, position = -1 } = {}) => {
 /**
  * (decorator) proxyfy the object for allowing case-insensitive access
  * @param {object} obj                      - object to be delegated
+ * @param {boolean} [reverse = true]        - reverse the inspection direction
  * @return {object}                         - the resulted proxy
  */
-const createCaseInsensitiveProxy = (obj) => {
+const createCaseInsensitiveProxy = (obj, { reverse = true } = {}) => {
   if (!checkToStringTag(obj, 'Object')) throw new TypeError('Invalid arguments as input.');
   return new Proxy(obj, {
     get: (target, name) => {
       if (!checkToStringTag(name, 'String')) return Reflect.get(target, name);
-      return target[Object.keys(target).find(key => key.toLowerCase() === name.toLowerCase())];
+      if (reverse === false) return target[Object.keys(target).find(key => key.toLowerCase() === name.toLowerCase())];
+      return target[Object.keys(target).reverse().find(key => key.toLowerCase() === name.toLowerCase())];
     },
   });
 };

@@ -1,3 +1,15 @@
+### 0.10.0-dev.19 / 2018-05-17
+> App
+- @'modules/helper':
+  - Renamed `caseInsensitiveProxy` as `caseInsensitiveQueryProxy`;
+  - Revised `modifyHTMLTitleTag`.
+- Enhanced `createCaseInsensitiveProxy` object utilities @'controller/utilities'.
+
+> Test (86%)
+- Added 'modules/helper.test.js'.
+- Updated `createCaseInsensitiveProxy` test.
+
+
 ### 0.10.0-dev.18 / 2018-05-16
 > App
 - Revised and renamed `passwordValidation` as `isValidPasswordReset` @'modules/auth'.
@@ -17,7 +29,7 @@
 
 > Test (81%)
 - Added 'modules/header.test.js' unit tests.
-- Added `paginatedQuery unit test`.
+- Added `paginatedQuery` unit test.
 - Updated `exportJSON` and `getMiddlewareChain` tests.
 
 

@@ -16,7 +16,7 @@ const { browserReceptor, APIReceptor } = require('../handlers/receptor');
  */
 const getProcessingPipes = (option) => {
   const queue = [];
-  if (option.sensitive       !== true)     queue.push(_M_.caseInsensitiveProxy);
+  if (option.sensitive       !== true)     queue.push(_M_.caseInsensitiveQueryProxy);
   if (option.authorization   === true)     queue.push(..._M_.isAuthorized);
   if (option.authentication  === true)     queue.push(..._M_.isSignedIn);
   if (option.crawler         === false)    queue.push(_M_.noCrawlerHeader);

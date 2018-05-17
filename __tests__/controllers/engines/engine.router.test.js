@@ -25,7 +25,7 @@ describe('Engines: Router', () => {
       'noStoreCacheHeader',
     ]);
     expect(test[1]).toEqual([
-      'caseInsensitiveProxy',
+      'caseInsensitiveQueryProxy',
       'noCrawlerHeader',
       'initialize',
       'authenticate',
@@ -33,7 +33,7 @@ describe('Engines: Router', () => {
       'noStoreCacheHeader',
     ]);
     expect(test[2]).toEqual([
-      'caseInsensitiveProxy',
+      'caseInsensitiveQueryProxy',
     ]);
   });
 
@@ -47,14 +47,14 @@ describe('Engines: Router', () => {
 
     // should print out the stacked middleware name in 'html' mode
     expect(test('html')).toEqual([
-      'caseInsensitiveProxy',
+      'caseInsensitiveQueryProxy',
       'mockMain',
       'templateHandler',
     ]);
 
     // should print out the stacked middleware name in 'api' mode
     expect(test('api')).toEqual([
-      'caseInsensitiveProxy',
+      'caseInsensitiveQueryProxy',
       'mockMain',
       'JSONHandler',
     ]);

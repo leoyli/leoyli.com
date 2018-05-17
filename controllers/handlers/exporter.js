@@ -23,7 +23,7 @@ renderer.posts.single = ({ filename, post = null, meta = {} } = {}) => function 
       || post.state.recycled
       || (!post.state.published && !req.session.user)                                                                   // todo: wired up with authorization
   ) throw new _U_.error.HttpException(404);
-  if (post.title) _M_.modifyHTMLTitleTag({ name: post.title, root: true })(req, res);
+  if (post.title) _M_.modifyHTMLTitleTag({ tag: post.title, extend: false })(req, res);
   return res.render(filename, { $$POST: post, $$META: meta });
 };
 
