@@ -62,4 +62,10 @@ site.root = {
 
 
 // exports
-module.exports = site;
+module.exports = { site };
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});

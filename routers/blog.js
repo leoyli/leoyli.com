@@ -1,6 +1,6 @@
 /* eslint-disable key-spacing */
 const { Device } = require('../controllers/engines/router');
-const { editor, blog } = require('../controllers/routers/blog');
+const { editor, blog } = require('../controllers/routers/');
 
 
 // device

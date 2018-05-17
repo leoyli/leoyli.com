@@ -33,4 +33,10 @@ page.root = {
 
 
 // exports
-module.exports = page;
+module.exports = { page };
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});

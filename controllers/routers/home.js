@@ -41,4 +41,10 @@ home.security = {
 
 
 // exports
-module.exports = home;
+module.exports = { home };
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});

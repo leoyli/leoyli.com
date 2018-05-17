@@ -1,3 +1,14 @@
+### 0.10.0-dev.19.5 / 2018-05-17
+> App
+- @'controllers/routers'
+  - added testing symbols;
+  - centralized all hashed object into 'index.js';
+  - updated all routers setting files.
+
+> Test (71%)
+- Redefined coverage directories.
+
+
 ### 0.10.0-dev.19 / 2018-05-17
 > App
 - @'modules/helper':

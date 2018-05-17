@@ -71,3 +71,9 @@ blog.list = {
 
 // exports
 module.exports = { editor, blog };
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});

@@ -59,4 +59,10 @@ auth.signout = {
 
 
 // exports
-module.exports = auth;
+module.exports = { auth };
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});

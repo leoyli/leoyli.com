@@ -2,7 +2,7 @@
 const { usePassport } = require('../controllers/modules/')._M_;
 const { ClientException } = require('../controllers/utilities/')._U_.error;
 const { Device } = require('../controllers/engines/router');
-const auth = require('../controllers/routers/auth');
+const { auth } = require('../controllers/routers/');
 
 
 // device
