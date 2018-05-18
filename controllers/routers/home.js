@@ -5,23 +5,15 @@ const { UsersModel } = require('../../models/');
 // controllers
 const home = {};
 
-home.profile_editor = {
-  GET: function home_profile_editor_GET(req, res, next) {
-    res.locals.$$VIEW.user = req.user._doc;
-    return next();
-  },
-};
-
-
 home.profile = {
   GET: function home_profile_GET(req, res, next) {
-    res.locals.$$VIEW.user = req.user._doc;
+    res.locals.$$VIEW.user = req.user.toObject();
     return next();
   },
   PATCH: async function home_profile_PATCH(req, res) {
-    const raw = { info: req.body.profile.info, nickname: req.body.profile.nickname };
-    if (raw.info && raw.info.birthday) raw.info.birthday = new Date(raw.info.birthday);
-    await UsersModel.update({ _id: req.user._id }, { $set: { ...raw, _nickname: req.user.nickname } });
+    await UsersModel.update({ _id: req.user._id }, { $set: {
+      info: req.body.profile.info, nickname: req.body.profile.nickname, _$nickname: req.user.nickname,
+    } });
     req.flash('info', 'Your profile have been successfully updated!');
     return res.redirect('/home/profile');
   },

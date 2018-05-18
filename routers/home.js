@@ -7,18 +7,18 @@ const { home } = require('../controllers/routers/');
 const homeRouter = new Device([
   {
     route:        '/profile/edit',
-    controller:   home.profile_editor,
-    setting:      { title: 'Edit Your Profile', template: './__root__/home/profile/profile_editor' },
+    controller:   home.profile,
+    setting:      { method: 'GET', title: 'Edit Your Profile', template: './__root__/home/profile/profile_editor' },
   },
   {
     route:        '/profile',
     controller:   home.profile,
-    setting:      { title: 'Profile', template: './__root__/home/profile/info', servingAPI: true },
+    setting:      { title: 'Profile', template: './__root__/home/profile/info', servingAPI: false },
   },
   {
     route:        '/security',
     controller:   home.security,
-    setting:      { title: 'Change Password', template: './__root__/home/profile/security', servingAPI: true },
+    setting:      { title: 'Change Password', template: './__root__/home/profile/security', servingAPI: false },
   },
 ]);
 

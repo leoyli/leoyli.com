@@ -365,7 +365,7 @@ describe('Modules: Query', () => {
     const result = { list: ['some_docs'], meta: {} };
     res.locals.$$SITE = { num: 10 };
 
-    // stub the modelIndex
+    /* stub the modelIndex */
     modelIndex.SomeCollectionModel = {
       aggregate: jest.fn(() => Promise.resolve([result])),
       hydrate: jest.fn(item => item),

@@ -109,22 +109,26 @@ class Device {
   exec(mode) {
     if (!['html', 'api'].includes(mode)) throw ReferenceError(`Received ${mode} as an invalid mode.`);
     const router = new Router('/').use(this._base);
+    const matrix = this.rules.filter(({ setting = {} }) => (mode.toLowerCase() === 'api' ? setting.servingAPI : true));
 
     // router registrations
-    const matrix = this.rules.filter(({ setting = {} }) => (mode.toLowerCase() === 'api' ? setting.servingAPI : true));
-    matrix.forEach(({ route, alias, controller, setting }) => {
+    matrix.forEach(({ route, alias, controller, setting = {} }) => {
       const controlKeys = Object.keys(controller).sort();
       const options = { ...this.setting, ...setting };
 
-      // method registrations
-      controlKeys.forEach(key => {
-        if (key === 'alias' && !alias) throw new ReferenceError('Parameter "alias" have to be provided.');
-        const path = key === 'alias' ? alias : route;
-        const method = key === 'alias' ? 'get' : key.toLowerCase();
-        router[method](path, getMiddlewareChain(mode.toLowerCase(), controller[key], this._hook, options));
-      });
+      // registerer
+      const registerRouterByMethod = (methodKey) => {
+        if (methodKey === 'alias' && !alias) throw new ReferenceError('Parameter "alias" have to be provided.');
+        const path = methodKey === 'alias' ? alias : route;
+        const method = methodKey === 'alias' ? 'get' : methodKey.toLowerCase();
+        router[method](path, getMiddlewareChain(mode.toLowerCase(), controller[methodKey], this._hook, options));
+      };
+
+      if (setting.method) registerRouterByMethod(setting.method);
+      else controlKeys.forEach(method => registerRouterByMethod(method));
     });
 
+    // export router
     return router;
   }
 

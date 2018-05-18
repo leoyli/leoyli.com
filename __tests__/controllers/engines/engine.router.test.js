@@ -61,7 +61,7 @@ describe('Engines: Router', () => {
   });
 
 
-  test('Class: Device', () => {
+  test('Class: Device', () => {                                                                                         // todo: more comprehensive test (e.g. `setting.method` option)
     const mockRule = [{ route: '/', controller: { GET: jest.fn() } }];
     const mockSetting = { sensitive: true, cache: false };
     const mockMiddleware = () => {};

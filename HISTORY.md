@@ -1,3 +1,19 @@
+### 0.10.0-dev.20 / 2018-05-17
+> App
+- Extended `Device.exec` method @'engine/router':
+  - allowed router to 'share/borrow' controller(.method) by using `setting.method` option.
+    (not allow to change method bound with the controller)
+  - updated 'home' router.
+- Used `_$` to imply triggering some special pre/post-hooked events before DB operation.
+- @'controllers/routers/home':
+  - simplified `home.profile.GET` and `home.profile.PATCH`.
+  - removed `home.profile_editor`.
+
+> Test (74%)
+- Added 'routers/home.test.js'.
+- Used C-style comments for stubbing notes.
+
+
 ### 0.10.0-dev.19.5 / 2018-05-17
 > App
 - @'controllers/routers'
