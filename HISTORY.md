@@ -1,3 +1,14 @@
+### 0.10.0-dev.21 / 2018-05-19
+> App
+- Revised 'auth' router controllers.
+- Fixed error code typos @'handlers/error'.
+
+> Test (80%)
+- Added 'routers/auth.test.js'.
+- Centralized reusable mocking functions.
+- Improved resolution of existing tests.
+
+
 ### 0.10.0-dev.20 / 2018-05-17
 > App
 - Extended `Device.exec` method @'engine/router':

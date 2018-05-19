@@ -50,7 +50,7 @@ describe('Utilities: Express', () => {
     await test_2.handle({ url: '/' }, {}, () => {});
     expect(spyNext).toHaveBeenCalledTimes(2);
 
-    // should not accept invalid types
+    // should throw error for invalid arguments
     expect(() => wrapMiddleware(undefined)).toThrowError(TypeError);
   });
 });

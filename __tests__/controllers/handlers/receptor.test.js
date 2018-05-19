@@ -19,9 +19,9 @@ describe('Handlers: Receptor', () => {
   test('Middleware: browserReceptor', () => {
     req.flash = jest.fn(call => (call === 'action' ? ['retry'] : []));
     req.session.returnTo = '/';
-    browserReceptor(req, res, next);
 
     // should set $$MODE to 'html'
+    browserReceptor(req, res, next);
     expect(res.locals.$$MODE).toBe('html');
 
     // should create flash containers
@@ -29,10 +29,10 @@ describe('Handlers: Receptor', () => {
     expect(req.flash).toBeCalledWith('error');
     expect(req.flash).toBeCalledWith('info');
 
-    // should not do housekeeping whenever `retry` existed in `flash.action`
+    // should NOT do housekeeping whenever `retry` existed in `flash.action`
     expect(req.session).toHaveProperty('returnTo', '/');
 
-    // should call `next`
+    // should pass the final state checks
     expect(next).toHaveBeenCalledTimes(1);
   });
 
@@ -40,9 +40,9 @@ describe('Handlers: Receptor', () => {
   test('Middleware: APIReceptor', () => {
     const arbitraryStringValue = expect.stringMatching('');
     res.set = jest.fn();
-    APIReceptor(req, res, next);
 
     // should set $$MODE to 'html'
+    APIReceptor(req, res, next);
     expect(res.locals.$$MODE).toBe('api');
 
     // should set CORS headers
@@ -52,7 +52,7 @@ describe('Handlers: Receptor', () => {
     // expect(res.set).toBeCalledWith('Access-Control-Allow-Credentials', arbitraryStringValue);
     expect(res.set).toBeCalledWith('Access-Control-Max-Age', arbitraryStringValue);
 
-    // should call `next`
+    // should pass the final state checks
     expect(next).toHaveBeenCalledTimes(1);
   });
 });

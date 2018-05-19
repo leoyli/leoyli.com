@@ -40,7 +40,7 @@ terminal.ClientException = function ClientException(err, req, res, next) {
     }
   }
 
-  if (!err.from && err.code === 20003) return redirect.signInRetry(req, res);
+  if (!err.from && err.code === 20000) return redirect.signInRetry(req, res);
   return res.redirect('back');
 };
 

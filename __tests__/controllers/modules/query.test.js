@@ -370,18 +370,18 @@ describe('Modules: Query', () => {
       aggregate: jest.fn(() => Promise.resolve([result])),
       hydrate: jest.fn(item => item),
     };
-    await paginatedQuery('SomeCollection')(req, res, next);
 
     // should perform query via `SomeCollectionModel.aggregate`
+    await paginatedQuery('SomeCollection')(req, res, next);
     expect(modelIndex.SomeCollectionModel.aggregate).toHaveBeenCalled();
 
     // should `hydrate` resulted documents
-    expect(modelIndex.SomeCollectionModel.hydrate).toHaveBeenCalledWith(result.list[0]);
+    expect(modelIndex.SomeCollectionModel.hydrate).toHaveBeenLastCalledWith(result.list[0]);
 
     // should store data into session chest
     expect(req.session.chest).toEqual(result);
 
-    // should call `next`
+    // should pass the final state checks
     expect(next).toHaveBeenCalledTimes(1);
   });
 });

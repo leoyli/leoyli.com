@@ -18,7 +18,7 @@ describe('Utilities: Error', () => {
     expect(TransferableError.prototype).toBeInstanceOf(ExtendableError);
     expect(() => new TransferableError()).toThrowError(ReferenceError);
 
-    // should not able to further extend a subclass
+    // should NOT able to further extend a subclass
     class TestException extends TransferableError {}
     class FurtherExtendedException extends TestException {}
     expect(() => new FurtherExtendedException()).toThrowError(ReferenceError);

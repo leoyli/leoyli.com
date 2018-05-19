@@ -19,12 +19,12 @@ beforeEach(() => {
 describe('Modules: Helper', () => {
   test('Middleware: caseInsensitiveQueryProxy', () => {
     req.query = {};
-    caseInsensitiveQueryProxy(req, res, next);
 
     // should be dedicated to a proxy
+    caseInsensitiveQueryProxy(req, res, next);
     expect(util.types.isProxy(req.query)).toBeTruthy();
 
-    // should call `next`
+    // should pass the final state checks
     expect(next).toHaveBeenCalledTimes(1);
   });
 
@@ -57,7 +57,7 @@ describe('Modules: Helper', () => {
     modifyHTMLTitleTag({ tag: insertedTitle, delimiter: '|' })(req, res, next);
     expect(res.locals.$$VIEW.title).toBe('inserted_title | inserted_title');
 
-    // should call `next`
+    // should pass the final state checks
     expect(next).toHaveBeenCalledTimes(5);
   });
 });

@@ -5,38 +5,37 @@ const {
 
 
 // mock
-const calledWithNext = Symbol('done');
 const httpMocks = require('node-mocks-http');
 
 beforeEach(() => {
   global.res = httpMocks.createResponse();
   global.req = httpMocks.createRequest({ session: {} });
-  global.next = jest.fn(() => calledWithNext);
+  global.next = jest.fn();
+
+  /* stubbed functions */
+  res.set = jest.fn();
 });
 
 
 // tests
 describe('Modules: Query', () => {
   test('Middleware: noCrawlerHeader', () => {
-    const arbitraryStringValue = expect.stringMatching('');
-    res.set = jest.fn();
-
-    // should call `next`
-    expect(noCrawlerHeader(req, res, next)).toBe(calledWithNext);
-
     // should set headers
-    expect(res.set).toBeCalledWith('Cache-Control', arbitraryStringValue);
+    noCrawlerHeader(req, res, next);
+    expect(res.set).toBeCalledWith('Cache-Control', expect.any(String));
     expect(res.set).toBeCalledWith('x-robots-tag', 'none');
+
+    // should pass the final state checks
+    expect(next).toHaveBeenCalledTimes(1);
   });
 
 
   test('Middleware: noStoreCacheHeader', () => {
-    res.set = jest.fn();
-
-    // should call `next`
-    expect(noStoreCacheHeader(req, res, next)).toBe(calledWithNext);
-
     // should set headers
+    noStoreCacheHeader(req, res, next);
     expect(res.set).toBeCalledWith('Cache-Control', 'no-store, no-cache, must-revalidate');
+
+    // should pass the final state checks
+    expect(next).toHaveBeenCalledTimes(1);
   });
 });

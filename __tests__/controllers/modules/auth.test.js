@@ -28,11 +28,11 @@ describe('Modules: Auth', () => {
       code: 20000,
     }));
 
-    // should not throw exception if authenticated
+    // should NOT throw exception if authenticated
     req.isAuthenticated = () => true;
     expect(() => _isSignedIn(req, res, next)).not.toThrowError();
 
-    // should call `next` only once
+    // should pass the final state checks
     expect(next).toHaveBeenCalledTimes(1);
   });
 
@@ -41,7 +41,8 @@ describe('Modules: Auth', () => {
     const _isAuthorized = isAuthorized[isAuthorized.length - 1];
     req.user = { _id: 'some_user_id' };
 
-    // should throw exception if not authorized
+    // should behave differently based on authority
+    // // if not authorized
     try {
       PostsModel.count = jest.fn(() => 2);
       await _isAuthorized(req, res, next);
@@ -52,14 +53,17 @@ describe('Modules: Auth', () => {
       }));
     }
 
-    // should NOT throw exception if authorized
-    PostsModel.count = jest.fn(() => 1);
-    await _isAuthorized(req, res, next);
+    // // if authorized
+    try {
+      PostsModel.count = jest.fn(() => 1);
+      await _isAuthorized(req, res, next);
+    } catch (err) {
+      // expect NOT to be executed
+      expect(err).not.toBeInstanceOf(Error);
+    }
 
-    // should call `next` only once
+    // should pass the final state checks
     expect(next).toHaveBeenCalledTimes(1);
-
-    // expect total assertions to be called
     expect.assertions(2);
   });
 
@@ -69,7 +73,7 @@ describe('Modules: Auth', () => {
     req.body = { password: { old: 'old', new: 'new', confirmed: 'new' } };
     expect(() => isValidPasswordReset(req, res, next)).not.toThrowError();
 
-    // should not pass validation
+    // should NOT pass validation
     // if missing filed
     req.body = { password: { old: 'old', new: 'new', confirmed: '' } };
     expect(() => isValidPasswordReset(req, res, next)).toThrowError(expect.objectContaining({
@@ -91,7 +95,7 @@ describe('Modules: Auth', () => {
       code: 10003,
     }));
 
-    // should call `next` only once
+    // should pass the final state checks
     expect(next).toHaveBeenCalledTimes(1);
   });
 });
