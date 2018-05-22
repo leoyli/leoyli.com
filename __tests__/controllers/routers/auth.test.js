@@ -41,7 +41,7 @@ const toProceedTheClientByAuthenticity = (fn, req, res, next) => {
 
 
 // test
-describe('Routers: Auth', () => {
+describe('Routers: Auth.signup', () => {
   test('Middleware: account_signup_GET', () => {
     // (*) should run recycling tests
     expect(toProceedTheClientByAuthenticity(signup.GET, req, res, next)).toBeTruthy();
@@ -51,12 +51,11 @@ describe('Routers: Auth', () => {
 
   test('Middleware: account_signup_POST', async () => {
     const _account_signup_POST = signup.POST[signup.POST.length - 1];
-    const someUserDoc = {};
     req.body = { username: 'some_new_user', password: { new: 'some_pw', confirmed: 'some_pw' } };
     req.logIn = jest.fn();
 
     /* stub `register` method @lib'passport-local-mongoose' */
-    UsersModel.register = jest.fn(() => someUserDoc);
+    UsersModel.register = jest.fn(() => Symbol.for('some_user_doc'));
 
     // should call `register` on the model
     await _account_signup_POST(req, res, next);
@@ -77,7 +76,7 @@ describe('Routers: Auth', () => {
       await _account_signup_POST(req, res, next);
 
       // should call with `someUserDoc` return from the stubbed function
-      expect(req.logIn).toBeCalledWith(someUserDoc, expect.any(Function));
+      expect(req.logIn).toBeCalledWith(Symbol.for('some_user_doc'), expect.any(Function));
 
       // should proceed the client
       expect(req.flash).toBeCalledWith('info', expect.stringContaining(req.body.username));
@@ -91,8 +90,10 @@ describe('Routers: Auth', () => {
     expect(next).not.toBeCalled();
     expect.assertions(6);
   });
+});
 
 
+describe('Routers: Auth.signin', () => {
   test('Middleware: account_signin_GET', () => {
     res.locals.$$VIEW = { flash: { action: [] } };
 
@@ -130,13 +131,12 @@ describe('Routers: Auth', () => {
 
 
     // (L1) should handle message incoming from `passport.authenticate`
-    const someDBError = new Error();
     const someAuthUser = { _id: 'some_id', picture: 'some_location', nickname: 'some_name', something_else: '/' };
 
     // // if an unexpected errors (e.g. DB)
-    mockPassportCB.mockImplementationOnce(cb => cb(someDBError));
+    mockPassportCB.mockImplementationOnce(cb => cb(Symbol.for('some_error')));
     signin.POST(req, res, next);
-    expect(next).toHaveBeenLastCalledWith(someDBError);
+    expect(next).toHaveBeenLastCalledWith(Symbol.for('some_error'));
 
     // // if fail to be authenticated
     mockPassportCB.mockImplementationOnce(cb => cb(null, null));
@@ -153,15 +153,14 @@ describe('Routers: Auth', () => {
 
 
     // (L2) should handle message incoming from `req.logIn`
-    const someSignInError = new Error();
     Date.now = () => new Date('2018-01-01T00:00:00.000Z').getTime();
     req.session = { cookie: {} };
     someAuthUser.updateLastTimeLog = jest.fn();
 
     // // if failed to be signed-in
-    req.logIn.mockImplementationOnce((_someAuthUser, cb) => cb(someSignInError));
+    req.logIn.mockImplementationOnce((_someAuthUser, cb) => cb(Symbol.for('some_error')));
     signin.POST(req, res, next);
-    expect(next).toHaveBeenLastCalledWith(someSignInError);
+    expect(next).toHaveBeenLastCalledWith(Symbol.for('some_error'));
 
     // // if can be signed-in
     req.logIn.mockImplementation((_someAuthUser, cb) => cb());
@@ -203,8 +202,10 @@ describe('Routers: Auth', () => {
     // should pass the final state checks
     expect(next).toHaveBeenCalledTimes(3);
   });
+});
 
 
+describe('Routers: Auth.signout', () => {
   test('Middleware: account_signout_GET', async () => {
     req.session.user = {};
     req.logout = jest.fn();

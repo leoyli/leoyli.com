@@ -20,7 +20,7 @@ const renderer = { posts: {} };
  */
 renderer.posts.single = ({ filename, post = null, meta = {} } = {}) => function singlePostRenderer(req, res) {
   if (!post
-      || post.state.recycled
+      || (!post.state || post.state.recycled)
       || (!post.state.published && !req.session.user)                                                                   // todo: wired up with authorization
   ) throw new _U_.error.HttpException(404);
   if (post.title) _M_.modifyHTMLTitleTag({ tag: post.title, extend: false })(req, res);
@@ -50,11 +50,14 @@ renderer.posts.multiple = ({ filename, list = [], meta = {} } = {}) => function 
  * @return {string|*}
  */
 const exportHTML = ({ template: $template, renderer: $renderer } = {}) => function templateHandler(req, res) {
-  const { post, list, meta, template = $template, renderer: renderingSymbol = $renderer } = req.session.chest
-    ? req.session.chest
+  const { post, list, meta, template = $template, renderer: renderingSymbol = $renderer } = req.session.cache
+    ? req.session.cache
     : {};
-  const filename = template && template.replace(/\/:([a-z0-9-$]+)$/i, (match, key) => `/${req.params[key]}`);
-  delete req.session.chest;
+  delete req.session.cache;
+
+  // check dynamic template
+  const filename = template && template.replace(/\/:([\w\d$-]+)$/i, (match, key) => `/${req.params[key]}`);
+  if (!filename) throw new ReferenceError('Missing template');
 
   switch (renderingSymbol) {
     case VIEW_POSTS_SINGLE:
@@ -76,11 +79,11 @@ const exportHTML = ({ template: $template, renderer: $renderer } = {}) => functi
  */
 const exportJSON = (option) => function JSONHandler(req, res) {
   const doc = {
-    ...(req.session.chest ? req.session.chest : {}),
+    ...(req.session.cache ? req.session.cache : {}),
     _execution_time: new Date(Date.now()).toISOString(),
     _cache: false,
   };
-  delete req.session.chest;
+  delete req.session.cache;
   return res.json(doc);
 };
 

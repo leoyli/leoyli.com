@@ -22,14 +22,13 @@ beforeEach(() => {
 // test
 describe('Routers: home.profile', () => {
   test('Middleware: home_profile_GET', () => {
-    const someUserDoc = {};
-    req.user = { toObject: jest.fn(() => someUserDoc) };
+    req.user = { toObject: jest.fn(() => Symbol.for('some_user_doc')) };
     res.locals.$$VIEW = {};
 
     // should populate plain user document into $$VIEW
     profile.GET(req, res, next);
     expect(req.user.toObject).toHaveBeenCalledTimes(1);
-    expect(res.locals.$$VIEW.user).toEqual(someUserDoc);
+    expect(res.locals.$$VIEW.user).toBe(Symbol.for('some_user_doc'));
 
     // should meet overall expectations
     expect(next).toHaveBeenCalledTimes(1);

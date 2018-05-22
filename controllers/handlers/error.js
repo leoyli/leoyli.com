@@ -9,7 +9,7 @@ const redirect = {};
  */
 redirect.signInRetry = function signInRetry(req, res) {
   // if signed-out from a authentication required page (silent the resulted error flash)
-  if (req.header('Referrer').includes(req.originalUrl)) {
+  if (req.header('Referrer') && req.header('Referrer').includes(req.originalUrl)) {
     res.locals.$$VIEW.flash.info.forEach(info => req.flash('info', info));
     delete req.flash('error');
   }

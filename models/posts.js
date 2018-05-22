@@ -1,6 +1,6 @@
-
 /* eslint-disable key-spacing */
 const mongoose = require('mongoose');
+const { _U_ } = require('../controllers/utilities/');
 
 
 // schema
@@ -47,18 +47,24 @@ PostsSchema
 
 
 // action hooks
-// // version counter (pre-hook)
-PostsSchema.pre('findOneAndUpdate', function PostsSchema_findOneAndUpdate() {
+// // version counter
+PostsSchema.pre('findOneAndUpdate', function PostsSchema_pre_findOneAndUpdate() {
   this.findOneAndUpdate({}, { $inc: { _revised: 1 } });
 });
 
 
-// // recycle setter (pre-hook)
-PostsSchema.pre('update', function PostsSchema_update() {
+// // recycle setter
+PostsSchema.pre('update', function PostsSchema_pre_update() {
   const _$update = this.getUpdate();
   if (_$update.$set['state.pended'] === true) _$update.$set['state.published'] = false;                                 // tofix: initial post ist not worked
   if (_$update.$set['state.recycled'] === true) _$update.$set = { 'time._recycled': Date.now() };
   if (_$update.$set['state.recycled'] === false) _$update.$set = { 'time._recycled': null };
+});
+
+
+// // before saving
+PostsSchema.pre('save', function PostsSchema_pre_save() {
+  this.canonical = _U_.string.toKebabCase(this.title);                                                                  // tofix: duplicated key (e.g. /new, /edit, /edit_2)
 });
 
 

@@ -22,11 +22,10 @@ describe('Utilities: Express', () => {
     expect(test[1]).toBe(someMiddleware);
 
     // should cache error and pass it to `next`
-    const someError = new Error();
     const spyNext = jest.fn();
-    const someAsyncMiddlewareThatThrowsError = async (req, res, next) => { throw someError; };
+    const someAsyncMiddlewareThatThrowsError = async (req, res, next) => { throw Symbol.for('some_error'); };
     await wrapAsync(someAsyncMiddlewareThatThrowsError)(null, null, spyNext);
-    expect(spyNext).toBeCalledWith(someError);
+    expect(spyNext).toBeCalledWith(Symbol.for('some_error'));
   });
 
 

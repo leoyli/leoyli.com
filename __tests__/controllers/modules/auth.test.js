@@ -17,6 +17,11 @@ beforeEach(() => {
 
 // test
 describe('Modules: Auth', () => {
+  test('Middleware: usePassport', () => {
+    // no testing items
+  });
+
+
   test('Middleware: isSignedIn', () => {
     const _isSignedIn = isSignedIn[isSignedIn.length - 1];
     req.session.user = {};

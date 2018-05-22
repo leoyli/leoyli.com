@@ -378,8 +378,8 @@ describe('Modules: Query', () => {
     // should `hydrate` resulted documents
     expect(modelIndex.SomeCollectionModel.hydrate).toHaveBeenLastCalledWith(result.list[0]);
 
-    // should store data into session chest
-    expect(req.session.chest).toEqual(result);
+    // should store data into session cache
+    expect(req.session.cache).toEqual(result);
 
     // should pass the final state checks
     expect(next).toHaveBeenCalledTimes(1);

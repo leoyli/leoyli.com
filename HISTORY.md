@@ -1,3 +1,19 @@
+### 0.10.0-dev.22 / 2018-05-21
+> App
+- Revised 'blog' router controllers.
+- Revised 'post' schema @'model/post'.
+- Revised 'errorHandlingAgent' for logging unhandled errors @'service/error'.
+- Added `permission` option into all routers. (pre-formatted/inactive feature)
+- Added template reference check for `exportHTML` @'handlers/exporter'.
+- Fixed `ReferenceError` for missing `Referrer` header @'handlers/error'.
+- Renamed `req.session.chest` as `req.session.cache`.
+
+> Test (84%)
+- Added 'routers/blog.test.js'.
+- Added error testing into `exportHTML` test.
+- Used `Symbol.for` as a replacement of dummy `object` entity.
+
+
 ### 0.10.0-dev.21 / 2018-05-19
 > App
 - Revised 'auth' router controllers.

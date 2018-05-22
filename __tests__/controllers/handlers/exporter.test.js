@@ -71,25 +71,28 @@ describe('Handlers: Exporter', () => {
 
 
   test('Middleware: exportHTML', () => {
+    // should throw error if missing template
+    expect(() => exportHTML()(req, res, next)).toThrowError(ReferenceError);
+
     // should handle based on a given renderer symbol
     // // if is `VIEW_POSTS_SINGLE`
-    req.session.chest = { doc: 'test' };
+    req.session.cache = { doc: 'test' };
     renderer.posts.single = jest.fn(() => () => {});
-    exportHTML({ renderer: rendererSymbols.VIEW_POSTS_SINGLE })(req, res, next);
-    expect(req.session).not.toHaveProperty('chest');
+    exportHTML({ template: '/', renderer: rendererSymbols.VIEW_POSTS_SINGLE })(req, res, next);
+    expect(req.session).not.toHaveProperty('cache');
     expect(renderer.posts.single).toHaveBeenCalledTimes(1);
 
     // // if is `VIEW_POSTS_MULTIPLE`
-    req.session.chest = { doc: 'test' };
+    req.session.cache = { doc: 'test' };
     renderer.posts.multiple = jest.fn(() => () => {});
-    exportHTML({ renderer: rendererSymbols.VIEW_POSTS_MULTIPLE })(req, res, next);
-    expect(req.session).not.toHaveProperty('chest');
+    exportHTML({ template: '/', renderer: rendererSymbols.VIEW_POSTS_MULTIPLE })(req, res, next);
+    expect(req.session).not.toHaveProperty('cache');
     expect(renderer.posts.multiple).toHaveBeenCalledTimes(1);
 
     // // if any other cases
-    req.session.chest = { doc: 'test' };
-    exportHTML()(req, res, next);
-    expect(req.session).not.toHaveProperty('chest');
+    req.session.cache = { doc: 'test' };
+    exportHTML({ template: '/' })(req, res, next);
+    expect(req.session).not.toHaveProperty('cache');
     expect(res.render).toHaveBeenCalledTimes(1);
 
     // should pass the final state checks
@@ -99,7 +102,7 @@ describe('Handlers: Exporter', () => {
 
   test('Middleware: exportJSON', () => {
     Date.now = () => new Date('2018-01-01T00:00:00.000Z').getTime();
-    req.session.chest = { doc: 'test' };
+    req.session.cache = { doc: 'test' };
     res.json = jest.fn();
 
     // should call `res.json`
@@ -107,7 +110,7 @@ describe('Handlers: Exporter', () => {
     expect(res.json).toHaveBeenCalledTimes(1);
 
     // should do housekeeping on session
-    expect(req.session).not.toHaveProperty('chest');
+    expect(req.session).not.toHaveProperty('cache');
 
     // should pass the final state checks
     expect(next).not.toBeCalled();

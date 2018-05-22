@@ -251,8 +251,8 @@ const paginatedQuery = (collection, { num, sort } = {}) => function queryControl
     .aggregate(getAggregationQuery(collection, req.params, req.query, num || res.locals.$$SITE.num, sort))
     .then(docs => docs[0])
     .then(result => {
-      req.session.chest = result;
-      if (result.list) req.session.chest.list = result.list.map(doc => Model.hydrate(doc));
+      req.session.cache = result;
+      if (result.list) req.session.cache.list = result.list.map(doc => Model.hydrate(doc));
       return next();
     })
     .catch(next);
