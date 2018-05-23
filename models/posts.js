@@ -56,9 +56,10 @@ PostsSchema.pre('findOneAndUpdate', function PostsSchema_pre_findOneAndUpdate() 
 // // recycle setter
 PostsSchema.pre('update', function PostsSchema_pre_update() {
   const _$update = this.getUpdate();
-  if (_$update.$set['state.pended'] === true) _$update.$set['state.published'] = false;                                 // tofix: initial post ist not worked
-  if (_$update.$set['state.recycled'] === true) _$update.$set = { 'time._recycled': Date.now() };
-  if (_$update.$set['state.recycled'] === false) _$update.$set = { 'time._recycled': null };
+  if (_$update.$set['state.pended']   === true)   _$update.$set['state.published']  = false;                            // tofix: initial post ist not worked
+  if (_$update.$set['state.recycled'] === true)   _$update.$set['time._recycled']   = Date.now();
+  if (_$update.$set['state.recycled'] === false)  _$update.$set['time._recycled']   = null;
+  if (_$update.$set['state.restored'] === true)   _$update.$set['time._recycled']   = null;
 });
 
 

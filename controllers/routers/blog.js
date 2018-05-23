@@ -48,7 +48,7 @@ blog.post = {
       { $set: req.body.post },
       { new: true },
     );
-    if (post) req.session.cache = { post };
+    req.session.cache = { post };
     req.flash('info', 'post have been successfully updated!');
     return res.redirect(`/blog/${post.canonical}`);
   },

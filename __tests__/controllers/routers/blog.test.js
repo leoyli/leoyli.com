@@ -5,6 +5,7 @@ const { blog: {
 
 
 // mock
+const { _M_ } = require(`${__ROOT__}/controllers/modules`);
 const { PostsModel } = require(`${__ROOT__}/models/`);
 const httpMocks = require('node-mocks-http');
 
@@ -200,8 +201,15 @@ describe('Routers: Blog.post', () => {
 
 
 describe('Routers: Blog.list', () => {
-  test('Middleware: blog_list_GET', () => {
-    // no testing items
+  test('Middleware: blog_list_GET', async () => {
+    _M_.paginatedQuery = jest.fn(() => () => {});
+
+    // should send a query via `paginatedQuery` module fn
+    await list.GET(req, res, next);
+    expect(_M_.paginatedQuery).toHaveBeenCalledTimes(1);
+
+    // should pass the final state checks
+    expect(next).not.toBeCalled();
   });
 
 

@@ -24,11 +24,11 @@ const siteRouter = new Device([
     },
   },
   {
-    route: '/stack/:stackType',
+    route: '/stack/:collection',
     controller: site.stack,
     setting: {
       title: 'Stack',
-      template: './__root__/site/stack/:stackType',
+      template: './__root__/site/stack/:collection',
       renderer: Device.renderer.VIEW_STACK,
       servingAPI: true,
     },

@@ -30,7 +30,7 @@ describe('Routers: home.profile', () => {
     expect(req.user.toObject).toHaveBeenCalledTimes(1);
     expect(res.locals.$$VIEW.user).toBe(Symbol.for('some_user_doc'));
 
-    // should meet overall expectations
+    // should pass the final state checks
     expect(next).toHaveBeenCalledTimes(1);
   });
 
@@ -60,9 +60,8 @@ describe('Routers: home.profile', () => {
 
 describe('Routers: home.security', () => {
   test('Middleware: home_security_GET', () => {
+    // should pass the final state checks
     security.GET(req, res, next);
-
-    // should meet overall expectations
     expect(next).toHaveBeenCalledTimes(1);
   });
 

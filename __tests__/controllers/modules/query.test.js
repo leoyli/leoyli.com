@@ -231,8 +231,8 @@ describe('Modules: Query', () => {
     expect(pullPipe_1_matching('posts', {}, {}))
       .toHaveProperty('$match', { 'state.hidden': false, 'state.published': true, 'time._recycled': { $eq: null } });
 
-    // // if (B) collection is `posts || media || page`; param have `stackType`; query have `access: 'bin'` key
-    expect(pullPipe_1_matching('posts', { stackType: 'posts/media' }, { access: 'bin' }))
+    // // if (B) collection is `posts || media || page`; param have `collection`; query have `access: 'bin'` key
+    expect(pullPipe_1_matching('posts', { collection: 'posts/media' }, { access: 'bin' }))
       .toHaveProperty('$match', { 'time._recycled': { $ne: null } });
   });
 
@@ -243,8 +243,8 @@ describe('Modules: Query', () => {
     expect(pullPipe_2_masking({}))
       .toHaveProperty('$project', { content: 0 });
 
-    // // if param have `stackType` key
-    expect(pullPipe_2_masking({ stackType: 'post' }))
+    // // if param have `collection` key
+    expect(pullPipe_2_masking({ collection: 'post' }))
       .toHaveProperty('$project', { content: 0, featured: 0 });
   });
 

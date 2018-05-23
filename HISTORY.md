@@ -1,3 +1,15 @@
+### 0.10.0-dev.23 / 2018-05-23
+> App
+- Renamed all `stackType` as `collection`.
+- Revised `PostsSchema.pre('update')` schema method @'model/posts'.
+- Revised 'site' router controllers.
+
+> Test (89%)
+- Added 'routers/site.test.js'.
+- Added test to cover code branches in `blog_list_GET` @'routers/blog'.
+- Fixed typo and formatting issue @'routers/home.test.js'.
+
+
 ### 0.10.0-dev.22 / 2018-05-21
 > App
 - Revised 'blog' router controllers.

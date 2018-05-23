@@ -94,9 +94,9 @@ const pullPipe_1_matching = (collection, params, query) => {
   const _$$date = query.date ? queryDateExpression(...parseQueryDate(query.date)) : null;                               // tofix: query time zone problem
   if (_$$date) $match['time._created'] = _$$date;
   if (['posts', 'media', 'page'].includes(collection)) {
-    $match['time._recycled'] = (params.stackType && query.access === 'bin') ? { $ne: null } : { $eq: null };
-    if (!params.stackType) $match['state.published'] = true;
-    if (!params.stackType) $match['state.hidden'] = false;
+    $match['time._recycled'] = (params.collection && query.access === 'bin') ? { $ne: null } : { $eq: null };
+    if (!params.collection) $match['state.published'] = true;
+    if (!params.collection) $match['state.hidden'] = false;
   }
   return { $match };
 };
@@ -110,7 +110,7 @@ const pullPipe_1_matching = (collection, params, query) => {
 const pullPipe_2_masking = (params) => {
   const $project = {};
   const mask = ['content'];
-  if (params.stackType) mask.push('featured');
+  if (params.collection) mask.push('featured');
   for (let i = mask.length - 1; i > -1; i -= 1) $project[mask[i]] = 0;
   return { $project };
 };
