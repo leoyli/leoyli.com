@@ -25,6 +25,11 @@ describe('Modules: Query', () => {
     expect(res.set).toBeCalledWith('Cache-Control', expect.any(String));
     expect(res.set).toBeCalledWith('x-robots-tag', 'none');
 
+    // should be able to use as a modifier (not a middleware)
+    res.set.mockReset();
+    expect(() => noCrawlerHeader(req, res)).not.toThrowError();
+    expect(res.set).toHaveBeenCalledTimes(2);
+
     // should pass the final state checks
     expect(next).toHaveBeenCalledTimes(1);
   });
@@ -34,6 +39,11 @@ describe('Modules: Query', () => {
     // should set headers
     noStoreCacheHeader(req, res, next);
     expect(res.set).toBeCalledWith('Cache-Control', 'no-store, no-cache, must-revalidate');
+
+    // should be able to use as a modifier (not a middleware)
+    res.set.mockReset();
+    expect(() => noStoreCacheHeader(req, res)).not.toThrowError();
+    expect(res.set).toHaveBeenCalledTimes(1);
 
     // should pass the final state checks
     expect(next).toHaveBeenCalledTimes(1);

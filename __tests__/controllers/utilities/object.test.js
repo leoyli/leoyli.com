@@ -35,6 +35,9 @@ describe('Utilities: Object', () => {
     // // an array/object mixture
     expect(test[2]).toEqual(target[2]);
     expect(test[2]).not.toBe(target[2]);
+
+    // should throw an Error for invalid cloning target
+    expect(() => cloneDeep(Symbol('some_invalid_target'))).toThrowError(TypeError);
   });
 
 
@@ -125,5 +128,8 @@ describe('Utilities: Object', () => {
     const test_2 = createCaseInsensitiveProxy(target, { reverse: false });
     expect(test_2).not.toBe(target);
     expect(test_2).toEqual({ a: 1, A: 1 });
+
+    // should throw an Error for invalid target
+    expect(() => createCaseInsensitiveProxy([])).toThrowError(TypeError);
   });
 });

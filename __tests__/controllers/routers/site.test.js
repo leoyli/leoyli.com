@@ -99,17 +99,19 @@ describe('Routers: Site.upload', () => {
     expect(req.flash).not.toBeCalled();
 
     // should create media associated with the uploader
-    req.body.busboySlip = { raw: [{}, {}], mes: ['', ''] };
+    req.body.busboySlip = { raw: [{}, {}] };
     await _site_upload_POST(req, res, next);
-    expect(req.body.busboySlip.raw).toContainEqual(expect.objectContaining({ author: {} }));
     expect(MediaModel.create).toHaveBeenCalledTimes(1);
-
-    // should call `req.flash`
-    expect(req.flash).toHaveBeenCalledWith('error', expect.any(String));
+    expect(req.body.busboySlip.raw).toContainEqual(expect.objectContaining({ author: {} }));
     expect(req.flash).toHaveBeenLastCalledWith('info', expect.stringContaining('2 file'));
-    expect(req.flash).toHaveBeenCalledTimes(3);
+
+    // should flash all messages
+    req.body.busboySlip = { mes: [''] };
+    await _site_upload_POST(req, res, next);
+    expect(req.flash).toHaveBeenLastCalledWith('error', expect.any(String));
 
     // should pass the final state checks
+    expect(req.flash).toHaveBeenCalledTimes(2);
     expect(next).not.toBeCalled();
   });
 });
@@ -133,7 +135,7 @@ describe('Routers: Site.stack', () => {
     _U_.express.wrapMiddleware = jest.fn(() => () => {});
     PostsModel.update = jest.fn();
     MediaModel.update = jest.fn();
-    req.body = { action: '', target: [{}] };
+    req.body = { action: '' };
 
     // (*) should run recycling tests
     expect(await toHandleHttpExceptionsForInvalidCollection(stack.PATCH, req, res, next)).toBeTruthy();

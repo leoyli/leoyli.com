@@ -23,7 +23,7 @@ const isSignedIn = [...usePassport, function isSignedIn(req, res, next) {
  * validate if client is authorized
  */
 const isAuthorized = [...isSignedIn, async function isAuthorized(req, res, next) {
-  const [field, val] = req.params.canonical !== undefined
+  const [field, val] = req.params.canonical
     ? ['canonical', req.params.canonical]
     : ['_id', _U_.string.parseMongoObjectId(req.url)];
   if (await PostsModel.count({ [field]: val, 'author._id': req.user._id }) !== 1) {                                     // tofix: find the post first then decide to give or not

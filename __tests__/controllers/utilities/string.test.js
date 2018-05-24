@@ -29,6 +29,9 @@ describe('Utilities: String', () => {
     expect(test_2[0]).toBeTruthy();
     expect(test_2[1]).toBeTruthy();
     expect(test_2[2]).toBeTruthy();
+
+    // should throw an Error for non-string checking types
+    expect(() => checkToStringTag({}, {})).toThrowError(TypeError);
   });
 
 

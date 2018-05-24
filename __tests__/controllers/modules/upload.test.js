@@ -1,22 +1,30 @@
 /* global __ROOT__ */
 const {
-  getSavingPath, isUploadable, fetchRawDoc, fetchMessage, upload,
+  getSavingPath, isUploadable, fetchRawDoc, fetchMessage, upload, parseMultipart,
 } = require(`${__ROOT__}/controllers/modules/upload`)[Symbol.for('__TEST__')];
 
 
-// module
+// mock
+const httpMocks = require('node-mocks-http');
+const events = require('events');
 const fs = require('fs');
+
+beforeEach(() => {
+  global.res = httpMocks.createResponse();
+  global.req = httpMocks.createRequest({ session: {} });
+  global.next = jest.fn();
+});
 
 
 // test
-describe('Module: Upload', () => {
+describe('Modules: Upload', () => {
   const someConfig = { fileSize: 25 * 1000000, MIME: ['image/png', 'image/gif'] };
   const someBusboy = { fieldName: 'media_test[file]', fileName: 'test.png', MIME: 'image/png', stream: {} };
 
 
   test('Fn: getSavingPath', () => {
-    // stub out Date.now
-    Date.now = () => new Date('2018-01-01T00:00:00.000Z');
+    /* stub Date.now */
+    Date.now = () => new Date('2018-01-01T00:00:00.000Z').getTime();
 
     // should take the current time as the saving file name
     expect(getSavingPath('__PATH__', 'someFile.png')).toBe(`__PATH__/201801/${+Date.now()}.png`);
@@ -90,5 +98,10 @@ describe('Module: Upload', () => {
       // should delete the testing file
       fs.unlink(anotherBusboy.filePath, () => fs.rmdir(`${__dirname}/_tempt`, done));
     }));
+  });
+
+
+  test('Middleware: parseMultipart', () => {
+
   });
 });

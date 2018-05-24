@@ -57,6 +57,10 @@ describe('Modules: Helper', () => {
     modifyHTMLTitleTag({ tag: insertedTitle, delimiter: '|' })(req, res, next);
     expect(res.locals.$$VIEW.title).toBe('inserted_title | inserted_title');
 
+    // should be able to use as a modifier (not a middleware)
+    expect(() => modifyHTMLTitleTag({ tag: insertedTitle })(req, res)).not.toThrowError();
+    expect(res.locals.$$VIEW.title).toBe('inserted_title - inserted_title | inserted_title');
+
     // should pass the final state checks
     expect(next).toHaveBeenCalledTimes(5);
   });

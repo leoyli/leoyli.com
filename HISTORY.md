@@ -1,3 +1,14 @@
+### 0.10.0-dev.23.5 / 2018-05-23
+> App
+- Simplified redundant `Array.length > 0` as just `Array.length`.
+- Simplified `site_upload_POST` middleware @'routers/site'.
+- Simplified `isAuthorized` module.
+
+> Test (90%)
+- Excluded 'index.js' to be counted as in a coverage report @'__configs__/'.
+- Added more resolved tests to increase the coverage of code branch.
+
+
 ### 0.10.0-dev.23 / 2018-05-23
 > App
 - Renamed all `stackType` as `collection`.
