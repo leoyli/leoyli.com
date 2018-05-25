@@ -1,5 +1,5 @@
 const { _M_ } = require('../modules/');
-const { _U_ } = require('../utilities/');
+
 
 // controllers
 const page = {};
@@ -12,21 +12,21 @@ page.search = {
 
 
 page.edit = {
-  GET: function page_landing_GET(req, res, next) {
+  GET: function page_edit_GET(req, res, next) {
     return next();
   },
 };
 
 
 page.show = {
-  GET: function page_landing_GET(req, res, next) {
-    return next(new _U_.error.HttpException(404));
+  GET: function page_show_GET(req, res, next) {
+    return next();
   },
 };
 
 
 page.root = {
-  GET: function page_landing_GET(req, res, next) {
+  GET: function page_root_GET(req, res, next) {
     return next();
   },
 };

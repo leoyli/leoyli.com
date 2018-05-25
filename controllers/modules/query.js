@@ -252,7 +252,7 @@ const paginatedQuery = (collection, { num, sort } = {}) => function queryControl
     .then(docs => docs[0])
     .then(result => {
       req.session.cache = result;
-      if (result.list) req.session.cache.list = result.list.map(doc => Model.hydrate(doc));
+      if (result && result.list) req.session.cache.list = result.list.map(doc => Model.hydrate(doc));
       return next();
     })
     .catch(next);

@@ -1,3 +1,13 @@
+### 0.10.0-dev.23.5 / 2018-05-24
+> App
+- Fixed potential reference error @'modules/query'.
+- Revised 'page' router.
+
+> Test (92%)
+- Added 'routers/page.test.js'.
+- Updated formats @'routers/query'.
+
+
 ### 0.10.0-dev.23.5 / 2018-05-23
 > App
 - Simplified redundant `Array.length > 0` as just `Array.length`.

@@ -18,7 +18,7 @@ beforeEach(() => {
 
 
 // tests
-describe('Modules: Query', () => {
+describe('Modules: Query components', () => {
   test('Fn: paginatedMetaExpression', () => {
     // should return an object as $$meta
     // // if all argument are "empty"
@@ -359,8 +359,10 @@ describe('Modules: Query', () => {
     // (*) should match with the snapshot
     expect(test).toMatchSnapshot();
   });
+});
 
 
+describe('Modules: Query', () => {
   test('Middleware: paginatedQuery', async () => {
     const result = { list: ['some_docs'], meta: {} };
     res.locals.$$SITE = { num: 10 };
