@@ -4,25 +4,23 @@ const {
 } = require(`${__ROOT__}/controllers/engines/view`)[Symbol.for('__TEST__')];
 
 
-// mock
+// modules
 const fs = require('fs');
 
-const mockLocals = { settings: {}, cache: false, _locals: {}, test: {} };
-const mockString = '<a>Hello World</a>';
-const mockCallback = (err, str) => {
-  if (err) return err;
-  return str;
-};
+
+// mocks
+const someLocals = { settings: {}, cache: false, _locals: {}, test: {} };
+const someString = '<a>Hello World</a>';
 
 jest.mock('fs', () => ({
   readFileSync: jest.fn(),
   readFile: jest.fn(),
 }));
-fs.readFileSync.mockReturnValue(mockString);
-fs.readFile.mockImplementation((file, option, cb) => cb(null, mockString));
+fs.readFileSync.mockReturnValue(someString);
+fs.readFile.mockImplementation((file, option, cb) => cb(null, someString));
 
 
-// test
+// tests
 describe('Engines: View', () => {
   test('Fn: getCompilationConfigs', () => {
     // should return object with `varname` property consisted with argument
@@ -32,10 +30,10 @@ describe('Engines: View', () => {
 
   test('Fn: getFileString', async () => {
     // should return file string synchronously
-    expect(getFileString('test', true)).toEqual(mockString);
+    expect(getFileString('test', true)).toEqual(someString);
 
     // should return file string in Promise
-    expect(await getFileString('test').then(str => str)).toEqual(mockString);
+    expect(await getFileString('test').then(str => str)).toEqual(someString);
   });
 
 
@@ -49,7 +47,7 @@ describe('Engines: View', () => {
 
   test('Fn: getBlueprint', () => {
     // should return a blueprint object
-    const test = getBlueprint(mockLocals);
+    const test = getBlueprint(someLocals);
     expect(test).toHaveProperty('_fn');
     expect(test).toHaveProperty('test');
     expect(test).not.toHaveProperty('settings');
@@ -60,10 +58,10 @@ describe('Engines: View', () => {
 
   test('Fn: buildTemplate', () => {
     // should construct a `Template` object
-    const test = buildTemplate('', {}, mockString);
+    const test = buildTemplate('', {}, someString);
     expect(test instanceof Template).toBeTruthy();
     expect(test.compile instanceof Function).toBeTruthy();
-    expect(test.render()).toBe(mockString);
+    expect(test.render()).toBe(someString);
   });
 
 
@@ -76,8 +74,13 @@ describe('Engines: View', () => {
 
 
   test('Fn: render', async () => {
+    const someCallback = (err, str) => {
+      if (err) return err;
+      return str;
+    };
+
     // should return the rendering result
-    const test = await (render('', mockLocals, mockCallback));
-    expect(test).toEqual(mockString);
+    const test = await (render('', someLocals, someCallback));
+    expect(test).toEqual(someString);
   });
 });

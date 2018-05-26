@@ -4,20 +4,22 @@ const {
 } = require(`${__ROOT__}/controllers/handlers/exporter.js`)[Symbol.for('__TEST__')];
 
 
-// mock
+// modules
 const httpMocks = require('node-mocks-http');
 
+
+// mocks
 beforeEach(() => {
   global.res = httpMocks.createResponse();
   global.req = httpMocks.createRequest({ session: {} });
   global.next = jest.fn();
 
-  /* stubbed functions */
+  /* stub functions */
   res.render = jest.fn();
 });
 
 
-// test
+// tests
 describe('Handlers: Exporter', () => {
   test('Middleware: renderer.posts.single', () => {
     // should throw an Error (HTTPException(404))

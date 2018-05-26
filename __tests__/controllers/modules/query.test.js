@@ -6,9 +6,18 @@ const {
 } = require(`${__ROOT__}/controllers/modules/query`)[Symbol.for('__TEST__')];
 
 
-// mock
+// modules
 const modelIndex = require(`${__ROOT__}/models/`);
 const httpMocks = require('node-mocks-http');
+
+
+// mocks
+jest.mock(`${__ROOT__}/models/`, () => ({
+  SomeCollectionModel: {
+    aggregate: jest.fn(),
+    hydrate: jest.fn(),
+  },
+}));
 
 beforeEach(() => {
   global.res = httpMocks.createResponse();
@@ -18,7 +27,7 @@ beforeEach(() => {
 
 
 // tests
-describe('Modules: Query components', () => {
+describe('Modules: Query (components)', () => {
   test('Fn: paginatedMetaExpression', () => {
     // should return an object as $$meta
     // // if all argument are "empty"
@@ -227,11 +236,11 @@ describe('Modules: Query components', () => {
         },
       });
 
-    // // if (A) collection is `posts || media || page`
+    // // if collection is `posts || media || page`
     expect(pullPipe_1_matching('posts', {}, {}))
       .toHaveProperty('$match', { 'state.hidden': false, 'state.published': true, 'time._recycled': { $eq: null } });
 
-    // // if (B) collection is `posts || media || page`; param have `collection`; query have `access: 'bin'` key
+    // // if collection is `posts || media || page`; param have `collection`; query have `access: 'bin'` key
     expect(pullPipe_1_matching('posts', { collection: 'posts/media' }, { access: 'bin' }))
       .toHaveProperty('$match', { 'time._recycled': { $ne: null } });
   });
@@ -362,26 +371,22 @@ describe('Modules: Query components', () => {
 });
 
 
-describe('Modules: Query', () => {
+describe('Modules: Query (control)', () => {
   test('Middleware: paginatedQuery', async () => {
-    const result = { list: ['some_docs'], meta: {} };
+    const someResult = { list: ['some_docs'], meta: {} };
+    modelIndex.SomeCollectionModel.aggregate.mockImplementation(() => Promise.resolve([someResult]));
+    modelIndex.SomeCollectionModel.hydrate.mockImplementation(item => item);
     res.locals.$$SITE = { num: 10 };
-
-    /* stub the modelIndex */
-    modelIndex.SomeCollectionModel = {
-      aggregate: jest.fn(() => Promise.resolve([result])),
-      hydrate: jest.fn(item => item),
-    };
 
     // should perform query via `SomeCollectionModel.aggregate`
     await paginatedQuery('SomeCollection')(req, res, next);
     expect(modelIndex.SomeCollectionModel.aggregate).toHaveBeenCalled();
 
     // should `hydrate` resulted documents
-    expect(modelIndex.SomeCollectionModel.hydrate).toHaveBeenLastCalledWith(result.list[0]);
+    expect(modelIndex.SomeCollectionModel.hydrate).toHaveBeenLastCalledWith(someResult.list[0]);
 
     // should store data into session cache
-    expect(req.session.cache).toEqual(result);
+    expect(req.session.cache).toEqual(someResult);
 
     // should pass the final state checks
     expect(next).toHaveBeenCalledTimes(1);

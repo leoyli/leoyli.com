@@ -4,17 +4,25 @@ const { site: {
 } } = require(`${__ROOT__}/controllers/routers/site`)[Symbol.for('__TEST__')];
 
 
-// mock
+// modules
 const { PostsModel, MediaModel, ConfigsModel } = require(`${__ROOT__}/models/`);
 const { _U_ } = require(`${__ROOT__}/controllers/utilities`);
 const httpMocks = require('node-mocks-http');
+
+
+// mocks
+jest.mock(`${__ROOT__}/models/`, () => ({
+  PostsModel: jest.fn(),
+  MediaModel: jest.fn(),
+  ConfigsModel: jest.fn(),
+}));
 
 beforeEach(() => {
   global.res = httpMocks.createResponse();
   global.req = httpMocks.createRequest({ session: {} });
   global.next = jest.fn();
 
-  /* stubbed functions */
+  /* stub functions */
   req.flash = jest.fn();
   res.redirect = jest.fn();
 });
@@ -49,7 +57,7 @@ const toHandleHttpExceptionsForInvalidCollection = async (fn, req, res, next) =>
 };
 
 
-// test
+// tests
 describe('Routers: Site.configs', () => {
   test('Middleware: site_configs_GET', () => {
     res.locals.$$VIEW = {};

@@ -4,17 +4,29 @@ const { auth: {
 } } = require(`${__ROOT__}/controllers/routers/auth`)[Symbol.for('__TEST__')];
 
 
-// mock
+// modules
 const { UsersModel } = require(`${__ROOT__}/models/`);
 const passport = require('passport');
 const httpMocks = require('node-mocks-http');
+
+
+// mocks
+jest.mock('passport', () => ({
+  authenticate: jest.fn(),
+  initialize: jest.fn(),
+  session: jest.fn(),
+}));
+
+jest.mock(`${__ROOT__}/models/`, () => ({
+  UsersModel: jest.fn(),
+}));
 
 beforeEach(() => {
   global.res = httpMocks.createResponse();
   global.req = httpMocks.createRequest({ session: {} });
   global.next = jest.fn();
 
-  /* stubbed functions */
+  /* stub functions */
   req.flash = jest.fn();
   res.redirect = jest.fn();
   req.isAuthenticated = jest.fn();
@@ -40,7 +52,7 @@ const toProceedTheClientByAuthenticity = (fn, req, res, next) => {
 };
 
 
-// test
+// tests
 describe('Routers: Auth.signup', () => {
   test('Middleware: account_signup_GET', () => {
     // (*) should run recycling tests
@@ -51,11 +63,9 @@ describe('Routers: Auth.signup', () => {
 
   test('Middleware: account_signup_POST', async () => {
     const _account_signup_POST = signup.POST[signup.POST.length - 1];
-    req.body = { username: 'some_new_user', password: { new: 'some_pw', confirmed: 'some_pw' } };
-    req.logIn = jest.fn();
-
-    /* stub `register` method @lib'passport-local-mongoose' */
     UsersModel.register = jest.fn(() => Symbol.for('some_user_doc'));
+    req.logIn = jest.fn();
+    req.body = { username: 'some_new_user', password: { new: 'some_pw', confirmed: 'some_pw' } };
 
     // should call `register` on the model
     await _account_signup_POST(req, res, next);
@@ -118,20 +128,18 @@ describe('Routers: Auth.signin', () => {
 
 
   test('Middleware: account_signin_POST', async () => {
-    // should proceed the client based on authenticity
     // (L0) (*) should run recycling tests
+    passport.authenticate.mockImplementation((strategy, cb) => jest.fn(cb));
     expect(toProceedTheClientByAuthenticity(signin.POST, req, res, next)).toBeTruthy();
     expect(res.redirect).toBeCalledWith('/home');
     jest.resetAllMocks();
 
-    /* stub `passport.authenticate` method @lib'passport' */
-    const mockPassportCB = jest.fn();
-    passport.authenticate = ((strategy, cb) => () => mockPassportCB(cb));
-    req.logIn = jest.fn();
-
 
     // (L1) should handle message incoming from `passport.authenticate`
     const someAuthUser = { _id: 'some_id', picture: 'some_location', nickname: 'some_name', something_else: '/' };
+    const mockPassportCB = jest.fn();
+    passport.authenticate.mockImplementation((strategy, cb) => jest.fn(() => mockPassportCB(cb)));
+    req.logIn = jest.fn();
 
     // // if an unexpected errors (e.g. DB)
     mockPassportCB.mockImplementationOnce(cb => cb(Symbol.for('some_error')));

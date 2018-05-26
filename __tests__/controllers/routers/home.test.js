@@ -4,22 +4,28 @@ const { home: {
 } } = require(`${__ROOT__}/controllers/routers/home`)[Symbol.for('__TEST__')];
 
 
-// mock
+// modules
 const { UsersModel } = require(`${__ROOT__}/models/`);
 const httpMocks = require('node-mocks-http');
+
+
+// mocks
+jest.mock(`${__ROOT__}/models/`, () => ({
+  UsersModel: jest.fn(),
+}));
 
 beforeEach(() => {
   global.res = httpMocks.createResponse();
   global.req = httpMocks.createRequest({ session: {} });
   global.next = jest.fn();
 
-  /* stubbed functions */
+  /* stub functions */
   req.flash = jest.fn();
   res.redirect = jest.fn();
 });
 
 
-// test
+// tests
 describe('Routers: home.profile', () => {
   test('Middleware: home_profile_GET', () => {
     req.user = { toObject: jest.fn(() => Symbol.for('some_user_doc')) };
@@ -38,8 +44,6 @@ describe('Routers: home.profile', () => {
   test('Middleware: home_profile_PATCH', async () => {
     req.body.profile = { info: { birthday: '2018-01-01T00:00:00.000Z' } };
     req.user = { _id: 'some_id', nickname: 'some_name' };
-
-    /* stub `update` model method */
     UsersModel.update = jest.fn();
 
     // should patch user profile
@@ -69,12 +73,10 @@ describe('Routers: home.security', () => {
   test('Middleware: home_security_PATCH', async () => {
     const _home_security_PATCH = security.PATCH[security.PATCH.length - 1];
     req.body.password = { old: 'some_old_pw', new: 'some_new_pw' };
-
-    /* stub `changePassword` method @lib'passport-local-mongoose' */
     req.user = { changePassword: jest.fn(() => Promise.resolve()) };
-    await _home_security_PATCH(req, res, next);
 
     // should change user password
+    await _home_security_PATCH(req, res, next);
     expect(req.user.changePassword).toHaveBeenLastCalledWith(req.body.password.old, req.body.password.new);
 
     // should proceed the client with flash message

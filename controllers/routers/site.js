@@ -23,7 +23,7 @@ site.upload = {                                                                 
   GET: function site_upload_GET(req, res, next) {
     return next();
   },
-  POST: [_M_.parseMultipart({ fileSize: 25 * 1048576 }), async function site_upload_POST(req, res) {
+  POST: [_M_.handleStreamUpload({ fileSize: 25 * 1048576 }), async function site_upload_POST(req, res) {
     const { raw = [], mes = [] } = req.body.busboySlip;
     if (mes.length) mes.map(hint => req.flash('error', hint));
     if (raw.length) {

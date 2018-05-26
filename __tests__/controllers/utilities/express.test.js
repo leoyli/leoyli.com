@@ -4,7 +4,7 @@ const {
 } = require(`${__ROOT__}/controllers/utilities/express`)[Symbol.for('__TEST__')];
 
 
-// test
+// tests
 describe('Utilities: Express', () => {
   test('Fn: wrapAsync', async () => {
     const someAsyncMiddleware = async (req, res, next) => next();

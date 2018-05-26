@@ -1,23 +1,15 @@
 /* global __ROOT__ */
 const {
-  getSavingPath, isUploadable, fetchRawDoc, fetchMessage, upload, parseMultipart,
-} = require(`${__ROOT__}/controllers/modules/upload`)[Symbol.for('__TEST__')];
+  getSavingPath, isUploadable, fetchRawDoc, fetchMessage, upload,
+} = require(`${__ROOT__}/controllers/modules/upload/helpers`)[Symbol.for('__TEST__')];
 
 
-// mock
-const httpMocks = require('node-mocks-http');
-const events = require('events');
+// modules
 const fs = require('fs');
 
-beforeEach(() => {
-  global.res = httpMocks.createResponse();
-  global.req = httpMocks.createRequest({ session: {} });
-  global.next = jest.fn();
-});
 
-
-// test
-describe('Modules: Upload', () => {
+// tests
+describe('Modules: Upload (components)', () => {
   const someConfig = { fileSize: 25 * 1000000, MIME: ['image/png', 'image/gif'] };
   const someBusboy = { fieldName: 'media_test[file]', fileName: 'test.png', MIME: 'image/png', stream: {} };
 
@@ -84,9 +76,10 @@ describe('Modules: Upload', () => {
       stream: fs.createReadStream('__tests__/test.png'),
       filePath: `${__dirname}/_tempt/test.streamed.png`,
     };
-    //
+
+    // should run assertions after 3ms later of `close` event
     upload(anotherBusboy);
-    anotherBusboy.stream.on('close', () => fs.stat(anotherBusboy.filePath, (err, stats) => {
+    anotherBusboy.stream.on('close', () => setTimeout(() => fs.stat(anotherBusboy.filePath, (err, stats) => {
       if (err) throw err;
 
       // should be exactly uploaded
@@ -97,11 +90,7 @@ describe('Modules: Upload', () => {
 
       // should delete the testing file
       fs.unlink(anotherBusboy.filePath, () => fs.rmdir(`${__dirname}/_tempt`, done));
-    }));
-  });
-
-
-  test('Middleware: parseMultipart', () => {
-
+      done();
+    }), 3));
   });
 });

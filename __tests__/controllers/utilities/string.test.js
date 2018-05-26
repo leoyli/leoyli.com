@@ -4,7 +4,7 @@ const {
 } = require(`${__ROOT__}/controllers/utilities/string`)[Symbol.for('__TEST__')];
 
 
-// test
+// tests
 describe('Utilities: String', () => {
   test('Fn: checkToStringTag', () => {
     const target = [

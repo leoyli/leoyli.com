@@ -4,7 +4,7 @@ const {
 } = require(`${__ROOT__}/controllers/engines/router`)[Symbol.for('__TEST__')];
 
 
-// test
+// tests
 describe('Engines: Router', () => {
   test('Fn: getProcessingPipes', () => {
     const target = [

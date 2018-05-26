@@ -4,26 +4,32 @@ const { page: {
 } } = require(`${__ROOT__}/controllers/routers/page`)[Symbol.for('__TEST__')];
 
 
-// mock
+// modules
 const { _M_ } = require(`${__ROOT__}/controllers/modules`);
 const httpMocks = require('node-mocks-http');
+
+
+// mocks
+jest.mock(`${__ROOT__}/controllers/modules`, () => ({
+  _M_: {
+    paginatedQuery: jest.fn(() => () => {}),
+  },
+}));
 
 beforeEach(() => {
   global.res = httpMocks.createResponse();
   global.req = httpMocks.createRequest({ session: {} });
   global.next = jest.fn();
 
-  /* stubbed functions */
+  /* stub functions */
   req.flash = jest.fn();
   res.redirect = jest.fn();
 });
 
 
-// test
+// tests
 describe('Routers: page.search', () => {
   test('Middleware: page_search_GET', async () => {
-    _M_.paginatedQuery = jest.fn(() => () => {});
-
     // should send a query via `paginatedQuery` module fn
     await search.GET(req, res, next);
     expect(_M_.paginatedQuery).toHaveBeenCalledTimes(1);

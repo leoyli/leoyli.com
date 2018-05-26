@@ -4,9 +4,17 @@ const {
 } = require(`${__ROOT__}/controllers/modules/auth`)[Symbol.for('__TEST__')];
 
 
-// mock
-const PostsModel = require(`${__ROOT__}/models/posts`);
+// modules
+const { PostsModel } = require(`${__ROOT__}/models/`);
 const httpMocks = require('node-mocks-http');
+
+
+// mocks
+jest.mock(`${__ROOT__}/models/`, () => ({
+  PostsModel: {
+    count: jest.fn(),
+  },
+}));
 
 beforeEach(() => {
   global.res = httpMocks.createResponse();
@@ -15,7 +23,7 @@ beforeEach(() => {
 });
 
 
-// test
+// tests
 describe('Modules: Auth', () => {
   test('Middleware: usePassport', () => {
     // no testing items
@@ -49,9 +57,10 @@ describe('Modules: Auth', () => {
     // should behave differently based on authority
     // // if not authorized
     try {
-      PostsModel.count = jest.fn(() => 2);
+      PostsModel.count.mockImplementationOnce(() => 2);
       await _isAuthorized(req, res, next);
     } catch (err) {
+      expect(PostsModel.count).toHaveBeenCalledTimes(1);
       expect(err).toEqual(expect.objectContaining({
         name: 'ClientException',
         code: 20001,
@@ -60,8 +69,9 @@ describe('Modules: Auth', () => {
 
     // // if authorized
     try {
-      PostsModel.count = jest.fn(() => 1);
+      PostsModel.count.mockImplementationOnce(() => 1);
       await _isAuthorized(req, res, next);
+      expect(PostsModel.count).toHaveBeenCalledTimes(2);
     } catch (err) {
       // expect NOT to be executed
       expect(err).not.toBeInstanceOf(Error);
@@ -69,7 +79,7 @@ describe('Modules: Auth', () => {
 
     // should pass the final state checks
     expect(next).toHaveBeenCalledTimes(1);
-    expect.assertions(2);
+    expect.assertions(4);
   });
 
 

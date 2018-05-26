@@ -4,7 +4,7 @@ const {
 } = require(`${__ROOT__}/controllers/utilities/error`)[Symbol.for('__TEST__')];
 
 
-// test
+// tests
 describe('Utilities: Error', () => {
   test('Class: ExtendableError', () => {
     // should be an instance and behave as an Error

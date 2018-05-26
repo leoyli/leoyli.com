@@ -4,9 +4,11 @@ const {
 } = require(`${__ROOT__}/controllers/handlers/receptor.js`)[Symbol.for('__TEST__')];
 
 
-// mock
+// modules
 const httpMocks = require('node-mocks-http');
 
+
+// mocks
 beforeEach(() => {
   global.res = httpMocks.createResponse();
   global.req = httpMocks.createRequest({ session: {} });
@@ -14,7 +16,7 @@ beforeEach(() => {
 });
 
 
-// test
+// tests
 describe('Handlers: Receptor', () => {
   test('Middleware: browserReceptor', () => {
     req.flash = jest.fn(call => (call === 'action' ? ['retry'] : []));

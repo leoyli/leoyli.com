@@ -4,17 +4,29 @@ const { blog: {
 } } = require(`${__ROOT__}/controllers/routers/blog`)[Symbol.for('__TEST__')];
 
 
-// mock
+// modules
 const { _M_ } = require(`${__ROOT__}/controllers/modules`);
 const { PostsModel } = require(`${__ROOT__}/models/`);
 const httpMocks = require('node-mocks-http');
+
+
+// mocks
+jest.mock(`${__ROOT__}/controllers/modules`, () => ({
+  _M_: {
+    paginatedQuery: jest.fn(() => () => {}),
+  },
+}));
+
+jest.mock(`${__ROOT__}/models/`, () => ({
+  PostsModel: jest.fn(),
+}));
 
 beforeEach(() => {
   global.res = httpMocks.createResponse();
   global.req = httpMocks.createRequest({ session: {} });
   global.next = jest.fn();
 
-  /* stubbed functions */
+  /* stub functions */
   req.flash = jest.fn();
   res.redirect = jest.fn();
 
@@ -24,7 +36,7 @@ beforeEach(() => {
 });
 
 
-// test
+// tests
 describe('Routers: Blog.edit', () => {
   test('Middleware: blog_edit_alias', async () => {
     req.params = { canonical: 'some_slug' };
@@ -202,8 +214,6 @@ describe('Routers: Blog.post', () => {
 
 describe('Routers: Blog.list', () => {
   test('Middleware: blog_list_GET', async () => {
-    _M_.paginatedQuery = jest.fn(() => () => {});
-
     // should send a query via `paginatedQuery` module fn
     await list.GET(req, res, next);
     expect(_M_.paginatedQuery).toHaveBeenCalledTimes(1);

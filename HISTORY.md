@@ -1,4 +1,18 @@
-### 0.10.0-dev.23.5 / 2018-05-24
+### 0.10.0-dev.25 / 2018-05-26
+> App
+- @'modules/upload':
+  - revised and renamed `parseMultipart` as `handleStreamUpload`;
+  - split module into 3 files for the sake of testing isolation;
+  - removed the dependency of `domain` node-core module;
+  - handled error correctly by emitting `error` events.
+
+> Test (96%)
+- Rearranged testing code-styles.
+- Fixed multiple improper mocking usages.
+- Split 'upload.test.js' into 'upload/control.test.js', 'upload/handlers.test.js', and 'upload/control.test.js'.
+
+
+### 0.10.0-dev.24 / 2018-05-24
 > App
 - Fixed potential reference error @'modules/query'.
 - Revised 'page' router.

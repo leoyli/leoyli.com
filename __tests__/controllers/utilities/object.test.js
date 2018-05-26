@@ -4,7 +4,7 @@ const {
 } = require(`${__ROOT__}/controllers/utilities/object`)[Symbol.for('__TEST__')];
 
 
-// test
+// tests
 describe('Utilities: Object', () => {
   test('Fn: hasOwnKey', () => {
     // should check if object has own a key

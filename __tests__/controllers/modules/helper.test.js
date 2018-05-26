@@ -4,10 +4,12 @@ const {
 } = require(`${__ROOT__}/controllers/modules/helper`)[Symbol.for('__TEST__')];
 
 
-// mock
+// modules
 const util = require('util');
 const httpMocks = require('node-mocks-http');
 
+
+// mocks
 beforeEach(() => {
   global.res = httpMocks.createResponse();
   global.req = httpMocks.createRequest({ session: {} });
@@ -15,7 +17,7 @@ beforeEach(() => {
 });
 
 
-// test
+// tests
 describe('Modules: Helper', () => {
   test('Middleware: caseInsensitiveQueryProxy', () => {
     req.query = {};
@@ -34,11 +36,12 @@ describe('Modules: Helper', () => {
     const insertedTitle = 'inserted_title';
     res.locals.$$VIEW = { title: theSameTitle };
 
-    // should NOT modify tag without 'html' mode flag
+    // (1) should NOT modify tag without 'html' mode flag
     modifyHTMLTitleTag(insertedTitle)(req, res, next);
     expect(res.locals.$$VIEW.title).toBe(theSameTitle);
 
-    // should modify title tag
+
+    // (2) should modify title tag
     res.locals.$$MODE = 'html';
 
     // // if no option specified (default to prepend)
@@ -57,7 +60,8 @@ describe('Modules: Helper', () => {
     modifyHTMLTitleTag({ tag: insertedTitle, delimiter: '|' })(req, res, next);
     expect(res.locals.$$VIEW.title).toBe('inserted_title | inserted_title');
 
-    // should be able to use as a modifier (not a middleware)
+
+    // (3) should be able to use as a modifier (not a middleware)
     expect(() => modifyHTMLTitleTag({ tag: insertedTitle })(req, res)).not.toThrowError();
     expect(res.locals.$$VIEW.title).toBe('inserted_title - inserted_title | inserted_title');
 

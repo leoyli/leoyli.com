@@ -4,15 +4,17 @@ const {
 } = require(`${__ROOT__}/controllers/modules/header`)[Symbol.for('__TEST__')];
 
 
-// mock
+// modules
 const httpMocks = require('node-mocks-http');
 
+
+// mocks
 beforeEach(() => {
   global.res = httpMocks.createResponse();
   global.req = httpMocks.createRequest({ session: {} });
   global.next = jest.fn();
 
-  /* stubbed functions */
+  /* stub functions */
   res.set = jest.fn();
 });
 
