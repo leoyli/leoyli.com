@@ -65,6 +65,7 @@ describe('Modules: Helper', () => {
     expect(() => modifyHTMLTitleTag({ tag: insertedTitle })(req, res)).not.toThrowError();
     expect(res.locals.$$VIEW.title).toBe('inserted_title - inserted_title | inserted_title');
 
+
     // should pass the final state checks
     expect(next).toBeCalledTimes(5);
   });

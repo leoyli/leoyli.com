@@ -170,7 +170,7 @@ const pullPipe_5_paginating = (query, num, sort) => {
       now: $$meta.now,
       end: $$meta.end,
       sort: { $literal: pullPipe_3_sorting(query, sort).$sort },
-      period: { $literal: query.date && queryDateExpression(...parseQueryDate(query.date)) },
+      period: { $literal: queryDateExpression(...parseQueryDate(query.date)) },
     },
   };
   return { $project };
@@ -251,7 +251,7 @@ const paginatedQuery = (collection, { num, sort } = {}) => function queryControl
     .aggregate(getAggregationQuery(collection, req.params, req.query, num || res.locals.$$SITE.num, sort))
     .then(docs => docs[0])
     .then(result => {
-      req.session.cache = result;
+      if (result) req.session.cache = result;
       if (result && result.list) req.session.cache.list = result.list.map(doc => Model.hydrate(doc));
       return next();
     })

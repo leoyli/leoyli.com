@@ -30,7 +30,7 @@ beforeEach(() => {
 describe('Modules: Query (components)', () => {
   test('Fn: paginatedMetaExpression', () => {
     // should return an object as $$meta
-    // // if all argument are "empty"
+    // // if `query` have no properties
     expect(paginatedMetaExpression({})).toStrictEqual({
       end: { $ceil: { $divide: ['$count', 10] } },
       now: { $cond: {
@@ -42,7 +42,7 @@ describe('Modules: Query (components)', () => {
       page: 1,
     });
 
-    // // if query have `page` object > 0 and preset num
+    // // if `query.page` > 0 and preset num
     expect(paginatedMetaExpression({ page: 5 }, 25)).toStrictEqual({
       end: { $ceil: { $divide: ['$count', 25] } },
       now: { $cond: {
@@ -54,7 +54,7 @@ describe('Modules: Query (components)', () => {
       page: 5,
     });
 
-    // // if query have `page` object < 0 (ignored invalid page value)
+    // // if `query.page` < 0 (ignored invalid page value)
     expect(paginatedMetaExpression({ page: 0 }, 25)).toStrictEqual({
       end: { $ceil: { $divide: ['$count', 25] } },
       now: { $cond: {
@@ -63,6 +63,18 @@ describe('Modules: Query (components)', () => {
         else: { $ceil: { $divide: ['$count', 25] } },
       } },
       num: 25,
+      page: 1,
+    });
+
+    // // if `query.num` > 0
+    expect(paginatedMetaExpression({ num: 10 }, 25)).toStrictEqual({
+      end: { $ceil: { $divide: ['$count', 10] } },
+      now: { $cond: {
+        if: { $lt: [1, { $ceil: { $divide: ['$count', 10] } }] },
+        then: { $literal: 1 },
+        else: { $ceil: { $divide: ['$count', 10] } },
+      } },
+      num: 10,
       page: 1,
     });
   });
@@ -374,21 +386,31 @@ describe('Modules: Query (components)', () => {
 describe('Modules: Query (control)', () => {
   test('Middleware: paginatedQuery', async () => {
     const someResult = { list: ['some_docs'], meta: {} };
-    modelIndex.SomeCollectionModel.aggregate.mockImplementation(() => Promise.resolve([someResult]));
     modelIndex.SomeCollectionModel.hydrate.mockImplementation(item => item);
     res.locals.$$SITE = { num: 10 };
 
-    // should perform query via `SomeCollectionModel.aggregate`
+    // (1) should handle no document returning
+    modelIndex.SomeCollectionModel.aggregate.mockImplementationOnce(() => Promise.resolve([undefined]));
     await paginatedQuery('SomeCollection')(req, res, next);
-    expect(modelIndex.SomeCollectionModel.aggregate).toBeCalled();
+    expect(modelIndex.SomeCollectionModel.aggregate).toBeCalledTimes(1);
+    expect(modelIndex.SomeCollectionModel.hydrate).not.toBeCalled();
+    expect(req.session).not.toHaveProperty('cache');
+
+
+    // (2) should perform query via `SomeCollectionModel.aggregate`
+    modelIndex.SomeCollectionModel.aggregate.mockImplementationOnce(() => Promise.resolve([someResult]));
+    await paginatedQuery('SomeCollection')(req, res, next);
+    expect(modelIndex.SomeCollectionModel.aggregate).toBeCalledTimes(2);
 
     // should `hydrate` resulted documents
     expect(modelIndex.SomeCollectionModel.hydrate).lastCalledWith(someResult.list[0]);
 
     // should store data into session cache
+    expect(req.session).toHaveProperty('cache');
     expect(req.session.cache).toStrictEqual(someResult);
 
+
     // should pass the final state checks
-    expect(next).toBeCalledTimes(1);
+    expect(next).toBeCalledTimes(2);
   });
 });

@@ -5,10 +5,17 @@ const {
 
 
 // modules
+const { _M_ } = require(`${__ROOT__}/controllers/modules`);
 const httpMocks = require('node-mocks-http');
 
 
 // mocks
+jest.mock(`${__ROOT__}/controllers/modules`, () => ({
+  _M_: {
+    modifyHTMLTitleTag: jest.fn(() => () => {}),
+  },
+}));
+
 beforeEach(() => {
   global.res = httpMocks.createResponse();
   global.req = httpMocks.createRequest({ session: {} });
@@ -46,8 +53,12 @@ describe('Handlers: Exporter', () => {
       $$META: expect.any(Object),
     }));
 
+    // should replace title tag when 'post' have a title
+    renderer.posts.single({ filename: '/', post: { title: 'some_title', state: {} } })(req, res, next);
+    expect(_M_.modifyHTMLTitleTag).toBeCalledTimes(1);
+
     // should pass the final state checks
-    expect(res.render).toBeCalledTimes(1);
+    expect(res.render).toBeCalledTimes(2);
     expect(next).not.toBeCalled();
   });
 
@@ -103,15 +114,28 @@ describe('Handlers: Exporter', () => {
 
 
   test('Middleware: exportJSON', () => {
+    const someCache = { doc: 'test' };
     Date.now = () => new Date('2018-01-01T00:00:00.000Z').getTime();
-    req.session.cache = { doc: 'test' };
     res.json = jest.fn();
 
-    // should call `res.json`
+    // should export data via `res.json`
+    // // if nothing store in session caches
     exportJSON()(req, res, next);
-    expect(res.json).toBeCalledTimes(1);
+    expect(res.json).lastCalledWith(expect.objectContaining({
+      _execution_time: expect.any(String),
+      _cache: expect.any(Boolean),
+    }));
 
-    // should do housekeeping on session
+    // // if something store in session caches
+    req.session.cache = someCache;
+    exportJSON()(req, res, next);
+    expect(res.json).lastCalledWith(expect.objectContaining({
+      ...someCache,
+      _execution_time: expect.any(String),
+      _cache: expect.any(Boolean),
+    }));
+
+    // should clean up session caches
     expect(req.session).not.toHaveProperty('cache');
 
     // should pass the final state checks

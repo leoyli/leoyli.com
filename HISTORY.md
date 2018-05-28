@@ -1,3 +1,11 @@
+### 0.10.0-dev.26.5 / 2018-05-28
+> App
+- Simplified 'query' module.
+
+> Test (96%)
+- Improved coverage in code branches.
+
+
 ### 0.10.0-dev.26 / 2018-05-28
 > App
 - Fixed missing `req.user` by using `usePassport` @'router/home'.

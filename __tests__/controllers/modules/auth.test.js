@@ -54,7 +54,7 @@ describe('Modules: Auth', () => {
     const _isAuthorized = isAuthorized[isAuthorized.length - 1];
     req.user = { _id: 'some_user_id' };
 
-    // should behave differently based on authority
+    // (1) should behave differently based on authority
     // // if not authorized
     try {
       PostsModel.count.mockImplementationOnce(() => 2);
@@ -69,7 +69,7 @@ describe('Modules: Auth', () => {
 
     // // if authorized
     try {
-      PostsModel.count.mockImplementationOnce(() => 1);
+      PostsModel.count.mockImplementation(() => 1);
       await _isAuthorized(req, res, next);
       expect(PostsModel.count).toBeCalledTimes(2);
     } catch (err) {
@@ -77,9 +77,20 @@ describe('Modules: Auth', () => {
       expect(err).not.toBeInstanceOf(Error);
     }
 
+
+    // (2) should send query with filed depended on `req.params`
+    // // if have not `req.params.canonical`
+    expect(PostsModel.count).toBeCalledWith(expect.objectContaining({ _id: null }));
+
+    // // if have `req.params.canonical`
+    req.params = { canonical: 'some_slug' };
+    await _isAuthorized(req, res, next);
+    expect(PostsModel.count).toBeCalledWith(expect.objectContaining({ canonical: 'some_slug' }));
+
+
     // should pass the final state checks
-    expect(next).toBeCalledTimes(1);
-    expect.assertions(4);
+    expect(next).toBeCalledTimes(2);
+    expect.assertions(6);
   });
 
 

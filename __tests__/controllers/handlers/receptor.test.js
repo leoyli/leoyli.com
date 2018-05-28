@@ -19,10 +19,11 @@ beforeEach(() => {
 // tests
 describe('Handlers: Receptor', () => {
   test('Middleware: browserReceptor', () => {
-    req.flash = jest.fn(call => (call === 'action' ? ['retry'] : []));
+    req.flash = jest.fn();
     req.session.returnTo = '/';
 
     // should set $$MODE to 'html'
+    req.flash.mockImplementation(call => (call === 'action' ? ['retry'] : []));
     browserReceptor(req, res, next);
     expect(res.locals.$$MODE).toBe('html');
 
@@ -31,11 +32,17 @@ describe('Handlers: Receptor', () => {
     expect(req.flash).toBeCalledWith('error');
     expect(req.flash).toBeCalledWith('info');
 
-    // should NOT do housekeeping whenever `retry` existed in `flash.action`
+    // should only clean up `req.session.returnTo` depends on `req.flash.action`.
+    // if `req.flash.action` have 'retry' as an element, then do nothing
     expect(req.session).toHaveProperty('returnTo', '/');
 
+    // if `req.flash.action` have no 'retry' as an element, then delete it
+    req.flash.mockImplementation(() => []);
+    browserReceptor(req, res, next);
+    expect(req.session).not.toHaveProperty('returnTo');
+
     // should pass the final state checks
-    expect(next).toBeCalledTimes(1);
+    expect(next).toBeCalledTimes(2);
   });
 
 

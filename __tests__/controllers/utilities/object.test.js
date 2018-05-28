@@ -60,19 +60,18 @@ describe('Utilities: Object', () => {
 
   test('Fn: assignDeep', () => {
     const target = { a: { b: { g: 'g' } } };
-    const path = 'a[b].c.d[e][f]';
     const value = 'f';
     const expectation = { a: { b: { c: { d: { e: { f: 'f' } } }, g: 'g' } } };
 
-    // should immutably assign value by object path in depth (default)
-    const test_1 = assignDeep(target, path, value);
-    expect(test_1).not.toBe(target);
-    expect(test_1).toStrictEqual(expectation);
+    // should immutably assign value by object path{string} in depth (default)
+    const testWithPathString = assignDeep(target, 'a[b].c.d[e][f]', value);
+    expect(testWithPathString).not.toBe(target);
+    expect(testWithPathString).toStrictEqual(expectation);
 
-    // should mutably assign value by object path in depth
-    const test_2 = assignDeep(target, path, value, { mutate: true });
-    expect(test_2).toBe(target);
-    expect(test_2).toStrictEqual(expectation);
+    // should mutably assign value by object path{array} in depth
+    const testWithPathArray = assignDeep(target, ['a', 'b', 'c', 'd', 'e', 'f'], value, { mutate: true });
+    expect(testWithPathArray).toBe(target);
+    expect(testWithPathArray).toStrictEqual(expectation);
   });
 
 

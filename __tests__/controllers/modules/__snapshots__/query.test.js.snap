@@ -92,7 +92,7 @@ Object {
         "$literal": NaN,
       },
       "period": Object {
-        "$literal": undefined,
+        "$literal": null,
       },
       "sort": Object {
         "$literal": Object {
