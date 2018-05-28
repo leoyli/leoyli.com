@@ -25,15 +25,15 @@ describe('Utilities: Object', () => {
     const test = target.map(obj => cloneDeep(obj));
 
     // // if is an array
-    expect(test[0]).toEqual(target[0]);
+    expect(test[0]).toStrictEqual(target[0]);
     expect(test[0]).not.toBe(target[0]);
 
     // // if is an object
-    expect(test[1]).toEqual(target[1]);
+    expect(test[1]).toStrictEqual(target[1]);
     expect(test[1]).not.toBe(target[1]);
 
     // // an array/object mixture
-    expect(test[2]).toEqual(target[2]);
+    expect(test[2]).toStrictEqual(target[2]);
     expect(test[2]).not.toBe(target[2]);
 
     // should throw an Error for invalid cloning target
@@ -48,13 +48,13 @@ describe('Utilities: Object', () => {
 
     // should immutably merge the source into the target deeply (default)
     const test_1 = mergeDeep(target, source);
-    expect(test_1).toEqual(expectation);
-    expect(target).not.toEqual(expectation);
+    expect(test_1).toStrictEqual(expectation);
+    expect(target).not.toStrictEqual(expectation);
 
     // should mutably merge the source into the target deeply
     const test_2 = mergeDeep(target, source, { mutate: true });
-    expect(test_2).toEqual(expectation);
-    expect(target).toEqual(expectation);
+    expect(test_2).toStrictEqual(expectation);
+    expect(target).toStrictEqual(expectation);
   });
 
 
@@ -67,12 +67,12 @@ describe('Utilities: Object', () => {
     // should immutably assign value by object path in depth (default)
     const test_1 = assignDeep(target, path, value);
     expect(test_1).not.toBe(target);
-    expect(test_1).toEqual(expectation);
+    expect(test_1).toStrictEqual(expectation);
 
     // should mutably assign value by object path in depth
     const test_2 = assignDeep(target, path, value, { mutate: true });
     expect(test_2).toBe(target);
-    expect(test_2).toEqual(expectation);
+    expect(test_2).toStrictEqual(expectation);
   });
 
 
@@ -101,17 +101,17 @@ describe('Utilities: Object', () => {
     // should immutably burst the nested array deeply based on the first element (expectLastOneWin, default)
     const test_1 = burstArrayDeep(target);
     expect(test_1).not.toBe(target);
-    expect(test_1).toEqual(expectLastOneWin);
+    expect(test_1).toStrictEqual(expectLastOneWin);
 
     // should immutably burst the nested array deeply based on the first element (expectFirstOneWin)
     const test_3 = burstArrayDeep(target, { position: 0 });
     expect(test_3).not.toBe(target);
-    expect(test_3).toEqual(expectFirstOneWin);
+    expect(test_3).toStrictEqual(expectFirstOneWin);
 
     // should immutably burst the nested array deeply
     const test_2 = burstArrayDeep(target, { mutate: true });
     expect(test_2).toBe(target);
-    expect(test_2).toEqual(expectLastOneWin);
+    expect(test_2).toStrictEqual(expectLastOneWin);
   });
 
 

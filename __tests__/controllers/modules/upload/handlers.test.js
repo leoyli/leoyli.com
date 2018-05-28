@@ -38,16 +38,16 @@ describe('Modules: Upload (handlers)', () => {
     // // if is not uploadable
     helpers.isUploadable.mockReturnValueOnce(false);
     handleOnFile(slip, {})('some_name', fakeStream);
-    expect(helpers.isUploadable).toHaveBeenCalledTimes(1);
-    expect(helpers.upload).toHaveBeenCalledTimes(0);
-    expect(fakeStream.resume).toHaveBeenCalledTimes(1);
+    expect(helpers.isUploadable).toBeCalledTimes(1);
+    expect(helpers.upload).toBeCalledTimes(0);
+    expect(fakeStream.resume).toBeCalledTimes(1);
 
     // // if is uploadable
     helpers.isUploadable.mockResolvedValueOnce(true);
     handleOnFile(slip, {})('some_name', fakeStream);
-    expect(helpers.isUploadable).toHaveBeenCalledTimes(2);
-    expect(helpers.upload).toHaveBeenCalledTimes(1);
-    expect(fakeStream.resume).toHaveBeenCalledTimes(1);
+    expect(helpers.isUploadable).toBeCalledTimes(2);
+    expect(helpers.upload).toBeCalledTimes(1);
+    expect(fakeStream.resume).toBeCalledTimes(1);
 
 
     // (2-1) should listen to events
@@ -59,13 +59,13 @@ describe('Modules: Upload (handlers)', () => {
 
     // // if is `error` event
     fakeStream_2.emit('error', Symbol.for('some_error'));
-    expect(spyOnMockBusboyEmit).toHaveBeenLastCalledWith('error', Symbol.for('some_error'));
-    expect(spyOnMockBusboyEmit).toHaveBeenCalledTimes(1);
+    expect(spyOnMockBusboyEmit).lastCalledWith('error', Symbol.for('some_error'));
+    expect(spyOnMockBusboyEmit).toBeCalledTimes(1);
 
     // // if is `end` event
     fakeStream_2.emit('end', Symbol.for('some_error'));
-    expect(helpers.fetchRawDoc).toHaveBeenCalledTimes(1);
-    expect(helpers.fetchMessage).toHaveBeenCalledTimes(1);
+    expect(helpers.fetchRawDoc).toBeCalledTimes(1);
+    expect(helpers.fetchMessage).toBeCalledTimes(1);
 
 
     // (2-2) should handle truncated file
@@ -74,14 +74,14 @@ describe('Modules: Upload (handlers)', () => {
     // // if success
     fs.unlink.mockImplementationOnce((filePath, cb) => cb(null));
     fakeStream_2.emit('end', Symbol.for('some_error'));
-    expect(fs.unlink).toHaveBeenCalledTimes(1);
-    expect(spyOnMockBusboyEmit).toHaveBeenCalledTimes(1);
+    expect(fs.unlink).toBeCalledTimes(1);
+    expect(spyOnMockBusboyEmit).toBeCalledTimes(1);
 
     // // if fail, bubble the error
     fs.unlink.mockImplementationOnce((filePath, cb) => cb(Symbol.for('some_error')));
     fakeStream_2.emit('end', Symbol.for('some_error'));
-    expect(fs.unlink).toHaveBeenCalledTimes(2);
-    expect(spyOnMockBusboyEmit).toHaveBeenCalledTimes(2);
+    expect(fs.unlink).toBeCalledTimes(2);
+    expect(spyOnMockBusboyEmit).toBeCalledTimes(2);
   });
 
 
@@ -90,15 +90,15 @@ describe('Modules: Upload (handlers)', () => {
 
     // should have no effects for an empty string
     handleOnField(slip)('media_a[_id]', '');
-    expect(slip.raw).toEqual({});
+    expect(slip.raw).toStrictEqual({});
 
     // should mutate slip with parsed data (by expression)
     handleOnField(slip)('media_a[_id]', 'some_id');
-    expect(slip.raw).toEqual({ media_a: { _id: 'some_id' } });
+    expect(slip.raw).toStrictEqual({ media_a: { _id: 'some_id' } });
 
     // should populate additional data with another call (by dot notation)
     handleOnField(slip)('media_a.author', 'some_author');
-    expect(slip.raw).toEqual({ media_a: { _id: 'some_id', author: 'some_author' } });
+    expect(slip.raw).toStrictEqual({ media_a: { _id: 'some_id', author: 'some_author' } });
   });
 
 
@@ -118,7 +118,7 @@ describe('Modules: Upload (handlers)', () => {
     expect(req.body).toHaveProperty('busboySlip.mes', expect.any(Array));
 
     // should filter out any sub-object with `isSkipped === true` in `raw`
-    expect(req.body.busboySlip.raw).toEqual(expect.arrayContaining([slip.raw.media_a, slip.raw.media_c]));
-    expect(req.body.busboySlip.raw).not.toEqual(expect.arrayContaining([slip.raw.media_b]));
+    expect(req.body.busboySlip.raw).toStrictEqual(expect.arrayContaining([slip.raw.media_a, slip.raw.media_c]));
+    expect(req.body.busboySlip.raw).not.toStrictEqual(expect.arrayContaining([slip.raw.media_b]));
   });
 });

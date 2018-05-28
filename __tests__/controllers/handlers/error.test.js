@@ -45,11 +45,11 @@ describe('Handlers: Exception', () => {
     // (2) should store redirecting address and proceed the user
     expect(req.flash).toBeCalledWith('action', 'retry');
     expect(req.session).toHaveProperty('returnTo', req.originalUrl);
-    expect(res.redirect).toHaveBeenLastCalledWith('/signin');
+    expect(res.redirect).lastCalledWith('/signin');
 
 
     // should pass the final state checks
-    expect(res.redirect).toHaveBeenCalledTimes(2);
+    expect(res.redirect).toBeCalledTimes(2);
     expect(next).not.toBeCalled();
   });
 });

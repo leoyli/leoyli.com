@@ -41,13 +41,13 @@ describe('Handlers: Exporter', () => {
       .not.toThrowError();
 
     // should call `res.render`
-    expect(res.render).toHaveBeenLastCalledWith('/', expect.objectContaining({
+    expect(res.render).lastCalledWith('/', expect.objectContaining({
       $$POST: expect.any(Object),
       $$META: expect.any(Object),
     }));
 
     // should pass the final state checks
-    expect(res.render).toHaveBeenCalledTimes(1);
+    expect(res.render).toBeCalledTimes(1);
     expect(next).not.toBeCalled();
   });
 
@@ -57,15 +57,15 @@ describe('Handlers: Exporter', () => {
 
     // should call `res.render`
     renderer.posts.multiple()(req, res, next);
-    expect(res.render).toHaveBeenCalledTimes(1);
-    expect(res.render).toHaveBeenLastCalledWith(undefined, expect.objectContaining({
+    expect(res.render).toBeCalledTimes(1);
+    expect(res.render).lastCalledWith(undefined, expect.objectContaining({
       $$LIST: expect.any(Array),
       $$META: expect.any(Object),
     }));
 
     // should have populate meta properties into `res.locals.$$VIEW` based on a given meta
     renderer.posts.multiple({ filename: '/', meta: { num: 2, now: 4, end: 6 } })(req, res, next);
-    expect(res.locals.$$VIEW).toEqual({ route: '', prev: "?num=2&page='3", next: "?num=2&page='5" });
+    expect(res.locals.$$VIEW).toStrictEqual({ route: '', prev: "?num=2&page='3", next: "?num=2&page='5" });
 
     // should pass the final state checks
     expect(next).not.toBeCalled();
@@ -82,20 +82,20 @@ describe('Handlers: Exporter', () => {
     renderer.posts.single = jest.fn(() => () => {});
     exportHTML({ template: '/', renderer: rendererSymbols.VIEW_POSTS_SINGLE })(req, res, next);
     expect(req.session).not.toHaveProperty('cache');
-    expect(renderer.posts.single).toHaveBeenCalledTimes(1);
+    expect(renderer.posts.single).toBeCalledTimes(1);
 
     // // if is `VIEW_POSTS_MULTIPLE`
     req.session.cache = { doc: 'test' };
     renderer.posts.multiple = jest.fn(() => () => {});
     exportHTML({ template: '/', renderer: rendererSymbols.VIEW_POSTS_MULTIPLE })(req, res, next);
     expect(req.session).not.toHaveProperty('cache');
-    expect(renderer.posts.multiple).toHaveBeenCalledTimes(1);
+    expect(renderer.posts.multiple).toBeCalledTimes(1);
 
     // // if any other cases
     req.session.cache = { doc: 'test' };
     exportHTML({ template: '/' })(req, res, next);
     expect(req.session).not.toHaveProperty('cache');
-    expect(res.render).toHaveBeenCalledTimes(1);
+    expect(res.render).toBeCalledTimes(1);
 
     // should pass the final state checks
     expect(next).not.toBeCalled();
@@ -109,7 +109,7 @@ describe('Handlers: Exporter', () => {
 
     // should call `res.json`
     exportJSON()(req, res, next);
-    expect(res.json).toHaveBeenCalledTimes(1);
+    expect(res.json).toBeCalledTimes(1);
 
     // should do housekeeping on session
     expect(req.session).not.toHaveProperty('cache');

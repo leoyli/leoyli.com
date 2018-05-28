@@ -27,7 +27,7 @@ describe('Modules: Helper', () => {
     expect(util.types.isProxy(req.query)).toBeTruthy();
 
     // should pass the final state checks
-    expect(next).toHaveBeenCalledTimes(1);
+    expect(next).toBeCalledTimes(1);
   });
 
 
@@ -66,6 +66,6 @@ describe('Modules: Helper', () => {
     expect(res.locals.$$VIEW.title).toBe('inserted_title - inserted_title | inserted_title');
 
     // should pass the final state checks
-    expect(next).toHaveBeenCalledTimes(5);
+    expect(next).toBeCalledTimes(5);
   });
 });

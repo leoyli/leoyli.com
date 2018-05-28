@@ -39,14 +39,14 @@ const toProceedTheClientByAuthenticity = (fn, req, res, next) => {
   // // if not authenticated
   req.isAuthenticated.mockReturnValueOnce(false);
   fn(req, res, next);
-  expect(res.redirect).toHaveBeenCalledTimes(0);
-  expect(next).toHaveBeenCalledTimes(1);
+  expect(res.redirect).toBeCalledTimes(0);
+  expect(next).toBeCalledTimes(1);
 
   // // if authenticated
   req.isAuthenticated.mockReturnValueOnce(true);
   fn(req, res, next);
-  expect(res.redirect).toHaveBeenCalledTimes(1);
-  expect(next).toHaveBeenCalledTimes(1);
+  expect(res.redirect).toBeCalledTimes(1);
+  expect(next).toBeCalledTimes(1);
 
   return true;
 };
@@ -117,13 +117,13 @@ describe('Routers: Auth.signin', () => {
 
     // // if no `retry` action
     signin.GET(req, res, next);
-    expect(req.flash).toHaveBeenCalledTimes(0);
+    expect(req.flash).toBeCalledTimes(0);
 
     // // if with `retry` action
     res.locals.$$VIEW.flash.action = ['retry'];
     signin.GET(req, res, next);
     expect(req.flash).toBeCalledWith('action', 'retry');
-    expect(req.flash).toHaveBeenCalledTimes(1);
+    expect(req.flash).toBeCalledTimes(1);
   });
 
 
@@ -144,12 +144,12 @@ describe('Routers: Auth.signin', () => {
     // // if an unexpected errors (e.g. DB)
     mockPassportCB.mockImplementationOnce(cb => cb(Symbol.for('some_error')));
     signin.POST(req, res, next);
-    expect(next).toHaveBeenLastCalledWith(Symbol.for('some_error'));
+    expect(next).lastCalledWith(Symbol.for('some_error'));
 
     // // if fail to be authenticated
     mockPassportCB.mockImplementationOnce(cb => cb(null, null));
     signin.POST(req, res, next);
-    expect(next).toHaveBeenLastCalledWith(expect.objectContaining({
+    expect(next).lastCalledWith(expect.objectContaining({
       name: 'ClientException',
       code: 20002,
     }));
@@ -168,12 +168,12 @@ describe('Routers: Auth.signin', () => {
     // // if failed to be signed-in
     req.logIn.mockImplementationOnce((_someAuthUser, cb) => cb(Symbol.for('some_error')));
     signin.POST(req, res, next);
-    expect(next).toHaveBeenLastCalledWith(Symbol.for('some_error'));
+    expect(next).lastCalledWith(Symbol.for('some_error'));
 
     // // if can be signed-in
     req.logIn.mockImplementation((_someAuthUser, cb) => cb());
     signin.POST(req, res, next);
-    expect(res.redirect).toHaveBeenCalledTimes(1);
+    expect(res.redirect).toBeCalledTimes(1);
 
 
     // (L3) should handle successful sign-in
@@ -181,7 +181,7 @@ describe('Routers: Auth.signin', () => {
     expect(someAuthUser.updateLastTimeLog).toBeCalledWith('signIn');
 
     // should partially populate user document into session
-    expect(req.session).toEqual(expect.objectContaining({
+    expect(req.session).toStrictEqual(expect.objectContaining({
       user: {
         _id: someAuthUser._id,
         picture: someAuthUser.picture,
@@ -196,19 +196,19 @@ describe('Routers: Auth.signin', () => {
     expect(req.session.cookie.expires.getTime() - Date.now()).toBe(0);
 
     // should proceed the client with flash message
-    expect(req.flash).toHaveBeenLastCalledWith('info', expect.stringContaining(someAuthUser.nickname));
-    expect(res.redirect).toHaveBeenLastCalledWith('/home');
+    expect(req.flash).lastCalledWith('info', expect.stringContaining(someAuthUser.nickname));
+    expect(res.redirect).lastCalledWith('/home');
 
     // should handle special conditions
     req.body.isPersisted = true;
     req.session = { cookie: {}, returnTo: 'some_location' };
     signin.POST(req, res, next);
     expect(req.session.cookie.expires.getTime() - Date.now()).toBe(14 * 24 * 3600000);
-    expect(res.redirect).toHaveBeenLastCalledWith(req.session.returnTo);
+    expect(res.redirect).lastCalledWith(req.session.returnTo);
 
 
     // should pass the final state checks
-    expect(next).toHaveBeenCalledTimes(3);
+    expect(next).toBeCalledTimes(3);
   });
 });
 
@@ -223,17 +223,17 @@ describe('Routers: Auth.signout', () => {
     req.isAuthenticated.mockReturnValueOnce(false);
     signout.GET(req, res, next);
     expect(req.flash).not.toBeCalled();
-    expect(req.logout).toHaveBeenCalledTimes(0);
-    expect(res.redirect).toHaveBeenCalledTimes(1);
-    expect(res.redirect).toHaveBeenLastCalledWith('back');
+    expect(req.logout).toBeCalledTimes(0);
+    expect(res.redirect).toBeCalledTimes(1);
+    expect(res.redirect).lastCalledWith('back');
 
     // // if authenticated
     req.isAuthenticated.mockReturnValueOnce(true);
     signout.GET(req, res, next);
     expect(req.flash).toBeCalledWith('info', expect.any(String));
-    expect(req.logout).toHaveBeenCalledTimes(1);
-    expect(res.redirect).toHaveBeenCalledTimes(2);
-    expect(res.redirect).toHaveBeenLastCalledWith('back');
+    expect(req.logout).toBeCalledTimes(1);
+    expect(res.redirect).toBeCalledTimes(2);
+    expect(res.redirect).lastCalledWith('back');
 
     // should pass the final state checks
     expect(next).not.toBeCalled();

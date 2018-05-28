@@ -30,10 +30,10 @@ describe('Engines: View', () => {
 
   test('Fn: getFileString', async () => {
     // should return file string synchronously
-    expect(getFileString('test', true)).toEqual(someString);
+    expect(getFileString('test', true)).toStrictEqual(someString);
 
     // should return file string in Promise
-    expect(await getFileString('test').then(str => str)).toEqual(someString);
+    expect(await getFileString('test').then(str => str)).toStrictEqual(someString);
   });
 
 
@@ -81,6 +81,6 @@ describe('Engines: View', () => {
 
     // should return the rendering result
     const test = await (render('', someLocals, someCallback));
-    expect(test).toEqual(someString);
+    expect(test).toStrictEqual(someString);
   });
 });

@@ -41,11 +41,11 @@ describe('Modules: Upload (components)', () => {
   test('Fn: fetchRawDoc', () => {
     // should populate document based on the parser object
     expect(fetchRawDoc({ ...someBusboy, filePath: '/_temp/_time.png' }, someConfig))
-      .toEqual({ media_test: { file: { name: '_time.png', path: '/_temp/_time.png', ext: 'png' } } });
+      .toStrictEqual({ media_test: { file: { name: '_time.png', path: '/_temp/_time.png', ext: 'png' } } });
 
     // should mark the document with `isSkipped` flag
     expect(fetchRawDoc({ ...someBusboy, MIME: 'image/jpeg' }, someConfig))
-      .toEqual({ media_test: { isSkipped: true } });
+      .toStrictEqual({ media_test: { isSkipped: true } });
   });
 
 

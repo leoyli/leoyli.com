@@ -30,10 +30,10 @@ describe('Modules: Query', () => {
     // should be able to use as a modifier (not a middleware)
     res.set.mockReset();
     expect(() => noCrawlerHeader(req, res)).not.toThrowError();
-    expect(res.set).toHaveBeenCalledTimes(2);
+    expect(res.set).toBeCalledTimes(2);
 
     // should pass the final state checks
-    expect(next).toHaveBeenCalledTimes(1);
+    expect(next).toBeCalledTimes(1);
   });
 
 
@@ -45,9 +45,9 @@ describe('Modules: Query', () => {
     // should be able to use as a modifier (not a middleware)
     res.set.mockReset();
     expect(() => noStoreCacheHeader(req, res)).not.toThrowError();
-    expect(res.set).toHaveBeenCalledTimes(1);
+    expect(res.set).toBeCalledTimes(1);
 
     // should pass the final state checks
-    expect(next).toHaveBeenCalledTimes(1);
+    expect(next).toBeCalledTimes(1);
   });
 });

@@ -35,7 +35,7 @@ describe('Handlers: Receptor', () => {
     expect(req.session).toHaveProperty('returnTo', '/');
 
     // should pass the final state checks
-    expect(next).toHaveBeenCalledTimes(1);
+    expect(next).toBeCalledTimes(1);
   });
 
 
@@ -55,6 +55,6 @@ describe('Handlers: Receptor', () => {
     expect(res.set).toBeCalledWith('Access-Control-Max-Age', arbitraryStringValue);
 
     // should pass the final state checks
-    expect(next).toHaveBeenCalledTimes(1);
+    expect(next).toBeCalledTimes(1);
   });
 });

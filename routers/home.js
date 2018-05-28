@@ -1,5 +1,6 @@
 const { Device } = require('../controllers/engines/router');
 const { home } = require('../controllers/routers/');
+const { _M_ } = require('../controllers/modules/');
 
 
 // device
@@ -46,6 +47,7 @@ const homeRouter = new Device([
 
 // settings
 homeRouter.setting = { title: 'Account', cache: false };
+homeRouter.hook('pre', _M_.usePassport);
 homeRouter.permission = {
   access: ['owner'],
   change: ['owner'],

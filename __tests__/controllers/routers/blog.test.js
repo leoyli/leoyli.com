@@ -48,7 +48,7 @@ describe('Routers: Blog.edit', () => {
       PostsModel.findOne.mockResolvedValueOnce(null);
       await edit.alias(req, res, next);
     } catch (err) {
-      expect(err).toEqual(expect.objectContaining({
+      expect(err).toStrictEqual(expect.objectContaining({
         name: 'HttpException',
         code: 404,
       }));
@@ -58,13 +58,13 @@ describe('Routers: Blog.edit', () => {
     try {
       PostsModel.findOne.mockResolvedValueOnce({ _id: 'a12b34c57d78e90f12a34b56' });
       await edit.alias(req, res, next);
-      expect(PostsModel.findOne).toHaveBeenLastCalledWith(req.params);
+      expect(PostsModel.findOne).lastCalledWith(req.params);
 
       // should cache returned document
       expect(req.session.cache).toHaveProperty('post');
 
       // should proceed the client
-      expect(res.redirect).toHaveBeenLastCalledWith('/blog/a12b34c57d78e90f12a34b56/edit');
+      expect(res.redirect).lastCalledWith('/blog/a12b34c57d78e90f12a34b56/edit');
     } catch (err) {
       // expect NOT to be executed
       expect(err).not.toBeInstanceOf(Error);
@@ -96,10 +96,10 @@ describe('Routers: Blog.edit', () => {
     await edit.GET(req, res, next);
     expect(req.session.cache).toHaveProperty('post', Symbol.for('some_post'));
     expect(PostsModel.findById).toBeCalledWith(expect.any(Object));
-    expect(PostsModel.findById.mock.calls[0][0].toHexString()).toEqual('a12b34c57d78e90f12a34b56');
+    expect(PostsModel.findById.mock.calls[0][0].toHexString()).toStrictEqual('a12b34c57d78e90f12a34b56');
 
     // should pass the final state checks
-    expect(next).toHaveBeenCalledTimes(3);
+    expect(next).toBeCalledTimes(3);
   });
 });
 
@@ -119,12 +119,12 @@ describe('Routers: Blog.post', () => {
     req.session.cache = { post: { canonical: 'wrong_slug' } };
     await post.alias(req, res, next);
     expect(req.session.cache).toHaveProperty('post', Symbol.for('some_post'));
-    expect(PostsModel.findOne).toHaveBeenLastCalledWith(expect.objectContaining({
+    expect(PostsModel.findOne).lastCalledWith(expect.objectContaining({
       canonical: expect.any(String), 'time._recycled': { $eq: null },
     }));
 
     // should pass the final state checks
-    expect(next).toHaveBeenCalledTimes(2);
+    expect(next).toBeCalledTimes(2);
   });
 
 
@@ -138,7 +138,7 @@ describe('Routers: Blog.post', () => {
       PostsModel.findOne.mockResolvedValueOnce(null);
       await post.GET(req, res, next);
     } catch (err) {
-      expect(err).toEqual(expect.objectContaining({
+      expect(err).toStrictEqual(expect.objectContaining({
         name: 'HttpException',
         code: 404,
       }));
@@ -148,7 +148,7 @@ describe('Routers: Blog.post', () => {
     try {
       PostsModel.findOne.mockResolvedValueOnce({ canonical: 'some_slug' });
       await post.GET(req, res, next);
-      expect(PostsModel.findOne).toHaveBeenLastCalledWith(expect.objectContaining({
+      expect(PostsModel.findOne).lastCalledWith(expect.objectContaining({
         _id: expect.any(String), 'time._recycled': { $eq: null },
       }));
 
@@ -156,7 +156,7 @@ describe('Routers: Blog.post', () => {
       expect(req.session.cache).toHaveProperty('post');
 
       // should proceed the client
-      expect(res.redirect).toHaveBeenLastCalledWith('/blog/some_slug');
+      expect(res.redirect).lastCalledWith('/blog/some_slug');
     } catch (err) {
       // expect NOT to be executed
       expect(err).not.toBeInstanceOf(Error);
@@ -174,7 +174,7 @@ describe('Routers: Blog.post', () => {
 
     // should update the post with _id
     await post.PUT(req, res, next);
-    expect(PostsModel.update).toHaveBeenLastCalledWith(
+    expect(PostsModel.update).lastCalledWith(
       expect.objectContaining({ _id: expect.any(Object) }),
       expect.objectContaining({ $set: { ...req.body.post } }),
       { new: true },
@@ -184,8 +184,8 @@ describe('Routers: Blog.post', () => {
     expect(req.session.cache).toHaveProperty('post');
 
     // should proceed the client with flash message
-    expect(req.flash).toHaveBeenLastCalledWith('info', expect.any(String));
-    expect(res.redirect).toHaveBeenLastCalledWith('/blog/some_slug');
+    expect(req.flash).lastCalledWith('info', expect.any(String));
+    expect(res.redirect).lastCalledWith('/blog/some_slug');
 
     // should pass the final state checks
     expect(next).not.toBeCalled();
@@ -198,13 +198,13 @@ describe('Routers: Blog.post', () => {
 
     // should delete the post with _id
     await post.DELETE(req, res, next);
-    expect(PostsModel.remove).toHaveBeenLastCalledWith(expect.objectContaining({
+    expect(PostsModel.remove).lastCalledWith(expect.objectContaining({
       _id: expect.any(Object),
     }));
 
     // should proceed the client with flash message
-    expect(req.flash).toHaveBeenLastCalledWith('info', expect.any(String));
-    expect(res.redirect).toHaveBeenLastCalledWith('/blog/');
+    expect(req.flash).lastCalledWith('info', expect.any(String));
+    expect(res.redirect).lastCalledWith('/blog/');
 
     // should pass the final state checks
     expect(next).not.toBeCalled();
@@ -216,7 +216,7 @@ describe('Routers: Blog.list', () => {
   test('Middleware: blog_list_GET', async () => {
     // should send a query via `paginatedQuery` module fn
     await list.GET(req, res, next);
-    expect(_M_.paginatedQuery).toHaveBeenCalledTimes(1);
+    expect(_M_.paginatedQuery).toBeCalledTimes(1);
 
     // should pass the final state checks
     expect(next).not.toBeCalled();
@@ -228,15 +228,15 @@ describe('Routers: Blog.list', () => {
 
     // should create a post
     await list.POST(req, res, next);
-    expect(PostsModel.create).toHaveBeenLastCalledWith(expect.objectContaining({
+    expect(PostsModel.create).lastCalledWith(expect.objectContaining({
       title: expect.any(String),
       content: expect.any(String),
       author: expect.any(Object),
     }));
 
     // should proceed the client with flash message
-    expect(req.flash).toHaveBeenLastCalledWith('info', expect.any(String));
-    expect(res.redirect).toHaveBeenLastCalledWith('/blog/');
+    expect(req.flash).lastCalledWith('info', expect.any(String));
+    expect(res.redirect).lastCalledWith('/blog/');
 
     // should pass the final state checks
     expect(next).not.toBeCalled();

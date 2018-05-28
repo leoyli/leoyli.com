@@ -35,8 +35,8 @@ const getProcessingPipes = (option) => {
  */
 const getMiddlewareChain = (mode, main, hooker, option) => {
   const pipeline = getProcessingPipes(option);
-  const exporter = mode !== 'api' ? exportHTML(option) : exportJSON(option);
-  const titleModifier = mode !== 'api' && option.title ? _M_.modifyHTMLTitleTag(option.title) : [];
+  const exporter = mode === 'html' ? exportHTML(option) : exportJSON(option);
+  const titleModifier = mode === 'html' && option.title ? _M_.modifyHTMLTitleTag(option.title) : [];
   const chain = [pipeline, hooker.pre, titleModifier, main, hooker.post, exporter];
   return _U_.express.wrapAsync([...new Set([].concat(...chain))]);
 };
@@ -49,10 +49,11 @@ class Device {
    * @param {array} rules = []              - an array that contains routing rule objects
    * @param {object} [option]               - (see express.Router() API)
    */
-  constructor(rules = [], option) {
-    this._base = new Router(option);
-    this._hook = { pre: [], post: [] };
+  constructor(rules = [], option = {}) {
+    this._baseOption = _U_.object.freezeDeep(option);
+    this._baseStack = new Set();
     this._setting = {};
+    this._hook = { pre: [], post: [] };
     this.rules = _U_.object.freezeDeep(rules);
   }
 
@@ -63,7 +64,7 @@ class Device {
   get setting() {
     return new Proxy(this._setting, {
       set: (setting, option, value) => {
-        if (option === 'title') this._hook.pre.push(_M_.modifyHTMLTitleTag(value));
+        if (option === 'title') this._hook.pre = this._hook.pre.concat(_M_.modifyHTMLTitleTag(value));
         else setting[option] = value;
         return true;
       },
@@ -82,53 +83,51 @@ class Device {
 
   /**
    * middleware attaching (populating upon the device level, spreading on the whole route path afterward)
-   * @param fn                              - middleware to be shared
+   * @param {function} fn                   - middleware to be shared
    * @return {Device}
    */
   use(fn) {
-    this._base.use(fn);
+    this._baseStack.add(fn);
     return this;
   }
 
   /**
    * middleware hooking (explicitly populating into individual routing method)
-   * @param tag                             - position tag of the hook
-   * @param fn                              - middleware to be staked
+   * @param {string} tag                    - position tag of the hook
+   * @param {function|[function]} fn        - middleware to be staked
    * @return {Device}
    */
   hook(tag, fn) {
-    if (['pre', 'post'].includes(tag)) this._hook[tag].push(...(_U_.string.checkToStringTag(fn, 'Array') ? fn : [fn]));
+    if (['pre', 'post'].includes(tag)) this._hook[tag] = this._hook[tag].concat(fn);
     return this;
   }
 
   /**
    * assemble middleware from the device
-   * @param mode
+   * @param {string} mode
    * @return {function}                     - middleware assembly (device)
    */
   exec(mode) {
     if (!['html', 'api'].includes(mode)) throw ReferenceError(`Received ${mode} as an invalid mode.`);
-    const router = new Router('/').use(this._base);
     const matrix = this.rules.filter(({ setting = {} }) => (mode.toLowerCase() === 'api' ? setting.servingAPI : true));
 
-    // router registrations
+    // create router
+    const router = new Router(this._baseOption);
+    if (this._baseStack.size) router.use(...this._baseStack);
+
+    // register router
     matrix.forEach(({ route, alias, controller, setting = {} }) => {
-      const controlKeys = Object.keys(controller).sort();
+      const methodKeys = setting.method ? [setting.method] : Object.keys(controller).sort().reverse();
       const options = { ...this.setting, ...setting };
-
-      // registerer
-      const registerRouterByMethod = (methodKey) => {
-        if (methodKey === 'alias' && !alias) throw new ReferenceError('Parameter "alias" have to be provided.');
-        const path = methodKey === 'alias' ? alias : route;
-        const method = methodKey === 'alias' ? 'get' : methodKey.toLowerCase();
-        router[method](path, getMiddlewareChain(mode.toLowerCase(), controller[methodKey], this._hook, options));
-      };
-
-      if (setting.method) registerRouterByMethod(setting.method);
-      else controlKeys.forEach(method => registerRouterByMethod(method));
+      for (let i = methodKeys.length - 1, method = methodKeys[i]; i > -1; method = methodKeys[i -= 1]) {
+        if (method === 'alias' && !alias) throw new ReferenceError('Parameter "alias" have to be provided.');
+        const path = `${method === 'alias' ? alias : route}`;
+        const httpMethod = method === 'alias' ? 'get' : method.toLowerCase();
+        router[httpMethod](path, getMiddlewareChain(mode.toLowerCase(), controller[method], this._hook, options));
+      }
     });
 
-    // export router
+    // expose router
     return router;
   }
 
@@ -139,8 +138,8 @@ class Device {
    * @return {function}                     - middleware assembly (device cluster)
    */
   static exec(mode, clusterPairs) {
-    const router = new Router('/');
-    router.use(mode !== 'api' ? browserReceptor : APIReceptor);
+    const router = new Router({});
+    router.use(mode === 'html' ? browserReceptor : APIReceptor);
     clusterPairs.forEach(([path, device]) => router.use(path, device.exec(mode)));
     return router;
   }

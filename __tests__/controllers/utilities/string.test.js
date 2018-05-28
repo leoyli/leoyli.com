@@ -79,8 +79,8 @@ describe('Utilities: String', () => {
     const expectation = ['a', 'b', 'c', 'd', 'e', 'f'];
 
     // should parse a target string into an ordered array
-    expect(parseObjPath('a[b].c.d[e][f]')).toEqual(expectation);
-    expect(parseObjPath('a[b[c]].d[e.f]')).toEqual(expectation);
+    expect(parseObjPath('a[b].c.d[e][f]')).toStrictEqual(expectation);
+    expect(parseObjPath('a[b[c]].d[e.f]')).toStrictEqual(expectation);
 
     // should return `null` if failed
     expect(parseObjPath(undefined)).toBeNull();
@@ -93,7 +93,7 @@ describe('Utilities: String', () => {
     // should parse a target string into a Mongo ObjectId
     const test = parseMongoObjectId('http://(url)/5a167966807c57204ef40cdd?page=1');
     expect(checkToStringTag(test)).toBe('Object');
-    expect(test.toString()).toEqual(expectation);
+    expect(test.toString()).toStrictEqual(expectation);
 
     // should return `null` if failed
     expect(parseMongoObjectId('5a167966807c57204ef40cdd0')).toBeNull();
@@ -124,7 +124,7 @@ describe('Utilities: String', () => {
     expect(parsePath('some?test.js')).toBeNull();
 
     // should parse full URL
-    expect(parsePath('https://name@some.domain.com:8080/a/b/c/test.pdf?s=na#top')).toEqual({
+    expect(parsePath('https://name@some.domain.com:8080/a/b/c/test.pdf?s=na#top')).toStrictEqual({
       input: 'https://name@some.domain.com:8080/a/b/c/test.pdf?s=na#top',
       protocol: 'https',
       hostname: 'some.domain.com',
@@ -138,7 +138,7 @@ describe('Utilities: String', () => {
     });
 
     // should parse hostname with no protocol
-    expect(parsePath('//some.domain.com:8080')).toEqual({
+    expect(parsePath('//some.domain.com:8080')).toStrictEqual({
       input: '//some.domain.com:8080',
       protocol: null,
       hostname: 'some.domain.com',
@@ -152,7 +152,7 @@ describe('Utilities: String', () => {
     });
 
     // should parse directory with no protocol
-    expect(parsePath('//some/')).toEqual({
+    expect(parsePath('//some/')).toStrictEqual({
       input: '//some/',
       protocol: null,
       hostname: null,
@@ -166,7 +166,7 @@ describe('Utilities: String', () => {
     });
 
     // should parse as file if not wrapped by slash
-    expect(parsePath('//some')).toEqual({
+    expect(parsePath('//some')).toStrictEqual({
       input: '//some',
       protocol: null,
       hostname: null,
@@ -180,7 +180,7 @@ describe('Utilities: String', () => {
     });
 
     // should parse as file if not contain any slash
-    expect(parsePath('some.test.js')).toEqual({
+    expect(parsePath('some.test.js')).toStrictEqual({
       input: 'some.test.js',
       protocol: null,
       hostname: null,

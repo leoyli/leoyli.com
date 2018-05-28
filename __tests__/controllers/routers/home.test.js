@@ -33,11 +33,11 @@ describe('Routers: home.profile', () => {
 
     // should populate plain user document into $$VIEW
     profile.GET(req, res, next);
-    expect(req.user.toObject).toHaveBeenCalledTimes(1);
+    expect(req.user.toObject).toBeCalledTimes(1);
     expect(res.locals.$$VIEW.user).toBe(Symbol.for('some_user_doc'));
 
     // should pass the final state checks
-    expect(next).toHaveBeenCalledTimes(1);
+    expect(next).toBeCalledTimes(1);
   });
 
 
@@ -48,13 +48,13 @@ describe('Routers: home.profile', () => {
 
     // should patch user profile
     await profile.PATCH(req, res, next);
-    expect(UsersModel.update).toHaveBeenLastCalledWith({ _id: req.user._id }, {
+    expect(UsersModel.update).lastCalledWith({ _id: req.user._id }, {
       $set: expect.objectContaining({ _$nickname: req.user.nickname }),
     });
 
     // should proceed the client with flash message
-    expect(req.flash).toHaveBeenLastCalledWith('info', expect.any(String));
-    expect(res.redirect).toHaveBeenLastCalledWith('/home/profile');
+    expect(req.flash).lastCalledWith('info', expect.any(String));
+    expect(res.redirect).lastCalledWith('/home/profile');
 
     // should pass the final state checks
     expect(next).not.toBeCalled();
@@ -66,7 +66,7 @@ describe('Routers: home.security', () => {
   test('Middleware: home_security_GET', () => {
     // should pass the final state checks
     security.GET(req, res, next);
-    expect(next).toHaveBeenCalledTimes(1);
+    expect(next).toBeCalledTimes(1);
   });
 
 
@@ -77,11 +77,11 @@ describe('Routers: home.security', () => {
 
     // should change user password
     await _home_security_PATCH(req, res, next);
-    expect(req.user.changePassword).toHaveBeenLastCalledWith(req.body.password.old, req.body.password.new);
+    expect(req.user.changePassword).lastCalledWith(req.body.password.old, req.body.password.new);
 
     // should proceed the client with flash message
-    expect(req.flash).toHaveBeenLastCalledWith('info', expect.any(String));
-    expect(res.redirect).toHaveBeenLastCalledWith('/home/profile');
+    expect(req.flash).lastCalledWith('info', expect.any(String));
+    expect(res.redirect).lastCalledWith('/home/profile');
 
     // should pass the final state checks
     expect(next).not.toBeCalled();

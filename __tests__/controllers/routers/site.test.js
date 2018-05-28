@@ -47,7 +47,7 @@ const toHandleHttpExceptionsForInvalidCollection = async (fn, req, res, next) =>
     req.params.collection = '';
     await fn(req, res, next);
   } catch (err) {
-    expect(err).toEqual(expect.objectContaining({
+    expect(err).toStrictEqual(expect.objectContaining({
       name: 'HttpException',
       code: 404,
     }));
@@ -65,10 +65,10 @@ describe('Routers: Site.configs', () => {
 
     // should load configs from `env`
     configs.GET(req, res, next);
-    expect(JSON.parse).toHaveBeenLastCalledWith(process.env.$WEBSITE_CONFIGS);
+    expect(JSON.parse).lastCalledWith(process.env.$WEBSITE_CONFIGS);
 
     // should pass the final state checks
-    expect(next).toHaveBeenCalledTimes(1);
+    expect(next).toBeCalledTimes(1);
   });
 
 
@@ -78,10 +78,10 @@ describe('Routers: Site.configs', () => {
 
     // should call `updateConfigs` model method
     await configs.PATCH(req, res, next);
-    expect(ConfigsModel.updateConfigs).toHaveBeenLastCalledWith(Symbol.for('some_configs'));
+    expect(ConfigsModel.updateConfigs).lastCalledWith(Symbol.for('some_configs'));
 
     // should pass the final state checks
-    expect(res.redirect).toHaveBeenLastCalledWith('back');
+    expect(res.redirect).lastCalledWith('back');
     expect(next).not.toBeCalled();
   });
 });
@@ -91,7 +91,7 @@ describe('Routers: Site.upload', () => {
   test('Middleware: site_upload_GET', () => {
     // should pass the final state checks
     upload.GET(req, res, next);
-    expect(next).toHaveBeenCalledTimes(1);
+    expect(next).toBeCalledTimes(1);
   });
 
 
@@ -109,17 +109,17 @@ describe('Routers: Site.upload', () => {
     // should create media associated with the uploader
     req.body.busboySlip = { raw: [{}, {}] };
     await _site_upload_POST(req, res, next);
-    expect(MediaModel.create).toHaveBeenCalledTimes(1);
+    expect(MediaModel.create).toBeCalledTimes(1);
     expect(req.body.busboySlip.raw).toContainEqual(expect.objectContaining({ author: {} }));
-    expect(req.flash).toHaveBeenLastCalledWith('info', expect.stringContaining('2 file'));
+    expect(req.flash).lastCalledWith('info', expect.stringContaining('2 file'));
 
     // should flash all messages
     req.body.busboySlip = { mes: [''] };
     await _site_upload_POST(req, res, next);
-    expect(req.flash).toHaveBeenLastCalledWith('error', expect.any(String));
+    expect(req.flash).lastCalledWith('error', expect.any(String));
 
     // should pass the final state checks
-    expect(req.flash).toHaveBeenCalledTimes(2);
+    expect(req.flash).toBeCalledTimes(2);
     expect(next).not.toBeCalled();
   });
 });
@@ -152,8 +152,8 @@ describe('Routers: Site.stack', () => {
     jest.resetAllMocks();
     req.params.collection = 'posts';
     await stack.PATCH(req, res, next);
-    expect(PostsModel.update).toHaveBeenCalledTimes(0);
-    expect(MediaModel.update).toHaveBeenCalledTimes(0);
+    expect(PostsModel.update).toBeCalledTimes(0);
+    expect(MediaModel.update).toBeCalledTimes(0);
 
     // should update documents in a given collection
     req.body = { action: 'some_action', target: [{}] };
@@ -162,18 +162,18 @@ describe('Routers: Site.stack', () => {
     jest.resetAllMocks();
     req.params.collection = 'posts';
     await stack.PATCH(req, res, next);
-    expect(PostsModel.update).toHaveBeenCalledTimes(1);
-    expect(MediaModel.update).toHaveBeenCalledTimes(0);
+    expect(PostsModel.update).toBeCalledTimes(1);
+    expect(MediaModel.update).toBeCalledTimes(0);
 
     // // if is 'media'
     jest.resetAllMocks();
     req.params.collection = 'media';
     await stack.PATCH(req, res, next);
-    expect(PostsModel.update).toHaveBeenCalledTimes(0);
-    expect(MediaModel.update).toHaveBeenCalledTimes(1);
+    expect(PostsModel.update).toBeCalledTimes(0);
+    expect(MediaModel.update).toBeCalledTimes(1);
 
     // should update in accordance with actions
-    expect(MediaModel.update).toHaveBeenLastCalledWith(
+    expect(MediaModel.update).lastCalledWith(
       expect.anything(),
       { $set: expect.objectContaining({ 'state.some_action': true }) },
       expect.anything(),
@@ -190,6 +190,6 @@ describe('Routers:', () => {
   test('Middleware: site_main_GET', () => {
     // should pass the final state checks
     root.GET(req, res, next);
-    expect(next).toHaveBeenCalledTimes(1);
+    expect(next).toBeCalledTimes(1);
   });
 });

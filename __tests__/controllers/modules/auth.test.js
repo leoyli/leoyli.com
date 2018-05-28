@@ -46,7 +46,7 @@ describe('Modules: Auth', () => {
     expect(() => _isSignedIn(req, res, next)).not.toThrowError();
 
     // should pass the final state checks
-    expect(next).toHaveBeenCalledTimes(1);
+    expect(next).toBeCalledTimes(1);
   });
 
 
@@ -60,8 +60,8 @@ describe('Modules: Auth', () => {
       PostsModel.count.mockImplementationOnce(() => 2);
       await _isAuthorized(req, res, next);
     } catch (err) {
-      expect(PostsModel.count).toHaveBeenCalledTimes(1);
-      expect(err).toEqual(expect.objectContaining({
+      expect(PostsModel.count).toBeCalledTimes(1);
+      expect(err).toStrictEqual(expect.objectContaining({
         name: 'ClientException',
         code: 20001,
       }));
@@ -71,14 +71,14 @@ describe('Modules: Auth', () => {
     try {
       PostsModel.count.mockImplementationOnce(() => 1);
       await _isAuthorized(req, res, next);
-      expect(PostsModel.count).toHaveBeenCalledTimes(2);
+      expect(PostsModel.count).toBeCalledTimes(2);
     } catch (err) {
       // expect NOT to be executed
       expect(err).not.toBeInstanceOf(Error);
     }
 
     // should pass the final state checks
-    expect(next).toHaveBeenCalledTimes(1);
+    expect(next).toBeCalledTimes(1);
     expect.assertions(4);
   });
 
@@ -111,6 +111,6 @@ describe('Modules: Auth', () => {
     }));
 
     // should pass the final state checks
-    expect(next).toHaveBeenCalledTimes(1);
+    expect(next).toBeCalledTimes(1);
   });
 });

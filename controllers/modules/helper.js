@@ -19,7 +19,7 @@ const caseInsensitiveQueryProxy = (req, res, next) => {
  * @param {boolean} [option.append = false] - append title tag
  * @param {string} [option.delimiter = '-'] - delimiter used in conjunction
  */
-const modifyHTMLTitleTag = (option) => function _modifyHTMLTitleTag(req, res, next) {
+const modifyHTMLTitleTag = (option) => function modifyHTMLTitleTagByOption(req, res, next) {
   if (res.locals.$$MODE === 'html') {
     const config = (_U_.string.checkToStringTag(option, 'String')) ? { tag: option } : option;
     const { tag, extend = true, append = false, delimiter = '-' } = config;

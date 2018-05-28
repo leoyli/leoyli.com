@@ -1,3 +1,16 @@
+### 0.10.0-dev.26 / 2018-05-28
+> App
+- Fixed missing `req.user` by using `usePassport` @'router/home'.
+- Renamed `_modifyHTMLTitleTag` as `modifyHTMLTitleTagByOption`.
+- Revised 'router' engine.
+
+> Test (96%)
+- Upgraded 'jest' lib to v23.0.1.
+- Revised 'router' engine tests. (100% covered)
+- Replaced most `toEqual` by ``toStrictEqual`.
+- Replaced `toHaveBeenCalledTimes` by `toBeCalledTimes` alias.
+
+
 ### 0.10.0-dev.25 / 2018-05-26
 > App
 - @'modules/upload':

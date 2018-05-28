@@ -47,37 +47,37 @@ describe('Modules: Upload (control)', () => {
     handleStreamUpload()(req, res, next);
 
     // should call mocked constructor and register 4 events
-    expect(Busboy).toHaveBeenCalledTimes(1);
+    expect(Busboy).toBeCalledTimes(1);
     expect(mockBusboy_1._eventsCount).toBe(4);
 
     // should evoke targeted event function only
     mockBusboy_1.emit('file');
-    expect(mockHandleOnFile).toHaveBeenCalledTimes(1);
-    expect(mockHandleOnField).toHaveBeenCalledTimes(0);
-    expect(mockHandleOnFinish).toHaveBeenCalledTimes(0);
+    expect(mockHandleOnFile).toBeCalledTimes(1);
+    expect(mockHandleOnField).toBeCalledTimes(0);
+    expect(mockHandleOnFinish).toBeCalledTimes(0);
 
     mockBusboy_1.emit('field');
-    expect(mockHandleOnFile).toHaveBeenCalledTimes(1);
-    expect(mockHandleOnField).toHaveBeenCalledTimes(1);
-    expect(mockHandleOnFinish).toHaveBeenCalledTimes(0);
+    expect(mockHandleOnFile).toBeCalledTimes(1);
+    expect(mockHandleOnField).toBeCalledTimes(1);
+    expect(mockHandleOnFinish).toBeCalledTimes(0);
 
     mockBusboy_1.emit('finish');
-    expect(mockHandleOnFile).toHaveBeenCalledTimes(1);
-    expect(mockHandleOnField).toHaveBeenCalledTimes(1);
-    expect(mockHandleOnFinish).toHaveBeenCalledTimes(1);
+    expect(mockHandleOnFile).toBeCalledTimes(1);
+    expect(mockHandleOnField).toBeCalledTimes(1);
+    expect(mockHandleOnFinish).toBeCalledTimes(1);
 
     // should not call next during above emissions
-    expect(next).toHaveBeenCalledTimes(0);
+    expect(next).toBeCalledTimes(0);
 
     // should do nothing for falsy error emission
     mockBusboy_1.emit('error');
     expect(mockBusboy_1._eventsCount).toBe(4);
-    expect(next).toHaveBeenCalledTimes(0);
+    expect(next).toBeCalledTimes(0);
 
     // should trigger error-handling events
     mockBusboy_1.emit('error', Symbol.for('some_error'));
     expect(mockBusboy_1._eventsCount).toBe(0);
-    expect(next).toHaveBeenLastCalledWith(Symbol.for('some_error'));
+    expect(next).lastCalledWith(Symbol.for('some_error'));
 
 
     // (C2) should run middleware with given settings
@@ -88,7 +88,7 @@ describe('Modules: Upload (control)', () => {
     handleStreamUpload(settings)(req, res, next);
 
     // should run event handler with given settings
-    expect(handlers.handleOnFile).toHaveBeenLastCalledWith(expect.any(Object), expect.objectContaining(settings));
-    expect(handlers.handleOnField).toHaveBeenLastCalledWith(expect.any(Object), expect.objectContaining(settings));
+    expect(handlers.handleOnFile).lastCalledWith(expect.any(Object), expect.objectContaining(settings));
+    expect(handlers.handleOnField).lastCalledWith(expect.any(Object), expect.objectContaining(settings));
   });
 });
