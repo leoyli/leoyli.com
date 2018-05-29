@@ -1,3 +1,19 @@
+### 0.10.0-dev.28 / 2018-05-28
+> App
+- Upgraded dependencies:
+  - 'body-parser' 1.18.2 -> 1.18.3
+  - 'marked' 0.3.19 -> 0.4.0
+  - 'mongoose' 5.0.17 -> 5.1.3
+  - 'validator' 9.4.1 -> 10.2.0
+- Upgraded dev-dependencies:
+  - 'eslint-plugin-import' 2.11.0 -> 2.12.0
+  - 'eslint-plugin-react' 7.7.0 -> 7.8.2
+  - 'node-mocks-http' 1.5.8 -> 1.7.0
+  - 'supertest' 3.0.0 -> 3.1.0
+- Pended dependencies:
+  - 'passport-local-mongoose' <_CONFLICTED_>
+
+
 ### 0.10.0-dev.27.5 / 2018-05-28
 > App
 - Split 'query' module into 'pocket', 'helpers', and 'pipes' submodules.
