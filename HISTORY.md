@@ -1,3 +1,12 @@
+### 0.10.0 / 2018-05-29
+> App
+- Finished v0.10: 'unit testing and revised CMS routing' development.
+- Refactored and enhanced code functionality and countability via unit testing.
+
+> Test
+- Covered 98% code-lines across controller tests.
+
+
 ### 0.10.0-dev.29 / 2018-05-29
 > App
 - Revised 'error' handlers.
