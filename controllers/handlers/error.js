@@ -8,13 +8,10 @@ const redirect = {};
  * redirect to sign-in page
  */
 redirect.signInRetry = function signInRetry(req, res) {
-  // if signed-out from a authentication required page (silent the resulted error flash)
   if (req.header('Referrer') && req.header('Referrer').includes(req.originalUrl)) {
     res.locals.$$VIEW.flash.info.forEach(info => req.flash('info', info));
     delete req.flash('error');
   }
-
-  // label the returning page which only be returned if action is 'retry'
   req.session.returnTo = req.originalUrl;
   req.flash('action', 'retry');
   return res.redirect('/signin');
@@ -27,6 +24,7 @@ redirect.signInRetry = function signInRetry(req, res) {
 const terminal = {};
 
 terminal.ClientException = function ClientException(err, req, res, next) {
+  if (!err.from && err.code === 20000) return redirect.signInRetry(req, res);
   switch (err.from) {
     case 'BulkWriteError':
       if (err.code === 11000) req.flash('error', 'This username is not available.');
@@ -39,8 +37,6 @@ terminal.ClientException = function ClientException(err, req, res, next) {
       req.flash('error', err.message);
     }
   }
-
-  if (!err.from && err.code === 20000) return redirect.signInRetry(req, res);
   return res.redirect('back');
 };
 
@@ -55,7 +51,7 @@ terminal.HttpException = function HttpException(err, req, res, next) {
 };
 
 
-// gateway
+// control
 const exceptionHandler = function exceptionHandler(err, req, res, next) {
   if (['dev', 'test'].includes(process.env.NODE_ENV)) console.log(err.stack);
 

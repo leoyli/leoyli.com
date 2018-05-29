@@ -1,3 +1,11 @@
+### 0.10.0-dev.29 / 2018-05-29
+> App
+- Revised 'error' handlers.
+
+> Test (98%)
+- Added more tests @'handlers/errors'.
+
+
 ### 0.10.0-dev.28 / 2018-05-28
 > App
 - Upgraded dependencies:

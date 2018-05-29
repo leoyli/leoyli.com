@@ -42,7 +42,7 @@ const toHandleHttpExceptionsForInvalidCollection = async (fn, req, res, next) =>
     expect(err).not.toBeInstanceOf(Error);
   }
 
-  // if is others
+  // // if is others
   try {
     req.params.collection = '';
     await fn(req, res, next);

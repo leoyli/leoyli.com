@@ -100,21 +100,21 @@ describe('Modules: Auth', () => {
     expect(() => isValidPasswordReset(req, res, next)).not.toThrowError();
 
     // should NOT pass validation
-    // if missing filed
+    // // if missing filed
     req.body = { password: { old: 'old', new: 'new', confirmed: '' } };
     expect(() => isValidPasswordReset(req, res, next)).toThrowError(expect.objectContaining({
       name: 'ClientException',
       code: 10001,
     }));
 
-    // if not match with `confirmed`
+    // // if not match with `confirmed`
     req.body = { password: { old: 'old', new: 'new', confirmed: 'wrong' } };
     expect(() => isValidPasswordReset(req, res, next)).toThrowError(expect.objectContaining({
       name: 'ClientException',
       code: 10002,
     }));
 
-    // if the same as `old`
+    // // if the same as `old`
     req.body = { password: { old: 'old', new: 'old', confirmed: 'old' } };
     expect(() => isValidPasswordReset(req, res, next)).toThrowError(expect.objectContaining({
       name: 'ClientException',

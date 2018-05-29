@@ -50,7 +50,7 @@ describe('Modules: Upload (handlers)', () => {
     expect(fakeStream.resume).toBeCalledTimes(1);
 
 
-    // (2-1) should listen to events
+    // (2) should listen to events
     const fakeStream_2 = new EventEmitter();
     const mockBusboy = new EventEmitter().on('error', () => {});
     const spyOnMockBusboyEmit = jest.spyOn(mockBusboy, 'emit');
@@ -68,7 +68,7 @@ describe('Modules: Upload (handlers)', () => {
     expect(helpers.fetchMessage).toBeCalledTimes(1);
 
 
-    // (2-2) should handle truncated file
+    // (3) should handle truncated file
     fakeStream_2.truncated = true;
 
     // // if success

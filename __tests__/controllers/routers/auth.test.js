@@ -128,14 +128,14 @@ describe('Routers: Auth.signin', () => {
 
 
   test('Middleware: account_signin_POST', async () => {
-    // (L0) (*) should run recycling tests
+    // (C0) (*) should run recycling tests
     passport.authenticate.mockImplementation((strategy, cb) => jest.fn(cb));
     expect(toProceedTheClientByAuthenticity(signin.POST, req, res, next)).toBeTruthy();
     expect(res.redirect).toBeCalledWith('/home');
     jest.resetAllMocks();
 
 
-    // (L1) should handle message incoming from `passport.authenticate`
+    // (C1) should handle message incoming from `passport.authenticate`
     const someAuthUser = { _id: 'some_id', picture: 'some_location', nickname: 'some_name', something_else: '/' };
     const mockPassportCB = jest.fn();
     passport.authenticate.mockImplementation((strategy, cb) => jest.fn(() => mockPassportCB(cb)));
@@ -160,7 +160,7 @@ describe('Routers: Auth.signin', () => {
     expect(req.logIn).toBeCalledWith(someAuthUser, expect.any(Function));
 
 
-    // (L2) should handle message incoming from `req.logIn`
+    // (C2) should handle message incoming from `req.logIn`
     Date.now = () => new Date('2018-01-01T00:00:00.000Z').getTime();
     req.session = { cookie: {} };
     someAuthUser.updateLastTimeLog = jest.fn();
@@ -176,7 +176,7 @@ describe('Routers: Auth.signin', () => {
     expect(res.redirect).toBeCalledTimes(1);
 
 
-    // (L3) should handle successful sign-in
+    // (C3) should handle successful sign-in
     // should update user document
     expect(someAuthUser.updateLastTimeLog).toBeCalledWith('signIn');
 

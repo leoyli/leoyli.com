@@ -33,10 +33,10 @@ describe('Handlers: Receptor', () => {
     expect(req.flash).toBeCalledWith('info');
 
     // should only clean up `req.session.returnTo` depends on `req.flash.action`.
-    // if `req.flash.action` have 'retry' as an element, then do nothing
+    // // if `req.flash.action` have 'retry' as an element, then do nothing
     expect(req.session).toHaveProperty('returnTo', '/');
 
-    // if `req.flash.action` have no 'retry' as an element, then delete it
+    // // if `req.flash.action` have no 'retry' as an element, then delete it
     req.flash.mockImplementation(() => []);
     browserReceptor(req, res, next);
     expect(req.session).not.toHaveProperty('returnTo');
