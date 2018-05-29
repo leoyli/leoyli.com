@@ -1,3 +1,458 @@
+### 0.10.0-dev.29 / 2018-05-29
+> App
+- Revised 'error' handlers.
+
+> Test (98%)
+- Added more tests @'handlers/errors'.
+
+
+### 0.10.0-dev.28 / 2018-05-28
+> App
+- Upgraded dependencies:
+  - 'body-parser' 1.18.2 -> 1.18.3
+  - 'marked' 0.3.19 -> 0.4.0
+  - 'mongoose' 5.0.17 -> 5.1.3
+  - 'validator' 9.4.1 -> 10.2.0
+- Upgraded dev-dependencies:
+  - 'eslint-plugin-import' 2.11.0 -> 2.12.0
+  - 'eslint-plugin-react' 7.7.0 -> 7.8.2
+  - 'node-mocks-http' 1.5.8 -> 1.7.0
+  - 'supertest' 3.0.0 -> 3.1.0
+- Pended dependencies:
+  - 'passport-local-mongoose' <_CONFLICTED_>
+
+
+### 0.10.0-dev.27.5 / 2018-05-28
+> App
+- Split 'query' module into 'pocket', 'helpers', and 'pipes' submodules.
+- Renamed 'upload/control' as 'upload/packet'
+
+> Test (96%)
+- Split 'query' testing files in accordance with the changes.
+
+
+### 0.10.0-dev.27 / 2018-05-28
+> App
+- Simplified 'query' module.
+
+> Test (96%)
+- Improved coverage in code branches.
+
+
+### 0.10.0-dev.26 / 2018-05-28
+> App
+- Fixed missing `req.user` by using `usePassport` @'router/home'.
+- Renamed `_modifyHTMLTitleTag` as `modifyHTMLTitleTagByOption`.
+- Revised 'router' engine.
+
+> Test (96%)
+- Upgraded 'jest' lib to v23.0.1.
+- Revised 'router' engine tests. (100% covered)
+- Replaced most `toEqual` by ``toStrictEqual`.
+- Replaced `toHaveBeenCalledTimes` by `toBeCalledTimes` alias.
+
+
+### 0.10.0-dev.25 / 2018-05-26
+> App
+- @'modules/upload':
+  - revised and renamed `parseMultipart` as `handleStreamUpload`;
+  - split module into 3 files for the sake of testing isolation;
+  - removed the dependency of `domain` node-core module;
+  - handled error correctly by emitting `error` events.
+
+> Test (96%)
+- Rearranged testing code-styles.
+- Fixed multiple improper mocking usages.
+- Split 'upload.test.js' into 'upload/control.test.js', 'upload/handlers.test.js', and 'upload/control.test.js'.
+
+
+### 0.10.0-dev.24 / 2018-05-24
+> App
+- Fixed potential reference error @'modules/query'.
+- Revised 'page' router.
+
+> Test (92%)
+- Added 'routers/page.test.js'.
+- Updated formats @'routers/query'.
+
+
+### 0.10.0-dev.23.5 / 2018-05-23
+> App
+- Simplified redundant `Array.length > 0` as just `Array.length`.
+- Simplified `site_upload_POST` middleware @'routers/site'.
+- Simplified `isAuthorized` module.
+
+> Test (90%)
+- Excluded 'index.js' to be counted as in a coverage report @'__configs__/'.
+- Added more resolved tests to increase the coverage of code branch.
+
+
+### 0.10.0-dev.23 / 2018-05-23
+> App
+- Renamed all `stackType` as `collection`.
+- Revised `PostsSchema.pre('update')` schema method @'model/posts'.
+- Revised 'site' router controllers.
+
+> Test (89%)
+- Added 'routers/site.test.js'.
+- Added test to cover code branches in `blog_list_GET` @'routers/blog'.
+- Fixed typo and formatting issue @'routers/home.test.js'.
+
+
+### 0.10.0-dev.22 / 2018-05-21
+> App
+- Revised 'blog' router controllers.
+- Revised 'post' schema @'model/post'.
+- Revised 'errorHandlingAgent' for logging unhandled errors @'service/error'.
+- Added `permission` option into all routers. (pre-formatted/inactive feature)
+- Added template reference check for `exportHTML` @'handlers/exporter'.
+- Fixed `ReferenceError` for missing `Referrer` header @'handlers/error'.
+- Renamed `req.session.chest` as `req.session.cache`.
+
+> Test (84%)
+- Added 'routers/blog.test.js'.
+- Added error testing into `exportHTML` test.
+- Used `Symbol.for` as a replacement of dummy `object` entity.
+
+
+### 0.10.0-dev.21 / 2018-05-19
+> App
+- Revised 'auth' router controllers.
+- Fixed error code typos @'handlers/error'.
+
+> Test (80%)
+- Added 'routers/auth.test.js'.
+- Centralized reusable mocking functions.
+- Improved resolution of existing tests.
+
+
+### 0.10.0-dev.20 / 2018-05-17
+> App
+- Extended `Device.exec` method @'engine/router':
+  - allowed router to 'share/borrow' controller(.method) by using `setting.method` option.
+    (not allow to change method bound with the controller)
+  - updated 'home' router.
+- Used `_$` to imply triggering some special pre/post-hooked events before DB operation.
+- @'controllers/routers/home':
+  - simplified `home.profile.GET` and `home.profile.PATCH`.
+  - removed `home.profile_editor`.
+
+> Test (74%)
+- Added 'routers/home.test.js'.
+- Used C-style comments for stubbing notes.
+
+
+### 0.10.0-dev.19.5 / 2018-05-17
+> App
+- @'controllers/routers'
+  - added testing symbols;
+  - centralized all hashed object into 'index.js';
+  - updated all routers setting files.
+
+> Test (71%)
+- Redefined coverage directories.
+
+
+### 0.10.0-dev.19 / 2018-05-17
+> App
+- @'modules/helper':
+  - Renamed `caseInsensitiveProxy` as `caseInsensitiveQueryProxy`;
+  - Revised `modifyHTMLTitleTag`.
+- Enhanced `createCaseInsensitiveProxy` object utilities @'controller/utilities'.
+
+> Test (86%)
+- Added 'modules/helper.test.js'.
+- Updated `createCaseInsensitiveProxy` test.
+
+
+### 0.10.0-dev.18 / 2018-05-16
+> App
+- Revised and renamed `passwordValidation` as `isValidPasswordReset` @'modules/auth'.
+- Reordered error codes in `ClientException_en` @'utilities/error-code'.
+
+> Test (83%)
+- Added 'modules/auth.test.js'.
+- Removed redundant `calledWithNext` symbool.
+- Improved testing resolutions.
+
+
+### 0.10.0-dev.17 / 2018-05-16
+> App
+- Improved readability in all JSDocs.
+- Revised `exportJSON` to be consisted with other handlers @'handlers/exporter'.
+- Simplified `paginatedQuery` @'modules/query'.
+
+> Test (81%)
+- Added 'modules/header.test.js' unit tests.
+- Added `paginatedQuery` unit test.
+- Updated `exportJSON` and `getMiddlewareChain` tests.
+
+
+### 0.10.0-dev.16 / 2018-05-15
+> App
+- Merged `APIHeader` into `APIReceptor` @'modules/header' -> 'handlers/receptor'.
+
+> Test (79%)
+- Added corresponding unit tests into `APIReceptor`.
+- Improved some readiablity of assertions.
+
+
+### 0.10.0-dev.15.5 / 2018-05-15
+> App
+- Merged @'controllers/interfaces' -> 'controllers/modules'.
+  - split 'regulator', 'adaptor' into multiple submodules;
+  - renamed files @'adaptor' -> 'helper'.
+
+> Test (78%)
+- Rearranged files w.r.t. changes.
+
+
+### 0.10.0-dev.15 / 2018-05-15
+> App
+- @'handlers/exception' -> 'handlers/error':
+  - merged `terminal.MongoError` into `terminal.ClientException`;
+  - simplified `terminal.TemplateException` and `terminal.HttpException`.
+
+> Test (78%)
+- Added `redirect.signInRetry` unit test.
+
+
+### 0.10.0-dev.14.1 / 2018-05-15
+> App
+- Fixed bugs @'handlers/exporter'.
+- Populated website settings in `APIReceptor` @'hanlders/receptor'.
+
+> Test
+- Enhanced the testing quality @'handlers/exporter'.
+
+
+### 0.10.0-dev.14 / 2018-05-14
+> App
+- @'handlers/exportor' and @'handlers/receptor'
+  - added JSDocs;
+  - revised most handlers for better conssitency and readability;
+
+> Test (79%)
+- Added 'handlers/exporter.test.js' unit tests.
+- Enhanced semantic assertions @'handlers/receptor'.
+- Removed duplicated test @'interfaces/query'.
+- Revised `Date.now()` stub @'interfaces/upload'.
+
+
+### 0.10.0-dev.13 / 2018-05-14
+> App
+- Revised `browserReceptor` @'handlers/receptor'.
+
+> Test (75%)
+- Fixed typos.
+- Configured used preset global variable via `ESLint`.
+- Updated some environment variables.
+- Depended `node-mocks-http` lib.
+- Added 'handlers/receptor.test.js' unit tests.
+
+
+### 0.10.0-dev.12 / 2018-05-13
+> App
+- @'utilities/object':
+  - simplified `mergeDeep` @'utilities/object';
+  - added `burstArrayDeep` object method @'utilities/object'.
+- @'app':
+  - depended `qs` lib;
+    (the same lib used in express.js)
+  - added `env` and `query parser` customized configurations @'app'.
+  - used `burstArrayDeep` to modify `qs.parse` result.
+- revised and renamed 'interfaces/fetch` as 'interfaces/query':
+  - added JSDoc for all functions;
+  - added `parseQuerySort` helper;
+  - isolated `paginatedMetaExpression` helper;
+  - revised `parseQueryDate`;
+  - enhanced `pullPipe_3_sorting` sorting capabilities;
+  - renamed `aggregateFetch` as `paginatedQuery`.
+
+> Test
+- Added more tests upon 'query' interfaces.
+- Added `burstArrayDeep` unit test @'utilities/object'.
+- Fixed typos and variable naming in other tests.
+
+
+### 0.10.0-dev.11 / 2018-05-11
+> App
+- Fixed setting bug in `page.search` route.
+- Handled the invalid date query exception in `aggregateFetch`.
+
+> Test
+- Revised `fetch.test.js`.
+
+
+### 0.10.0-dev.10 / 2018-05-10
+> App
+- Replaced `parseFilePath` by `parsePath` @'utilities/string'.
+- Renamed `proxyfyInCaseInsensitiveKey` as `createCaseInsensitiveProxy` @'utilities/object'.
+
+> Test
+- Turned off testing coverage report.
+- Added more tests for `parsePath` @'utilities/string'.
+- Used assertion style of comment for managing all tests.
+
+
+### 0.10.0-dev.9 / 2018-05-09
+> App
+- Moved 'fetch' and 'upload' @'modules' -> 'interfaces'.
+- Updated 'adapter' module and 'media' model.
+- Refactored 'upload' @'interface'.
+
+> Test
+- Refactored 'upload' interface unit testing.
+
+
+### 0.10.0-dev.8.1 / 2018-05-09
+> App
+- Fixed argument displacement in `wrapMiddleware` @'utilities/express'.
+- Fixed missing type check in `ErrorCodeDictionary.lookup` @'utilities/error-code'.
+- Adjusted `ExtendableError` for beeter test coverage.
+
+> Test
+- Configured jest to report the testing coverage.
+- Added more tests against `wrapMiddleware` @'utilities/express'(100%).
+
+
+### 0.10.0-dev.8 / 2018-05-08
+> App
+- Removed undesired type checking in 'wrapAsync' @'utilities/express'.
+
+> Test
+- Added 'utilities/express.test.js'.
+- Specified `__ROOT__` as `global.__ROOT__`.
+
+
+### 0.10.0-dev.7 / 2018-05-08
+> App
+- Ensured `this.message` will contain only `String` primitive @'utilities/error'.
+
+> Test
+- Added 'utilities/error.test.js'.
+
+
+### 0.10.0-dev.6 / 2018-05-08
+> App
+- Unified `Symbol.for('__TEST__')` channel in all files.
+- Reanmed `injectMiddleware` as `wrapMiddleware` @'utilities/express'.
+- Updated ESLint configs.
+
+> Test
+- Added `__ROOT__` in `global` testing environment.
+- Added `env.config.js` to load environment variables.
+- Updated all tests.
+
+
+### 0.10.0-dev.5 / 2018-05-07
+> App
+- Revised and added JSDoc for 'router' engine.
+- Added JSDoc for 'view' engine.
+
+> Test
+- Added new 'router.engine.test.js'.
+- Moved @'utilities/' -> @'controller/utilities/'.
+
+
+### 0.10.0-dev.4 / 2018-05-07
+> App
+- Revised 'view' engine.
+- Fixed a reference bug in 'router' engine and 'fetch' module.
+- Fixed a type bug @'utilities/error-code/index'.
+
+> Test
+- Revised 'engine.view.test'.
+- Updated test @'utilities/'.
+
+
+### 0.10.0-dev.3 / 2018-05-07
+> App
+- Refactored 'utilities':
+  - moved `checkToStringTag` @'object' -> @'string';
+  - check as if receiving (1) an empty string; or (2) an invalid `str` @'string';
+  - renamed `readObjPath`, `readMongoId`  as `parseObjPath`, `parseMongoObjectId`, respectively @'string';
+  - `parseMongoObjectId` now returns native mongo `ObjectId` object @'string';
+  - replaced `inspectFileURL` by `parseFilePath` @'string'.
+  - updated depended files.
+
+> Test
+- Added '__configs__/jest.config.js'.
+- Updated 'object.test.js' and 'string.test.js'.
+
+
+### 0.10.0-dev.2.2 / 2018-05-07
+> App
+- Fixed the unresolved variable bugs in 'router' engine.
+
+
+### 0.10.0-dev.2.1 / 2018-05-05
+> App
+- Fixed argument bug in `catch` in `wrapAsync`.
+- Used `switch` expression for better readability in `wrapAsync`.
+
+
+### 0.10.0-dev.2 / 2018-05-05
+> App
+- Upgraded 'router' engine:
+  - renamed `Device.run` as `Device.exec`;
+  - renamed `getPreprocessor` as `getProcessingPipes`;
+  - added `static load` for clustering multiple devices;
+  - integrated 'api' routing by introducing routing 'mode';
+  - removed 'api' controller and router;
+  - revised `getMiddlewareChain` for processing different modes;
+  - removed `servingAPI` option from `getProcessingPipes`;
+  - extracted `wrapAsync`: @'engine/router' -> @'utilities/express'.
+- Added `insertMiddleware` 'express' utilities.
+- @('controllers/handlers/'):
+  - renamed `errorHandler` as `exceptionHandler` (@'exception');
+  - renamed `templateHandler` as `exportHTML` (@'exporter');
+  - added `exportJSON` (@'exporter');
+  - renamed `responseInitializer` as `BrowserReceptor` (@'receptor');
+  - added `APIReceptor` (@'receptors');
+  - added `res.locals.$$MODE` local parameter (@'receptor').
+- @('controllers/modules/'):
+  - renamed `fetchController` as `aggregateFetch` (@'fetch');
+  - renamed `uploadController` as `parseMultipart` (@'upload');
+  - removed unnecessary `require()` (@'adaptor');
+  - moved in `postNormalizer` from 'responder' (@'adaptor');
+  - added mode checking in `modifyHTMLTitleTag` middleware (@'regulator').
+- @('controllers/routers/'):
+  - ensured the consistence of name referencing among router controllers;
+  - moved sub-routers to meet RESTful API standard (in progress);
+  - removed `home.main` router;
+  - renamed `site.main as ``site.root`.
+- @('routers/')
+  - used `setting.servingAPI` as a flag for the 'API' mode;
+  - simplified `routingService` in @'routers/index'.
+- @('app')
+  - Introduced `errorHandlingAgent` as a service;
+  - Integrated with `routingService` and `errorHandlingAgent`.
+
+
+### 0.10.0-dev.1 / 2018-05-03
+> App
+- Prefixed static router under '/src' path.
+- Added a new static router for 'private' documents hosting.
+- Renamed 'seed', 'admin', 'account', 'posts', and 'pages' router as 'init', 'site', 'auth', 'blog', 'page', respectively.
+- Separated 'api-type' and 'html-type' routers.
+- Added two new sub routing paths in 'page' router.
+- Revised `post.show` and `editor.edit` route`{RegExp}` path in 'blog' router.
+- Updated `.gitignore`.
+
+> Test
+- Updated w.r.t. the changes.
+
+> UI
+- Updated w.r.t. the changes.
+
+
+### 0.10.0-dev.0 / 2018-05-03
+> App
+- Initiated v0.10 dev-branch.
+  (goal: Revised CMS routing)
+
+
 ### 0.9.0 / 2018-05-03
 > App
 - Replaced v0.9: 'CMS & UI' by v0.9: 'code: styling and refracting' development.

@@ -1,24 +1,10 @@
 /* eslint-disable no-restricted-syntax */
-const { readObjPath } = require('./string');
+const { checkToStringTag, parseObjPath } = require('./string');
 
 
 /**
- * check the native brand(type) of objects                                                                              // note: `checkToStringTag` can be generalized
- * @param {object} target                   - object to be checked
- * @param {string} [str]                    - name to be matched (case insensitive)
- * @return {(boolean|string)}               - if no name given, the brand name of the object would be returned
- */
-const checkToStringTag = (target, str) => {
-  const nativeBrandName = (obj) => Object.prototype.toString.call(obj).slice(8, -1);
-  if (str && nativeBrandName(str).toLowerCase() !== 'string') throw new TypeError('Second argument is not a string.');
-  if (str) return nativeBrandName(target).toLowerCase() === str.toLowerCase();
-  return nativeBrandName(target);
-};
-
-
-/**
- * check if object has wwn a property
- * @param {object} obj                      - target{object} to be evaluate
+ * check if object has the property
+ * @param {object} obj                      - object to be evaluate
  * @param {string} prop                     - name of the property
  * @return {boolean}                        - evaluation result
  */
@@ -29,7 +15,7 @@ const hasOwnKey = (obj, prop) => {
 
 /**
  * clone the object/array deeply by its value (reference decoupled)
- * @param {object|array} source             - source{object} to be cloned, not support to an Array object
+ * @param {object|array} source             - referencing object
  * @return {object|array}                   - cloned object which is allocated at different memory
  */
 const cloneDeep = (source) => {
@@ -40,9 +26,9 @@ const cloneDeep = (source) => {
 
 /**
  * merge two object recursively                                                                                         // note: this function can not copy getter/setter properties
- * @param {object} target                   - target{object} to be operated
- * @param {object} source                   - reference object for target
- * @param {boolean} [mutate = false]        - allow to mutate the target object
+ * @param {object} target                   - object to be operated
+ * @param {object|array} source             - referencing object
+ * @param {boolean} [mutate = false]        - mutation setting
  * @return {object}                         - the merged object
  */
 const mergeDeep = (target, source, { mutate = false } = {}) => {
@@ -52,8 +38,7 @@ const mergeDeep = (target, source, { mutate = false } = {}) => {
   const mergeRecursion = (obj, src) => {
     const srcKeys = Reflect.ownKeys(src);
     const objKeys = Reflect.ownKeys(obj);
-    for (let i = srcKeys.length - 1; i > -1; i -= 1) {
-      const currentKey = srcKeys[i];
+    for (let i = srcKeys.length - 1, currentKey = srcKeys[i]; i > -1; currentKey = srcKeys[i -= 1]) {
       if (checkToStringTag(src[currentKey], 'Object')) {
         if (!objKeys.includes(currentKey)) obj[currentKey] = {};
         mergeRecursion(obj[currentKey], src[currentKey]);
@@ -67,10 +52,36 @@ const mergeDeep = (target, source, { mutate = false } = {}) => {
 
 
 /**
+ * assigned the value to an object by path recursively                                                                  // note: (1) can be set to mutable; (2) value could be 0{number}
+ * @param {object} target                   - object to be operated
+ * @param {string|array} path               - assigning object path
+ * @param {*} [value]                       - value to be assigned (by reference)
+ * @param {boolean} [mutate = false]        - mutation setting
+ * @return {object}                         - the assigned object
+ */
+const assignDeep = (target, path, value, { mutate = false } = {}) => {
+  const worker = mutate === true ? target : cloneDeep(target);
+  const pathStack = checkToStringTag(path, 'String') ? parseObjPath(path) : path;
+
+  // tail-call recursion (single-file)
+  const assignRecursion = (obj, keys) => {
+    if (keys.length === 1) obj[keys[0]] = value;
+    else {
+      if (obj[keys[0]] === undefined) obj[keys[0]] = {};
+      return assignRecursion(obj[keys[0]], keys.slice(1), value);
+    }
+  };
+
+  assignRecursion(worker, pathStack, value);
+  return worker;
+};
+
+
+/**
  * frozen the target and its property deeply
- * @param {object|array} target             - target{object} to be operated
- * @param {boolean} [mutate = false]        - allow to mutate the target object
- * @return {object|array}                   - the deeply frozen object/array
+ * @param {object|array} target             - object to be operated
+ * @param {boolean} [mutate = false]        - mutation setting
+ * @return {object|array}                   - the frozen object/array
  */
 const freezeDeep = (target, { mutate = false } = {}) => {
   const worker = mutate === true ? target : cloneDeep(target);
@@ -90,42 +101,44 @@ const freezeDeep = (target, { mutate = false } = {}) => {
 
 
 /**
- * assigned the value to an object by path recursively                                                                  // note: (1) can be set to mutable; (2) value could be 0{number}
- * @param {object} target                   - target{object} to be operated
- * @param {string|array} path               - referencing path of the object
- * @param {*} [value]                       - value{*} to be assigned
- * @param {boolean} [mutate = false]        - allow to mutate the target object
- * @return {object}                         - the assigned object
+ * burst array in a nested object based on a given position in all array
+ * @param {object} target                   - object to be operated
+ * @param {boolean} [mutate = false]        - mutation setting
+ * @param {number} [position = -1]          - position in the array (0 = first-one-win; -1 = last-one-win)
+ * @return {object}                         - the resulted object
  */
-const assignDeep = (target, path, value, { mutate = false } = {}) => {
+const burstArrayDeep = (target, { mutate = false, position = -1 } = {}) => {
   const worker = mutate === true ? target : cloneDeep(target);
-  const pathStack = checkToStringTag(path, 'String') ? readObjPath(path) : path;
+  const index = Number(position);
 
-  // tail-call recursion (single-file)
-  const assignRecursion = (obj, keys) => {
-    if (keys.length === 1) obj[keys[0]] = value;
-    else {
-      if (obj[keys[0]] === undefined) obj[keys[0]] = {};
-      return assignRecursion(obj[keys[0]], keys.slice(1), value);
+  // non-tail-call recursion (parallel)
+  const burstArrayRecursion = (obj) => {
+    const keys = Object.keys(obj);
+    for (let i = keys.length - 1, key = keys[i]; i > -1; key = keys[i -= 1]) {
+      const type = checkToStringTag(obj[key]);
+      if (type === 'Array') obj[key] = obj[key][index < 0 ? obj[key].length + index : index];
+      if (type === 'Object') burstArrayRecursion(obj[key]);
     }
   };
 
-  assignRecursion(worker, pathStack, value);
+  burstArrayRecursion(worker);
   return worker;
 };
 
 
 /**
- * proxyfy the object for allowing case-insensitive access
- * @param {object} obj                      - target{object} to be operated
- * @return {object}                         - the proxyfied object
+ * (decorator) proxyfy the object for allowing case-insensitive access
+ * @param {object} obj                      - object to be delegated
+ * @param {boolean} [reverse = true]        - reverse the inspection direction
+ * @return {object}                         - the resulted proxy
  */
-const proxyfyInCaseInsensitiveKey = (obj) => {
+const createCaseInsensitiveProxy = (obj, { reverse = true } = {}) => {
   if (!checkToStringTag(obj, 'Object')) throw new TypeError('Invalid arguments as input.');
   return new Proxy(obj, {
     get: (target, name) => {
       if (!checkToStringTag(name, 'String')) return Reflect.get(target, name);
-      return target[Object.keys(target).find(key => key.toLowerCase() === name.toLowerCase())];
+      if (reverse === false) return target[Object.keys(target).find(key => key.toLowerCase() === name.toLowerCase())];
+      return target[Object.keys(target).reverse().find(key => key.toLowerCase() === name.toLowerCase())];
     },
   });
 };
@@ -133,11 +146,17 @@ const proxyfyInCaseInsensitiveKey = (obj) => {
 
 // exports
 module.exports = {
-  checkToStringTag,
   hasOwnKey,
   cloneDeep,
   mergeDeep,
   assignDeep,
   freezeDeep,
-  proxyfyInCaseInsensitiveKey,
+  burstArrayDeep,
+  createCaseInsensitiveProxy,
 };
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});

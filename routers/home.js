@@ -1,36 +1,57 @@
-/* eslint-disable key-spacing */
 const { Device } = require('../controllers/engines/router');
-const home = require('../controllers/routers/home');
+const { home } = require('../controllers/routers/');
+const { _M_ } = require('../controllers/modules/');
 
 
 // device
-const dashboardRouter = new Device([
+const homeRouter = new Device([
   {
-    route:        '/',
-    controller:   home.main,
-    setting:      { title: 'Dashboard', template: './__root__/' },
+    route: '/profile/edit',
+    controller: home.profile,
+    setting: {
+      method: 'GET',
+      title: 'Edit Your Profile',
+      template: './__root__/home/profile/profile_editor',
+    },
   },
   {
-    route:        '/profile',
-    controller:   home.profile,
-    setting:      { title: 'Profile', template: './__root__/home/profile/info' },
+    route: '/profile',
+    controller: home.profile,
+    setting: {
+      title: 'Profile',
+      template: './__root__/home/profile/info',
+      servingAPI: false,
+    },
   },
   {
-    route:        '/profile/edit',
-    controller:   home.profile_editor,
-    setting:      { title: 'Edit Your Profile', template: './__root__/home/profile/profile_editor' },
+    route: '/security',
+    controller: home.security,
+    setting: {
+      title: 'Change Password',
+      template: './__root__/home/profile/security',
+      servingAPI: false,
+    },
   },
   {
-    route:        '/security',
-    controller:   home.security,
-    setting:      { title: 'Change Password', template: './__root__/home/profile/security' },
+    route: '/',
+    controller: home.profile,
+    setting: {
+      method: 'GET',
+      title: 'Home',
+      template: './__root__/home/profile/info',
+      servingAPI: false,
+    },
   },
 ]);
 
 
 // settings
-dashboardRouter.setting = { title: 'Account', authentication: true, cache: false };
-
+homeRouter.setting = { title: 'Account', cache: false };
+homeRouter.hook('pre', _M_.usePassport);
+homeRouter.permission = {
+  access: ['owner'],
+  change: ['owner'],
+};
 
 // exports
-module.exports = dashboardRouter.run();
+module.exports = homeRouter;

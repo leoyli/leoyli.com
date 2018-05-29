@@ -12,9 +12,9 @@ const MediaSchema   = new mongoose.Schema({
     nickname        : { type: String },
   },
   file: {
-    type            : { type: String },
-    path            : { type: String },
     name            : { type: String },
+    path            : { type: String },
+    ext             : { type: String },
   },
   title             : { type: String, trim: true, required: [true, 'is required'] },
   description       : { type: String, trim: true, required: [true, 'is required'] },

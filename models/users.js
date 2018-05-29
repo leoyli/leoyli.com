@@ -1,3 +1,4 @@
+
 /* eslint-disable key-spacing */
 const mongoose = require('mongoose');
 const validator = require('validator');
@@ -44,10 +45,11 @@ UsersSchema.pre('save', function UsersSchema_pre_save() {
   if (this.nickname === undefined) this.nickname = `${this.info.firstName} ${this.info.lastName}`.trim();
 });
 
+
 // // auto-update all posts associated with the author in dark (pre-hook)
 UsersSchema.pre('update', function UsersSchema_pre_update() {
   const _$update = this.getUpdate();
-  if (_$update.$set.nickname !== _$update.$set._nickname) {
+  if (_$update.$set.nickname !== _$update.$set._$nickname) {
     mongoose.connection.db.collection('posts').update(
       { 'author._id': this.getQuery()._id },
       { $set: { 'author.nickname': _$update.$set.nickname } },
@@ -66,12 +68,14 @@ UsersSchema.methods.updateLastTimeLog = function UsersSchema_updateLastTimeLog(f
   );
 };
 
+
 // // methods from third-party plugin (object method)
 UsersSchema.plugin(passportLocalMongoose, {
   usernameField: 'email',
   usernameQueryFields: ['username'],
   selectFields: ['_id', 'email', 'nickname', 'picture', 'info', 'time'],
 });
+
 
 // // rewrite plugin methods as promises
 const selfPromisify = (fn, arg, THIS) => {
@@ -82,15 +86,18 @@ const selfPromisify = (fn, arg, THIS) => {
   }));
 };
 
+
 const _register = UsersSchema.statics.register;
 UsersSchema.statics.register = function (...arg) {
   return selfPromisify(_register, arg, this);
 };
 
+
 const _authenticate = UsersSchema.methods.authenticate;
 UsersSchema.methods.authenticate = function (...arg) {
   return selfPromisify(_authenticate, arg, this);
 };
+
 
 const _changePassword = UsersSchema.methods.changePassword;
 UsersSchema.methods.changePassword = function (...arg) {

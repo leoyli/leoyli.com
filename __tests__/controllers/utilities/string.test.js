@@ -1,72 +1,196 @@
-// module
-const { toKebabCase, toCapitalized, toEscapedChars,
-  readMongoId, readObjPath, inspectFileURL } = require('../../../controllers/utilities/')[Symbol.for('UNIT_TEST')];
+/* global __ROOT__ */
+const {
+  checkToStringTag, toKebabCase, toCapitalized, toEscapedChars, parseMongoObjectId, parseObjPath, parsePath,
+} = require(`${__ROOT__}/controllers/utilities/string`)[Symbol.for('__TEST__')];
 
 
-// test
-describe('Check the ENV', () => {
-  test('Should run in test mode', () => {
-    expect(process.env.NODE_ENV).toEqual('test');
+// tests
+describe('Utilities: String', () => {
+  test('Fn: checkToStringTag', () => {
+    const target = [
+      [],
+      {},
+      async () => {},
+    ];
+    const expectation = [
+      'Array',
+      'Object',
+      'AsyncFunction',
+    ];
+
+    // should use `Object.prototype.toString` to get the object type
+    const test_1 = target.map(obj => checkToStringTag(obj));
+    expect(test_1[0]).toBe(expectation[0]);
+    expect(test_1[1]).toBe(expectation[1]);
+    expect(test_1[2]).toBe(expectation[2]);
+
+    // should check if object match with a type name
+    const test_2 = target.map((obj, index) => checkToStringTag(obj, expectation[index]));
+    expect(test_2[0]).toBeTruthy();
+    expect(test_2[1]).toBeTruthy();
+    expect(test_2[2]).toBeTruthy();
+
+    // should throw an Error for non-string checking types
+    expect(() => checkToStringTag({}, {})).toThrowError(TypeError);
   });
-});
 
 
-describe('Bundle: String methods', () => {
   test('Fn: toKebabCase', () => {
-    const test = ['~~THIS_IS_A_TEST~~', '  thisIsATest...', 'This Is A Test!'];
-    const result = test.map(str => toKebabCase(str));
-    //
-    expect(result[0]).toBe('this-is-a-test');
-    expect(result[1]).toBe('this-is-a-test');
-    expect(result[2]).toBe('this-is-a-test');
+    const target = [
+      '~~THIS_IS_ATest~~',
+      'This Is A Test!',
+      undefined,
+    ];
+    const expectation = 'this-is-a-test';
+
+    // should convert the target string to the kebab-case
+    const test = target.map(str => toKebabCase(str));
+    expect(test[0]).toBe(expectation);
+    expect(test[1]).toBe(expectation);
+
+    // should return `null` if target is not a string
+    expect(test[2]).toBeNull();
   });
+
 
   test('Fn: toCapitalized', () => {
-    const test = ['This is a test, and can be tested.', 'test'];
-    const result = test.map(str => toCapitalized(str));
-    //
-    expect(result[0]).toBe('This Is A Test, And Can Be Tested.');
-    expect(result[1]).toBe('Test');
+    // should capitalize the target string
+    expect(toCapitalized('test')).toBe('Test');
+    expect(toCapitalized('This is a test, and can be tested.')).toBe('This Is A Test, And Can Be Tested.');
+
+    // should return `null` if failed
+    expect(toCapitalized(undefined)).toBeNull();
   });
+
 
   test('Fn: toEscapedChars', () => {
-    const test = ['result- =\'"`.,:;<([{', undefined];
-    const result = test.map(str => toEscapedChars(str));
-    //
-    expect(result[0]).toBe('result- &#61;&#39;&#34;&#96;&#46;&#44;&#58;&#59;&#60;&#40;&#91;&#123;');
-    expect(result[1]).toBe(null);
+    // should escape special characters in the target string
+    expect(toEscapedChars('result- =\'"`.,:;<([{'))
+      .toBe('result- &#61;&#39;&#34;&#96;&#46;&#44;&#58;&#59;&#60;&#40;&#91;&#123;');
+    expect(toEscapedChars('This is a test...'))
+      .toBe('This is a test&#46;&#46;&#46;');
+
+    // should return `null` if failed
+    expect(toEscapedChars(undefined)).toBeNull();
   });
 
-  test('Fn: readMongoId', () => {
-    const test = ['http://(url)/5a167966807c57204ef40cdd?page=1', 'http://(url)/5a167966807c57204ef40cdd0wg/'];
-    const result = readMongoId(test[0]);
-    //
-    expect(result).toEqual('5a167966807c57204ef40cdd');
-    expect(() => readMongoId(test[1])).toThrow(/No Mongo ObjectId/);
+
+  test('Fn: parseObjPath', () => {
+    const expectation = ['a', 'b', 'c', 'd', 'e', 'f'];
+
+    // should parse a target string into an ordered array
+    expect(parseObjPath('a[b].c.d[e][f]')).toStrictEqual(expectation);
+    expect(parseObjPath('a[b[c]].d[e.f]')).toStrictEqual(expectation);
+
+    // should return `null` if failed
+    expect(parseObjPath(undefined)).toBeNull();
   });
 
-  test('Fn: readObjPath', () => {
-    const test = 'a[b].c.d[e][f]';
-    const result = readObjPath(test);
-    //
-    expect(result).toEqual(['a', 'b', 'c', 'd', 'e', 'f']);
+
+  test('Fn: parseMongoObjectId', () => {
+    const expectation = '5a167966807c57204ef40cdd';
+
+    // should parse a target string into a Mongo ObjectId
+    const test = parseMongoObjectId('http://(url)/5a167966807c57204ef40cdd?page=1');
+    expect(checkToStringTag(test)).toBe('Object');
+    expect(test.toString()).toStrictEqual(expectation);
+
+    // should return `null` if failed
+    expect(parseMongoObjectId('5a167966807c57204ef40cdd0')).toBeNull();
+    expect(parseMongoObjectId(undefined)).toBeNull();
   });
 
-  test('Fn: inspectFileURL', () => {
-    const mockExtName = ['png', 'gif'];
-    const test = ['http://domain.com/path/name/file.png', 'domain.com/file.png', 'http://t.io/t.gif', 'file.png'];
-    const result1 = inspectFileURL(test[0], mockExtName);
-    const result2 = inspectFileURL(test[1], mockExtName);
-    const result3 = inspectFileURL(test[2], mockExtName, { raw: false, use: 'ftp' });
-    const result4 = inspectFileURL(test[2], mockExtName, { raw: false });
-    const result5 = inspectFileURL(test[3], mockExtName, { raw: false });
-    const result6 = inspectFileURL(test[4], mockExtName, { raw: false });
-    //
-    expect(result1.slice(0, 6)).toEqual([test[0], 'http', 'domain.com', '/path/name/', 'file.png']);
-    expect(result2.slice(0, 6)).toEqual([test[1], undefined, 'domain.com', '/', 'file.png']);
-    expect(result3).toBe('ftp://t.io/t.gif');
-    expect(result4).toBe(test[2]);
-    expect(result5).toBeNull();
-    expect(result6).toBeNull();
+
+  test('Fn: parsePath', () => {
+    // should fail to parse
+    // // if is invalid argument
+    expect(parsePath(undefined)).toBeNull();
+    expect(parsePath('')).toBeNull();
+
+    // // if contains more than one (//, @, #, ?)
+    expect(parsePath('https://some@domain.com:8080/t@st.pdf')).toBeNull();
+    expect(parsePath('https://some.domain.com:8080/test.pdf?abc?def')).toBeNull();
+    expect(parsePath('https://some.domain.com:8080/test.pdf#abc#def')).toBeNull();
+    expect(parsePath('https://some.domain.com:8080//test.pdf')).toBeNull();
+
+    // // if contains invalid port
+    expect(parsePath('https://some.domain.com:99999/')).toBeNull();
+    expect(parsePath('https://some.domain.com:abcde/')).toBeNull();
+
+    // // if contains base
+    expect(parsePath('https://some.domain.com/some:test.js')).toBeNull();
+    expect(parsePath('some:test.js')).toBeNull();
+    expect(parsePath('some@test.js')).toBeNull();
+    expect(parsePath('some?test.js')).toBeNull();
+
+    // should parse full URL
+    expect(parsePath('https://name@some.domain.com:8080/a/b/c/test.pdf?s=na#top')).toStrictEqual({
+      input: 'https://name@some.domain.com:8080/a/b/c/test.pdf?s=na#top',
+      protocol: 'https',
+      hostname: 'some.domain.com',
+      username: 'name',
+      port: 8080,
+      dir: '/a/b/c',
+      base: 'test.pdf',
+      ext: 'pdf',
+      query: 's=na',
+      hash: 'top',
+    });
+
+    // should parse hostname with no protocol
+    expect(parsePath('//some.domain.com:8080')).toStrictEqual({
+      input: '//some.domain.com:8080',
+      protocol: null,
+      hostname: 'some.domain.com',
+      username: null,
+      port: 8080,
+      dir: '/',
+      base: null,
+      ext: null,
+      query: null,
+      hash: null,
+    });
+
+    // should parse directory with no protocol
+    expect(parsePath('//some/')).toStrictEqual({
+      input: '//some/',
+      protocol: null,
+      hostname: null,
+      username: null,
+      port: null,
+      dir: '/some',
+      base: null,
+      ext: null,
+      query: null,
+      hash: null,
+    });
+
+    // should parse as file if not wrapped by slash
+    expect(parsePath('//some')).toStrictEqual({
+      input: '//some',
+      protocol: null,
+      hostname: null,
+      username: null,
+      port: null,
+      dir: '/',
+      base: 'some',
+      ext: null,
+      query: null,
+      hash: null,
+    });
+
+    // should parse as file if not contain any slash
+    expect(parsePath('some.test.js')).toStrictEqual({
+      input: 'some.test.js',
+      protocol: null,
+      hostname: null,
+      username: null,
+      port: null,
+      dir: '/',
+      base: 'some.test.js',
+      ext: 'js',
+      query: null,
+      hash: null,
+    });
   });
 });

@@ -1,84 +1,86 @@
-// mock
+/* global __ROOT__ */
+const {
+  getCompilationConfigs, getBlueprint, getRuntimeMethods, getTemplate, buildTemplate, getFileString, render, Template,
+} = require(`${__ROOT__}/controllers/engines/view`)[Symbol.for('__TEST__')];
+
+
+// modules
+const fs = require('fs');
+
+
+// mocks
+const someLocals = { settings: {}, cache: false, _locals: {}, test: {} };
+const someString = '<a>Hello World</a>';
+
 jest.mock('fs', () => ({
   readFileSync: jest.fn(),
   readFile: jest.fn(),
 }));
-const fs = require('fs');
+fs.readFileSync.mockReturnValue(someString);
+fs.readFile.mockImplementation((file, option, cb) => cb(null, someString));
 
 
-// module
-const { getCompilationConfigs, getBlueprint, getRuntimeMethods,
-  getTemplate, buildTemplate, getFileString, render, Template,
-} = require('../../../controllers/engines/view')[Symbol.for('UNIT_TEST')];
-
-
-// test
-describe('Check the ENV', () => {
-  test('Should run in test mode', () => {
-    expect(process.env.NODE_ENV).toEqual('test');
-  });
-});
-
-
-describe('Bundle: engine.js', () => {
-  const mockLocals = { settings: {}, cache: false, _locals: {}, test: {} };
-  const mockContent = '<a>Hello World</a>';
-  fs.readFileSync.mockReturnValue(mockContent);
-  fs.readFile.mockImplementation((file, option, next) => next(null, mockContent));
-
-  test('Fn: getCompilationConfigs: Should generate doT configs on-the-fly', () => {
-    const result = getCompilationConfigs('a, b, c');
-    //
-    expect(result.varname).toBe('a, b, c');
+// tests
+describe('Engines: View', () => {
+  test('Fn: getCompilationConfigs', () => {
+    // should return object with `varname` property consisted with argument
+    expect(getCompilationConfigs('a, b, c').varname).toBe('a, b, c');
   });
 
-  test('Fn: getBlueprint: Should transpile Express.js meta into the blueprint of Template{object}', () => {
-    const result = getBlueprint(mockLocals);
-    //
-    expect(result).toHaveProperty('_fn');
-    expect(result).toHaveProperty('test');
-    expect(result).not.toHaveProperty('settings');
-    expect(result).not.toHaveProperty('cache');
-    expect(result).not.toHaveProperty('_locals');
+
+  test('Fn: getFileString', async () => {
+    // should return file string synchronously
+    expect(getFileString('test', true)).toStrictEqual(someString);
+
+    // should return file string in Promise
+    expect(await getFileString('test').then(str => str)).toStrictEqual(someString);
   });
 
-  test('Fn: getRuntimeMethods: Should get runtime template methods', () => {
-    const result = getRuntimeMethods({}, {}, '');
-    //
-    expect(result).toHaveProperty('useMarkdown');
-    expect(result).toHaveProperty('loadPartial');
+
+  test('Fn: getRuntimeMethods', () => {
+    // should return object with run-time view methods
+    const test = getRuntimeMethods({}, {}, '');
+    expect(test).toHaveProperty('useMarkdown');
+    expect(test).toHaveProperty('loadPartial');
   });
 
-  test('Fn: getTemplate: Should get a compiled Template{object}', async () => {
-    const result = [getTemplate('test', {}, true), await getTemplate('test', {})];
-    //
-    expect(result[0] instanceof Template).toBeTruthy();
-    expect(result[1] instanceof Template).toBeTruthy();
+
+  test('Fn: getBlueprint', () => {
+    // should return a blueprint object
+    const test = getBlueprint(someLocals);
+    expect(test).toHaveProperty('_fn');
+    expect(test).toHaveProperty('test');
+    expect(test).not.toHaveProperty('settings');
+    expect(test).not.toHaveProperty('cache');
+    expect(test).not.toHaveProperty('_locals');
   });
 
-  test('Fn: buildTemplate: Should construct a new Template{object}', () => {
-    const result = buildTemplate('', {}, mockContent);
-    //
-    expect(result instanceof Template).toBeTruthy();
-    expect(result.compile instanceof Function).toBeTruthy();
-    expect(result.render()).toBe(mockContent);
+
+  test('Fn: buildTemplate', () => {
+    // should construct a `Template` object
+    const test = buildTemplate('', {}, someString);
+    expect(test instanceof Template).toBeTruthy();
+    expect(test.compile instanceof Function).toBeTruthy();
+    expect(test.render()).toBe(someString);
   });
 
-  test('Fn: getFileString: Should get context as string from the template file', async () => {
-    const result = [getFileString('test', true), await getFileString('test').then(() => 0)];
-    //
-    expect(result[0]).toEqual(mockContent);
-    expect(result[1]).toEqual(0);
+
+  test('Fn: getTemplate', async () => {
+    // should return a `Template` object
+    const test = await Promise.all([getTemplate('test', {}, true), getTemplate('test', {}).then(template => template)]);
+    expect(test[0] instanceof Template).toBeTruthy();
+    expect(test[1] instanceof Template).toBeTruthy();
   });
 
-  test('Fn: render: Should return the requested content in HTML', async () => {
-    const result = await (render('', mockLocals, (err, context) => {
-      if (err) throw err;
-      return context;
-    })).then(string => {
-      return typeof string === 'string';
-    });
-    //
-    expect(result).toBeTruthy();
+
+  test('Fn: render', async () => {
+    const someCallback = (err, str) => {
+      if (err) return err;
+      return str;
+    };
+
+    // should return the rendering result
+    const test = await (render('', someLocals, someCallback));
+    expect(test).toStrictEqual(someString);
   });
 });

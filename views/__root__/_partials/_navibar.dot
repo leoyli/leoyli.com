@@ -7,10 +7,10 @@
         <div class="collapse navbar-collapse justify-content-end ">
             <ul class="navbar-nav d-flex align-items-end text-uppercase">
                 <li class="nav-item">
-                    <a class="nav-link" href="/seed">Seed</a>
+                    <a class="nav-link" href="/init">Init</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/posts">Blog</a>
+                    <a class="nav-link" href="/blog">Blog</a>
                 </li>
                 {{? !$$VIEW.user }}
                     <li class="nav-item">
@@ -39,13 +39,13 @@
                             <div class="dropdown-divider my-1"></div>
                             <a class="dropdown-item px-3" href="/home">Dashboard</a>
                             <div class="dropdown-divider my-1"></div>
-                            <a class="dropdown-item px-3" href="/posts/edit">New Post</a>
-                            <a class="dropdown-item px-3" href="/admin/stack/posts">Posts Overview</a>
+                            <a class="dropdown-item px-3" href="/blog/edit">New Post</a>
+                            <a class="dropdown-item px-3" href="/site/stack/posts">Posts Overview</a>
                             <div class="dropdown-divider my-1"></div>
-                            <a class="dropdown-item px-3" href="/admin/upload">Upload Media</a>
-                            <a class="dropdown-item px-3" href="/admin/stack/media">Media Overview</a>
+                            <a class="dropdown-item px-3" href="/site/upload">Upload Media</a>
+                            <a class="dropdown-item px-3" href="/site/stack/media">Media Overview</a>
                             <div class="dropdown-divider my-1"></div>
-                            <a class="dropdown-item px-3" href="/admin/configs">Website Settings</a>
+                            <a class="dropdown-item px-3" href="/site/configs">Website Settings</a>
                             <a class="dropdown-item px-3" href="/home/profile">User Profile</a>
                             <a class="dropdown-item px-3" href="/signout">Sign Out</a>
                         </div>

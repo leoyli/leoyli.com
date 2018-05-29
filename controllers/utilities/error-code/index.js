@@ -1,5 +1,5 @@
 /* eslint-disable no-shadow, no-template-curly-in-string */
-const { checkToStringTag } = require('../object');
+const { checkToStringTag } = require('../string');
 
 
 class ErrorCodeDictionary {
@@ -9,7 +9,7 @@ class ErrorCodeDictionary {
 
   lookup(entry, literals) {
     if (!this.dictionary.has(entry)) return null;
-    if (!checkToStringTag(literals, 'String')) return this.dictionary.get(entry);
+    if (!['Object', 'String'].includes(checkToStringTag(literals))) return this.dictionary.get(entry);
 
     // replacing with template literals
     return this.dictionary.get(entry).replace(/\${([^}]*)}/g, (match, key) => {
@@ -42,9 +42,9 @@ collection.set('ClientException_en', new ErrorCodeDictionary({
   10001: 'Please fill all required fields.',
   10002: 'Two new password does not the same.',
   10003: 'Password cannot be set to the same as the current.',
+  20000: 'Please sign in first!',
   20001: 'Invalid authorization...',
   20002: 'Wrong email/username or password!',
-  20003: 'Please sign in first!',
 }));
 
 collection.set('HttpException_en', new ErrorCodeDictionary({

@@ -30,6 +30,7 @@ configsSchema.static('initialize', async function configsSchema_initialize(next 
   } return next();
 });
 
+
 configsSchema.static('updateConfigs', async function configsSchema_updateConfigs(doc, next = () => {}) {
   process.env.$WEBSITE_CONFIGS = JSON.stringify(await this.findOneAndUpdate({ active: true }, doc, { new: true }));
   return next();

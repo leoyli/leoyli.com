@@ -1,6 +1,4 @@
-// ==============================
-//  DEPENDENCIES
-// ==============================
+const qs = require('qs');
 const methodOverride = require('method-override');
 const session = require('express-session');
 const favicon = require('serve-favicon');
@@ -14,34 +12,40 @@ const passport = require('passport');
 const flash = require('connect-flash');
 
 
-// ==============================
-//  SERVICES
-// ==============================
+// MODULE
+const { _M_ } = require('./controllers/modules/');
+const { _U_ } = require('./controllers/utilities/');
 const routingService = require('./routers/');
 const viewEngineService = require('./controllers/engines/view');
 const passportAgent = require('./services/passport');
 const securityHeaderAgent = require('./services/security');
+const errorHandlingAgent = require('./services/error');
 
 
-// ==============================
-//  SERVICES QUEUE
-// ==============================
+// CONNECTION
 const app = express();
+
+
+/** setting **/
+app.set('env', 'dev');
+app.set('query parser', str => {
+  return _U_.object.burstArrayDeep(qs.parse(str, { parseArrays: false, depth: 0 }), { mutate: true, position: -1 });
+});
+
+
+/** database **/
+mongoose.connect(process.env.DB);
+if (process.env.NODE_ENV !== 'test') require('./models/').ConfigsModel.initialize();
 
 
 /** security **/
 securityHeaderAgent(app);
 
 
-/** static **/
-app.use(express.static(path.join(__dirname, './public'), {
+/** static public resources **/
+app.use('/src', express.static(path.join(__dirname, './src/public'), {
   setHeaders: (res) => res.set('x-robots-tag', 'none'),
 }));
-
-
-/** database **/
-mongoose.connect(process.env.DB);
-if (process.env.NODE_ENV !== 'test') require('./models/').ConfigsModel.initialize();
 
 
 /** session **/
@@ -62,6 +66,12 @@ app.use(session({
 passportAgent(passport);
 
 
+/** static private resources **/
+app.use('/src', _M_.isSignedIn, express.static(path.join(__dirname, './src/private'), {
+  setHeaders: (res) => res.set('x-robots-tag', 'none'),
+}));
+
+
 /** debugger **/
 if (process.env.NODE_ENV === 'dev') app.use(logger('dev'));
 
@@ -69,25 +79,22 @@ if (process.env.NODE_ENV === 'dev') app.use(logger('dev'));
 /** API **/
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ type: 'application/json' }));
-app.use('/api', routingService.APIRouter);
+app.use('/api', routingService('api'));
 
 
 /** HTML **/
 app.engine('dot', viewEngineService.__express);
 app.set('view engine', 'dot');
 app.set('views', path.join(__dirname, './views'));
-app.set('upload', path.join(__dirname, './public/media'));
+app.set('upload', path.join(__dirname, './src/public/media'));
 app.use(flash());
 app.use(methodOverride('_method'));
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use('/', routingService.HTMLRouter);
+app.use(favicon(path.join(__dirname, './src/public', 'favicon.ico')));
+app.use('/', routingService('html'));
 
 
-/** Last-ditch **/
-app.use((err, req, res, next) => {
-  console.log(err);
-  return res.sendStatus(500);
-});
+/** error **/
+errorHandlingAgent(app);
 
 
 // exports
