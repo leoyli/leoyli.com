@@ -1,3 +1,9 @@
+### 0.11.0-dev.0 / 2018-05-29
+> App
+- Initiated v0.11 dev-branch.
+  (goal: deploy preparations)
+
+
 ### 0.10.0 / 2018-05-29
 > App
 - Finished v0.10: 'unit testing and revised CMS routing' development.
