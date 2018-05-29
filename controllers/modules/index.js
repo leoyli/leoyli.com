@@ -1,8 +1,8 @@
 const auth = require('./auth');
 const header = require('./header');
 const helper = require('./helper');
-const { paginatedQuery } = require('./query');
-const { handleStreamUpload } = require('./upload/control');
+const { paginatedQuery } = require('./query/packet');
+const { handleStreamUpload } = require('./upload/packet');
 
 
 // exports

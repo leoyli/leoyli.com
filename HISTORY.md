@@ -1,4 +1,13 @@
-### 0.10.0-dev.26.5 / 2018-05-28
+### 0.10.0-dev.27.5 / 2018-05-28
+> App
+- Split 'query' module into 'pocket', 'helpers', and 'pipes' submodules.
+- Renamed 'upload/control' as 'upload/packet'
+
+> Test (96%)
+- Split 'query' testing files in accordance with the changes.
+
+
+### 0.10.0-dev.27 / 2018-05-28
 > App
 - Simplified 'query' module.
 

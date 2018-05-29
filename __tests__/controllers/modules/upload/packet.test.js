@@ -1,7 +1,7 @@
 /* global __ROOT__, req, res, next */
 const {
   handleStreamUpload,
-} = require(`${__ROOT__}/controllers/modules/upload/control`)[Symbol.for('__TEST__')];
+} = require(`${__ROOT__}/controllers/modules/upload/packet`)[Symbol.for('__TEST__')];
 
 
 // modules
