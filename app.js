@@ -15,8 +15,9 @@ const flash = require('connect-flash');
 // MODULE
 const { _M_ } = require('./controllers/modules/');
 const { _U_ } = require('./controllers/utilities/');
-const routingService = require('./routers/');
+const { ConfigsModel } = require('./models/');
 const viewEngineService = require('./controllers/engines/view');
+const routingService = require('./routers/');
 const passportAgent = require('./services/passport');
 const securityHeaderAgent = require('./services/security');
 const errorHandlingAgent = require('./services/error');
@@ -34,8 +35,7 @@ app.set('query parser', str => {
 
 
 /** database **/
-mongoose.connect(process.env.DB);
-if (process.env.NODE_ENV !== 'test') require('./models/').ConfigsModel.initialize();
+mongoose.connect(process.env.DB).then(() => ConfigsModel.initConfig(app));
 
 
 /** security **/

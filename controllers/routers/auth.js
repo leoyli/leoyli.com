@@ -1,7 +1,7 @@
 const passport = require('passport');
 const { _M_ } = require('../modules/');
 const { UsersModel } = require('../../models/');
-const { ClientException } = require('../utilities/')._U_.error;
+const { _U_: { error: { ClientException } } } = require('../utilities/');
 
 
 // controllers
@@ -12,7 +12,7 @@ auth.signup = {
     if (req.isAuthenticated()) return res.redirect('/home');
     return next();
   },
-  POST: [_M_.isValidPasswordReset, async function auth_signup_POST(req, res) {
+  POST: [_M_.isValidPasswordSyntax, async function auth_signup_POST(req, res) {
     const newUser = await UsersModel.register(new UsersModel(req.body), req.body.password.new);
     req.logIn(newUser, err => {
       if (err) throw err;
@@ -39,7 +39,7 @@ auth.signin = {
         authUser.updateLastTimeLog('signIn');
         req.session.cookie.expires = new Date(req.body.isPersisted ? (14 * 24 * 3600000) + Date.now() : Date.now());
         req.session.user = { _id: authUser._id, picture: authUser.picture, nickname: authUser.nickname };
-        req.flash('info', `Welcome back ${authUser.nickname}`);
+        req.flash('info', `Welcome back ${authUser.nickname}!`);
         return res.redirect(req.session.returnTo || '/home');
       });
     })(req, res, next);

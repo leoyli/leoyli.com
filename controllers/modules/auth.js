@@ -36,9 +36,9 @@ const isAuthorized = [...isSignedIn, async function isAuthorized(req, res, next)
 /**
  * validate if resetting password is acceptable
  */
-const isValidPasswordReset = (req, res, next) => {
+const isValidPasswordSyntax = (req, res, next) => {
   const { password } = req.body;
-  if (!password.old || !password.new || !password.confirmed) throw new _U_.error.ClientException(10001);
+  if (password.old === '' || !password.new || !password.confirmed) throw new _U_.error.ClientException(10001);
   if (password.new !== password.confirmed) throw new _U_.error.ClientException(10002);
   if (password.new === password.old) throw new _U_.error.ClientException(10003);
   return next();
@@ -50,7 +50,7 @@ module.exports = {
   usePassport,
   isSignedIn,
   isAuthorized,
-  isValidPasswordReset,
+  isValidPasswordSyntax,
 };
 
 Object.defineProperty(module.exports, Symbol.for('__TEST__'), {

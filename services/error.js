@@ -1,4 +1,4 @@
-const { HttpException } = require('../controllers/utilities/')._U_.error;
+const { _U_: { error: { HttpException } } } = require('../controllers/utilities/');
 const { exceptionHandler } = require('../controllers/handlers/error');
 
 

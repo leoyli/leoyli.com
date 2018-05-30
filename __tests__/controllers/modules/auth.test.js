@@ -1,6 +1,6 @@
 /* global __ROOT__, req, res, next */
 const {
-  usePassport, isSignedIn, isAuthorized, isValidPasswordReset,
+  usePassport, isSignedIn, isAuthorized, isValidPasswordSyntax,
 } = require(`${__ROOT__}/controllers/modules/auth`)[Symbol.for('__TEST__')];
 
 
@@ -94,34 +94,41 @@ describe('Modules: Auth', () => {
   });
 
 
-  test('Middleware: isValidPasswordReset', () => {
-    // should pass reset validation
+  test('Middleware: isValidPasswordSyntax', () => {
+    // (1) should pass reset validation
+    // // if required `old`
     req.body = { password: { old: 'old', new: 'new', confirmed: 'new' } };
-    expect(() => isValidPasswordReset(req, res, next)).not.toThrowError();
+    expect(() => isValidPasswordSyntax(req, res, next)).not.toThrowError();
 
-    // should NOT pass validation
+    // // if not required `old`
+    req.body = { password: { new: 'new', confirmed: 'new' } };
+    expect(() => isValidPasswordSyntax(req, res, next)).not.toThrowError();
+
+
+    // (2) should NOT pass validation
     // // if missing filed
-    req.body = { password: { old: 'old', new: 'new', confirmed: '' } };
-    expect(() => isValidPasswordReset(req, res, next)).toThrowError(expect.objectContaining({
+    req.body = { password: { old: '', new: 'new', confirmed: 'new' } };
+    expect(() => isValidPasswordSyntax(req, res, next)).toThrowError(expect.objectContaining({
       name: 'ClientException',
       code: 10001,
     }));
 
     // // if not match with `confirmed`
     req.body = { password: { old: 'old', new: 'new', confirmed: 'wrong' } };
-    expect(() => isValidPasswordReset(req, res, next)).toThrowError(expect.objectContaining({
+    expect(() => isValidPasswordSyntax(req, res, next)).toThrowError(expect.objectContaining({
       name: 'ClientException',
       code: 10002,
     }));
 
     // // if the same as `old`
     req.body = { password: { old: 'old', new: 'old', confirmed: 'old' } };
-    expect(() => isValidPasswordReset(req, res, next)).toThrowError(expect.objectContaining({
+    expect(() => isValidPasswordSyntax(req, res, next)).toThrowError(expect.objectContaining({
       name: 'ClientException',
       code: 10003,
     }));
 
+
     // should pass the final state checks
-    expect(next).toBeCalledTimes(1);
+    expect(next).toBeCalledTimes(2);
   });
 });

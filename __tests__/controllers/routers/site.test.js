@@ -60,25 +60,20 @@ const toHandleHttpExceptionsForInvalidCollection = async (fn, req, res, next) =>
 // tests
 describe('Routers: Site.configs', () => {
   test('Middleware: site_configs_GET', () => {
-    res.locals.$$VIEW = {};
-    JSON.parse = jest.fn();
-
-    // should load configs from `env`
-    configs.GET(req, res, next);
-    expect(JSON.parse).lastCalledWith(process.env.$WEBSITE_CONFIGS);
-
     // should pass the final state checks
+    configs.GET(req, res, next);
     expect(next).toBeCalledTimes(1);
   });
 
 
   test('Middleware: site_configs_PATCH', async () => {
     req.body.configs = Symbol.for('some_configs');
-    ConfigsModel.updateConfigs = jest.fn();
+    req.app = { get: jest.fn(), set: jest.fn() };
+    ConfigsModel.updateConfig = jest.fn();
 
-    // should call `updateConfigs` model method
+    // should call `updateConfig` model method
     await configs.PATCH(req, res, next);
-    expect(ConfigsModel.updateConfigs).lastCalledWith(Symbol.for('some_configs'));
+    expect(ConfigsModel.updateConfig).lastCalledWith(req.app, Symbol.for('some_configs'));
 
     // should pass the final state checks
     expect(res.redirect).lastCalledWith('back');

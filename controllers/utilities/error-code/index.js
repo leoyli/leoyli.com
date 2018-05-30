@@ -59,7 +59,7 @@ collection.set('HttpException_en', new ErrorCodeDictionary({
 // exports
 module.exports = new Proxy(collection, {
   get: (collection, name) => {
-    const book = `${name}_${process.env.$WEBSITE_CONFIGS.language || 'en'}`;
+    const book = `${name}_${process.env.LANG || 'en'}`;
     if (collection.has(book)) return (entry, literals) => collection.get(book).lookup(entry, literals) || entry;
     return (entry) => entry;
   },

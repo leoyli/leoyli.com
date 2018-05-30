@@ -73,7 +73,7 @@ describe('Modules: Upload (components)', () => {
     const anotherBusboy = {
       ...someBusboy,
       time: Date.now(),
-      stream: fs.createReadStream('__tests__/test.png'),
+      stream: fs.createReadStream(`${__ROOT__}/src/public/default/admin_picture.png`),
       filePath: `${__dirname}/_tempt/test.streamed.png`,
     };
 
@@ -83,7 +83,7 @@ describe('Modules: Upload (components)', () => {
       if (err) throw err;
 
       // should be exactly uploaded
-      expect(stats.size).toBe(11821);
+      expect(stats.size).toBe(63526);
 
       // should be newly uploaded
       expect(stats.mtime - anotherBusboy.time).toBeGreaterThan(0);

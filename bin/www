@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const http2 = require('spdy');
-const debug = require('debug')('leoyli-main:server');
+const debug = require('debug')('OpenBox:server');
 const { checkToStringTag } = require('../controllers/utilities/')._U_.string;
 const app = require('../app');
 

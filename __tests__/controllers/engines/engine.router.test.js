@@ -186,8 +186,8 @@ describe('Engines: Router (control)', () => {
 
     // should load receptors (middleware) with respect to the given `mode`
     const entry = [['/', testDevice], ['/test', testDevice]];
-    expect(Device.exec('html', entry).stack[0].name).toBe('browserReceptor');
-    expect(Device.exec('api', entry).stack[0].name).toBe('APIReceptor');
+    expect(Device.exec('html', entry).stack[1].name).toBe('browserReceptor');
+    expect(Device.exec('api', entry).stack[1].name).toBe('APIReceptor');
 
     // should pass the spy state checks
     expect(sypOnInstanceExec).toBeCalledTimes(4);

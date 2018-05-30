@@ -24,7 +24,7 @@ home.security = {
   GET: function home_security_GET(req, res, next) {
     return next();
   },
-  PATCH: [_M_.isValidPasswordReset, async function home_security_PATCH(req, res) {
+  PATCH: [_M_.isValidPasswordSyntax, async function home_security_PATCH(req, res) {
     await req.user.changePassword(req.body.password.old, req.body.password.new);
     req.flash('info', 'Password have been successfully changed.');
     return res.redirect('/home/profile');

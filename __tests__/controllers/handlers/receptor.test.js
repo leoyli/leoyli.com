@@ -1,6 +1,6 @@
 /* global __ROOT__, req, res, next */
 const {
-  browserReceptor, APIReceptor,
+  initialReceptor, browserReceptor, APIReceptor,
 } = require(`${__ROOT__}/controllers/handlers/receptor.js`)[Symbol.for('__TEST__')];
 
 
@@ -13,14 +13,38 @@ beforeEach(() => {
   global.res = httpMocks.createResponse();
   global.req = httpMocks.createRequest({ session: {} });
   global.next = jest.fn();
+
+  /* stub functions */
+  res.redirect = jest.fn();
 });
 
 
 // tests
 describe('Handlers: Receptor', () => {
+  test('Middleware: initialReceptor', () => {
+    req.app = { get: jest.fn(() => ({ initialized: false })) };
+
+    // should proceed the client based on the state of the app
+    // // if have not initialized
+    initialReceptor(req, res, next);
+    expect(res.redirect).lastCalledWith('/init');
+    expect(next).toBeCalledTimes(0);
+
+    // // if have initialized
+    req.app = { get: jest.fn(() => ({ initialized: true })) };
+    initialReceptor(req, res, next);
+    expect(res.redirect).toBeCalledTimes(1);
+    expect(next).toBeCalledTimes(1);
+
+    // should populate website config into $$SITE view variable
+    expect(res.locals).toHaveProperty('$$SITE');
+  });
+
+
   test('Middleware: browserReceptor', () => {
-    req.flash = jest.fn();
     req.session.returnTo = '/';
+    res.locals.$$SITE = {};
+    req.flash = jest.fn();
 
     // should set $$MODE to 'html'
     req.flash.mockImplementation(call => (call === 'action' ? ['retry'] : []));

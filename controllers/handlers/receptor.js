@@ -1,10 +1,19 @@
 /**
+ * start to handle any request
+ */
+const initialReceptor = (req, res, next) => {
+  res.locals.$$SITE = req.app.get('APP_CONFIG');
+  if (!res.locals.$$SITE.initialized && !req.url.match(/^\/init/i)) return res.redirect('/init');
+  return next();
+};
+
+
+/**
  * start to handle an HTML(browser) request
  */
 const browserReceptor = (req, res, next) => {                                                                           // todo: start to load template file from fs? (concurrency)
   // populating variables
   res.locals.$$MODE = 'html';
-  res.locals.$$SITE = JSON.parse(process.env.$WEBSITE_CONFIGS);
   res.locals.$$VIEW = {
     flash: { error: req.flash('error'), info: req.flash('info'), action: req.flash('action') },
     route: req.baseUrl + req.path,
@@ -28,7 +37,6 @@ const browserReceptor = (req, res, next) => {                                   
 const APIReceptor = (req, res, next) => {
   // populate variables
   res.locals.$$MODE = 'api';
-  res.locals.$$SITE = JSON.parse(process.env.$WEBSITE_CONFIGS);
 
   // setup required headers
   res.set('Access-Control-Allow-Origin', '*');                                                                          // todo: set to allowed domain list
@@ -42,7 +50,7 @@ const APIReceptor = (req, res, next) => {
 
 
 // exports
-module.exports = { browserReceptor, APIReceptor };
+module.exports = { initialReceptor, browserReceptor, APIReceptor };
 
 Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
   value: {

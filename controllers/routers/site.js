@@ -9,11 +9,10 @@ const site = {};
 
 site.configs = {
   GET: function site_configs_GET(req, res, next) {
-    res.locals.$$VIEW.configs = JSON.parse(process.env.$WEBSITE_CONFIGS);
     return next();
   },
   PATCH: async function site_configs_PATCH(req, res) {
-    await ModelIndex.ConfigsModel.updateConfigs(req.body.configs);                                                      // tofix: pickup updated variables to avoid injections
+    await ModelIndex.ConfigsModel.updateConfig(req.app, req.body.configs);                                                      // tofix: pickup updated variables to avoid injections
     return res.redirect('back');
   },
 };

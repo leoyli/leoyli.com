@@ -8,7 +8,7 @@ const passportLocalMongoose = require('passport-local-mongoose');
 // schema
 const UsersSchema   = new mongoose.Schema({
   active            : { type: String, default: false },
-  roles             : { type: String, default: 'admin' },
+  role              : { type: String, enum: ['admin', 'coordinator', 'editor'], default: 'editor' },
   username          : { type: String, unique: true, lowercase: true },
   email             : { type: String,
     unique          : true,
@@ -19,11 +19,11 @@ const UsersSchema   = new mongoose.Schema({
       message       : 'Invalid email address',
     } },
   nickname          : { type: String },
-  picture           : { type: String, required: true, default: '' },                                                    // todo: added a validator
+  picture           : { type: String, default: '' },                                                                    // todo: added a validator
   info: {
-    firstName       : { type: String, required: true, trim: true },
-    lastName        : { type: String, required: true, trim: true },
-    gender          : { type: String, required: true, enum: ['Male', 'Female', 'NA'], default: 'NA' },
+    firstName       : { type: String, default: '', trim: true },
+    lastName        : { type: String, default: '', trim: true },
+    gender          : { type: String, enum: ['Male', 'Female', 'NA'], default: 'NA' },
     residency       : { type: String },
     timezone        : { type: String },
     birthday        : { type: Date },

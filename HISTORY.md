@@ -1,3 +1,32 @@
+### 0.11.0-dev.1 / 2018-05-29
+> App
+- @'handlers/receptors':
+  - extracted `initialReceptor` from `browserReceptor` and `APIReceptor`;
+  - preload `initialReceptor` in all routers.
+- Added `process.env.LANG` environment variable to store app system language @'error/code'.
+- Changed storage of app configs from `process.env` to express `app` object:
+  - revised `ConfigsModel` static methods @'model/configs';
+  - loaded app configs via `initialReceptor`.
+- Revised and renamed `isValidPasswordReset` as `isValidPasswordSyntax`.
+- Renamed debug name-space as 'OpenBox:server'.
+- Refactored `init` router and controllers.
+- Simplified `site_configs_GET` @'routers/site'.
+- Modified 'users' schema @'model/users'.
+- Few minor optimizations.
+
+> UI
+- Added '__root__/init.dot' template.
+
+> Test (98%)
+- Added 'routers/init.test.js'.
+- Added `initialReceptor` unit test @'handlers/receptor'.
+- Added more detailed test into `isValidPasswordReset` @'modules/auth'.
+- Adapted tests with the changes of `site_configs_PATCH` @'routers/site'.
+- Removed unused environment variables @'env.config'.
+- Replaced upload test file.
+- Removed 'test.png' file.
+
+
 ### 0.11.0-dev.0 / 2018-05-29
 > App
 - Initiated v0.11 dev-branch.
