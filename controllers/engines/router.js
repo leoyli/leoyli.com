@@ -14,13 +14,11 @@ const { initialReceptor, browserReceptor, APIReceptor } = require('../handlers/r
  * @param {object} option                   - setting options
  * @return {array}                          - ordering of the result is important
  */
-const getProcessingPipes = (option) => {
+const getRouterPlugins = (option) => {
   const queue = [];
-  if (option.sensitive       !== true)     queue.push(_M_.caseInsensitiveQueryProxy);
-  if (option.authorization   === true)     queue.push(..._M_.isAuthorized);
-  if (option.authentication  === true)     queue.push(..._M_.isSignedIn);
-  if (option.crawler         === false)    queue.push(_M_.noCrawlerHeader);
-  if (option.cache           === false)    queue.push(_M_.noStoreCacheHeader);
+  if (option.sensitive !== true) queue.push(_M_.caseInsensitiveQueryProxy);
+  if (option.crawler === false) queue.push(_M_.noCrawlerHeader);
+  if (option.cache === false) queue.push(_M_.noStoreCacheHeader);
   return [...new Set(queue)];
 };
 
@@ -30,14 +28,16 @@ const getProcessingPipes = (option) => {
  * @param {string} mode                     - routing mode
  * @param {array|function} main             - the main controlling logic
  * @param {object} hooker                   - pre/post hooked middleware on the device
+ * @param {array} access                    - accessing group defined in router permission
  * @param {object} option                   - router settings
  * @return {array}
  */
-const getMiddlewareChain = (mode, main, hooker, option) => {
-  const pipeline = getProcessingPipes(option);
-  const exporter = mode === 'html' ? exportHTML(option) : exportJSON(option);
-  const titleModifier = mode === 'html' && option.title ? _M_.modifyHTMLTitleTag(option.title) : [];
-  const chain = [pipeline, hooker.pre, titleModifier, main, hooker.post, exporter];
+const getRouterStacks = (mode, main, hooker, access, option) => {
+  const checkpoint = access ? !access.includes('public') ? _M_.isSignedIn : [] : [];
+  const plugins = getRouterPlugins(option);
+  const titleModifier = mode === 'HTML' && option.title ? _M_.modifyHTMLTitleTag(option.title) : [];
+  const exporter = mode === 'HTML' ? exportHTML(option) : exportJSON(option);
+  const chain = [checkpoint, plugins, hooker.pre, titleModifier, main, hooker.post, exporter];
   return _U_.express.wrapAsync([...new Set([].concat(...chain))]);
 };
 
@@ -108,22 +108,23 @@ class Device {
    * @return {function}                     - middleware assembly (device)
    */
   exec(mode) {
-    if (!['html', 'api'].includes(mode)) throw ReferenceError(`Received ${mode} as an invalid mode.`);
-    const matrix = this.rules.filter(({ setting = {} }) => (mode.toLowerCase() === 'api' ? setting.servingAPI : true));
+    if (!['HTML', 'API'].includes(mode)) throw ReferenceError(`Received ${mode} as an invalid mode.`);
+    const matrix = this.rules.filter(({ setting = {} }) => (mode === 'API' ? setting.servingAPI : true));
 
     // create router
     const router = new Router(this._baseOption);
     if (this._baseStack.size) router.use(...this._baseStack);
 
     // register router
-    matrix.forEach(({ route, alias, controller, setting = {} }) => {
+    matrix.forEach(({ route, alias, controller, permission = {}, setting = {} }) => {
       const methodKeys = setting.method ? [setting.method] : Object.keys(controller).sort().reverse();
       const options = { ...this.setting, ...setting };
       for (let i = methodKeys.length - 1, method = methodKeys[i]; i > -1; method = methodKeys[i -= 1]) {
         if (method === 'alias' && !alias) throw new ReferenceError('Parameter "alias" have to be provided.');
         const path = `${method === 'alias' ? alias : route}`;
         const httpMethod = method === 'alias' ? 'get' : method.toLowerCase();
-        router[httpMethod](path, getMiddlewareChain(mode.toLowerCase(), controller[method], this._hook, options));
+        const access = httpMethod === 'get' ? permission.access : permission.change;
+        router[httpMethod](path, getRouterStacks(mode, controller[method], this._hook, access, options));
       }
     });
 
@@ -133,14 +134,14 @@ class Device {
 
   /**
    * assemble middleware from the device cluster
-   * @param {string} mode                   - assemble mode, accept 'html' or 'api'
+   * @param {string} mode                   - assemble mode, accept 'HTML' or 'API'
    * @param {[string, object]} clusterPairs - routing path and device pair
    * @return {function}                     - middleware assembly (device cluster)
    */
   static exec(mode, clusterPairs) {
     const router = new Router({});
     router.use(initialReceptor);
-    router.use(mode === 'html' ? browserReceptor : APIReceptor);
+    router.use(mode === 'HTML' ? browserReceptor : APIReceptor);
     clusterPairs.forEach(([path, device]) => router.use(path, device.exec(mode)));
     return router;
   }
@@ -162,8 +163,8 @@ module.exports = {
 
 Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
   value: {
-    getProcessingPipes,
-    getMiddlewareChain,
+    getRouterPlugins,
+    getRouterStacks,
     ...module.exports,
   },
 });

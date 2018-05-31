@@ -79,7 +79,7 @@ if (process.env.NODE_ENV === 'dev') app.use(logger('dev'));
 /** API **/
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ type: 'application/json' }));
-app.use('/api', routingService('api'));
+app.use('/api', routingService('API'));
 
 
 /** HTML **/
@@ -90,7 +90,7 @@ app.set('upload', path.join(__dirname, './src/public/media'));
 app.use(flash());
 app.use(methodOverride('_method'));
 app.use(favicon(path.join(__dirname, './src/public', 'favicon.ico')));
-app.use('/', routingService('html'));
+app.use('/', routingService('HTML'));
 
 
 /** error **/

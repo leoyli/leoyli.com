@@ -1,28 +1,24 @@
 /* global __ROOT__ */
 const {
-  getProcessingPipes, getMiddlewareChain, Device,
+  getRouterPlugins, getRouterStacks, Device,
 } = require(`${__ROOT__}/controllers/engines/router`)[Symbol.for('__TEST__')];
 
 
 // tests
 describe('Engines: Router (component)', () => {
-  test('Fn: getProcessingPipes', () => {
+  test('Fn: getRouterPlugins', () => {
     const target = [
-      { sensitive: false, authorization: true, authentication: true, crawler: false, cache: false },
-      { sensitive: true, authorization: false, authentication: false, crawler: true, cache: true },
+      { sensitive: false, crawler: false, cache: false },
+      { sensitive: true, crawler: true, cache: true },
       {},
     ];
     //
-    const test = target.map(option => getProcessingPipes(option).map(fn => fn.name));
+    const test = target.map(option => getRouterPlugins(option).map(fn => fn.name));
 
     // should print out the stacked middleware name based on the given options
     expect(test[0]).toStrictEqual([
       'caseInsensitiveQueryProxy',
       'noCrawlerHeader',
-      'initialize',
-      'authenticate',
-      'isSignedIn',
-      'isAuthorized',
       'noStoreCacheHeader',
     ]);
     expect(test[1]).toStrictEqual([
@@ -33,23 +29,32 @@ describe('Engines: Router (component)', () => {
   });
 
 
-  test('Fn: getMiddlewareChain', () => {
+  test('Fn: getRouterStacks', () => {
     const someController = () => {};
     const someHooker = { pre: [], post: [] };
     const someOption = { title: {} };
-    const thunk = (mode) => getMiddlewareChain(mode, someController, someHooker, someOption);
+    const someAccess = [];
+    const thunk = (mode) => getRouterStacks(mode, someController, someHooker, someAccess, someOption);
     const test = (mode) => thunk(mode).map(fn => fn.name);
 
-    // should print out the stacked middleware name in 'html' mode
-    expect(test('html')).toStrictEqual([
+    // should print out the stacked middleware name in 'HTML' mode
+    expect(test('HTML')).toStrictEqual([
+      'noCrawlerHeader',
+      'initialize',
+      'authenticate',
+      'isSignedIn',
       'caseInsensitiveQueryProxy',
       'modifyHTMLTitleTagByOption',
       'someController',
       'templateHandler',
     ]);
 
-    // should print out the stacked middleware name in 'api' mode
-    expect(test('api')).toStrictEqual([
+    // should print out the stacked middleware name in 'API' mode
+    expect(test('API')).toStrictEqual([
+      'noCrawlerHeader',
+      'initialize',
+      'authenticate',
+      'isSignedIn',
       'caseInsensitiveQueryProxy',
       'someController',
       'JSONHandler',
@@ -119,19 +124,19 @@ describe('Engines: Router (control)', () => {
 
   test('instance: exec', () => {
     // (1) should throw an Error
-    // // if is a mode other than 'html' or 'api'
+    // // if is a mode other than 'HTML' or 'API'
     const testRouter_A = new Device();
-    expect(() => testRouter_A.exec('api')).not.toThrowError();
-    expect(() => testRouter_A.exec('html')).not.toThrowError();
+    expect(() => testRouter_A.exec('API')).not.toThrowError();
+    expect(() => testRouter_A.exec('HTML')).not.toThrowError();
     expect(() => testRouter_A.exec(undefined)).toThrowError(ReferenceError);
 
     // // if with controller{hashed object} in an invalid http method as a key
     const testRouter_B = new Device([{ route: '/', controller: { some: () => {} } }]);
-    expect(() => testRouter_B.exec('html')).toThrowError(TypeError);
+    expect(() => testRouter_B.exec('HTML')).toThrowError(TypeError);
 
     // // if given `controller.alias` without the `alias` key
     const testRouter_C = new Device([{ route: '/', controller: { alias: () => {} } }]);
-    expect(() => testRouter_C.exec('html')).toThrowError(ReferenceError);
+    expect(() => testRouter_C.exec('HTML')).toThrowError(ReferenceError);
 
 
     // (2) should expose router with middleware stacked
@@ -144,16 +149,16 @@ describe('Engines: Router (control)', () => {
 
     // // if method not specified
     someRules[0].setting.method = undefined;
-    expect(new Device(someRules).exec('html').stack).toHaveLength(3);
+    expect(new Device(someRules).exec('HTML').stack).toHaveLength(3);
 
     // // if method specified
     someRules[0].setting.method = 'POST';
-    const someExposedRouter_4 = new Device(someRules).exec('html');
+    const someExposedRouter_4 = new Device(someRules).exec('HTML');
     expect(someExposedRouter_4.stack[0].route.methods.post).toBeTruthy();
     expect(someExposedRouter_4.stack).toHaveLength(1);
 
 
-    // (3) should expose rules set with `servingAPI === true` under 'api' mode
+    // (3) should expose rules set with `servingAPI === true` under 'API' mode
     const anotherRules = [{
       route: '/some_route_1',
       controller: { GET: () => {} },
@@ -163,20 +168,20 @@ describe('Engines: Router (control)', () => {
       controller: { GET: () => {} },
       setting: { servingAPI: false },
     }];
-    expect(new Device(anotherRules).exec('api').stack).toHaveLength(1);
-    expect(new Device(anotherRules).exec('html').stack).toHaveLength(2);
+    expect(new Device(anotherRules).exec('API').stack).toHaveLength(1);
+    expect(new Device(anotherRules).exec('HTML').stack).toHaveLength(2);
 
 
     // (4) should expose router with the given express router option
     const routerOption = { mergeParams: true };
-    expect(new Device([], routerOption).exec('html')).toStrictEqual(expect.objectContaining(routerOption));
+    expect(new Device([], routerOption).exec('HTML')).toStrictEqual(expect.objectContaining(routerOption));
 
 
     // (5) should stake middleware stored via use
     const testRouter = new Device();
     const someMiddleware = () => {};
     testRouter.use(someMiddleware);
-    expect(testRouter.exec('html').stack[0].handle.name).toBe('someMiddleware');
+    expect(testRouter.exec('HTML').stack[0].handle.name).toBe('someMiddleware');
   });
 
 
@@ -186,8 +191,8 @@ describe('Engines: Router (control)', () => {
 
     // should load receptors (middleware) with respect to the given `mode`
     const entry = [['/', testDevice], ['/test', testDevice]];
-    expect(Device.exec('html', entry).stack[1].name).toBe('browserReceptor');
-    expect(Device.exec('api', entry).stack[1].name).toBe('APIReceptor');
+    expect(Device.exec('HTML', entry).stack[1].name).toBe('browserReceptor');
+    expect(Device.exec('API', entry).stack[1].name).toBe('APIReceptor');
 
     // should pass the spy state checks
     expect(sypOnInstanceExec).toBeCalledTimes(4);

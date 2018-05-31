@@ -46,10 +46,10 @@ describe('Handlers: Receptor', () => {
     res.locals.$$SITE = {};
     req.flash = jest.fn();
 
-    // should set $$MODE to 'html'
+    // should set $$MODE to 'HTML'
     req.flash.mockImplementation(call => (call === 'action' ? ['retry'] : []));
     browserReceptor(req, res, next);
-    expect(res.locals.$$MODE).toBe('html');
+    expect(res.locals.$$MODE).toBe('HTML');
 
     // should create flash containers
     expect(req.flash).toBeCalledWith('action');
@@ -74,9 +74,9 @@ describe('Handlers: Receptor', () => {
     const arbitraryStringValue = expect.stringMatching('');
     res.set = jest.fn();
 
-    // should set $$MODE to 'html'
+    // should set $$MODE to 'HTML'
     APIReceptor(req, res, next);
-    expect(res.locals.$$MODE).toBe('api');
+    expect(res.locals.$$MODE).toBe('API');
 
     // should set CORS headers
     expect(res.set).toBeCalledWith('Access-Control-Allow-Origin', arbitraryStringValue);

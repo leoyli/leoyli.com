@@ -36,13 +36,13 @@ describe('Modules: Helper', () => {
     const insertedTitle = 'inserted_title';
     res.locals.$$VIEW = { title: theSameTitle };
 
-    // (1) should NOT modify tag without 'html' mode flag
+    // (1) should NOT modify tag without 'HTML' mode flag
     modifyHTMLTitleTag(insertedTitle)(req, res, next);
     expect(res.locals.$$VIEW.title).toBe(theSameTitle);
 
 
     // (2) should modify title tag
-    res.locals.$$MODE = 'html';
+    res.locals.$$MODE = 'HTML';
 
     // // if no option specified (default to prepend)
     modifyHTMLTitleTag(insertedTitle)(req, res, next);

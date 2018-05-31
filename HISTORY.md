@@ -1,4 +1,17 @@
-### 0.11.0-dev.1 / 2018-05-29
+### 0.11.0-dev.2 / 2018-05-31
+> App
+- @'engine/router':
+  - renamed `getMiddlewareChain` as `getRouterPlugins`;
+  - renamed `getProcessingPipes` as `getRouterPlugins`;
+  - added minimal permission checking in `getRouterStacks`.
+  - removed `authorization`, `authentication` options in `getRouterPlugins`.
+- Capitalized `$$MODE` for all cases.
+
+> Test (98%)
+- Updated testing scripts against the changes.
+
+
+### 0.11.0-dev.1 / 2018-05-30
 > App
 - @'handlers/receptors':
   - extracted `initialReceptor` from `browserReceptor` and `APIReceptor`;

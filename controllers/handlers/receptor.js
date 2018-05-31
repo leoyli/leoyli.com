@@ -13,7 +13,7 @@ const initialReceptor = (req, res, next) => {
  */
 const browserReceptor = (req, res, next) => {                                                                           // todo: start to load template file from fs? (concurrency)
   // populating variables
-  res.locals.$$MODE = 'html';
+  res.locals.$$MODE = 'HTML';
   res.locals.$$VIEW = {
     flash: { error: req.flash('error'), info: req.flash('info'), action: req.flash('action') },
     route: req.baseUrl + req.path,
@@ -36,7 +36,7 @@ const browserReceptor = (req, res, next) => {                                   
  */
 const APIReceptor = (req, res, next) => {
   // populate variables
-  res.locals.$$MODE = 'api';
+  res.locals.$$MODE = 'API';
 
   // setup required headers
   res.set('Access-Control-Allow-Origin', '*');                                                                          // todo: set to allowed domain list
