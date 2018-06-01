@@ -1,3 +1,8 @@
+### 0.11.0-dev.2.1 / 2018-05-31
+> App
+- Fixed bugs in router when `route/alias` is a `RegExp` object.
+
+
 ### 0.11.0-dev.2 / 2018-05-31
 > App
 - @'engine/router':

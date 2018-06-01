@@ -121,7 +121,7 @@ class Device {
       const options = { ...this.setting, ...setting };
       for (let i = methodKeys.length - 1, method = methodKeys[i]; i > -1; method = methodKeys[i -= 1]) {
         if (method === 'alias' && !alias) throw new ReferenceError('Parameter "alias" have to be provided.');
-        const path = `${method === 'alias' ? alias : route}`;
+        const path = method === 'alias' ? alias : route;
         const httpMethod = method === 'alias' ? 'get' : method.toLowerCase();
         const access = httpMethod === 'get' ? permission.access : permission.change;
         router[httpMethod](path, getRouterStacks(mode, controller[method], this._hook, access, options));
