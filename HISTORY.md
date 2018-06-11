@@ -1,3 +1,17 @@
+### 0.11.0-dev.3 / 2018-06-10
+> App
+- Upgraded dependencies:
+  - 'passport-local-mongoose' -> 5.0.0
+  - 'mongoose' -> 3.0.10
+  - 'validator' -> 10.3.0
+  - 'npm' -> 6.1.0
+- Updated dev-dependencies:
+  - 'eslint-plugin-react' -> 7.9.1
+  - 'jest' -> 23.1.0
+- Removed promisifications of 'passport-local-mongoose' plugin functions in 'user' model.
+- Fixed authentication bugs.
+
+
 ### 0.11.0-dev.2.1 / 2018-05-31
 > App
 - Fixed bugs in router when `route/alias` is a `RegExp` object.

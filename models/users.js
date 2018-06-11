@@ -77,35 +77,6 @@ UsersSchema.plugin(passportLocalMongoose, {
 });
 
 
-// // rewrite plugin methods as promises
-const selfPromisify = (fn, arg, THIS) => {
-  if (typeof arg[arg.length - 1] === 'function') return fn.call(THIS, ...arg);
-  return new Promise((resolve, reject) => fn.call(THIS, ...arg, (err, result) => {
-    if (err) return reject(err);
-    return resolve(result);
-  }));
-};
-
-
-const _register = UsersSchema.statics.register;
-UsersSchema.statics.register = function (...arg) {
-  return selfPromisify(_register, arg, this);
-};
-
-
-const _authenticate = UsersSchema.methods.authenticate;
-UsersSchema.methods.authenticate = function (...arg) {
-  return selfPromisify(_authenticate, arg, this);
-};
-
-
-const _changePassword = UsersSchema.methods.changePassword;
-UsersSchema.methods.changePassword = function (...arg) {
-  this.time._changePassword = new Date(Date.now());
-  return selfPromisify(_changePassword, arg, this);
-};
-
-
 // virtual method for user-post association
 // // to-use: UsersModel.findOne({}).populate({ path: 'posts', match: { 'time._recycled': { $eq: null } }}).exec();
 UsersSchema.virtual('posts', {

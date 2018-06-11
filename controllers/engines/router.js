@@ -116,7 +116,7 @@ class Device {
     if (this._baseStack.size) router.use(...this._baseStack);
 
     // register router
-    matrix.forEach(({ route, alias, controller, permission = {}, setting = {} }) => {
+    matrix.forEach(({ route, alias, controller, setting = {}, permission = this.permission || {} }) => {
       const methodKeys = setting.method ? [setting.method] : Object.keys(controller).sort().reverse();
       const options = { ...this.setting, ...setting };
       for (let i = methodKeys.length - 1, method = methodKeys[i]; i > -1; method = methodKeys[i -= 1]) {
