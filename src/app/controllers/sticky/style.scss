@@ -1,0 +1,18 @@
+._-sticky {
+  height: 100%;                                                                                                         // note: essential for correctly calculating `offsetHeight`
+  width: 100%;
+  z-index: 1000;
+
+  &_hauled > * {
+    width: inherit;
+    position: relative;
+    top: inherit;
+  }
+  &_active > * {
+    position: fixed !important;
+    top: inherit;
+  }
+  &_navbar > * {
+    z-index: 1001;
+  }
+}

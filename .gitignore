@@ -56,11 +56,12 @@ typings/
 # google cloud platform env.
 app.yaml
 
-# self-signed SSL keys folder
-bin/SSL/
-
 # local system files
 .DS_Store
-package-lock.json
-src/public/media/
 *.map
+package-lock.json
+bin/
+static/public/media/*
+static/public/scripts/*
+static/public/stylesheets/*
+!static/public/media/favicon.ico

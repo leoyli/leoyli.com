@@ -1,0 +1,43 @@
+._-nav {
+  color: white;
+  background: $bg--navbar;
+}
+
+._-section__header {
+  @extend ._-nav;
+  min-height: 12.5em;
+  position: relative;
+  z-index: 1001;
+}
+
+._-tabbar {
+  height: 2.5em;
+  z-index: 1001;
+}
+
+._-body {
+  background: white;
+  min-height: 50em;
+}
+
+._-body__content {
+  & p {
+    padding-bottom: 3em;
+  }
+}
+
+._-body__content__table {
+  border-bottom: 1px #dee2e6 solid;
+}
+
+._-footer {
+  background: rgba(whitesmoke, .95);
+  min-height: 5em;
+}
+
+
+// plugin widgets
+._-sticky_navbar > * {
+  color: $bg--navbar;
+  background-color: rgba(whitesmoke, .95);
+}

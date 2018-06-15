@@ -1,3 +1,34 @@
+### 0.11.0-dev.4 / 2018-06-14
+> Server
+- @'package.json':
+  - 'start' and 'export' scripts.
+  - added dependencies:
+    - ESLint plugins/modules.
+    - 'node-fetch';
+    - 'babel', and related plugins/modules;
+    - 'react', and related plugins/modules;
+    - 'webpack', and related plugins/modules;
+  - removed dependencies:
+    - 'method-override'.
+- Used webpack to bundle up server-side (-> bin/www) and client-side (-> static/public/scripts, stylesheets) codes.
+- Removed all templates files and template view engine.
+- Implemented React server-side rendering (SSR) feature.
+  - manged as 'src/app', 'src/client', 'src/server';
+  - moved 'bin/www' -> 'src/server/server.js';
+  - added server-side and client-side renderings @'src/app/render'.
+- Updated configs @'server/app';
+  - merged 'services/passport'.
+  - removed/replaced 'dot' view engine.
+
+> React
+- Implemented 'Blog', 'Landing', 'Unfounded' routing components.
+- Merged with 'Sticky' and 'Dropdown' controlling components.
+- Added 'PostList' view components.
+
+> Test
+- Updated all existed testing path and items.
+
+
 ### 0.11.0-dev.3 / 2018-06-10
 > App
 - Upgraded dependencies:
