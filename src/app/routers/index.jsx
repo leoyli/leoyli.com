@@ -5,6 +5,7 @@ import fetch from 'node-fetch';
 // components
 import Blog from '../routers/blog';
 import Landing from '../routers/landing';
+import Auth from '../routers/auth';
 
 
 const index = [
@@ -16,6 +17,11 @@ const index = [
       `https://localhost:3443/api${path}`,
       { agent: new https.Agent({ rejectUnauthorized: false }) },
     ).then(res => res.json()),
+  },
+  {
+    path: '/auth',
+    exact: true,
+    component: Auth,
   },
   {
     path: '/',

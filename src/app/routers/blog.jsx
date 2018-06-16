@@ -1,10 +1,11 @@
 /* global __isBrowser__ */
-import React from 'react';
+
+import React, { Component } from 'react';
 import PostList from '../views/postlist';
 
 
 // components
-class Blog extends React.Component {
+class Blog extends Component {
   state = {
     data: __isBrowser__ ? window.__INIT__ : this.props.staticContext,
     loading: false,
@@ -17,10 +18,10 @@ class Blog extends React.Component {
 
   componentDidMount() {
     if (!this.state.data) this.loadData(this.props.match.url);
+    if (__isBrowser__) delete window.__INIT__;
   }
 
   render() {
-    // if (__isBrowser__) delete window.__INIT__;
     return (
       <div>
         <PostList {...this.state.data} />

@@ -4,7 +4,7 @@ const { routers } = require('../../app/routers/');
 const { renderServer } = require('../../app/render');
 
 
-const template = ({ title, body, data } = {}) => (`
+const template = ({ title, data, body } = {}) => (`
   <!DOCTYPE html>
   <html lang="en">
   <head>
@@ -14,7 +14,7 @@ const template = ({ title, body, data } = {}) => (`
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet"
       integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/static/stylesheets/style.css">
-    <script>window.__INIT__ = ${JSON.stringify(data)}</script>
+    <script>window.__INIT__ = ${JSON.stringify(data)};</script>
     <script src="/static/scripts/bundle.js" defer></script>
   </head>
   <body>
@@ -28,8 +28,8 @@ const serverSideRendering = async function serverSideRendering(req, res, next) {
   const activeRoute = routers.find(route => matchPath(req.path, route)) || {};
   const data = activeRoute.fetch ? await activeRoute.fetch(req.url) : {};
   const title = activeRoute.title || '';
-  const markup = renderServer(req.url, data);
-  res.send(template({ title, data, body: renderToString(markup) }));
+  const body = renderToString(renderServer(req.url, data));
+  res.send(template({ title, data, body }));
 };
 
 

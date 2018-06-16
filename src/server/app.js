@@ -7,14 +7,15 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const express = require('express');
 const path = require('path');
-const passport = require('passport');
+const jwt = require('express-jwt');
+const jwks = require('jwks-rsa');
 const flash = require('connect-flash');
 
 
 // MODULE
 const { _M_ } = require('./controllers/modules/');
 const { _U_ } = require('./controllers/utilities/');
-const { ConfigsModel, UsersModel } = require('./models/');
+const { ConfigsModel } = require('./models/');
 const { serverSideRendering } = require('./engines/view');
 const routingService = require('./routers/');
 const securityHeaderAgent = require('./services/security');
@@ -61,10 +62,18 @@ app.use(session({
 }));
 
 
-/** passport **/
-passport.use(UsersModel.createStrategy());
-passport.serializeUser(UsersModel.serializeUser());
-passport.deserializeUser(UsersModel.deserializeUser());
+/** authentication **/
+const jwtCheck = jwt({
+  secret: jwks.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: process.env.AUTH0_JWKS,
+  }),
+  audience: process.env.AUTH0_AUDIENCE,
+  issuer: process.env.AUTH0_ISSUER,
+  algorithms: ['RS256'],
+});
 
 
 /** static private resources **/
@@ -78,6 +87,7 @@ if (process.env.NODE_ENV === 'development') app.use(logger('dev'));
 
 
 /** API **/
+// app.use(jwtCheck);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ type: 'application/json' }));
 app.use('/api', routingService('API'));

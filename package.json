@@ -11,6 +11,7 @@
     "export": "webpack --mode=production --env production"
   },
   "dependencies": {
+    "auth0-js": "^9.6.1",
     "body-parser": "1.18.3",
     "busboy": "^0.2.14",
     "connect-flash": "^0.1.1",
@@ -18,7 +19,10 @@
     "debug": "^3.1.0",
     "dot": "^1.1.2",
     "express": "^4.16.3",
+    "express-jwt": "^5.3.1",
     "express-session": "^1.15.6",
+    "jwks-rsa": "^1.2.1",
+    "jwt-decode": "^2.2.0",
     "lodash": "^4.17.10",
     "marked": "0.4.0",
     "mongodb": "3.0.10",
@@ -26,9 +30,6 @@
     "morgan": "^1.9.0",
     "node-fetch": "^2.1.2",
     "node-sass": "^4.9.0",
-    "passport": "^0.4.0",
-    "passport-local": "^1.0.0",
-    "passport-local-mongoose": "^5.0.0",
     "qs": "^6.5.2",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",

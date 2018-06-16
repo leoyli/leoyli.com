@@ -21,6 +21,7 @@ class ContentSecurityPolicy {
       'img-src': '*',
       'frame-src': '\'none\'',
       'object-src': '\'none\'',
+      'connect-src': `'self' ${this.getTrustedDomains('connect')}`,
     };
     return Object.entries(RuleMaps).map(i => i.join(' ')).join('; ');
   }
@@ -31,7 +32,7 @@ const securityHeaderAgent = (app) => {
   const CSPConfigs = new ContentSecurityPolicy();
   CSPConfigs.addToWhitelist('script, style, font', 'https://stackpath.bootstrapcdn.com/');
   CSPConfigs.addToWhitelist('script, style', 'https://cdnjs.cloudflare.com/');
-  CSPConfigs.addToWhitelist('script', 'https://code.jquery.com/');
+  CSPConfigs.addToWhitelist('connect', 'https://leoyli.auth0.com/');
 
   app.set('x-powered-by', false);
   app.use((req, res, next) => {

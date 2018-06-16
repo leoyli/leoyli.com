@@ -1,3 +1,19 @@
+### 0.11.0-dev.5 / 2018-06-16
+> Server
+- @'package.json':
+  - added dependencies:
+    - 'auth0', 'express-jwt', 'jwks-rsa', 'jwt-decode'.
+  - removed dependencies:
+    - 'passport', 'passport-local', 'passport-local-mongoose'.
+- Updated CSP rules.
+- Switched from session-based authentication to token-based authentication. (ongoing)
+
+> React
+- Implemented 'Auth0' authentication services.
+- Added 'auth' routing and controller components.
+- Added conditional rendering on 'NavBar' view component.
+
+
 ### 0.11.0-dev.4 / 2018-06-14
 > Server
 - @'package.json':
