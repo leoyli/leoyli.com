@@ -1,34 +1,35 @@
-import https from 'https';
-import fetch from 'node-fetch';
+import Unfounded from './unfounded';
+import Landing from './page/landing';
+import PostList from './blog/list';
+import Post from './blog/post';
+import Signin from './auth/signin';
+import Signout from './auth/signout';
+import Editor from './blog/editor';
+import Stacks from './util/stacks';
+import Settings from './util/settings';
 
 
-// components
-import Blog from '../routers/blog';
-import Landing from '../routers/landing';
-import Auth from '../routers/auth';
-
-
-const index = [
-  {
-    path: '/blog',
-    exact: true,
-    component: Blog,
-    fetch: (path) => fetch(
-      `https://localhost:3443/api${path}`,
-      { agent: new https.Agent({ rejectUnauthorized: false }) },
-    ).then(res => res.json()),
+const index = {
+  auth: {
+    signin: Signin,
+    signout: Signout,
   },
-  {
-    path: '/auth',
-    exact: true,
-    component: Auth,
+  page: {
+    landing: Landing,
+    search: PostList,
+    unfounded: Unfounded,
   },
-  {
-    path: '/',
-    exact: true,
-    component: Landing,
+  blog: {
+    editor: Editor,
+    list: PostList,
+    post: Post,
   },
-];
+  util: {
+    stacks: Stacks,
+    settings: Settings,
+  },
+};
 
 
-export { index as default, index as routers };
+// exports
+export default index;

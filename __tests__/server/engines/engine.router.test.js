@@ -44,7 +44,7 @@ describe('Engines: Router (component)', () => {
       'authenticate',
       'isSignedIn',
       'caseInsensitiveQueryProxy',
-      'modifyHTMLTitleTagByOption',
+      'titleTagModifierByOption',
       'someController',
       'templateHandler',
     ]);
@@ -89,7 +89,7 @@ describe('Engines: Router (control)', () => {
 
     // should set title tag
     testDevice.setting.title = { tag: 'some_title' };
-    expect(testDevice._hook.pre.map(fn => fn.name)).toEqual(['modifyHTMLTitleTagByOption']);
+    expect(testDevice._hook.pre.map(fn => fn.name)).toEqual(['titleTagModifierByOption']);
 
     // should get both previous settings
     expect(testDevice.setting).toStrictEqual({ crawler: true, ...someSetting });

@@ -7,54 +7,51 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const express = require('express');
 const path = require('path');
-const jwt = require('express-jwt');
-const jwks = require('jwks-rsa');
-const flash = require('connect-flash');
 
 
 // MODULE
-const { _M_ } = require('./controllers/modules/');
-const { _U_ } = require('./controllers/utilities/');
+const { _M_ } = require('./controllers/modules');
+const { _U_ } = require('./utilities/');
 const { ConfigsModel } = require('./models/');
-const { serverSideRendering } = require('./engines/view');
-const routingService = require('./routers/');
-const securityHeaderAgent = require('./services/security');
-const errorHandlingAgent = require('./services/error');
+const { APIRouters } = require('./router.config');
 
 
 // CONNECTION
 const app = express();
 
 
+/** database **/
+mongoose.connect(process.env.DB).then(() => ConfigsModel.initConfig(app));
+
+
 /** setting **/
+app.set('x-powered-by', false);
 app.set('env', 'development');
+app.set('upload', path.resolve('./static/public/media'));
 app.set('query parser', str => {
   return _U_.object.burstArrayDeep(qs.parse(str, { parseArrays: false, depth: 0 }), { mutate: true, position: -1 });
 });
 
 
-/** database **/
-mongoose.connect(process.env.DB).then(() => ConfigsModel.initConfig(app));
-
-
 /** security **/
-securityHeaderAgent(app);
+app.use(_M_.securityHeaders);
 
 
 /** static public resources **/
-app.set('upload', path.resolve('./static/public/media'));
-app.use('/static', express.static(path.resolve('./static/public'), {
-  setHeaders: (res) => res.set('x-robots-tag', 'none'),
-}));
+// todo: added authentications to private resources
+app.use(favicon(path.resolve('./static/public/media', 'favicon.ico')));
+app.use('/static', _M_.noCrawlerHeader, express.static(path.resolve('./static/public')));
+app.use('/static', _M_.noCrawlerHeader, express.static(path.resolve('./static/private')));
 
 
 /** session **/
 app.use(session({
-  name: '__SESSION__',
-  secret: process.env.SECRET,
+  name: 'session_id',
+  secret: process.env.SESSION_SECRET,
   saveUninitialized: false,
+  rolling: false,
   resave: false,
-  cookie: (process.env.NODE_ENV === 'test') ? {} : { secure: true, httpOnly: true },                                    // note: secure === true only allows HTTPS and leading to test fail
+  cookie: (process.env.NODE_ENV === 'test') ? {} : { secure: true, httpOnly: true, sameSite: true },
   store: new MongoStore({
     mongooseConnection: mongoose.connection,
     autoRemove: 'native',
@@ -62,46 +59,60 @@ app.use(session({
 }));
 
 
-/** authentication **/
-const jwtCheck = jwt({
-  secret: jwks.expressJwtSecret({
-    cache: true,
-    rateLimit: true,
-    jwksRequestsPerMinute: 5,
-    jwksUri: process.env.AUTH0_JWKS,
-  }),
-  audience: process.env.AUTH0_AUDIENCE,
-  issuer: process.env.AUTH0_ISSUER,
-  algorithms: ['RS256'],
-});
-
-
-/** static private resources **/
-app.use('/static', _M_.isSignedIn, express.static(path.resolve('./static/private'), {
-  setHeaders: (res) => res.set('x-robots-tag', 'none'),
-}));
-
-
 /** debugger **/
 if (process.env.NODE_ENV === 'development') app.use(logger('dev'));
 
 
-/** API **/
-// app.use(jwtCheck);
+/** routers **/
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ type: 'application/json' }));
-app.use('/api', routingService('API'));
+app.use(_M_.appConfigsLoader);
 
 
-/** HTML **/
-app.use(flash());
-app.use(favicon(path.resolve('./static/public/media', 'favicon.ico')));
-app.use(serverSideRendering);
+/** auth endpoint **/
+app.get('/signout', (req, res, next) => {
+  if (req.session.accessToken) req.session.destroy();
+  next();
+});
 
 
-/** error **/
-errorHandlingAgent(app);
+/** API endpoints **/
+app.use('/api', APIRouters);
+app.use((err, req, res, next) => {
+  console.dir(err);
+  switch (err.name) {
+    case 'UnauthorizedError':
+      return res.status(401).json({
+        _error: err.name,
+        _status: 401,
+      });
+    case 'ValidationError':
+      return res.status(400).json({
+        _error: err.name,
+        _status: 400,
+      });
+    case 'HttpException':
+      return res.status(404).json({
+        _error: err.name,
+        _status: 404,
+      });
+    default: {
+      return res.status(500).json({
+        _error: 'InternalServerError',
+        _status: 500,
+      });
+    }
+  }
+});
+
+
+/** SSR endpoint **/
+app.use(_M_.serverSideRenderer);
+app.use((err, req, res, next) => {
+  console.log(err);
+  res.send('HTTP 500 - InternalServerError');
+});
 
 
 // exports
-module.exports = (process.env.NODE_ENV === 'test') ? { app, mongoose } : app;
+module.exports = app;

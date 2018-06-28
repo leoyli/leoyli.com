@@ -1,6 +1,6 @@
 /* global __ROOT__, req, res, next */
 const {
-  usePassport, isSignedIn, isAuthorized, isValidPasswordSyntax,
+  isSignedIn, isAuthorized, isValidPasswordSyntax,
 } = require(`${__ROOT__}/server/controllers/modules/auth`)[Symbol.for('__TEST__')];
 
 
@@ -25,11 +25,6 @@ beforeEach(() => {
 
 // tests
 describe('Modules: Auth', () => {
-  test('Middleware: usePassport', () => {
-    // no testing items
-  });
-
-
   test('Middleware: isSignedIn', () => {
     const _isSignedIn = isSignedIn[isSignedIn.length - 1];
     req.session.user = {};

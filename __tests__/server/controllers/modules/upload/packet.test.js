@@ -1,6 +1,6 @@
 /* global __ROOT__, req, res, next */
 const {
-  handleStreamUpload,
+  streamingUploader,
 } = require(`${__ROOT__}/server/controllers/modules/upload/packet`)[Symbol.for('__TEST__')];
 
 
@@ -28,7 +28,7 @@ beforeEach(() => {
 
 // tests
 describe('Modules: Upload (control)', () => {
-  test('Middleware: handleStreamUpload', () => {
+  test('Middleware: streamingUploader', () => {
     req.app = { get: jest.fn() };
     req.pipe = jest.fn(arg => arg);
 
@@ -44,7 +44,7 @@ describe('Modules: Upload (control)', () => {
     // (C1) should run middleware with default settings
     const mockBusboy_1 = new EventEmitter();
     Busboy.mockImplementationOnce(() => mockBusboy_1);
-    handleStreamUpload()(req, res, next);
+    streamingUploader()(req, res, next);
 
     // should call mocked constructor and register 4 events
     expect(Busboy).toBeCalledTimes(1);
@@ -85,7 +85,7 @@ describe('Modules: Upload (control)', () => {
     const settings = { fileSize: 10, MIME: ['some/type'] };
     const mockBusboy_2 = new EventEmitter();
     Busboy.mockImplementationOnce(() => mockBusboy_2);
-    handleStreamUpload(settings)(req, res, next);
+    streamingUploader(settings)(req, res, next);
 
     // should run event handler with given settings
     expect(handlers.handleOnFile).lastCalledWith(expect.any(Object), expect.objectContaining(settings));

@@ -31,7 +31,7 @@ const browserConfig = {
   },
   plugins: [
     new webpack.DefinePlugin({ __isBrowser__: 'true' }),
-    new MiniCssExtractPlugin({ filename: 'stylesheets/style.css' }),
+    new MiniCssExtractPlugin({ filename: '../stylesheets/style.css' }),
   ],
   resolve: { extensions: ['.js', '.jsx'] },
   devtool: 'source-map',

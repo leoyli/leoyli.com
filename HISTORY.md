@@ -1,3 +1,39 @@
+### 0.11.0-dev.6 / 2018-06-28
+> General
+- Corrected stylesheet bundling path-mismatch in webpack.config.
+- Updated ESLint rules.
+- @'package.json':
+  - revised running scripts;
+  - added: 'font-awesome', 'markdown-to-jsx', 'moment', 'react-router';
+  - removed: 'marked', 'dot'.
+  - updated: all to the latest.
+
+> Server
+- Replaced 'routers/index' by 'router.configs'.
+- Extracted 'home' and 'site' routers to the new 'util' router.
+- Migrated from template-sever-rendering to react-client-rendering:
+  - revised app(express) configurations, mongo models.
+  - revised all routers.
+  - revised 'engine/router' as 'driver/router'.
+  - removed 'services' files, 'view' engine, templates, handlers.
+  - fine-tuned to fit the needs of API requests.
+- Added 'controller/modules/render' module for the SSR support.
+- Integrated JWT authentication controls (session @db(cookie)).
+
+> React
+- Modularized and currified 'libs/fetch'.
+- Integrated with Auth0 authorization services under 'auth' routers (JWT token based @localStorage).
+- Integrated mongo-full-text search feature under 'page/search' router.
+- Implemented trashed-post recycling mechanism along with content managing board @'util/stacks'.
+- Implemented website settings board @'util/settings'.
+- Implemented pagination supports @'widgets/pagination'.
+- Finished major template(layout) components.
+- Revised 'sticky', 'dropdown' HOC.
+
+> Test
+- Removed and updated test suits.
+
+
 ### 0.11.0-dev.5 / 2018-06-16
 > Server
 - @'package.json':

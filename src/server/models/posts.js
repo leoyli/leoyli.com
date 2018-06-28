@@ -1,15 +1,13 @@
 /* eslint-disable key-spacing */
+
 const mongoose = require('mongoose');
-const { _U_ } = require('../controllers/utilities/');
+const { _U_ } = require('../utilities/');
 
 
 // schema
 const PostsSchema    = new mongoose.Schema({
   author: {
-    _id: {
-      type           : mongoose.Schema.Types.ObjectId,
-      ref            : 'users',
-    },
+    _id              : { type: String },
     nickname         : { type: String },
   },
   featured           : { type: String,                                                                                  // todo: featured by a video

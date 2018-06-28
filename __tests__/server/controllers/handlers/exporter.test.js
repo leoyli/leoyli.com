@@ -12,7 +12,7 @@ const httpMocks = require('node-mocks-http');
 // mocks
 jest.mock(`${__ROOT__}/server/controllers/modules`, () => ({
   _M_: {
-    modifyHTMLTitleTag: jest.fn(() => () => {}),
+    titleTagModifier: jest.fn(() => () => {}),
   },
 }));
 
@@ -55,7 +55,7 @@ describe('Handlers: Exporter', () => {
 
     // should replace title tag when 'post' have a title
     renderer.posts.single({ filename: '/', post: { title: 'some_title', state: {} } })(req, res, next);
-    expect(_M_.modifyHTMLTitleTag).toBeCalledTimes(1);
+    expect(_M_.titleTagModifier).toBeCalledTimes(1);
 
     // should pass the final state checks
     expect(res.render).toBeCalledTimes(2);

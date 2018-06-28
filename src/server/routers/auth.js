@@ -1,40 +1,22 @@
-const { usePassport } = require('../controllers/modules/')._M_;
-const { ClientException } = require('../controllers/utilities/')._U_.error;
-const { Device } = require('../engines/router');
-const { auth } = require('../controllers/routers/');
+const { _M_ } = require('../controllers/modules/index');
 
 
-// device
-const authRouter = new Device([
-  {
-    route: '/signup',
-    controller: auth.signup,
-    setting: {
-      title: 'Sign Up',
-      template: './__root__/account/signup',
-    },
-  },
-  {
-    route: '/signin',
-    controller: auth.signin,
-    setting: {
-      title: 'Sign In',
-      template: './__root__/account/signin',
-    },
-  },
-  {
-    route: '/signout',
-    controller: auth.signout,
-  },
-]);
+// controllers
+const auth = {};
 
-
-// settings
-authRouter.hook('pre', usePassport);
-authRouter.hook('post', (err, req, res, next) => {
-  return next(new ClientException(err));
-});
+auth.signin = {
+  POST: [_M_.JWTAuthentication, function auth_signin_POST(req, res, next) {
+    res.locals.data = { accessToken: req.session.accessToken };
+    return next();
+  }],
+};
 
 
 // exports
-module.exports = authRouter;
+module.exports = { auth };
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});

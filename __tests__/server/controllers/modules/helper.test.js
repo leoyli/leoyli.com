@@ -1,6 +1,6 @@
 /* global __ROOT__, req, res, next */
 const {
-  caseInsensitiveQueryProxy, modifyHTMLTitleTag,
+  caseInsensitiveQueryProxy, titleTagModifier,
 } = require(`${__ROOT__}/server/controllers/modules/helper`)[Symbol.for('__TEST__')];
 
 
@@ -31,13 +31,13 @@ describe('Modules: Helper', () => {
   });
 
 
-  test('Middleware: modifyHTMLTitleTag', () => {
+  test('Middleware: titleTagModifier', () => {
     const theSameTitle = 'some_title';
     const insertedTitle = 'inserted_title';
     res.locals.$$VIEW = { title: theSameTitle };
 
     // (1) should NOT modify tag without 'HTML' mode flag
-    modifyHTMLTitleTag(insertedTitle)(req, res, next);
+    titleTagModifier(insertedTitle)(req, res, next);
     expect(res.locals.$$VIEW.title).toBe(theSameTitle);
 
 
@@ -45,24 +45,24 @@ describe('Modules: Helper', () => {
     res.locals.$$MODE = 'HTML';
 
     // // if no option specified (default to prepend)
-    modifyHTMLTitleTag(insertedTitle)(req, res, next);
+    titleTagModifier(insertedTitle)(req, res, next);
     expect(res.locals.$$VIEW.title).toBe('inserted_title - some_title');
 
     // // if option `append` is `true`
-    modifyHTMLTitleTag({ tag: insertedTitle, append: true })(req, res, next);
+    titleTagModifier({ tag: insertedTitle, append: true })(req, res, next);
     expect(res.locals.$$VIEW.title).toBe('inserted_title - some_title - inserted_title');
 
     // // if option `extend` is `false`
-    modifyHTMLTitleTag({ tag: insertedTitle, extend: false })(req, res, next);
+    titleTagModifier({ tag: insertedTitle, extend: false })(req, res, next);
     expect(res.locals.$$VIEW.title).toBe('inserted_title');
 
     // // if option `delimiter` is specified
-    modifyHTMLTitleTag({ tag: insertedTitle, delimiter: '|' })(req, res, next);
+    titleTagModifier({ tag: insertedTitle, delimiter: '|' })(req, res, next);
     expect(res.locals.$$VIEW.title).toBe('inserted_title | inserted_title');
 
 
     // (3) should be able to use as a modifier (not a middleware)
-    expect(() => modifyHTMLTitleTag({ tag: insertedTitle })(req, res)).not.toThrowError();
+    expect(() => titleTagModifier({ tag: insertedTitle })(req, res)).not.toThrowError();
     expect(res.locals.$$VIEW.title).toBe('inserted_title - inserted_title | inserted_title');
 
 

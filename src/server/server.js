@@ -2,7 +2,7 @@ const fs = require('fs');
 const http2 = require('spdy');
 const debug = require('debug')('OpenBox:server');
 const app = require('./app');
-const { _U_: { string: { checkToStringTag } } } = require('./controllers/utilities/');
+const { _U_: { string: { checkToStringTag } } } = require('./utilities/');
 
 
 // helper functions

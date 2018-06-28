@@ -18,6 +18,10 @@
   "rules": {
     // configs
     "import/extensions": [".js", ".jsx"],
+    "jsx-a11y/anchor-is-valid": [ "error", {
+      "components": [ "Link" ],
+      "specialLink": [ "to" ]
+    }],
 
     // disabled
     "arrow-body-style": 0,
@@ -34,6 +38,8 @@
     "strict": 0,
     "react/sort-comp": 0,
     "react/prop-types": 0,
+    "react/no-did-mount-set-state": 0,
+    "react/no-did-update-set-state": 0,
 
     // warning
     "camelcase": 1,

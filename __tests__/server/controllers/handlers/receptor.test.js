@@ -82,7 +82,7 @@ describe('Handlers: Receptor', () => {
     expect(res.set).toBeCalledWith('Access-Control-Allow-Origin', arbitraryStringValue);
     expect(res.set).toBeCalledWith('Access-Control-Allow-Methods', arbitraryStringValue);
     expect(res.set).toBeCalledWith('Access-Control-Allow-Headers', arbitraryStringValue);
-    // expect(res.set).toBeCalledWith('Access-Control-Allow-Credentials', arbitraryStringValue);
+    // expect(res.set).toBeCalledWith('Access-Control-Allow-credentialss', arbitraryStringValue);
     expect(res.set).toBeCalledWith('Access-Control-Max-Age', arbitraryStringValue);
 
     // should pass the final state checks

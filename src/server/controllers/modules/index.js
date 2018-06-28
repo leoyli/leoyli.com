@@ -1,9 +1,19 @@
-const auth = require('./auth');
-const header = require('./header');
-const helper = require('./helper');
-const { paginatedQuery } = require('./query/packet');
-const { handleStreamUpload } = require('./upload/packet');
+const headers = require('./headers');
+const helpers = require('./helpers');
+const query = require('./query/');
+const upload = require('./upload/');
+const renderer = require('./render/');
+const auth = require('./auth/');
 
 
 // exports
-module.exports = { _M_: { ...auth, ...helper, ...header, paginatedQuery, handleStreamUpload } };
+module.exports = {
+  _M_: {
+    ...headers,
+    ...helpers,
+    ...query,
+    ...upload,
+    ...renderer,
+    ...auth,
+  },
+};

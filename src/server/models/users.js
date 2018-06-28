@@ -1,8 +1,7 @@
-
 /* eslint-disable key-spacing */
+
 const mongoose = require('mongoose');
 const validator = require('validator');
-const passportLocalMongoose = require('passport-local-mongoose');
 
 
 // schema
@@ -67,14 +66,6 @@ UsersSchema.methods.updateLastTimeLog = function UsersSchema_updateLastTimeLog(f
     { $set: { [`time._${fieldName}`]: new Date(Date.now()) } },
   );
 };
-
-
-// // methods from third-party plugin (object method)
-UsersSchema.plugin(passportLocalMongoose, {
-  usernameField: 'email',
-  usernameQueryFields: ['username'],
-  selectFields: ['_id', 'email', 'nickname', 'picture', 'info', 'time'],
-});
 
 
 // virtual method for user-post association
