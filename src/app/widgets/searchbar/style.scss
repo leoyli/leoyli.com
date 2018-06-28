@@ -1,0 +1,51 @@
+._-search {
+  display: inline;
+  float: unset;
+  position: relative;
+  top: .25em;
+  z-index: 1098;
+
+  & svg {
+    cursor: pointer;
+  }
+
+  &__bar {
+    background: rgba(#222, .95);
+    padding-bottom: .8em;
+    padding-top: .8em;
+    position: fixed;
+    text-align: left;
+    top: 0; left: 0;
+    width: 100%;
+    z-index: 1100;
+
+    & *:focus {
+      outline: none;
+    }
+
+    & input {
+      background: none;
+      border: none;
+      color: white;
+      font-size: larger;
+      width: 95%;
+    }
+
+    & button {
+      background: none;
+      border: none;
+      color: #999;
+      float: right;
+      position: fixed;
+      padding: 5px;;
+
+      & svg:hover {
+        color: white;
+      }
+    }
+
+    &--hidden {
+      display: none;
+    }
+  }
+}
