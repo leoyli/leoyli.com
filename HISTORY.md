@@ -1,3 +1,9 @@
+Version 0.11.0 / 2018-06-28
+
+> General
+- Finished v0.11: 'React SSR and deploy preparations'.
+
+
 ### 0.11.0-dev.6 / 2018-06-28
 > General
 - Corrected stylesheet bundling path-mismatch in webpack.config.

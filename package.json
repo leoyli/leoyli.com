@@ -1,13 +1,13 @@
 {
   "name": "leoyli-com",
-  "version": "0.11.0-dev.0",
+  "version": "0.11.0",
   "license": "Apache-2.0",
   "private": true,
   "scripts": {
     "db-shell": "/Volumes/Data/_db/bin/mongo",
     "db-sev": "/Volumes/Data/_db/bin/mongod",
     "test": "jest --config __tests__/__configs__/jest.config.js --watch",
-    "start": "nodemon ./bin/www --expose-http2",
+    "start": "./bin/www --expose-http2",
     "pack-dev": "webpack -w --mode=development",
     "pack-production": "webpack --mode=production --env production"
   },
