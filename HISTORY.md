@@ -1,3 +1,153 @@
+### 0.11.0-dev.6 / 2018-06-28
+> General
+- Corrected stylesheet bundling path-mismatch in webpack.config.
+- Updated ESLint rules.
+- @'package.json':
+  - revised running scripts;
+  - added: 'font-awesome', 'markdown-to-jsx', 'moment', 'react-router';
+  - removed: 'marked', 'dot'.
+  - updated: all to the latest.
+
+> Server
+- Replaced 'routers/index' by 'router.configs'.
+- Extracted 'home' and 'site' routers to the new 'util' router.
+- Migrated from template-sever-rendering to react-client-rendering:
+  - revised app(express) configurations, mongo models.
+  - revised all routers.
+  - revised 'engine/router' as 'driver/router'.
+  - removed 'services' files, 'view' engine, templates, handlers.
+  - fine-tuned to fit the needs of API requests.
+- Added 'controller/modules/render' module for the SSR support.
+- Integrated JWT authentication controls (session @db(cookie)).
+
+> React
+- Modularized and currified 'libs/fetch'.
+- Integrated with Auth0 authorization services under 'auth' routers (JWT token based @localStorage).
+- Integrated mongo-full-text search feature under 'page/search' router.
+- Implemented trashed-post recycling mechanism along with content managing board @'util/stacks'.
+- Implemented website settings board @'util/settings'.
+- Implemented pagination supports @'widgets/pagination'.
+- Finished major template(layout) components.
+- Revised 'sticky', 'dropdown' HOC.
+
+> Test
+- Removed and updated test suits.
+
+
+### 0.11.0-dev.5 / 2018-06-16
+> Server
+- @'package.json':
+  - added dependencies:
+    - 'auth0', 'express-jwt', 'jwks-rsa', 'jwt-decode'.
+  - removed dependencies:
+    - 'passport', 'passport-local', 'passport-local-mongoose'.
+- Updated CSP rules.
+- Switched from session-based authentication to token-based authentication. (ongoing)
+
+> React
+- Implemented 'Auth0' authentication services.
+- Added 'auth' routing and controller components.
+- Added conditional rendering on 'NavBar' view component.
+
+
+### 0.11.0-dev.4 / 2018-06-14
+> Server
+- @'package.json':
+  - 'start' and 'export' scripts.
+  - added dependencies:
+    - ESLint plugins/modules.
+    - 'node-fetch';
+    - 'babel', and related plugins/modules;
+    - 'react', and related plugins/modules;
+    - 'webpack', and related plugins/modules;
+  - removed dependencies:
+    - 'method-override'.
+- Used webpack to bundle up server-side (-> bin/www) and client-side (-> static/public/scripts, stylesheets) codes.
+- Removed all templates files and template view engine.
+- Implemented React server-side rendering (SSR) feature.
+  - manged as 'src/app', 'src/client', 'src/server';
+  - moved 'bin/www' -> 'src/server/server.js';
+  - added server-side and client-side renderings @'src/app/render'.
+- Updated configs @'server/app';
+  - merged 'services/passport'.
+  - removed/replaced 'dot' view engine.
+
+> React
+- Implemented 'Blog', 'Landing', 'Unfounded' routing components.
+- Merged with 'Sticky' and 'Dropdown' controlling components.
+- Added 'PostList' view components.
+
+> Test
+- Updated all existed testing path and items.
+
+
+### 0.11.0-dev.3 / 2018-06-10
+> App
+- Upgraded dependencies:
+  - 'passport-local-mongoose' -> 5.0.0
+  - 'mongoose' -> 3.0.10
+  - 'validator' -> 10.3.0
+  - 'npm' -> 6.1.0
+- Updated dev-dependencies:
+  - 'eslint-plugin-react' -> 7.9.1
+  - 'jest' -> 23.1.0
+- Removed promisifications of 'passport-local-mongoose' plugin functions in 'user' model.
+- Fixed authentication bugs.
+
+
+### 0.11.0-dev.2.1 / 2018-05-31
+> App
+- Fixed bugs in router when `route/alias` is a `RegExp` object.
+
+
+### 0.11.0-dev.2 / 2018-05-31
+> App
+- @'engine/router':
+  - renamed `getMiddlewareChain` as `getRouterPlugins`;
+  - renamed `getProcessingPipes` as `getRouterPlugins`;
+  - added minimal permission checking in `getRouterStacks`.
+  - removed `authorization`, `authentication` options in `getRouterPlugins`.
+- Capitalized `$$MODE` for all cases.
+
+> Test (98%)
+- Updated testing scripts against the changes.
+
+
+### 0.11.0-dev.1 / 2018-05-30
+> App
+- @'handlers/receptors':
+  - extracted `initialReceptor` from `browserReceptor` and `APIReceptor`;
+  - preload `initialReceptor` in all routers.
+- Added `process.env.LANG` environment variable to store app system language @'error/code'.
+- Changed storage of app configs from `process.env` to express `app` object:
+  - revised `ConfigsModel` static methods @'model/configs';
+  - loaded app configs via `initialReceptor`.
+- Revised and renamed `isValidPasswordReset` as `isValidPasswordSyntax`.
+- Renamed debug name-space as 'OpenBox:server'.
+- Refactored `init` router and controllers.
+- Simplified `site_configs_GET` @'routers/site'.
+- Modified 'users' schema @'model/users'.
+- Few minor optimizations.
+
+> UI
+- Added '__root__/init.dot' template.
+
+> Test (98%)
+- Added 'routers/init.test.js'.
+- Added `initialReceptor` unit test @'handlers/receptor'.
+- Added more detailed test into `isValidPasswordReset` @'modules/auth'.
+- Adapted tests with the changes of `site_configs_PATCH` @'routers/site'.
+- Removed unused environment variables @'env.config'.
+- Replaced upload test file.
+- Removed 'test.png' file.
+
+
+### 0.11.0-dev.0 / 2018-05-29
+> App
+- Initiated v0.11 dev-branch.
+  (goal: deploy preparations)
+
+
 ### 0.10.0 / 2018-05-29
 > App
 - Finished v0.10: 'unit testing and revised CMS routing' development.

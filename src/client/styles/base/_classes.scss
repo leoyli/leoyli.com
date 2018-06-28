@@ -1,0 +1,305 @@
+$transition-duration: .25s;
+
+// navbar
+._-nav {
+  background-color: $bg--navbar;
+  color: white;
+
+  ._-sticky--topped & {
+    background-color: rgba(whitesmoke, .95);
+    color: $bg--navbar;
+  }
+
+  & div > a {
+    color: inherit;
+
+    &:hover {
+      opacity: .75;
+      transition: $transition-duration;
+    }
+  }
+
+  &__link {
+    font-size: small;
+    padding: 0 .5em;
+    margin: 0 .5em;
+    text-transform: uppercase;
+
+    &--active {
+      border-bottom: 2px solid white;
+      padding-bottom: .25em;
+    }
+
+    ._-sticky--topped & {
+      font-weight: bold;
+
+      &--active {
+        border-bottom: 2px solid #0074D9;
+      }
+    }
+  }
+
+  &__left-menu a {
+    text-decoration: none;
+
+    &:first-child {
+      margin-right: 2.5em;
+    }
+  }
+
+  &__right-menu {
+    text-align: right;
+  }
+}
+
+._-button--signin {
+  background-color: rgba(whitesmoke, .1);
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  font-size: small;
+  text-transform: uppercase;
+  transition: none;
+  width: 6em;
+
+  &:hover {
+    background: rgba(whitesmoke, .95);
+    color: $bg--navbar;
+    transition: $transition-duration;
+  }
+
+  ._-sticky--topped & {
+    color: $bg--navbar;
+
+    &:hover {
+      background: rgba($bg--navbar, .1);
+    }
+  }
+
+  & a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+
+// header
+._-section__header {
+  background: $bg--navbar no-repeat center;
+  background-size: cover;
+  color: white;
+  left: calc(-1 * (100vw - 100%) / 2);
+  min-height: 12.5em;
+  position: relative;
+  width: 100vw;
+  z-index: 1090;
+
+  & > * {
+    z-index: 1091;
+  }
+
+  &__meta {
+    height: 1.75em;
+  }
+
+  &__edit {
+    &__button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      margin: 0;
+    }
+
+    & > * {
+      margin-left: .5em;
+    }
+
+    & svg {
+      background: whitesmoke;
+      border-radius: .2em;
+      color: #333;
+      font-size: 2em;
+      opacity: .9;
+      padding: .2em;
+      transition: $transition-duration;
+
+      &:hover {
+        color: whitesmoke;
+        background: dimgray;
+
+        &[data-icon="eraser"] {
+          background: tomato;
+        }
+
+        &[data-icon="pencil-alt"] {
+          background: dodgerblue;
+        }
+      }
+    }
+  }
+
+  &--with-overlay {
+    min-height: 20em;
+
+    &:before {
+      background: linear-gradient(to bottom, rgba($bg--navbar, .5), transparent 5%, rgba(0, 0, 0, .3));
+      content: '';
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      opacity: .6;
+      position: absolute;
+    }
+  }
+}
+
+
+// body
+._-body {
+  background: white;
+  min-height: 37em;
+
+  &__card {
+    &__header {
+      background: $bg--navbar no-repeat center;
+      background-size: cover;
+      height: 11.5em;
+      margin: auto -.5em;
+
+      & > * {
+        height: fit-content;
+      }
+    }
+
+    &__date {
+      border-radius: .3em;
+      background: rgba(whitesmoke, .3);
+      color: white;
+      font-weight: 600;
+      font-size: .9em;
+      height: fit-content;
+      opacity: .8;
+    }
+
+    &__title {
+      font-size: 1.25em;
+      font-weight: 400;
+      & a {
+        color: white;
+      }
+    }
+  }
+
+  &__content {
+    & p {
+      padding-bottom: 3em;
+    }
+
+    &__table {
+      border-bottom: 1px #dee2e6 solid;
+    }
+  }
+}
+
+
+// footer
+@mixin bottom-to-top-bg-hover-sweep($bg-color, $font-color: white) {
+  background: linear-gradient(to bottom, $bg-color, $bg-color 50%, transparent 50%, transparent) 0 -100%;
+  background-size: 100% 200%;
+  display: inline-block;
+  height: 2.5em;
+  margin: 0 .2em;
+  text-align: center;
+  transition: background-position .2s ease-in;
+  width: 2.5em;
+
+  &:hover {
+    color: $font-color;
+    background-position: 0 0;
+  }
+}
+
+._-footer {
+  background: rgba(whitesmoke, .95);
+  color: #666;
+  font-size: small;
+  min-height: 12em;
+
+  & p:first-child {
+    font-weight: bold;
+  }
+
+  & a {
+    color: #333;
+    text-decoration: underline;
+
+    &:hover {
+      color: #666;
+    }
+  }
+
+  & #socialLinks {
+    & a[title="GitHub"] {
+      @include bottom-to-top-bg-hover-sweep(#333333);
+    }
+
+    & a[title="LinkedIn"] {
+      @include bottom-to-top-bg-hover-sweep(#0077B5);
+    }
+
+    & a[title="Facebook"] {
+      @include bottom-to-top-bg-hover-sweep(#3B5998);
+    }
+
+    & svg {
+      font-size: 2.5em;
+      padding: .15em;
+      transition: $transition-duration;
+    }
+  }
+}
+
+
+// form
+._-form {
+  &__row {
+    width: 100%;
+
+    & > * {
+      background-color: white;
+      border-color: #ccc;
+      border-style: solid;
+      border-width: 1px 1px 0 0;
+      height: 2.5em;
+      margin: 0;
+      padding: 0 .5em;
+      transition: $transition-duration;
+
+      &:focus {
+        background-color: rgba(whitesmoke, .35);
+        outline: none;
+      }
+
+      &:first-child {
+        border-left-width: 1px;
+      }
+    }
+
+    &:last-child > * {
+      border-bottom-width: 1px;
+    }
+
+    & > textarea {
+      margin-bottom: -.4em;
+      height: auto;
+      resize: none;
+    }
+
+    & > button:not([disabled]):hover {
+      background-color: dodgerblue;
+      color: white;
+    }
+  }
+}
