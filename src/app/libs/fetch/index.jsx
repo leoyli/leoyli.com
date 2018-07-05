@@ -1,13 +1,12 @@
 /* global __isBrowser__ */
 
 import qs from 'qs';
-import https from 'https';
 import nodeFetch from 'node-fetch';
-import { authStorage } from '../auth/';
+import { authStorage } from '../auth';
 
 
 // configurations
-const API_SERVER = 'https://localhost:3443/api';
+const API_SERVICES = process.env.API_SERVICES;
 
 
 // helper
@@ -42,7 +41,7 @@ const fetchData = (routePath) => ({
   const routeParams = Object.keys(params).length ? params : parseRouteParams(routePath, path);
   const reducedPath = routePath.replace(/:(\w+)/g, (match, key) => routeParams[key]);
   const queryString = qs.stringify(query, { addQueryPrefix: true }) || search;
-  const url = `${API_SERVER}${reducedPath}${queryString}`;
+  const url = `${API_SERVICES}${reducedPath}${queryString}`;
 
   // authentication
   const accessToken = token || (__isBrowser__ ? authStorage.accessToken.get() : session.accessToken);
@@ -57,7 +56,6 @@ const fetchData = (routePath) => ({
 
   // fetch
   return fetchDriver(url, {
-    agent: new https.Agent({ rejectUnauthorized: false }),
     credentials: 'same-origin',
     headers: { authorization, ...headers },
     method,

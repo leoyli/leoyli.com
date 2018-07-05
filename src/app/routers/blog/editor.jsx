@@ -13,7 +13,6 @@ class Editor extends Component {
 
   _handleOnSubmit = (e) => {
     e.preventDefault();
-    console.log(1);
     this.setState(() => ({ loading: true }));
     this.props.send({ method: this.state.data ? 'PUT' : 'POST', data: e.target })
       .then(doc => {

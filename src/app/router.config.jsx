@@ -1,5 +1,5 @@
-import fetchData from './libs/fetch/';
-import config from './routers/';
+import fetchData from './libs/fetch';
+import config from './routers';
 
 
 // components

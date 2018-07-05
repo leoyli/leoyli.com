@@ -1,26 +1,29 @@
+/* eslint-disable prefer-destructuring */
 /* global __isBrowser__ */
 
 import decode from 'jwt-decode';
-import auth0 from 'auth0-js';
+import WebAuth from 'auth0-js/src/web-auth';
 
 
-// magic strings
+// variables
+const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE;
+const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID;
+const AUTH0_DEFAULT_SCOPE = process.env.AUTH0_DEFAULT_SCOPE;
+const AUTH0_REDIRECT_SIGNOUT = process.env.AUTH0_REDIRECT_SIGNOUT;
+const AUTH0_REDIRECT_SIGNIN = process.env.AUTH0_REDIRECT_SIGNIN;
+const AUTH0_SERVER_DOMAIN = process.env.AUTH0_SERVER_DOMAIN;
+
+
+// configs
 const ID_TOKEN_KEY      = 'id_token';
 const ACCESS_TOKEN_KEY  = 'access_token';
 const RETURN_TO         = 'return_to';
 
-const AUDIENCE          = 'https://leoyli.com/';
-const CLIENT_ID         = 'b274K7Z8Mx7wsk41OGo79ixwwsHjMu8y';
-const CLIENT_DOMAIN     = 'leoyli.auth0.com';
-const REDIRECT_SIGNIN   = 'https://localhost:3443/signin';
-const REDIRECT_SIGNOUT  = 'https://localhost:3443/signout';
-const SCOPE             = 'admin';
-
 
 // initialize
-const webAuth = new auth0.WebAuth({
-  clientID: CLIENT_ID,
-  domain: CLIENT_DOMAIN,
+const webAuth = new WebAuth({
+  clientID: AUTH0_CLIENT_ID,
+  domain: AUTH0_SERVER_DOMAIN,
 });
 
 
@@ -60,7 +63,6 @@ const authStorage = {
 
 // validation
 const isTokenExpired = (token) => {
-  if (__isBrowser__) window.__decode__ = decode;
   if ((decode(token).exp * 1000) > Date.now()) return false;
   authStorage.clearAllTokens();
   return true;
@@ -78,8 +80,8 @@ const isClientSignedIn = () => {
 const _handleSignOut = () => {
   authStorage.clearAllTokens();
   webAuth.logout({
-    returnTo: REDIRECT_SIGNOUT,
-    client_id: CLIENT_ID,
+    returnTo: AUTH0_REDIRECT_SIGNOUT,
+    client_id: AUTH0_CLIENT_ID,
   });
 };
 
@@ -97,9 +99,9 @@ const _handleSignIn = ({ returnTo } = {}, cb) => {
     if (returnTo) authStorage.returnTo.set(returnTo);
     webAuth.authorize({
       responseType: 'token id_token',
-      redirectUri: REDIRECT_SIGNIN,
-      audience: AUDIENCE,
-      scope: SCOPE,
+      redirectUri: AUTH0_REDIRECT_SIGNIN,
+      audience: AUTH0_AUDIENCE,
+      scope: AUTH0_DEFAULT_SCOPE,
     });
   }
 };

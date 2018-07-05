@@ -61,8 +61,9 @@ app.yaml
 # local system files
 .DS_Store
 *.map
-bin/
-static/public/media/*
-static/public/scripts/*
-static/public/stylesheets/*
-!static/public/media/favicon.ico
+bin/SSL
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

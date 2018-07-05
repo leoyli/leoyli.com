@@ -161,6 +161,28 @@ $transition-duration: .25s;
   background: white;
   min-height: 37em;
 
+  &__post {
+    & h2:not(:first-child) {
+      margin-top: 1.75em;
+    }
+    & li strong {
+      color: crimson;
+    }
+    & blockquote {
+      border-left: .25em solid #AAA;
+      color: #AAA;
+      font-weight: 600;
+      margin-left: 1em;
+      padding-left: 1em;
+    }
+    & img {
+      width: 100%;
+    }
+    & p {
+      text-align: justify;
+    }
+  }
+
   &__card {
     &__header {
       background: $bg--navbar no-repeat center;

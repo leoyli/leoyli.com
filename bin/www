@@ -1,0 +1,5238 @@
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 99);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports) {
+
+module.exports = require("react");
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const utilities = {
+  _U_: {
+    express: __webpack_require__(87),
+    object: __webpack_require__(85),
+    string: __webpack_require__(8),
+    error: __webpack_require__(84),
+  },
+};
+
+
+// exports
+module.exports = utilities;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-router-dom");
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-router");
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const headers = __webpack_require__(90);
+const helpers = __webpack_require__(88);
+const query = __webpack_require__(82);
+const upload = __webpack_require__(74);
+const renderer = __webpack_require__(70);
+const auth = __webpack_require__(29);
+
+
+// exports
+module.exports = {
+  _M_: {
+    ...headers,
+    ...helpers,
+    ...query,
+    ...upload,
+    ...renderer,
+    ...auth,
+  },
+};
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+module.exports = require("moment");
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _moment = __webpack_require__(5);
+
+var _moment2 = _interopRequireDefault(_moment);
+
+var _reactRouterDom = __webpack_require__(2);
+
+var _reactFontawesome = __webpack_require__(10);
+
+var _fetch = __webpack_require__(14);
+
+var _fetch2 = _interopRequireDefault(_fetch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// components
+class EditOptions extends _react.Component {
+  constructor(...args) {
+    var _temp;
+
+    return _temp = super(...args), this._handleOnClickButton = () => {
+      if (window.confirm('Are you sure you want to trash this article?' + '\n(Note: You may recover it later from the trash bin.)')) {
+        const send = (0, _fetch2.default)('/blog/:key');
+        send({ path: `/blog/${this.props.post._id}`, method: 'DELETE' }).then(({ result = {} }) => {
+          if (result.ok) this.props.history.replace('/blog');
+        });
+      }
+    }, this.render = () => _react2.default.createElement(
+      'div',
+      { className: 'align-self-end text-right _-section__header__edit' },
+      _react2.default.createElement(
+        _reactRouterDom.Link,
+        { to: { pathname: `/blog/${this.props.post._id}/edit`, state: { post: this.props.post } } },
+        _react2.default.createElement(_reactFontawesome.FontAwesomeIcon, { icon: 'pencil-alt' })
+      ),
+      _react2.default.createElement(
+        'button',
+        { className: '_-section__header__edit__button', onClick: this._handleOnClickButton },
+        _react2.default.createElement(_reactFontawesome.FontAwesomeIcon, { icon: 'eraser' })
+      )
+    ), _temp;
+  }
+
+}
+
+const MetaBox = ({ post: { author, category, tags, time }, post, history, isSignedIn }) => _react2.default.createElement(
+  'div',
+  { className: 'd-flex justify-content-between mb-3' },
+  _react2.default.createElement(
+    'div',
+    { className: 'd-sm-flex flex-row-reverse mb-4 mb-sm-2 _-section__header__meta' },
+    _react2.default.createElement(
+      'div',
+      { className: 'ml-sm-2' },
+      _react2.default.createElement(
+        'span',
+        null,
+        'By ',
+        author.nickname
+      ),
+      _react2.default.createElement(
+        'time',
+        { dateTime: time._created },
+        '\xA0@\xA0',
+        (0, _moment2.default)(time._created).format('MM/DD/YYYY')
+      )
+    ),
+    _react2.default.createElement(
+      'div',
+      { className: 'd-sm-inline-block ml-sm-0 ml-1' },
+      _react2.default.createElement(
+        'span',
+        { className: 'badge badge-pill badge-warning text-capitalize' },
+        category
+      )
+    )
+  ),
+  isSignedIn && _react2.default.createElement(EditOptions, { post: post, history: history })
+);
+
+const Header = ({ title, subtitle, featured, post, isSignedIn, history }) => _react2.default.createElement(
+  'header',
+  {
+    className: `d-flex mb-4 _-section__header ${featured ? '_-section__header--with-overlay' : ''}`,
+    style: featured ? { backgroundImage: `url('${featured}')` } : {}
+  },
+  _react2.default.createElement(
+    'div',
+    { className: 'container align-self-end' },
+    _react2.default.createElement(
+      'h2',
+      null,
+      title,
+      subtitle && ` - ${subtitle}`
+    ),
+    post ? _react2.default.createElement(MetaBox, { post: post, history: history, isSignedIn: isSignedIn }) : _react2.default.createElement(
+      'div',
+      null,
+      '\xA0'
+    )
+  )
+);
+
+// exports
+exports.default = Header;
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports._handleSignOut = exports._handleSignIn = exports.isClientSignedIn = exports.isTokenExpired = exports.authStorage = undefined;
+
+var _jwtDecode = __webpack_require__(17);
+
+var _jwtDecode2 = _interopRequireDefault(_jwtDecode);
+
+var _webAuth = __webpack_require__(67);
+
+var _webAuth2 = _interopRequireDefault(_webAuth);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// variables
+/* eslint-disable prefer-destructuring */
+/* global __isBrowser__ */
+
+const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE;
+const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID;
+const AUTH0_DEFAULT_SCOPE = process.env.AUTH0_DEFAULT_SCOPE;
+const AUTH0_REDIRECT_SIGNOUT = process.env.AUTH0_REDIRECT_SIGNOUT;
+const AUTH0_REDIRECT_SIGNIN = process.env.AUTH0_REDIRECT_SIGNIN;
+const AUTH0_SERVER_DOMAIN = process.env.AUTH0_SERVER_DOMAIN;
+
+// configs
+const ID_TOKEN_KEY = 'id_token';
+const ACCESS_TOKEN_KEY = 'access_token';
+const RETURN_TO = 'return_to';
+
+// initialize
+const webAuth = new _webAuth2.default({
+  clientID: AUTH0_CLIENT_ID,
+  domain: AUTH0_SERVER_DOMAIN
+});
+
+// storage
+const authStorage = {
+  clearAllTokens: () => {
+    localStorage.removeItem(ID_TOKEN_KEY);
+    localStorage.removeItem(ACCESS_TOKEN_KEY);
+    document.dispatchEvent(new Event('_authenticationStateChanged'));
+  },
+  clearAllWebAuthStateCaches: () => {
+    const storedKeys = Object.keys(localStorage);
+    for (let i = storedKeys.length - 1, key = storedKeys[i]; i > -1; key = storedKeys[i -= 1]) {
+      if (key.includes('com.auth0.auth.')) localStorage.removeItem(key);
+    }
+  },
+  idToken: {
+    set: token => localStorage.setItem(ID_TOKEN_KEY, token),
+    get: () => localStorage.getItem(ID_TOKEN_KEY),
+    remove: () => localStorage.removeItem(ID_TOKEN_KEY)
+  },
+  accessToken: {
+    set: token => localStorage.setItem(ACCESS_TOKEN_KEY, token),
+    get: () => localStorage.getItem(ACCESS_TOKEN_KEY),
+    remove: () => localStorage.removeItem(ACCESS_TOKEN_KEY)
+  },
+  returnTo: {
+    set: path => localStorage.setItem(RETURN_TO, path || '/'),
+    pop: () => {
+      const pathname = localStorage.getItem(RETURN_TO) || '/';
+      localStorage.removeItem(RETURN_TO);
+      return pathname;
+    }
+  }
+};
+
+// validation
+const isTokenExpired = token => {
+  if ((0, _jwtDecode2.default)(token).exp * 1000 > Date.now()) return false;
+  authStorage.clearAllTokens();
+  return true;
+};
+
+const isClientSignedIn = () => {
+  if (false) {}
+};
+
+// event handlers
+const _handleSignOut = () => {
+  authStorage.clearAllTokens();
+  webAuth.logout({
+    returnTo: AUTH0_REDIRECT_SIGNOUT,
+    client_id: AUTH0_CLIENT_ID
+  });
+};
+
+const _handleSignIn = ({ returnTo } = {}, cb) => {
+  try {
+    webAuth.parseHash({ hash: window.location.hash }, (err, authResult) => {
+      if (err) return cb(err);
+      authStorage.idToken.set(authResult.idToken);
+      authStorage.accessToken.set(authResult.accessToken);
+      document.dispatchEvent(new Event('_authenticationStateChanged'));
+      setTimeout(authStorage.clearAllWebAuthStateCaches, 0);
+      return cb(null, authStorage.returnTo.pop());
+    });
+  } catch (err) {
+    if (returnTo) authStorage.returnTo.set(returnTo);
+    webAuth.authorize({
+      responseType: 'token id_token',
+      redirectUri: AUTH0_REDIRECT_SIGNIN,
+      audience: AUTH0_AUDIENCE,
+      scope: AUTH0_DEFAULT_SCOPE
+    });
+  }
+};
+
+// exports
+exports.authStorage = authStorage;
+exports.isTokenExpired = isTokenExpired;
+exports.isClientSignedIn = isClientSignedIn;
+exports._handleSignIn = _handleSignIn;
+exports._handleSignOut = _handleSignOut;
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* eslint-disable no-bitwise */
+const { ObjectId } = __webpack_require__(86);
+
+
+/**
+ * check the object type with `Object.prototype.toString`
+ * @param {object} target                   - object to be checked
+ * @param {string} [str]                    - name to be matched (case insensitive)
+ * @return {(boolean|string)}               - if no name given, the brand name of the object would be returned
+ */
+const checkToStringTag = (target, str) => {
+  const name = (obj) => Object.prototype.toString.call(obj).slice(8, -1);
+  if (str && name(str).toLowerCase() !== 'string') throw new TypeError('Second argument is not a string.');
+  if (str) return name(target).toLowerCase() === str.toLowerCase();
+  return name(target);
+};
+
+
+/**
+ * convert string to kebabCase
+ * @param {string} str                      - any arbitrary string
+ * @return {string|null}                    - kebabCased string
+ */
+const toKebabCase = (str) => {
+  return !checkToStringTag(str, 'String') || !str ? null : str
+    .replace(/([a-z])([A-Z])/g, '$1-$2')                                                                                // handle CamelCase
+    .replace(/[`'":;,.?!@#$%^&*_=~(){}<>/\\\[\]\-\+\|\s]+/g, '-')                                                       // normalize special characters
+    .replace(/(-[A-Z])([A-Z][a-z])/g, '$1-$2')                                                                          // handle signal words in CamelCase
+    .replace(/^-+|-+$/g, '')                                                                                            // cleanup endpoints
+    .toLowerCase();
+};
+
+
+/**
+ * convert string to capitalize sentence
+ * @param {string} str                      - any arbitrary string
+ * @return {string|null}                    - capitalized string
+ */
+const toCapitalized = (str) => {
+  return !checkToStringTag(str, 'String') || !str  ? null : str.split(' ')
+    .map(subStr => subStr.charAt(0).toUpperCase() + subStr.slice(1)).join(' ');
+};
+
+
+/**
+ * convert matched context to HTML entity                                                                               // note: this method allows `null` or `undefined` argument
+ * @param {string} str                      - any arbitrary string
+ * @return {string|null}                    - escaped string, only key HTML entities are escaped
+ */
+const toEscapedChars = (str) => {
+  const charMap = {
+    '=': '&#61;',
+    "'": '&#39;',
+    '"': '&#34;',
+    '`': '&#96;',
+    '.': '&#46;',
+    ',': '&#44;',
+    ':': '&#58;',
+    ';': '&#59;',
+    '<': '&#60;',
+    '(': '&#40;',
+    '[': '&#91;',
+    '{': '&#123;',
+  };
+  return !checkToStringTag(str, 'String') || !str  ? null : str.replace(/[='"`.,:;<([{]/g, char => charMap[char]);
+};
+
+
+/**
+ * parse Mongo ObjectId (hexadecimal)                                                                                   // todo: option to output ObjectId obj.
+ * @param {string} str                      - any arbitrary string
+ * @return {object|null}                    - hexadecimal Mongo `ObjectId` object
+ */
+const parseMongoObjectId = (str) => {
+  const val = !checkToStringTag(str, 'String') || !str ? null : /(?:\=|\/|^)([a-f\d]{24})(?:\?|\/|$)/i.exec(str);
+  return val ? ObjectId(val[1].toLowerCase()) : null;
+};
+
+
+/**
+ * parse a string to object path array
+ * @param {string} str                      - any arbitrary string
+ * @return {array|null}                     - an array contains elements in ordered by nest keys (path)
+ */
+const parseObjPath = (str) => {
+  return !checkToStringTag(str, 'String') || !str  ? null : str.match(/[a-zA-Z0-9$_]+/g);
+};
+
+
+/**
+ * parse a given file path
+ * @param {string} str                      - any arbitrary string
+ * @return {object|null}                    - parsed result
+ */
+const parsePath = (str) => {
+  if (!checkToStringTag(str, 'String') || !str) return null;
+
+  // decode url
+  const _decoded = decodeURIComponent(str);
+  if (~_decoded.search(/([@#?]|\/\/).*\1/)) return null;
+
+  // extract special components in a url
+  const protocol  = _decoded.split('://').reverse()[1];
+  const hash      = _decoded.includes('/') && _decoded.split('#')[1];
+  const query     = _decoded.includes('/') && _decoded.replace(`#${hash}`, '').split('?')[1];
+
+  // check location
+  const _slug     = _decoded.replace(/^\w*:?\/\//, '').replace(`#${hash}`, '').replace(`?${query}`, '').split('/');
+  const _host     = _decoded.includes('/') && _slug[0].includes('.') && _slug[0];
+
+  // check port
+  const port      = _host && _host.includes(':') && +_host.split(':')[1];
+  if (Number.isNaN(port) || port < -1 || port > 65536) return null;
+
+  // check base
+  const base      = (_slug[_slug.length - 1] !== _host && _slug[_slug.length - 1]) || '';
+  if (~base.search(/[@#?:]/)) return null;
+
+  const username  = _host && _host.split('@').reverse()[1];
+  const hostname  = _host && _host.replace(`${username}@`, '').split(':')[0];
+  const ext       = base.includes('.') && base.split('.').reverse()[0];
+  const dir       = `/${_slug.slice(_slug.indexOf(_host) + 1, _slug.indexOf(base)).join('/')}`.replace('//', '');
+
+  // normalize result
+  const result = { input: str, protocol, hostname, username, port, dir, base, ext, query, hash };
+  for (let keys = Object.keys(result), i = keys.length - 1; i > -1; i -= 1) result[keys[i]] = result[keys[i]] || null;
+  return result;
+};
+
+
+// exports
+module.exports = {
+  checkToStringTag,
+  toKebabCase,
+  toCapitalized,
+  toEscapedChars,
+  parseMongoObjectId,
+  parseObjPath,
+  parsePath,
+};
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports) {
+
+module.exports = require("mongoose");
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+module.exports = require("@fortawesome/react-fontawesome");
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// components
+const Unfounded = () => _react2.default.createElement(
+  "div",
+  { className: "text-center m-5 p-5 text-muted" },
+  _react2.default.createElement(
+    "h1",
+    { className: "mt-5 pt-5 display-2" },
+    "404"
+  ),
+  _react2.default.createElement(
+    "p",
+    { className: "text-capitalize" },
+    "The resources requested was not found..."
+  )
+);
+
+// exports
+exports.default = Unfounded;
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = {
+  ConfigsModel: __webpack_require__(79),
+  UsersModel: __webpack_require__(78),
+  PostsModel: __webpack_require__(76),
+  MediaModel: __webpack_require__(75),
+};
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports) {
+
+module.exports = require("qs");
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /* global __isBrowser__ */
+
+var _qs = __webpack_require__(13);
+
+var _qs2 = _interopRequireDefault(_qs);
+
+var _nodeFetch = __webpack_require__(68);
+
+var _nodeFetch2 = _interopRequireDefault(_nodeFetch);
+
+var _auth = __webpack_require__(7);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// configurations
+const API_SERVICES = process.env.API_SERVICES;
+
+// helper
+const parseRouteParams = (pattern, path) => {
+  const routeParams = {};
+  const patternTree = pattern.split('/');
+  const pathTree = path.split('/');
+  for (let i = 0, j = patternTree.length; i < j; i += 1) {
+    if (patternTree[i] !== pathTree[i]) {
+      if (patternTree[i].startsWith(':')) routeParams[patternTree[i].slice(1)] = pathTree[i];else break;
+    }
+  }
+  return routeParams;
+};
+
+const fetchData = routePath => ({
+  path =  false ? undefined : '',
+  search =  false ? undefined : '',
+  method = 'GET',
+  token = '',
+  query = {},
+  params = {},
+  headers = {},
+  session = {},
+  data = {}
+} = {}) => {
+  const fetchDriver =  false ? undefined : _nodeFetch2.default;
+
+  // address
+  const routeParams = Object.keys(params).length ? params : parseRouteParams(routePath, path);
+  const reducedPath = routePath.replace(/:(\w+)/g, (match, key) => routeParams[key]);
+  const queryString = _qs2.default.stringify(query, { addQueryPrefix: true }) || search;
+  const url = `${API_SERVICES}${reducedPath}${queryString}`;
+
+  // authentication
+  const accessToken = token || ( false ? undefined : session.accessToken);
+  const authorization = accessToken ? `Bearer ${accessToken}` : undefined;
+
+  // data
+  const body = ['POST', 'PATCH', 'PUT'].includes(method) && data ? new URLSearchParams(data.constructor.name === 'HTMLFormElement' ? [...new FormData(data).entries()] : Object.entries(data)) : undefined;
+
+  // fetch
+  return fetchDriver(url, {
+    credentials: 'same-origin',
+    headers: _extends({ authorization }, headers),
+    method,
+    body
+  }).then(res => res.json()).catch(err => {
+    throw err;
+  });
+};
+
+// exports
+exports.default = fetchData;
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports) {
+
+module.exports = require("express");
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+// style
+
+
+var _qs = __webpack_require__(13);
+
+var _qs2 = _interopRequireDefault(_qs);
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = __webpack_require__(3);
+
+var _reactRouterDom = __webpack_require__(2);
+
+var _reactFontawesome = __webpack_require__(10);
+
+var _style = __webpack_require__(62);
+
+var _style2 = _interopRequireDefault(_style);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// magic-strings
+const NAMESPACE = {
+  queryName: 'page',
+  className: {
+    leader: '_-pagination',
+    active: '_-pagination--active',
+    icon: '_-pagination__icon'
+  }
+};
+
+// modifiers
+const populatePageItem = ({ now = 1, end = 0 } = {}, url = '/', search = '') => {
+  const pp = [];
+  const query = _qs2.default.parse(search, { ignoreQueryPrefix: true, parseArrays: false, depth: 0 });
+  const max = Math.min(Math.max(9, now + 4), end);
+  const min = Math.max(max - 8, 1);
+  const navLink = i => _react2.default.createElement(
+    _reactRouterDom.NavLink,
+    {
+      key: `pp-${i}`,
+      to: `${url}?${_qs2.default.stringify(_extends({}, query, { [NAMESPACE.queryName]: i }))}`,
+      className: NAMESPACE.className.leader,
+      activeClassName: NAMESPACE.className.active,
+      isActive: () => i === now
+    },
+    i
+  );
+  if (min !== 1) {
+    pp.push(navLink(1), _react2.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+      key: 'pp-to-head',
+      icon: 'angle-double-right',
+      rotation: 180,
+      className: NAMESPACE.className.icon
+    }));
+  }
+  if (end) for (let i = min; i <= max; i += 1) pp.push(navLink(i));
+  if (max !== end) {
+    pp.push(_react2.default.createElement(_reactFontawesome.FontAwesomeIcon, {
+      key: 'pp-to-end',
+      icon: 'angle-double-right',
+      className: NAMESPACE.className.icon
+    }), navLink(end));
+  }
+  return pp;
+};
+
+// components
+const Pagination = (0, _reactRouter.withRouter)(({ meta, match, location }) => {
+  if (meta) {
+    return _react2.default.createElement(
+      'nav',
+      { id: 'pagination', className: 'mt-5' },
+      populatePageItem(meta, match.url, location.search)
+    );
+  }
+  return null;
+});
+
+// exports
+exports.default = Pagination;
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports) {
+
+module.exports = require("jwt-decode");
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.routers = exports.default = undefined;
+
+var _fetch = __webpack_require__(14);
+
+var _fetch2 = _interopRequireDefault(_fetch);
+
+var _routers = __webpack_require__(66);
+
+var _routers2 = _interopRequireDefault(_routers);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// components
+const { auth, page, blog, util } = _routers2.default;
+
+// configs
+const authConfigs = [{
+  path: '/signin',
+  exact: true,
+  component: auth.signin,
+  send: (0, _fetch2.default)('/signin')
+}, {
+  path: '/signout',
+  exact: true,
+  component: auth.signout
+}];
+
+const pageConfigs = [{
+  path: '/search/:search',
+  exact: true,
+  component: page.search,
+  request: (0, _fetch2.default)('/search/:search')
+}];
+
+const blogConfigs = [{
+  path: '/blog',
+  exact: true,
+  component: blog.list,
+  request: (0, _fetch2.default)('/blog')
+}, {
+  path: '/blog/new',
+  exact: true,
+  component: blog.editor,
+  send: (0, _fetch2.default)('/blog'),
+  secure: true
+}, {
+  path: '/blog/:key',
+  exact: true,
+  component: blog.post,
+  request: (0, _fetch2.default)('/blog/:key')
+}, {
+  path: '/blog/:key/edit',
+  exact: true,
+  component: blog.editor,
+  request: (0, _fetch2.default)('/blog/:key'),
+  send: (0, _fetch2.default)('/blog/:key'),
+  secure: true
+}];
+
+const utilConfigs = [{
+  path: '/util/stacks/posts',
+  exact: true,
+  component: util.stacks,
+  request: (0, _fetch2.default)('/util/stacks/:collection'),
+  send: (0, _fetch2.default)('/util/stacks/:collection'),
+  secure: true
+}, {
+  path: '/util/settings',
+  exact: true,
+  component: util.settings,
+  send: (0, _fetch2.default)('/util/settings'),
+  secure: true
+}];
+
+const rootConfigs = [{
+  path: '/',
+  exact: true,
+  component: page.landing
+}];
+
+// exports
+const routerConfig = [].concat(authConfigs, pageConfigs, blogConfigs, utilConfigs, rootConfigs);
+exports.default = routerConfig;
+exports.routers = routerConfig;
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports) {
+
+module.exports = require("fs");
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports) {
+
+module.exports = require("path");
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { _M_ } = __webpack_require__(4);
+const { _U_ } = __webpack_require__(1);
+const ModelIndex = __webpack_require__(12);
+
+
+// controllers
+const util = {};
+
+
+util.stacks = {
+  GET: async function util_stacks_GET(req, res, next) {
+    const collection = req.params.collection.toLowerCase();
+    if (!['posts', 'media'].includes(collection)) throw new _U_.error.HttpException(404);
+    //
+    return _M_.paginatedQuery(collection, { num: 10 })(req, res, next);
+  },
+  PATCH: async function util_stacks_PATCH(req, res, next) {
+    const collection = req.params.collection.toLowerCase();
+    if (!['posts', 'media'].includes(collection)) throw new _U_.error.HttpException(404);
+    //
+    const { action, target } = req.body;
+    if (action && target.length) {
+      const model = ModelIndex[`${_U_.string.toCapitalized(collection)}Model`];
+      const result = await model.update(
+        { _id: { $in: target.toString().split(',') } },
+        { $set: { [`state.${action}`]: true } },
+        { multi: true },
+      );
+      res.locals.data = { ...res.locals.data, result };
+      return _M_.paginatedQuery(collection)(req, res, next);
+    }
+    return next();
+  },
+};
+
+
+util.upload = {                                                                                                         // todo: to be integrated in profile and media manager
+  POST: [_M_.streamingUploader({ fileSize: 25 * 1048576 }), async function util_upload_POST(req, res, next) {
+    const { raw = [], mes = [] } = req.body.busboySlip;
+    if (raw.length) {
+      for (let i = raw.length - 1, doc = raw[i]; i > -1; doc = raw[i -= 1]) {
+        doc.author = { _id: req.session.user.sub, nickname: 'admin' };
+      }
+      const media = await ModelIndex.MediaModel.create(raw);
+      res.locals.data = { ...res.locals.data, media };
+    }
+    return next();
+  }],
+};
+
+
+util.settings = {
+  GET: function util_settings_GET(req, res, next) {
+    res.locals.data = { ...res.locals.data, config: res.locals.config };
+    return next();
+  },
+  PATCH: async function util_settings_PATCH(req, res, next) {
+    const result = await ModelIndex.ConfigsModel.updateConfig(req, req.body.config);
+    res.locals.data = { ...res.locals.data, result };
+    return next();
+  },
+};
+
+
+// exports
+module.exports = { util };
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { _M_ } = __webpack_require__(4);
+const { _U_ } = __webpack_require__(1);
+const { PostsModel } = __webpack_require__(12);
+
+
+// controllers
+const blog = {};
+
+blog.post = {
+  GET: async function blog_post_GET(req, res, next) {
+    const mongoId = _U_.string.parseMongoObjectId(req.params.key);
+    const search = mongoId ? { _id: mongoId } : { canonical: req.params.key };
+    const query = { ...search, 'time._recycled': { $eq: null } };
+    const post = await PostsModel.findOne(query);
+    if (!post) throw new _U_.error.HttpException(404);
+    res.locals.data = { ...res.locals.data, post };
+    return next();
+  },
+  PUT: async function blog_post_PUT(req, res, next) {
+    const post = await PostsModel.findOneAndUpdate(
+      { _id: _U_.string.parseMongoObjectId(req.url) },
+      { $set: req.body.post },
+      { new: true },
+    );
+    res.locals.data = { ...res.locals.data, post };
+    return next();
+  },
+  DELETE: async function blog_post_DELETE(req, res, next) {
+    const result = await PostsModel.update(
+      { _id: _U_.string.parseMongoObjectId(req.url) },
+      { $set: { 'state.recycled': true } },
+      { multi: false },
+    );
+    res.locals.data = { ...res.locals.data, result };
+    return next();
+  },
+};
+
+
+blog.list = {
+  GET: function blog_list_GET(req, res, next) {
+    return _M_.paginatedQuery('posts')(req, res, next);
+  },
+  POST: async function blog_list_POST(req, res, next) {
+    const post = await PostsModel.create({
+      ...req.body.post,
+      author: { _id: req.session.user.sub, nickname: 'admin' },
+    });
+    res.locals.data = { ...res.locals.data, post };
+    return next();
+  },
+};
+
+
+blog.search = {
+  GET: function blog_search_GET(req, res, next) {
+    return _M_.paginatedQuery('posts')(req, res, next);
+  },
+};
+
+
+// exports
+module.exports = { blog };
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { _M_ } = __webpack_require__(4);
+
+
+// controllers
+const auth = {};
+
+auth.signin = {
+  POST: [_M_.JWTAuthentication, function auth_signin_POST(req, res, next) {
+    res.locals.data = { accessToken: req.session.accessToken };
+    return next();
+  }],
+};
+
+
+// exports
+module.exports = { auth };
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { _M_ } = __webpack_require__(4);
+
+
+// controllers
+const pages = {};
+
+pages.search = {
+  GET: function pages_search_GET(req, res, next) {
+    return _M_.paginatedQuery('posts')(req, res, next);
+  },
+};
+
+
+// exports
+module.exports = { pages };
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});
+
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { Router } = __webpack_require__(15);
+
+
+// modules
+const { _M_ } = __webpack_require__(4);
+const { _U_ } = __webpack_require__(1);
+
+
+// helpers
+/**
+ * stack a queue from setting options
+ * @param {object} option                   - setting options
+ * @return {array}                          - ordering of the result is important
+ */
+const getRouterPlugins = (option) => {
+  const queue = [];
+  if (option.sensitive !== true) queue.push(_M_.caseInsensitiveQueryProxy);
+  if (option.crawler === false) queue.push(_M_.noCrawlerHeader);
+  if (option.cache === false) queue.push(_M_.noStoreCacheHeader);
+  if (option.authentication === true) queue.push(_M_.JWTAuthentication);
+  return [...new Set(queue)];
+};
+
+
+/**
+ * compose an ordered, unique middleware firing chain
+ * @param {object} hooker                   - pre/post hooked middleware on the device
+ * @param {array|function} controller       - the main controlling logic
+ * @param {object} option                   - router settings
+ * @return {array}
+ */
+const getRouterStacks = (hooker, controller, option) => {
+  const plugins = getRouterPlugins(option);
+  const chain = [plugins, hooker.pre, controller, hooker.post];
+  return _U_.express.wrapAsync([...new Set([].concat(...chain))]);
+};
+
+
+class Device {
+  /**
+   * construct a routing device contains information and methods in assembling routing middleware
+   * @constructor
+   * @param {array} rules = []              - an array that contains routing rule objects
+   * @param {object} [option]               - (see express.Router() API)
+   */
+  constructor(rules = [], option = {}) {
+    this._baseOption = _U_.object.freezeDeep(option);
+    this._baseStack = new Set();
+    this._setting = {};
+    this._hook = { pre: [], post: [] };
+    this.rules = _U_.object.freezeDeep(rules);
+  }
+
+  /**
+   * getter of the Device setting, handling the setter duty via a Proxy
+   * @return {object}                       - stored read-only device setting
+   */
+  get setting() {
+    return new Proxy(this._setting, {
+      set: (setting, option, value) => {
+        if (option === 'title') this._hook.pre = this._hook.pre.concat(_M_.titleTagModifier(value));
+        else setting[option] = value;
+        return true;
+      },
+    });
+  }
+
+  /**
+   * setter of the Device setting, triggering a series of redirection of its getter pair
+   * @param {object} options                - device specific setting
+   */
+  set setting(options) {
+    Object.keys(options).forEach(key => {
+      this.setting[key] = options[key];
+    });
+  }
+
+  /**
+   * middleware attaching (populating upon the device level, spreading on the whole route path afterward)
+   * @param {function} fn                   - middleware to be shared
+   * @return {Device}
+   */
+  use(fn) {
+    this._baseStack.add(fn);
+    return this;
+  }
+
+  /**
+   * middleware hooking (explicitly populating into individual routing method)
+   * @param {string} tag                    - position tag of the hook
+   * @param {function|[function]} fn        - middleware to be staked
+   * @return {Device}
+   */
+  hook(tag, fn) {
+    if (['pre', 'post'].includes(tag)) this._hook[tag] = this._hook[tag].concat(fn);
+    return this;
+  }
+
+  /**
+   * assemble middleware from the device
+   * @return {function}                     - middleware assembly (device)
+   */
+  exec() {
+    // create router
+    const router = new Router(this._baseOption);
+    if (this._baseStack.size) router.use(...this._baseStack);
+
+    // register router
+    this.rules.forEach(({ path, controller, secure, setting }) => {
+      const methodKeys = Object.keys(controller).sort().reverse();
+      const option = { ...this.setting, ...setting };
+      for (let i = methodKeys.length - 1, method = methodKeys[i]; i > -1; method = methodKeys[i -= 1]) {
+        const pathOption = { ...option, authentication: secure === undefined ? method.toLowerCase() !== 'get' : secure };
+        router[method.toLowerCase()](path, getRouterStacks(this._hook, controller[method], pathOption));
+      }
+    });
+
+    // expose router
+    return router;
+  }
+
+  /**
+   * assemble middleware from the device config clusters
+   * @param {[string, object]} config       - routing path and device pair
+   * @return {function}                     - middleware assembly (device cluster)
+   */
+  static assemble(config) {
+    const router = new Router({});
+    router.use(_M_.CORSHeaders);
+    config.forEach(([path, device]) => router.use(path, device.exec()));
+    router.use(_M_.JSONResponseHandler);
+    return router;
+  }
+}
+
+
+// exports
+module.exports = {
+  Device,
+};
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    getRouterPlugins,
+    getRouterStacks,
+    ...module.exports,
+  },
+});
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { Device } = __webpack_require__(25);
+const { pages } = __webpack_require__(24);
+const { auth } = __webpack_require__(23);
+const { blog } = __webpack_require__(22);
+const { util } = __webpack_require__(21);
+
+
+// routers
+const authRouter = new Device([
+  {
+    path: '/signin',
+    controller: auth.signin,
+  },
+]);
+
+const pagesRouter = new Device([
+  {
+    path: '/search/:search',
+    controller: pages.search,
+  },
+]);
+
+const blogRouter = new Device([
+  {
+    path: '/search/:search',
+    controller: blog.search,
+  },
+  {
+    path: '/:key',
+    controller: blog.post,
+  },
+  {
+    path: '/',
+    controller: blog.list,
+  },
+]);
+
+const utilRouter = new Device([
+  {
+    path: '/settings',
+    controller: util.settings,
+    secure: true,
+  },
+  {
+    path: '/stacks/:collection',
+    controller: util.stacks,
+    secure: true,
+  },
+  {
+    path: '/upload',
+    controller: util.upload,
+    secure: true,
+  },
+]);
+
+
+// config
+const config = [
+  ['/', authRouter],
+  ['/', pagesRouter],
+  ['/util', utilRouter],
+  ['/blog', blogRouter],
+];
+
+
+// exports
+module.exports = {
+  APIRouters: Device.assemble(config),
+  authRouter,
+  pagesRouter,
+  blogRouter,
+  utilRouter,
+};
+
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports) {
+
+module.exports = require("jwks-rsa");
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports) {
+
+module.exports = require("express-jwt");
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const jwt = __webpack_require__(28);
+const jwks = __webpack_require__(27);
+const decode = __webpack_require__(17);
+const { _U_ } = __webpack_require__(1);
+
+
+const JWTVerification = jwt({
+  secret: jwks.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 10,
+    jwksUri: `https://${process.env.AUTH0_SERVER_DOMAIN}/.well-known/jwks.json`,
+  }),
+  audience: process.env.AUTH0_AUDIENCE,
+  issuer: `https://${process.env.AUTH0_SERVER_DOMAIN}/`,
+  algorithms: ['RS256'],
+});
+
+
+const JWTStorage = (req, res, next) => {
+  const token = req.headers.authorization && req.headers.authorization.split('Bearer ')[1];
+  if (token && token !== req.session.accessToken) {
+    req.session.user = req.user;
+    req.session.accessToken = token;
+    req.session.tokenExpiredAt = decode(token).exp * 1000;
+    req.session.cookie.maxAge = req.session.tokenExpiredAt - Date.now();
+  }
+  return next();
+};
+
+
+const JWTAuthentication = (req, res, next) => {
+  const token = req.headers.authorization && req.headers.authorization.split('Bearer ')[1];
+  if (token === req.session.accessToken && req.session.tokenExpiredAt > Date.now()) return next();
+  return _U_.express.wrapMiddleware([JWTVerification, JWTStorage])(req, res, next);
+};
+
+
+// exports
+module.exports = {
+  JWTAuthentication,
+  JWTVerification,
+  JWTStorage,
+};
+
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports) {
+
+const template = ({ config, data, body } = {}) => (`
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>${config.siteName}</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/static/stylesheets/style.css">
+    <script>
+      document.scripts[0].remove();
+      window.__CONFIG__ = ${JSON.stringify(config)};
+      window.__INIT__ = ${JSON.stringify(data)};
+    </script>
+    <script src="/static/scripts/bundle.js" defer></script>
+  </head>
+  <body>
+    <div id="root">${body}</div>
+  </body>
+  </html>
+`);
+
+
+// exports
+module.exports = {
+  template,
+};
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});
+
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _moment = __webpack_require__(5);
+
+var _moment2 = _interopRequireDefault(_moment);
+
+var _reactFontawesome = __webpack_require__(10);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// components
+const Footer = ({ _$CONFIG }) => _react2.default.createElement(
+  'footer',
+  { className: 'mt-5 _-footer' },
+  _react2.default.createElement(
+    'div',
+    { id: 'misc', className: 'container d-lg-flex text-justify pt-4' },
+    _react2.default.createElement(
+      'div',
+      { className: 'col-lg-9', id: 'sitePolicy', role: 'contentinfo' },
+      _react2.default.createElement(
+        'p',
+        { id: 'copyright' },
+        '2017\xA0-\xA0',
+        (0, _moment2.default)().format('YYYY'),
+        '\xA0\xA9\xA0',
+        _$CONFIG.siteName
+      ),
+      _react2.default.createElement(
+        'p',
+        { id: 'licence' },
+        'Except as otherwise noted, the content of this site is licensed under the\xA0',
+        _react2.default.createElement(
+          'a',
+          { href: 'https://creativecommons.org/licenses/by-sa/4.0/' },
+          'CC BY-SA 4.0 Licence'
+        ),
+        ', and code samples are licensed under the\xA0',
+        _react2.default.createElement(
+          'a',
+          { href: 'https://github.com/leoyli/leoyli.com/blob/master/LICENSE' },
+          'MIT License'
+        ),
+        '.'
+      )
+    ),
+    _react2.default.createElement(
+      'div',
+      { id: 'socialLinks', className: 'col-lg-3 text-lg-right pb-3', 'aria-label': 'socialMedia' },
+      _react2.default.createElement(
+        'a',
+        { href: 'https://github.com/leoyli', title: 'GitHub' },
+        _react2.default.createElement(_reactFontawesome.FontAwesomeIcon, { icon: ['fab', 'github'] })
+      ),
+      _react2.default.createElement(
+        'a',
+        { href: 'https://www.linkedin.com/in/leoyli', title: 'LinkedIn' },
+        _react2.default.createElement(_reactFontawesome.FontAwesomeIcon, { icon: ['fab', 'linkedin'] })
+      ),
+      _react2.default.createElement(
+        'a',
+        { href: 'https://www.facebook.com/leo.yuxiu.li', title: 'Facebook' },
+        _react2.default.createElement(_reactFontawesome.FontAwesomeIcon, { icon: ['fab', 'facebook-square'] })
+      )
+    )
+  )
+);
+
+// exports
+exports.default = Footer;
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _style = __webpack_require__(32);
+
+var _style2 = _interopRequireDefault(_style);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// magic-strings
+const NAMESPACE = {
+  eventList: ['resize', 'scroll'],
+  className: {
+    leader: '_-sticky',
+    topped: '_-sticky--topped',
+    active: '_-sticky--active',
+    hauled: '_-sticky--hauled'
+  }
+};
+
+// helpers
+
+
+// style
+const getScaledValue = (value, scaleFactor) => {
+  const parse = /^(-?\d+)?(?:.(\d+))?(%|px)?$/.exec(`${value}`.trim()) || {};
+  return parse[3] === '%' ? +`${parse[1] || 0}.${parse[2] || 0}` / 100 * (scaleFactor || 1) : +parse[1];
+};
+
+const getQuantityUponBaseline = (num, baseline) => {
+  return Math.floor(num < 0 ? baseline > -num ? baseline + num : 0 : num);
+};
+
+const scrollPosition = () => {
+  return Math.max(document.documentElement.scrollTop, document.body.scrollTop, window.pageYOffset);
+};
+
+const viewPortWidth = () => {
+  return Math.max(document.documentElement.clientWidth, window.innerWidth);
+};
+
+// components
+class Sticky extends _react2.default.Component {
+  constructor(...args) {
+    var _temp;
+
+    return _temp = super(...args), this.stickyBoxClassNames = [NAMESPACE.className.leader, this.props.className].join(' ').trim(), this.stickyBox = _react2.default.createRef(), this._loadConfigs = () => {
+      this.stickyBoxNode = this.stickyBox.current;
+      this.stickyConfigs = {
+        $TOP: getScaledValue(this.props.top, window.innerHeight),
+        $BOTTOM: getScaledValue(this.props.bottom, window.innerHeight),
+        $START: getScaledValue(this.props.start, document.documentElement.scrollHeight),
+        $STOP: getScaledValue(this.props.stop, document.documentElement.scrollHeight),
+        $DISTANCE: getScaledValue(this.props.distance, document.documentElement.scrollHeight)
+      };
+      return this;
+    }, this._updateStickyBox = () => {
+      const { className } = this.stickyBoxNode;
+      this.stickyBoxNode.className = this.stickyBoxNode.style.height = this.stickyBoxNode.style.width = '';
+      this.stickyBoxNode.style.height = `${this.stickyBoxNode.offsetHeight}px`;
+      this.stickyBoxNode.style.width = `${this.stickyBoxNode.offsetWidth}px`;
+      this.stickyBoxNode.className = className;
+      return this;
+    }, this._calculatePositions = () => {
+      const { $TOP, $BOTTOM, $START, $STOP, $DISTANCE } = this.stickyConfigs;
+
+      // calculating positions
+      const initial = this.stickyBoxNode.getBoundingClientRect().top + scrollPosition();
+      const vertex = getQuantityUponBaseline($TOP) // by $TOP
+      || getQuantityUponBaseline(-$BOTTOM, window.innerHeight) // by $BOTTOM
+      || getQuantityUponBaseline($START - initial) // by $START
+      || (initial ? -initial : 0); // (default, non-sticky)
+      const active = getQuantityUponBaseline(initial - vertex) + (initial ? 0 : this.stickyBoxNode.offsetHeight);
+      const frozen = getQuantityUponBaseline($STOP, document.documentElement.scrollHeight) // by $STOP
+      || active + (getQuantityUponBaseline($DISTANCE) || document.documentElement.scrollHeight); // by $DISTANCE (default, endless)
+
+      // caching view port parameters
+      const height = document.documentElement.scrollHeight;
+      const width = viewPortWidth();
+
+      // exposing the results
+      this.stickyPositions = { initial, vertex, active, frozen, height, width };
+
+      return this;
+    }, this._updateStickyElement = () => {
+      const { className } = NAMESPACE;
+      const { initial, vertex, active, frozen } = this.stickyPositions;
+      const current = scrollPosition();
+
+      // assigning classNames
+      if (active < current && initial === 0) this.stickyBoxNode.classList.add(className.topped);
+      if (active < current) this.stickyBoxNode.classList.add(className.active, className.hauled);
+      if (active >= current) {
+        this.stickyBoxNode.classList.remove(className.active, className.hauled, className.topped);
+        this.stickyBoxNode.style.top = '';
+      } else if (active < current && current <= frozen) {
+        this.stickyBoxNode.style.top = `${vertex}px`;
+      } else {
+        this.stickyBoxNode.classList.remove(className.active);
+        this.stickyBoxNode.style.top = `${frozen - active}px`;
+      }
+
+      return this;
+    }, this._handleStickyEvent = () => {
+      const { height, width } = this.stickyPositions;
+      if (width !== viewPortWidth()) return this._updateStickyBox()._calculatePositions()._updateStickyElement();
+      if (height !== document.documentElement.scrollHeight) return this._calculatePositions()._updateStickyElement();
+      return this._updateStickyElement();
+    }, this.componentDidMount = () => {
+      this._loadConfigs()._updateStickyBox()._calculatePositions()._updateStickyElement();
+      NAMESPACE.eventList.forEach(event => window.addEventListener(event, this._handleStickyEvent));
+    }, this.componentWillUnmount = () => {
+      NAMESPACE.eventList.forEach(event => window.removeEventListener(event, this._handleStickyEvent));
+    }, this.render = () => _react2.default.createElement(
+      'div',
+      { className: this.stickyBoxClassNames, ref: this.stickyBox },
+      this.props.children
+    ), _temp;
+  }
+
+}
+
+// exports
+exports.default = Sticky;
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = __webpack_require__(3);
+
+var _reactFontawesome = __webpack_require__(10);
+
+var _style = __webpack_require__(34);
+
+var _style2 = _interopRequireDefault(_style);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// magic-strings
+const NAMESPACE = {
+  eventList: ['click', 'scroll', 'keyup'],
+  className: {
+    hidden: '_-search__bar--hidden'
+  }
+};
+
+// view
+
+
+// style
+const SearchView = ({ onClick, onSubmit }) => _react2.default.createElement(
+  'div',
+  { id: 'searchPanel', className: 'mr-2 _-search' },
+  _react2.default.createElement(_reactFontawesome.FontAwesomeIcon, { icon: 'search', onClick: onClick }),
+  _react2.default.createElement(
+    'div',
+    { id: 'searchBar', className: '_-search__bar _-search__bar--hidden' },
+    _react2.default.createElement(
+      'form',
+      { autoComplete: 'off', className: 'container', onSubmit: onSubmit },
+      _react2.default.createElement('input', {
+        id: 'searchInput',
+        'aria-label': 'search',
+        name: 'search',
+        placeholder: 'Search keywords'
+      }),
+      _react2.default.createElement(
+        'button',
+        null,
+        _react2.default.createElement(_reactFontawesome.FontAwesomeIcon, { icon: 'sign-in-alt' })
+      )
+    )
+  )
+);
+
+// control
+class Search extends _react.Component {
+  constructor(...args) {
+    var _temp;
+
+    return _temp = super(...args), this._stopPropagation = e => e.stopPropagation(), this._handleSearchExitEvent = e => {
+      if (NAMESPACE.eventList.includes(e.type) && (!e.keyCode || e.keyCode === 27)) {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('searchBar').classList.add(NAMESPACE.className.hidden);
+        NAMESPACE.eventList.forEach(event => window.removeEventListener(event, this._handleSearchExitEvent));
+      }
+    }, this._handleOnClickSearch = e => {
+      e.stopPropagation();
+      document.getElementById('searchBar').classList.remove(NAMESPACE.className.hidden);
+      document.getElementById('searchBar').addEventListener('click', this._stopPropagation);
+      NAMESPACE.eventList.forEach(event => window.addEventListener(event, this._handleSearchExitEvent));
+    }, this._handleOnSubmitSearchQuery = e => {
+      e.preventDefault();
+      if (e.target.search.value && this.props.location.pathname !== `/search/${e.target.search.value}`) {
+        this.props.history.push(`/search/${e.target.search.value}`);
+      }
+    }, this.render = () => _react2.default.createElement(SearchView, { onClick: this._handleOnClickSearch, onSubmit: this._handleOnSubmitSearchQuery }), _temp;
+  }
+
+}
+
+// exports
+const SearchBar = (0, _reactRouter.withRouter)(Search);
+exports.default = SearchBar;
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _style = __webpack_require__(36);
+
+var _style2 = _interopRequireDefault(_style);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// magic-strings
+const NAMESPACE = {
+  eventList: ['click', 'scroll'],
+  className: {
+    leader: '_-dropdown',
+    toggle: '_-dropdown__toggle',
+    target: '_-dropdown__menu',
+    hidden: '_-dropdown__menu--hidden'
+  }
+};
+
+// components
+
+
+// styles
+class Dropdown extends _react2.default.Component {
+  constructor(...args) {
+    var _temp;
+
+    return _temp = super(...args), this.dropdownBoxClassName = [NAMESPACE.className.leader, this.props.className].join(' ').trim(), this.dropdownBox = _react2.default.createRef(), this._handleDropdownEvent = e => {
+      const { className, eventList } = NAMESPACE;
+      if (!e.target.className || !e.target.className.toString().includes(className.target)) {
+        this.dropdownMenuNode.classList.add(className.hidden);
+        eventList.map(type => document.removeEventListener(type, this._handleDropdownEvent));
+      }
+    }, this._onClickToggleMenu = e => {
+      const { className, eventList } = NAMESPACE;
+      if (e.target.className.toString().includes(className.toggle) && !this.dropdownMenuNode.classList.toggle(className.hidden)) {
+        eventList.map(type => document.addEventListener(type, this._handleDropdownEvent));
+      }
+    }, this.componentDidMount = () => {
+      const { className } = NAMESPACE;
+      this.dropdownMenuNode = this.dropdownBox.current.getElementsByClassName(className.target)[0];
+      this.dropdownMenuNode.classList.add(className.hidden);
+    }, this.render = () => _react2.default.createElement(
+      'div',
+      { className: this.dropdownBoxClassName, ref: this.dropdownBox, onClick: this._onClickToggleMenu },
+      this.props.children
+    ), _temp;
+  }
+
+}
+
+// exports
+exports.default = Dropdown;
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(2);
+
+var _dropdown = __webpack_require__(37);
+
+var _dropdown2 = _interopRequireDefault(_dropdown);
+
+var _searchbar = __webpack_require__(35);
+
+var _searchbar2 = _interopRequireDefault(_searchbar);
+
+var _sticky = __webpack_require__(33);
+
+var _sticky2 = _interopRequireDefault(_sticky);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// helper
+// components
+const NavMenuAuthOff = () => {
+  const state = { returnTo: false && window.location.pathname || '/' };
+  return _react2.default.createElement(
+    'button',
+    { className: 'btn mt-1 ml-2 _-button--signin' },
+    _react2.default.createElement(
+      _reactRouterDom.Link,
+      { to: { state, pathname: '/signin' } },
+      'Sign in'
+    )
+  );
+};
+
+// dependents
+/* global __isBrowser__ */
+
+const NavMenuAuthOn = () => _react2.default.createElement(
+  _dropdown2.default,
+  null,
+  _react2.default.createElement(
+    'div',
+    { className: '_-dropdown__toggle' },
+    _react2.default.createElement('img', {
+      alt: 'user menu',
+      className: '_-dropdown__toggle__icon',
+      src: '/static/media/icon.png'
+    })
+  ),
+  _react2.default.createElement(
+    'div',
+    { className: '_-dropdown__menu _-dropdown__menu--hidden' },
+    _react2.default.createElement(
+      'ul',
+      { className: '_-dropdown__menu__box' },
+      _react2.default.createElement(
+        'li',
+        { className: '_-dropdown__menu__item--title' },
+        'Welcome!'
+      ),
+      _react2.default.createElement(
+        'li',
+        { className: '_-dropdown__menu__item--divider' },
+        '\xA0'
+      ),
+      _react2.default.createElement(
+        'li',
+        { className: '_-dropdown__menu__item' },
+        _react2.default.createElement(
+          _reactRouterDom.Link,
+          { to: '/blog/new' },
+          'New Post'
+        )
+      ),
+      _react2.default.createElement(
+        'li',
+        { className: '_-dropdown__menu__item' },
+        _react2.default.createElement(
+          _reactRouterDom.Link,
+          { to: '/util/stacks/posts' },
+          'Posts Management'
+        )
+      ),
+      _react2.default.createElement(
+        'li',
+        { className: '_-dropdown__menu__item--divider' },
+        '\xA0'
+      ),
+      _react2.default.createElement(
+        'li',
+        { className: '_-dropdown__menu__item' },
+        _react2.default.createElement(
+          _reactRouterDom.Link,
+          { to: '/util/settings' },
+          'Website Settings'
+        )
+      ),
+      _react2.default.createElement(
+        'li',
+        { className: '_-dropdown__menu__item--divider' },
+        '\xA0'
+      ),
+      _react2.default.createElement(
+        'li',
+        { className: '_-dropdown__menu__item' },
+        _react2.default.createElement(
+          _reactRouterDom.Link,
+          { to: '/signout' },
+          'Sign out'
+        )
+      )
+    )
+  )
+);
+
+const NavLeftPort = ({ siteName }) => _react2.default.createElement(
+  'div',
+  { className: '_-nav__left-menu' },
+  _react2.default.createElement(
+    _reactRouterDom.Link,
+    {
+      to: '/',
+      className: 'navbar-brand mb-0 h1'
+    },
+    siteName
+  ),
+  _react2.default.createElement(
+    _reactRouterDom.NavLink,
+    {
+      exact: true,
+      to: '/blog/about',
+      className: '_-nav__link d-none d-sm-inline',
+      activeClassName: '_-nav__link--active'
+    },
+    'About'
+  ),
+  _react2.default.createElement(
+    _reactRouterDom.NavLink,
+    {
+      exact: true,
+      to: '/blog/CV',
+      className: '_-nav__link d-none d-sm-inline',
+      activeClassName: '_-nav__link--active'
+    },
+    'CV'
+  ),
+  _react2.default.createElement(
+    _reactRouterDom.NavLink,
+    {
+      to: '/blog',
+      className: '_-nav__link d-none d-sm-inline',
+      activeClassName: '_-nav__link--active',
+      isActive: (match, location) => {
+        return location.pathname.includes('/blog') && !['/blog/about', '/blog/cv'].includes(location.pathname.toLowerCase());
+      }
+    },
+    'Blog'
+  )
+);
+
+const NavRightPort = ({ isSignedIn }) => _react2.default.createElement(
+  'div',
+  { className: '_-nav__right-menu' },
+  _react2.default.createElement(_searchbar2.default, null),
+  isSignedIn ? _react2.default.createElement(NavMenuAuthOn, null) : _react2.default.createElement(NavMenuAuthOff, null)
+);
+
+const NavBar = ({ isSignedIn, _$CONFIG }) => _react2.default.createElement(
+  _sticky2.default,
+  null,
+  _react2.default.createElement(
+    'nav',
+    { className: 'navbar navbar-expand-lg _-nav' },
+    _react2.default.createElement(
+      'div',
+      { className: 'container' },
+      _react2.default.createElement(NavLeftPort, { siteName: _$CONFIG.siteName }),
+      _react2.default.createElement(NavRightPort, { isSignedIn: isSignedIn })
+    )
+  )
+);
+
+// exports
+exports.default = NavBar;
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports) {
+
+module.exports = require("@fortawesome/free-brands-svg-icons/faGithub");
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports) {
+
+module.exports = require("@fortawesome/free-brands-svg-icons/faLinkedin");
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports) {
+
+module.exports = require("@fortawesome/free-brands-svg-icons/faFacebookSquare");
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports) {
+
+module.exports = require("@fortawesome/free-solid-svg-icons/faSearch");
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports) {
+
+module.exports = require("@fortawesome/free-solid-svg-icons/faEraser");
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports) {
+
+module.exports = require("@fortawesome/free-solid-svg-icons/faSignInAlt");
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports) {
+
+module.exports = require("@fortawesome/free-solid-svg-icons/faPencilAlt");
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports) {
+
+module.exports = require("@fortawesome/free-solid-svg-icons/faAngleDoubleRight");
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports) {
+
+module.exports = require("@fortawesome/fontawesome-svg-core");
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _fontawesomeSvgCore = __webpack_require__(47);
+
+var _faAngleDoubleRight = __webpack_require__(46);
+
+var _faPencilAlt = __webpack_require__(45);
+
+var _faSignInAlt = __webpack_require__(44);
+
+var _faEraser = __webpack_require__(43);
+
+var _faSearch = __webpack_require__(42);
+
+var _faFacebookSquare = __webpack_require__(41);
+
+var _faLinkedin = __webpack_require__(40);
+
+var _faGithub = __webpack_require__(39);
+
+// configs
+
+
+// solid icons
+// import { faAngleDoubleRight, faPencilAlt, faSignInAlt, faEraser, faSearch } from '@fortawesome/free-solid-svg-icons/';
+_fontawesomeSvgCore.config.autoAddCss = false;
+
+// brand icons
+// import { faFacebookSquare, faLinkedin, faGithub } from '@fortawesome/free-brands-svg-icons';
+
+_fontawesomeSvgCore.library.add(_faPencilAlt.faPencilAlt, _faEraser.faEraser, _faSearch.faSearch, _faSignInAlt.faSignInAlt, _faAngleDoubleRight.faAngleDoubleRight, _faGithub.faGithub, _faLinkedin.faLinkedin, _faFacebookSquare.faFacebookSquare);
+
+// exports
+const fontawesome = { library: _fontawesomeSvgCore.library, config: _fontawesomeSvgCore.config };
+exports.default = _fontawesomeSvgCore.library;
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(2);
+
+var _reactRouter = __webpack_require__(3);
+
+var _router = __webpack_require__(18);
+
+var _auth = __webpack_require__(7);
+
+var _fetch = __webpack_require__(14);
+
+var _fetch2 = _interopRequireDefault(_fetch);
+
+var _fontawesome = __webpack_require__(48);
+
+var _fontawesome2 = _interopRequireDefault(_fontawesome);
+
+var _navbar = __webpack_require__(38);
+
+var _navbar2 = _interopRequireDefault(_navbar);
+
+var _footer = __webpack_require__(31);
+
+var _footer2 = _interopRequireDefault(_footer);
+
+var _unfounded = __webpack_require__(11);
+
+var _unfounded2 = _interopRequireDefault(_unfounded);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+// font-awesome
+
+
+// blocks
+
+
+// components
+class App extends _react2.default.Component {
+  constructor(...args) {
+    var _temp;
+
+    return _temp = super(...args), this.state = { isSignedIn: this.props.isSignedIn, _$CONFIG: this.props.config() }, _temp;
+  }
+
+  componentDidMount() {
+    document.addEventListener('_authenticationStateChanged', () => {
+      this.setState(() => ({ isSignedIn: (0, _auth.isClientSignedIn)() }));
+    });
+    document.addEventListener('_configUpdated', () => {
+      const request = (0, _fetch2.default)('/util/settings');
+      request().then(res => this.setState(() => ({ _$CONFIG: res.config })));
+    });
+  }
+
+  render() {
+    return _react2.default.createElement(
+      'div',
+      null,
+      _react2.default.createElement(_navbar2.default, { isSignedIn: this.state.isSignedIn, _$CONFIG: this.state._$CONFIG }),
+      _react2.default.createElement(
+        'div',
+        { className: 'container _-body' },
+        _react2.default.createElement(
+          _reactRouterDom.Switch,
+          null,
+          _router.routers.map((_ref) => {
+            let { path, exact, secure, component: C } = _ref,
+                rest = _objectWithoutProperties(_ref, ['path', 'exact', 'secure', 'component']);
+
+            return _react2.default.createElement(_reactRouterDom.Route, {
+              key: path,
+              path: path,
+              exact: exact,
+              render: props => secure && !this.state.isSignedIn ? _react2.default.createElement(_reactRouter.Redirect, { to: '/signin' }) : _react2.default.createElement(C, _extends({}, props, rest, this.props, {
+                isSignedIn: this.state.isSignedIn,
+                _$CONFIG: this.state._$CONFIG
+              }))
+            });
+          }),
+          _react2.default.createElement(_reactRouterDom.Route, { render: props => _react2.default.createElement(_unfounded2.default, _extends({}, props, { _$CONFIG: this.state.config })) })
+        )
+      ),
+      _react2.default.createElement(_footer2.default, { _$CONFIG: this.state._$CONFIG })
+    );
+  }
+}
+
+// exports
+exports.default = App;
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.RenderClient = exports.RenderServer = undefined;
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(2);
+
+var _auth = __webpack_require__(7);
+
+var _app = __webpack_require__(49);
+
+var _app2 = _interopRequireDefault(_app);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// helper
+/* global __isBrowser__ */
+
+const loadParamData = param => data => () => {
+  if (false) {}
+  return ( false ? undefined : data) || null;
+};
+
+// markups
+
+
+// root-component
+const RenderServer = (location, data, config, isServerSignedIn) => _react2.default.createElement(
+  _reactRouterDom.StaticRouter,
+  { location: location, context: {} },
+  _react2.default.createElement(_app2.default, {
+    isSignedIn: isServerSignedIn,
+    initialData: loadParamData('__INIT__')(data),
+    config: loadParamData('__CONFIG__')(config)
+  })
+);
+
+const RenderClient = () => _react2.default.createElement(
+  _reactRouterDom.BrowserRouter,
+  null,
+  _react2.default.createElement(_app2.default, {
+    isSignedIn: (0, _auth.isClientSignedIn)(),
+    initialData: loadParamData('__INIT__')(),
+    config: loadParamData('__CONFIG__')()
+  })
+);
+
+// exports
+exports.RenderServer = RenderServer;
+exports.RenderClient = RenderClient;
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// views
+const Settings = ({ _$CONFIG, onSubmit, isSubmittable }) => _react2.default.createElement(
+  "form",
+  { className: "pt-3", onSubmit: onSubmit },
+  _react2.default.createElement(
+    "div",
+    { className: "input-group my-1" },
+    _react2.default.createElement(
+      "div",
+      { className: "input-group-prepend col-2 px-0" },
+      _react2.default.createElement(
+        "span",
+        { className: "input-group-text w-100" },
+        "Website name"
+      )
+    ),
+    _react2.default.createElement("input", {
+      type: "text",
+      id: "siteName",
+      name: "config[siteName]",
+      className: "form-control",
+      defaultValue: _$CONFIG.siteName,
+      placeholder: "Website name"
+    })
+  ),
+  _react2.default.createElement(
+    "div",
+    { className: "input-group my-1" },
+    _react2.default.createElement(
+      "div",
+      { className: "input-group-prepend col-2 px-0" },
+      _react2.default.createElement(
+        "span",
+        { className: "input-group-text w-100" },
+        "Description"
+      )
+    ),
+    _react2.default.createElement("input", {
+      type: "text",
+      id: "description",
+      name: "config[description]",
+      className: "form-control",
+      placeholder: "Description",
+      defaultValue: _$CONFIG.description
+    })
+  ),
+  _react2.default.createElement(
+    "div",
+    { className: "input-group my-1" },
+    _react2.default.createElement(
+      "div",
+      { className: "input-group-prepend col-2 px-0" },
+      _react2.default.createElement(
+        "span",
+        { className: "input-group-text w-100" },
+        "Keywords"
+      )
+    ),
+    _react2.default.createElement("input", {
+      type: "text",
+      id: "keywords",
+      name: "config[keywords]",
+      className: "form-control",
+      defaultValue: _$CONFIG.keywords,
+      placeholder: "Keywords (separated by ',')"
+    })
+  ),
+  _react2.default.createElement(
+    "div",
+    { className: "input-group my-1" },
+    _react2.default.createElement(
+      "div",
+      { className: "input-group-prepend col-2 px-0" },
+      _react2.default.createElement(
+        "span",
+        { className: "input-group-text w-100" },
+        "Language"
+      )
+    ),
+    _react2.default.createElement(
+      "select",
+      { id: "language", name: "config[sets][language]", className: "custom-select" },
+      _react2.default.createElement(
+        "option",
+        { value: "en" },
+        "English (en)"
+      )
+    )
+  ),
+  _react2.default.createElement(
+    "div",
+    { className: "input-group my-1" },
+    _react2.default.createElement(
+      "div",
+      { className: "input-group-prepend col-2 px-0" },
+      _react2.default.createElement(
+        "span",
+        { className: "input-group-text w-100" },
+        "Timezone"
+      )
+    ),
+    _react2.default.createElement(
+      "select",
+      { id: "timezone", name: "config[sets][timezone]", className: "custom-select" },
+      _react2.default.createElement(
+        "option",
+        { value: "UTC\u221206:00 (MST)" },
+        "UTC\u221206:00 (MST)"
+      )
+    )
+  ),
+  _react2.default.createElement(
+    "div",
+    { className: "input-group my-1" },
+    _react2.default.createElement(
+      "div",
+      { className: "input-group-prepend col-2 px-0" },
+      _react2.default.createElement(
+        "span",
+        { className: "input-group-text w-100" },
+        "Time Format"
+      )
+    ),
+    _react2.default.createElement(
+      "select",
+      { id: "time-format", name: "config[sets][timeFormat]", className: "custom-select" },
+      _react2.default.createElement(
+        "option",
+        { value: "YYYY-MM-DD" },
+        "YYYY-MM-DD"
+      )
+    )
+  ),
+  _react2.default.createElement(
+    "div",
+    { className: "input-group my-1" },
+    _react2.default.createElement(
+      "div",
+      { className: "input-group-prepend col-2 px-0" },
+      _react2.default.createElement(
+        "span",
+        { className: "input-group-text w-100" },
+        "Posts per page"
+      )
+    ),
+    _react2.default.createElement("input", {
+      type: "number",
+      id: "num",
+      name: "config[sets][num]",
+      className: "form-control",
+      defaultValue: _$CONFIG.sets.num
+    })
+  ),
+  _react2.default.createElement(
+    "button",
+    {
+      "aria-label": "Update",
+      className: "btn btn-outline-primary text-uppercase float-right mx-1 mt-3",
+      disabled: !isSubmittable
+    },
+    "Update"
+  )
+);
+
+// exports
+exports.default = Settings;
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _settings = __webpack_require__(51);
+
+var _settings2 = _interopRequireDefault(_settings);
+
+var _header = __webpack_require__(6);
+
+var _header2 = _interopRequireDefault(_header);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// components
+
+
+// vies
+class Settings extends _react.Component {
+  constructor(...args) {
+    var _temp;
+
+    return _temp = super(...args), this.state = { isSubmittable: true }, this._handleOnSubmitUpdatedSettings = e => {
+      e.preventDefault();
+      this.setState(() => ({ isSubmittable: false }));
+      this.props.send({ method: 'PATCH', data: e.target }).then(res => {
+        if (res.result.nModified === 1) {
+          document.dispatchEvent(new Event('_configUpdated'));
+          this.setState(() => ({ isSubmittable: true }));
+        }
+      });
+    }, this.render = () => _react2.default.createElement(
+      'div',
+      { className: '_-settings' },
+      _react2.default.createElement(_header2.default, { title: 'Website Settings' }),
+      _react2.default.createElement(_settings2.default, {
+        _$CONFIG: this.props._$CONFIG,
+        onSubmit: this._handleOnSubmitUpdatedSettings,
+        isSubmittable: this.state.isSubmittable
+      })
+    ), _temp;
+  }
+
+}
+
+// exports
+exports.default = Settings;
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _qs = __webpack_require__(13);
+
+var _qs2 = _interopRequireDefault(_qs);
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _moment = __webpack_require__(5);
+
+var _moment2 = _interopRequireDefault(_moment);
+
+var _reactRouterDom = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// views
+const StacksSwitch = ({ location }) => {
+  const query = _qs2.default.parse(location.search, { ignoreQueryPrefix: true, parseArrays: false, depth: 0 });
+  const leaveBin = `${location.pathname}?${_qs2.default.stringify(_extends({}, query, { access: undefined }))}`;
+  const enterBin = `${location.pathname}?${_qs2.default.stringify(_extends({}, query, { access: 'bin' }))}`;
+  return location.search.includes('access=bin') ? _react2.default.createElement(
+    _reactRouterDom.Link,
+    { className: 'btn btn-sm btn-outline-primary float-right', to: leaveBin },
+    'LEAVE BIN'
+  ) : _react2.default.createElement(
+    _reactRouterDom.Link,
+    { className: 'btn btn-sm btn-outline-success float-right', to: enterBin },
+    'ENTER BIN'
+  );
+};
+
+const StacksAction = ({ state, event, location }) => {
+  const regularOptions = [_react2.default.createElement(
+    'option',
+    { value: 'pinned', key: 'option-pin' },
+    'Pin'
+  ), _react2.default.createElement(
+    'option',
+    { value: 'hidden', key: 'option-hide' },
+    'Hide'
+  ), _react2.default.createElement(
+    'option',
+    { value: 'recycled', key: 'option-recycle' },
+    'Recycle'
+  )];
+  const binOptions = [_react2.default.createElement(
+    'option',
+    { value: 'restored', key: 'option-restore' },
+    'Restore'
+  )];
+  return _react2.default.createElement(
+    'div',
+    { className: 'my-3 d-inline' },
+    _react2.default.createElement(
+      'select',
+      {
+        className: 'custom-select custom-select-sm col-2 mr-2',
+        name: 'command',
+        value: state.command,
+        onChange: event._onSelectCommand
+      },
+      _react2.default.createElement(
+        'option',
+        { value: 'null' },
+        'Select a bulk command'
+      ),
+      location.search.includes('access=bin') ? binOptions : regularOptions
+    ),
+    _react2.default.createElement(
+      'button',
+      {
+        className: 'btn btn-sm btn-outline-primary',
+        'aria-label': 'Apply',
+        onClick: event._onFireAction
+      },
+      'Apply'
+    )
+  );
+};
+
+const StacksCell = ({ event, checked, doc = {} }) => _react2.default.createElement(
+  'tr',
+  null,
+  _react2.default.createElement(
+    'th',
+    { className: 'text-center', scope: 'row' },
+    _react2.default.createElement(
+      'label',
+      { htmlFor: doc._id, className: 'm-0' },
+      _react2.default.createElement('input', {
+        type: 'checkbox',
+        id: doc._id,
+        value: doc._id,
+        onChange: event._onCheckDoc,
+        checked: checked.includes(doc._id)
+      })
+    )
+  ),
+  _react2.default.createElement(
+    'td',
+    null,
+    doc.author.nickname
+  ),
+  _react2.default.createElement(
+    'td',
+    null,
+    _react2.default.createElement(
+      _reactRouterDom.Link,
+      { to: `/blog/${doc.canonical}` },
+      doc.title
+    )
+  ),
+  _react2.default.createElement(
+    'td',
+    null,
+    doc.category
+  ),
+  _react2.default.createElement(
+    'td',
+    null,
+    doc.tags || 'null'
+  ),
+  _react2.default.createElement(
+    'td',
+    null,
+    (0, _moment2.default)(doc.time && doc.time._created).format('MM/DD/YYYY')
+  )
+);
+
+const StacksList = ({ event, state: { checked, data: { list = [] } } }) => _react2.default.createElement(
+  'table',
+  { className: 'table table-sm table-hover mt-3' },
+  _react2.default.createElement(
+    'thead',
+    null,
+    _react2.default.createElement(
+      'tr',
+      null,
+      _react2.default.createElement(
+        'th',
+        { className: 'text-center', scope: 'col', width: '3%' },
+        _react2.default.createElement(
+          'label',
+          { htmlFor: 'select-all', className: 'm-0' },
+          _react2.default.createElement('input', {
+            id: 'select-all',
+            type: 'checkbox',
+            onChange: event._onCheckAllDocs,
+            checked: checked.length && list.length === checked.length
+          })
+        )
+      ),
+      _react2.default.createElement(
+        'th',
+        { scope: 'col', width: '10%' },
+        'Author'
+      ),
+      _react2.default.createElement(
+        'th',
+        { scope: 'col', width: '50%' },
+        'Title'
+      ),
+      _react2.default.createElement(
+        'th',
+        { scope: 'col', width: '14%' },
+        'Category'
+      ),
+      _react2.default.createElement(
+        'th',
+        { scope: 'col', width: '14%' },
+        'Tags'
+      ),
+      _react2.default.createElement(
+        'th',
+        { scope: 'col', width: '12%' },
+        'Date'
+      )
+    )
+  ),
+  _react2.default.createElement(
+    'tbody',
+    null,
+    list.map(doc => _react2.default.createElement(StacksCell, { key: doc._id, event: event, checked: checked, doc: doc }))
+  )
+);
+
+const Stacks = props => _react2.default.createElement(
+  'form',
+  { className: 'container text-justify pt-3' },
+  _react2.default.createElement(StacksSwitch, props),
+  _react2.default.createElement(StacksAction, props),
+  _react2.default.createElement(StacksList, props)
+);
+
+// exports
+exports.default = Stacks;
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _stacks = __webpack_require__(53);
+
+var _stacks2 = _interopRequireDefault(_stacks);
+
+var _header = __webpack_require__(6);
+
+var _header2 = _interopRequireDefault(_header);
+
+var _pagination = __webpack_require__(16);
+
+var _pagination2 = _interopRequireDefault(_pagination);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// components
+class Stacks extends _react.Component {
+  constructor(...args) {
+    var _temp;
+
+    return _temp = super(...args), this.state = { data: this.props.initialData(), loading: false, command: 'null', checked: [] }, this.event = {
+      _onSelectCommand: e => {
+        const checkedValue = e.target.value;
+        this.setState(() => ({ command: checkedValue }));
+      },
+
+      _onCheckDoc: e => {
+        const checkedValue = e.target.value;
+        this.setState(() => ({
+          checked: this.state.checked.includes(checkedValue) ? this.state.checked.filter(_id => _id !== checkedValue) : this.state.checked.concat(checkedValue)
+        }));
+      },
+
+      _onCheckAllDocs: e => {
+        this.setState(() => ({
+          checked: this.state.data && this.state.data.list.length !== this.state.checked.length ? this.state.data.list.map(item => item._id) : []
+        }));
+      },
+
+      _onFireAction: e => {
+        e.preventDefault();
+        this.setState(() => ({ loading: true }));
+        this.props.send({ method: 'PATCH', data: { action: this.state.command, target: this.state.checked } }).then(res => {
+          if (res.result.nModified === this.state.checked.length) {
+            const data = { list: res.list, meta: res.meta };
+            this.setState(() => ({ data, loading: false, command: 'null', checked: [] }));
+          }
+        });
+      }
+    }, this.componentDidMount = () => {
+      if (!this.state.data && this.props.request) {
+        this.setState(() => ({ loading: true }));
+        this.props.request().then(data => this.setState(() => ({ data, loading: false })));
+      }
+    }, this.componentDidUpdate = prevProps => {
+      if (prevProps.location.path === this.props.location.path && prevProps.location.search !== this.props.location.search) {
+        this.props.request().then(data => this.setState(() => ({ data, loading: false })));
+      }
+    }, this.render = () => {
+      if (!this.state.data) return null;
+      return _react2.default.createElement(
+        'div',
+        { className: '_-stacks' },
+        _react2.default.createElement(_header2.default, { title: 'Content Manager', subtitle: 'Posts' }),
+        _react2.default.createElement(_stacks2.default, { state: this.state, event: this.event, location: this.props.location }),
+        _react2.default.createElement(_pagination2.default, { meta: this.state.data.meta })
+      );
+    }, _temp;
+  }
+
+}
+
+// exports
+
+
+// vies
+exports.default = Stacks;
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _moment = __webpack_require__(5);
+
+var _moment2 = _interopRequireDefault(_moment);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// components
+const Editor = ({ onSubmit, isSubmittable, post: { title, featured, category, tags, time, content } = {} }) => _react2.default.createElement(
+  'form',
+  { autoComplete: 'off', className: 'container d-flex pt-3 _-form', onSubmit: onSubmit },
+  _react2.default.createElement(
+    'div',
+    { className: 'form-row' },
+    _react2.default.createElement(
+      'div',
+      { className: '_-form__row' },
+      _react2.default.createElement('input', {
+        id: 'title',
+        'aria-label': 'title',
+        name: 'post[title]',
+        placeholder: 'TITLE',
+        className: 'col-12',
+        defaultValue: title
+      })
+    ),
+    _react2.default.createElement(
+      'div',
+      { className: '_-form__row' },
+      _react2.default.createElement('input', {
+        id: 'featured',
+        'aria-label': 'featured',
+        name: 'post[featured]',
+        placeholder: 'FEATURED IMAGE URL',
+        className: 'col-4',
+        defaultValue: featured
+      }),
+      _react2.default.createElement('input', {
+        id: 'category',
+        'aria-label': 'category',
+        name: 'post[category]',
+        placeholder: 'CATEGORY',
+        className: 'col-2',
+        defaultValue: category
+      }),
+      _react2.default.createElement('input', {
+        id: 'tags',
+        'aria-label': 'tags',
+        name: 'post[tags]',
+        placeholder: 'TAGS',
+        className: 'col-2',
+        defaultValue: tags
+      }),
+      _react2.default.createElement('input', {
+        id: 'state',
+        'aria-label': 'state',
+        name: 'post[state]',
+        placeholder: 'STATE',
+        className: 'col-2',
+        disabled: 'true'
+      }),
+      _react2.default.createElement('input', {
+        id: 'time',
+        'aria-label': 'time',
+        name: 'post[time]',
+        placeholder: 'TIME',
+        disabled: 'true',
+        className: 'col-2',
+        defaultValue: time && (0, _moment2.default)(time._created).format('MM/DD/YYYY')
+      })
+    ),
+    _react2.default.createElement(
+      'div',
+      { className: '_-form__row' },
+      _react2.default.createElement('textarea', {
+        id: 'content',
+        name: 'post[content]',
+        'aria-label': 'content',
+        placeholder: 'CONTENT',
+        className: 'col-12',
+        rows: '15',
+        defaultValue: content
+      })
+    ),
+    _react2.default.createElement(
+      'div',
+      { className: '_-form__row d-inline-flex' },
+      _react2.default.createElement(
+        'div',
+        { className: 'col-10' },
+        '\xA0'
+      ),
+      _react2.default.createElement(
+        'button',
+        { className: 'col-2', disabled: !isSubmittable },
+        title ? 'UPDATE' : 'SUBMIT'
+      )
+    )
+  )
+);
+
+// exports
+exports.default = Editor;
+
+/***/ }),
+/* 56 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+// views
+
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _header = __webpack_require__(6);
+
+var _header2 = _interopRequireDefault(_header);
+
+var _editor = __webpack_require__(55);
+
+var _editor2 = _interopRequireDefault(_editor);
+
+var _unfounded = __webpack_require__(11);
+
+var _unfounded2 = _interopRequireDefault(_unfounded);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// router
+class Editor extends _react.Component {
+  constructor(...args) {
+    var _temp;
+
+    return _temp = super(...args), this.state = { data: this.props.initialData() || this.props.location.state, loading: false }, this._handleOnSubmit = e => {
+      e.preventDefault();
+      this.setState(() => ({ loading: true }));
+      this.props.send({ method: this.state.data ? 'PUT' : 'POST', data: e.target }).then(doc => {
+        if (doc && doc.post) this.props.history.push(`/blog/${doc.post.canonical}`);
+      });
+    }, this.componentDidMount = () => {
+      if (!this.state.data && this.props.request) {
+        this.setState(() => ({ loading: true }));
+        this.props.request().then(data => this.setState(() => ({ data, loading: false })));
+      }
+    }, this.render = () => {
+      if (this.state.data && this.state.data._status === 404) return _react2.default.createElement(_unfounded2.default, this.props);
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(_header2.default, { title: 'Post Editor' }),
+        _react2.default.createElement(_editor2.default, _extends({ onSubmit: this._handleOnSubmit, isSubmittable: !this.state.loading }, this.state.data))
+      );
+    }, _temp;
+  }
+
+}
+
+// exports
+exports.default = Editor;
+
+/***/ }),
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = __webpack_require__(3);
+
+var _auth = __webpack_require__(7);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// components
+class Signout extends _react.Component {
+  constructor(...args) {
+    var _temp;
+
+    return _temp = super(...args), this.state = { isSignedIn: (0, _auth.isClientSignedIn)() }, this.componentDidMount = () => {
+      if (this.state.isSignedIn) return (0, _auth._handleSignOut)();
+    }, this.render = () => {
+      if (this.state.isSignedIn) return null;
+      return _react2.default.createElement(_reactRouter.Redirect, { to: '/' });
+    }, _temp;
+  }
+
+}
+
+// exports
+exports.default = Signout;
+
+/***/ }),
+/* 58 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = __webpack_require__(3);
+
+var _auth = __webpack_require__(7);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// components
+class Signin extends _react.Component {
+  constructor(...args) {
+    var _temp;
+
+    return _temp = super(...args), this.state = { isSignedIn: (0, _auth.isClientSignedIn)(), returnTo: '/' }, this.componentDidMount = () => {
+      if (this.state.isSignedIn) return null;
+      (0, _auth._handleSignIn)(this.props.location.state, (err, returnTo) => {
+        if (err) throw err;
+        this.setState(() => ({ returnTo, isSignedIn: true }));
+        this.props.send({ data: null, method: 'POST' }).then(({ accessToken }) => {
+          if (accessToken !== _auth.authStorage.accessToken.get()) _auth.authStorage.clearAllTokens(); // todo: FAILED ON SERVER: show error to the client
+        });
+      });
+    }, this.render = () => {
+      if (this.state.isSignedIn) return _react2.default.createElement(_reactRouter.Redirect, { to: this.state.returnTo || '/' });
+      return null;
+    }, _temp;
+  }
+
+}
+
+// exports
+exports.default = Signin;
+
+/***/ }),
+/* 59 */
+/***/ (function(module, exports) {
+
+module.exports = require("markdown-to-jsx");
+
+/***/ }),
+/* 60 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _markdownToJsx = __webpack_require__(59);
+
+var _markdownToJsx2 = _interopRequireDefault(_markdownToJsx);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// view
+const Post = ({ post = {} }) => _react2.default.createElement(
+  'div',
+  { className: 'd-flex' },
+  _react2.default.createElement(
+    'div',
+    { className: 'col-md-10 m-auto' },
+    _react2.default.createElement(
+      'article',
+      { id: post._id, className: '_-body__post' },
+      _react2.default.createElement(
+        _markdownToJsx2.default,
+        null,
+        post.content
+      )
+    )
+  )
+);
+
+// exports
+exports.default = Post;
+
+/***/ }),
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _post = __webpack_require__(60);
+
+var _post2 = _interopRequireDefault(_post);
+
+var _header = __webpack_require__(6);
+
+var _header2 = _interopRequireDefault(_header);
+
+var _unfounded = __webpack_require__(11);
+
+var _unfounded2 = _interopRequireDefault(_unfounded);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// router
+class Post extends _react.Component {
+  constructor(...args) {
+    var _temp;
+
+    return _temp = super(...args), this.state = { data: this.props.initialData(), loading: false }, _temp;
+  }
+
+  componentDidMount() {
+    if (!this.state.data && this.props.request) {
+      this.setState(() => ({ loading: true }));
+      this.props.request().then(data => this.setState(() => ({ data, loading: false })));
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.location.pathname !== this.props.location.pathname || prevProps.location.search !== this.props.location.search) {
+      this.setState(() => ({ loading: true }));
+      this.props.request().then(data => this.setState(() => ({ data, loading: false })));
+    }
+  }
+
+  render() {
+    if (!this.state.data) return null;
+    if (this.state.data._status !== 200) return _react2.default.createElement(_unfounded2.default, this.props);
+    return _react2.default.createElement(
+      'div',
+      null,
+      _react2.default.createElement(_header2.default, {
+        title: this.state.data.post.title,
+        post: this.state.data.post,
+        featured: this.state.data.post.featured,
+        history: this.props.history,
+        isSignedIn: this.props.isSignedIn
+      }),
+      _react2.default.createElement(_post2.default, this.state.data)
+    );
+  }
+}
+
+// exports
+
+
+// views
+exports.default = Post;
+
+/***/ }),
+/* 62 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 63 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _moment = __webpack_require__(5);
+
+var _moment2 = _interopRequireDefault(_moment);
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// view
+const PostTile = ({ post: { _id, author, featured, canonical, category, state, time, title } }) => _react2.default.createElement(
+  'article',
+  { id: _id, key: _id, className: 'col-xl-4 col-md-6 col-12 p-3 _-body__card' },
+  _react2.default.createElement(
+    'header',
+    {
+      className: 'row _-body__card__header',
+      style: featured ? { backgroundImage: `url('${featured}')` } : {}
+    },
+    _react2.default.createElement(
+      'div',
+      { className: 'm-2 pl-1' },
+      _react2.default.createElement(
+        'span',
+        { className: 'badge badge-pill badge-warning mr-2 text-capitalize' },
+        category
+      )
+    ),
+    _react2.default.createElement(
+      'h2',
+      { className: 'col-12 align-self-end _-body__card__title' },
+      _react2.default.createElement(
+        _reactRouterDom.Link,
+        { to: `/blog/${canonical}` },
+        title
+      )
+    )
+  ),
+  _react2.default.createElement(
+    'section',
+    { className: '_-body__card__section mt-1' },
+    _react2.default.createElement(
+      'time',
+      { dateTime: time._created, className: 'badge badge-primary mr-2' },
+      (0, _moment2.default)(time._created).format('MMM-DD')
+    ),
+    _react2.default.createElement(
+      'span',
+      null,
+      author.nickname
+    )
+  )
+);
+
+const List = ({ list = [] }) => _react2.default.createElement(
+  'div',
+  { className: 'container-md' },
+  _react2.default.createElement(
+    'div',
+    { className: 'row justify-content-left' },
+    list.length && list.map(post => _react2.default.createElement(PostTile, { key: post._id, post: post }))
+  )
+);
+
+// exports
+exports.default = List;
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _header = __webpack_require__(6);
+
+var _header2 = _interopRequireDefault(_header);
+
+var _list = __webpack_require__(63);
+
+var _list2 = _interopRequireDefault(_list);
+
+var _pagination = __webpack_require__(16);
+
+var _pagination2 = _interopRequireDefault(_pagination);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// router
+class List extends _react.Component {
+  constructor(...args) {
+    var _temp;
+
+    return _temp = super(...args), this.state = { data: this.props.initialData(), loading: false }, _temp;
+  }
+
+  componentDidMount() {
+    if (!this.state.data && this.props.request) {
+      this.setState(() => ({ loading: true }));
+      this.props.request().then(data => this.setState(() => ({ data, loading: false })));
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.location.pathname !== this.props.location.pathname || prevProps.location.search !== this.props.location.search) {
+      this.setState(() => ({ loading: true }));
+      this.props.request().then(data => this.setState(() => ({ data, loading: false })));
+    }
+  }
+
+  render() {
+    if (!this.state.data) return null;
+    return _react2.default.createElement(
+      'div',
+      null,
+      _react2.default.createElement(_header2.default, { title: this.props.location.pathname === '/blog' ? 'Post List' : 'Searched Results' }),
+      this.state.data.list ? _react2.default.createElement(_list2.default, this.state.data) : _react2.default.createElement(
+        'div',
+        null,
+        'NO RESULTS.'
+      ),
+      this.state.data && _react2.default.createElement(_pagination2.default, { meta: this.state.data.meta })
+    );
+  }
+}
+
+// exports
+
+
+// views
+exports.default = List;
+
+/***/ }),
+/* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = __webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// components
+const Landing = () => _react2.default.createElement(_reactRouter.Redirect, { to: '/blog' });
+
+// exports
+exports.default = Landing;
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _unfounded = __webpack_require__(11);
+
+var _unfounded2 = _interopRequireDefault(_unfounded);
+
+var _landing = __webpack_require__(65);
+
+var _landing2 = _interopRequireDefault(_landing);
+
+var _list = __webpack_require__(64);
+
+var _list2 = _interopRequireDefault(_list);
+
+var _post = __webpack_require__(61);
+
+var _post2 = _interopRequireDefault(_post);
+
+var _signin = __webpack_require__(58);
+
+var _signin2 = _interopRequireDefault(_signin);
+
+var _signout = __webpack_require__(57);
+
+var _signout2 = _interopRequireDefault(_signout);
+
+var _editor = __webpack_require__(56);
+
+var _editor2 = _interopRequireDefault(_editor);
+
+var _stacks = __webpack_require__(54);
+
+var _stacks2 = _interopRequireDefault(_stacks);
+
+var _settings = __webpack_require__(52);
+
+var _settings2 = _interopRequireDefault(_settings);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const index = {
+  auth: {
+    signin: _signin2.default,
+    signout: _signout2.default
+  },
+  page: {
+    landing: _landing2.default,
+    search: _list2.default,
+    unfounded: _unfounded2.default
+  },
+  blog: {
+    editor: _editor2.default,
+    list: _list2.default,
+    post: _post2.default
+  },
+  util: {
+    stacks: _stacks2.default,
+    settings: _settings2.default
+  }
+};
+
+// exports
+exports.default = index;
+
+/***/ }),
+/* 67 */
+/***/ (function(module, exports) {
+
+module.exports = require("auth0-js/src/web-auth");
+
+/***/ }),
+/* 68 */
+/***/ (function(module, exports) {
+
+module.exports = require("node-fetch");
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-dom/server");
+
+/***/ }),
+/* 70 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { matchPath } = __webpack_require__(2);
+const { renderToString } = __webpack_require__(69);
+const { routers } = __webpack_require__(18);
+const { RenderServer } = __webpack_require__(50);
+const { template } = __webpack_require__(30);
+const { _U_ } = __webpack_require__(1);
+
+
+// middleware
+const serverSideRenderer = async (req, res) => {
+  const activeRoute = routers.find(route => matchPath(req.path, route)) || {};
+  const isServerSignedIn = req.session && !!req.session.accessToken;
+  const { config } = res.locals;
+  const data = activeRoute.secure
+    ? (activeRoute.request && isServerSignedIn ? await activeRoute.request(req) : null)
+    : (activeRoute.request ? await activeRoute.request(req) : null);
+  const body = renderToString(RenderServer(req.url, data, config, isServerSignedIn));
+  if (data && data._status === 401) return res.redirect('/signin');
+  res.send(template({ config, data, body }));
+};
+
+
+// exports
+module.exports = {
+  serverSideRenderer: _U_.express.wrapAsync(serverSideRenderer),
+};
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    template,
+    ...module.exports,
+  },
+});
+
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const fs = __webpack_require__(19);
+const path = __webpack_require__(20);
+
+
+// modules
+const { _U_ } = __webpack_require__(1);
+
+
+// helpers
+/**
+ * compose the upload path and saving file name                                                                         // note: can only be called once in a stream
+ * @param {object} pathBase                 - default path
+ * @param {object} fileName                 - original filename
+ * @return {string}                         - file saving path
+ */
+const getSavingPath = (pathBase, fileName) => {
+  const fireTime = new Date(Date.now());
+  const filePath = fireTime.getUTCFullYear() + `0${fireTime.getUTCMonth() + 1}`.slice(-2);
+  const uniqueName = fireTime.getTime() + path.extname(fileName);
+  return path.join(pathBase, filePath, uniqueName);
+};
+
+
+/**
+ * check if the file is uploadable
+ * @param {object} task                     - busboy emitted arguments
+ * @param {object} configs                  - upload configurations
+ * @return {boolean}                        - uploadable(true) / in-uploadable(false)
+ */
+const isUploadable = (task, configs) => {
+  return !(!task.fileName || !configs.MIME.includes(task.MIME) || task.stream.truncated);
+};
+
+
+/**
+ * parse to give a raw document
+ * @param {object} task                     - busboy emitted arguments
+ * @param {object} configs                  - upload configurations
+ * @return {object}                         - parsed document to be merged
+ */
+const fetchRawDoc = (task, configs) => {
+  if (isUploadable(task, configs)) {
+    const pathParser = path.parse(task.filePath);
+    const doc = { ext: pathParser.ext.slice(1), path: task.filePath, name: pathParser.base };
+    return _U_.object.assignDeep({}, task.fieldName, doc);
+  }
+  return _U_.object.assignDeep({}, _U_.string.parseObjPath(task.fieldName)[0], { isSkipped: true });
+};
+
+
+/**
+ * parse to stack messages
+ * @param {object} task                     - busboy emitted arguments
+ * @param {object} configs                  - received configurations
+ * @return {string}                         - message to be stacked
+ */
+const fetchMessage = (task, configs) => {
+  const { stream, fileName, MIME } = task;
+  if (!fileName) return 'No files were uploaded.';                                                                      // tofix: centralized message; only display when upload = 0
+  if (!configs.MIME.includes(MIME)) return `"${fileName}" is in a unsupported file type.`;
+  if (stream.truncated) return `"${fileName}" exceed the file size limit (${configs.fileSize / 1000000}MB).`;
+  return '';
+};
+
+
+/**
+ * pipe the busboy readable stream with fs writable stream to upload the file
+ * @param {object} task                     - busboy emitted arguments
+ */
+const upload = (task) => {
+  const { stream, filePath } = task;
+  const fileStream = () => fs.createWriteStream(filePath).on('error', err => {
+    if (err && err.code !== 'ENOENT') stream.emit('error', new _U_.error.ServerError(err));
+    else if (err) stream.emit('mkdir', path.dirname(filePath));
+  });
+  stream.on('mkdir', directory => fs.mkdir(directory, err => {
+    if (err) stream.emit('error', new _U_.error.ServerError(92001, `${directory}\n${err.toString()}`));
+    else stream.pipe(fileStream());
+  }));
+  stream.pipe(fileStream());
+};
+
+
+// exports
+module.exports = {
+  getSavingPath,
+  isUploadable,
+  fetchRawDoc,
+  fetchMessage,
+  upload,
+};
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});
+
+
+/***/ }),
+/* 72 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const fs = __webpack_require__(19);
+
+
+// modules
+const { _U_ } = __webpack_require__(1);
+const { getSavingPath, isUploadable, fetchRawDoc, fetchMessage, upload } = __webpack_require__(71);
+
+
+// handlers
+/**
+ * handle `file` event emitted by busboy
+ * @param slip                              - document population pool
+ * @param {object} configs                  - upload configurations
+ */
+const handleOnFile = function handleOnFile(slip, configs) {
+  return (fieldName, stream, fileName, encoding, MIME) => {
+    const task = { fieldName, stream, fileName, encoding, MIME, filePath: getSavingPath(configs.pathBase, fileName) };
+    const busboy = this;
+    stream.on('error', err => busboy.emit('error', err));
+    stream.on('end', () => {
+      // update slip
+      _U_.object.mergeDeep(slip.raw, fetchRawDoc(task, configs), { mutate: true });
+      slip.mes.add(fetchMessage(task, configs));
+
+      // cleanup debris
+      if (stream.truncated) fs.unlink(task.filePath, err => (err ? stream.emit('error', err) : undefined));
+    });
+
+    // stream
+    return (isUploadable(task, configs)) ? upload(task) : stream.resume();                                              // note: both function will emit 'end' event at the end
+  };
+};
+
+
+/**
+ * handle `field` event emitted by busboy
+ * @param slip                              - document population pool
+ * @param {object} configs                  - upload configurations
+ */
+const handleOnField = function handleOnField(slip, configs) {
+  return (fieldName, value, truncatedName, truncatedValue, encoding, MIME) => {
+    if (value) _U_.object.assignDeep(slip.raw, fieldName, _U_.string.toEscapedChars(value), { mutate: true });
+  };
+};
+
+
+/**
+ * (middleware) handle `finish` event emitted by busboy
+ * @param slip                              - document population pool
+ */
+const handleOnFinish = (slip) => function handleOnBusboySlip(req, res, next) {
+  req.body.busboySlip = {
+    raw: Object.values(slip.raw).filter(obj => obj.isSkipped !== true),
+    mes: [...slip.mes],
+  };
+  return next();
+};
+
+
+// exports
+module.exports = {
+  handleOnFile,
+  handleOnField,
+  handleOnFinish,
+};
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});
+
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports) {
+
+module.exports = require("busboy");
+
+/***/ }),
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Busboy = __webpack_require__(73);
+
+
+// helpers
+const { handleOnFile, handleOnField, handleOnFinish } = __webpack_require__(72);
+
+
+// middleware
+/**
+ * (factory) handle/parse multipart upload by stream
+ * @param setting
+ */
+const streamingUploader = (setting = {}) => function uploadController(req, res, next) {
+  const slip = { raw: {}, mes: new Set() };
+  const configs = {
+    ...setting,
+    pathBase: req.app.get('upload'),
+    fileSize: setting.fileSize ? setting.fileSize : (25 * 1000000),                                                     // tofix: use default value (from env)
+    MIME: setting.MIME ? setting.MIME : ['image/png', 'image/gif', 'image/jpeg', 'image/svg+xml', 'image/x-icon'],      // tofix: use default value (from env)
+  };
+  const busboy = new Busboy({ headers: req.headers, limits: configs });
+  req.pipe(busboy
+    .on('file', handleOnFile.bind(busboy)(slip, configs))
+    .on('field', handleOnField.bind(busboy)(slip, configs))
+    .on('finish', () => handleOnFinish(slip)(req, res, next))
+    .on('error', err => {
+      if (err) {
+        busboy.removeAllListeners();
+        return next(err); // note: only receive an unexpected server error
+      }
+    }));
+};
+
+
+// exports
+module.exports = {
+  streamingUploader,
+};
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});
+
+
+/***/ }),
+/* 75 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* eslint-disable key-spacing */
+
+const mongoose = __webpack_require__(9);
+
+
+// schema
+const MediaSchema   = new mongoose.Schema({
+  author: {
+    _id             : { type: String },
+    nickname        : { type: String },
+  },
+  file: {
+    name            : { type: String },
+    path            : { type: String },
+    ext             : { type: String },
+  },
+  title             : { type: String, trim: true, required: [true, 'is required'] },
+  description       : { type: String, trim: true, required: [true, 'is required'] },
+  category          : { type: String, lowercase: true },
+  tag               : { type: String, lowercase: true },
+}, {
+  timestamps        : { createdAt: 'time.uploaded', updatedAt: 'time._updated' },
+  versionKey        : '_revised',
+});
+
+
+// action hooks
+MediaSchema.pre('findOneAndUpdate', function MediaSchema_pre_findOneAndUpdate() {
+  this.findOneAndUpdate({}, { $inc: { _revised: 1 } });
+});
+
+
+// exports
+module.exports = mongoose.model('media', MediaSchema);
+
+
+/***/ }),
+/* 76 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* eslint-disable key-spacing */
+
+const mongoose = __webpack_require__(9);
+const { _U_ } = __webpack_require__(1);
+
+
+// schema
+const PostsSchema    = new mongoose.Schema({
+  author: {
+    _id              : { type: String },
+    nickname         : { type: String },
+  },
+  featured           : { type: String,                                                                                  // todo: featured by a video
+    validate: {
+      validator      : value => value !== undefined,
+      message        : 'Invalid image URL',
+    } },
+  canonical          : { type: String, lowercase: true, unique: true },
+  title              : { type: String, required: [true, 'is required'], trim: true },
+  content            : { type: String, required: [true, 'is required'], trim: true },
+  category           : { type: String, lowercase: true, default: 'unclassified' },
+  tags               : { type: String, lowercase: true },
+  state: {
+    published        : { type: Boolean, required: true, default: true },
+    protected        : { type: Boolean, required: true, default: false },                                               // todo: add pw
+    hidden           : { type: Boolean, required: true, default: false },                                               // todo: add anti-robot HTML tag
+    pinned           : { type: Boolean, required: true, default: false },
+  },
+  time: {
+    _recycled        : { type: Date },
+  },
+}, {
+  timestamps         : { createdAt: 'time._created', updatedAt: 'time._updated' },
+  versionKey         : '_revised',
+});
+
+
+// indexes
+PostsSchema
+  .index({ tags : 1 })
+  .index({ category : -1 })
+  .index({ 'time._updated' : -1 })
+  .index({ 'time._recycled' : 1 }, { expireAfterSeconds: 14 * 24 * 3600 * 1000 })
+  .index({ title: 'text', content: 'text', category: 'text', tags : 'text' });
+
+
+// action hooks
+// // version counter
+PostsSchema.pre('findOneAndUpdate', function PostsSchema_pre_findOneAndUpdate() {
+  this.findOneAndUpdate({}, { $inc: { _revised: 1 } });
+});
+
+
+// // recycle setter
+PostsSchema.pre('update', function PostsSchema_pre_update() {
+  const _$update = this.getUpdate();
+  if (_$update.$set['state.pended']   === true)   _$update.$set['state.published']  = false;                            // tofix: initial post ist not worked
+  if (_$update.$set['state.recycled'] === true)   _$update.$set['time._recycled']   = Date.now();
+  if (_$update.$set['state.recycled'] === false)  _$update.$set['time._recycled']   = null;
+  if (_$update.$set['state.restored'] === true)   _$update.$set['time._recycled']   = null;
+});
+
+
+// // before saving
+PostsSchema.pre('save', function PostsSchema_pre_save() {
+  this.canonical = _U_.string.toKebabCase(this.title);                                                                  // tofix: duplicated key (e.g. /new, /edit, /edit_2)
+});
+
+
+// virtual property
+PostsSchema.virtual('state.pended').get(function () {
+  return !this.state.published;
+});
+
+
+PostsSchema.virtual('state.recycled').get(function () {
+  return !!this.time._recycled;
+});
+
+
+PostsSchema.virtual('time._expired').get(function () {
+  return this.time._recycled ? new Date(this.time._recycled.getTime() + (14 * 24 * 3600 * 1000)) : null;
+});
+
+
+// exports
+module.exports = mongoose.model('posts', PostsSchema);
+
+
+/***/ }),
+/* 77 */
+/***/ (function(module, exports) {
+
+module.exports = require("validator");
+
+/***/ }),
+/* 78 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* eslint-disable key-spacing */
+
+const mongoose = __webpack_require__(9);
+const validator = __webpack_require__(77);
+
+
+// schema
+const UsersSchema   = new mongoose.Schema({
+  active            : { type: String, default: false },
+  role              : { type: String, enum: ['admin', 'coordinator', 'editor'], default: 'editor' },
+  username          : { type: String, unique: true, lowercase: true },
+  email             : { type: String,
+    unique          : true,
+    required        : true,
+    validate: {
+      isAsync       : false,
+      validator     : validator.isEmail,
+      message       : 'Invalid email address',
+    } },
+  nickname          : { type: String },
+  picture           : { type: String, default: '' },                                                                    // todo: added a validator
+  info: {
+    firstName       : { type: String, default: '', trim: true },
+    lastName        : { type: String, default: '', trim: true },
+    gender          : { type: String, enum: ['Male', 'Female', 'NA'], default: 'NA' },
+    residency       : { type: String },
+    timezone        : { type: String },
+    birthday        : { type: Date },
+  },
+  time: {
+    _signIn         : { type: Date },
+    _changePassword : { type: Date },
+  },
+}, {
+  timestamps        : { createdAt: 'time._registered', updatedAt: 'time._updated' },
+  versionKey        : false,
+  toJSON            : { virtuals: true },
+});
+
+
+// action hooks
+// // nickname assignment (pre-hook)
+UsersSchema.pre('save', function UsersSchema_pre_save() {
+  if (this.nickname === undefined) this.nickname = `${this.info.firstName} ${this.info.lastName}`.trim();
+});
+
+
+// // auto-update all posts associated with the author in dark (pre-hook)
+UsersSchema.pre('update', function UsersSchema_pre_update() {
+  const _$update = this.getUpdate();
+  if (_$update.$set.nickname !== _$update.$set._$nickname) {
+    mongoose.connection.db.collection('posts').update(
+      { 'author._id': this.getQuery()._id },
+      { $set: { 'author.nickname': _$update.$set.nickname } },
+      { multi: true },
+    );
+  }
+});
+
+
+// methods for documents
+// // update the specified last time field
+UsersSchema.methods.updateLastTimeLog = function UsersSchema_updateLastTimeLog(fieldName) {
+  return mongoose.connection.db.collection('users').update(
+    { _id: this._id },
+    { $set: { [`time._${fieldName}`]: new Date(Date.now()) } },
+  );
+};
+
+
+// virtual method for user-post association
+// // to-use: UsersModel.findOne({}).populate({ path: 'posts', match: { 'time._recycled': { $eq: null } }}).exec();
+UsersSchema.virtual('posts', {
+  ref         : 'posts',
+  localField  : '_id',
+  foreignField: 'author._id',
+});
+
+
+// exports
+module.exports = mongoose.model('users', UsersSchema);
+
+
+/***/ }),
+/* 79 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* eslint-disable key-spacing */
+
+const mongoose = __webpack_require__(9);
+
+
+// schema
+const configsSchema  = new mongoose.Schema({
+  initialized        : { type: Boolean, default: false },
+  active             : { type: Boolean, default: false, unique: true },
+  siteName           : { type: String, default: 'New Website' },
+  description        : { type: String, default: 'n/a' },
+  keywords           : { type: String, default: 'n/a' },
+  sets: {
+    imageTypes       : { type: [[String]], default: ['gif', 'jpe?g', 'png', 'svg', 'tiff', 'webp'] },
+    language         : { type: String, default: 'en' },
+    timezone         : { type: String, default: '' },
+    timeFormat       : { type: String, default: '' },
+    sort             : { type: String, default: '' },
+    num              : { type: Number, default: 12 },
+  },
+}, {
+  timestamps         : { createdAt: 'time._created', updatedAt: 'time._updated' },
+  versionKey         : false,
+});
+
+
+// static methods
+configsSchema.static('initConfig', async function configsSchema_initialize(app, cb) {
+  const config = await this.findOne({ active: true });
+  app.set('APP_CONFIG', config ? (await config.toObject()) : (await this.create({ active: true })).toObject());
+  if (typeof cb === 'function') return cb();
+});
+
+
+configsSchema.static('updateConfig', async function configsSchema_updateConfig(req, doc, cb) {                          // todo: update lang (process.env)
+  req.app.set('APP_CONFIG', (await this.findOneAndUpdate({ active: true }, doc, { new: true })).toObject());
+  const result = { n: 1, nModified: 1, ok: 1 };
+  if (typeof cb === 'function') return cb(null, result);
+  return Promise.resolve(result);
+});
+
+
+// exports
+module.exports = mongoose.model('settings', configsSchema);
+
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { _U_ } = __webpack_require__(1);
+
+
+// helpers
+/**
+ * compose a hashed object containing Mongo query expressions for pagination
+ * @param {object} query                    - express.js query object
+ * @param {number} [num]                    - preset numbers of document per page
+ * @return {object}                         - a collection of Mongo expressions contains paginating variables
+ */
+const paginatedMetaExpression = (query, num = 10) => {
+  const $$page = Math.trunc(query.page > 1 ? query.page : 1);
+  const $$num = Math.trunc(query.num > 0 ? query.num : num);
+  const $$end = { $ceil: { $divide: ['$count', $$num] } };
+  const $$now = { $cond: { if: { $lt: [$$page, $$end] }, then: { $literal: $$page }, else: $$end } };
+  return { page: $$page, num: $$num, end: $$end, now: $$now };
+};
+
+
+/**
+ * compose Mongo query expression based on a time range from an array
+ * @param {array} start                     - an array formatted as [YYYY, MM, DD]
+ * @param {array} end                       - an array formatted as [YYYY, MM, DD]
+ * @return {object}                         - part-of expression in $match stage
+ */
+const queryDateExpression = (start, end) => {
+  if (!start || !end || start.length !== 3 || end.length !== 3) return null;
+  const [A, Z] = [(start < end) ? start : end, (start < end) ? end : start];
+  const [G, L] = [{ Y: A[0], M: A[1], D: A[2] }, { Y: Z[0], M: Z[1], D: Z[2] }];
+  G.D = G.Y ? G.M ? G.D ? G.D : (G.D += 1) : (G.D += 1) : L.M && L.D ? L.D : (G.D += 1);
+  G.M = G.Y ? G.M ? (G.M -= 1) : G.M : L.M ? L.M - 1 : G.M;
+  G.Y = G.Y ? G.Y : L.Y;
+  L.Y = L.M ? L.Y : (L.Y += 1);
+  L.M = L.M && L.D ? (L.M -= 1) : L.M;
+  L.D += 1;
+  return { $gte: new Date(Date.UTC(G.Y, G.M, G.D)), $lt: new Date(Date.UTC(L.Y, L.M, L.D)) };
+};
+
+
+/**
+ * parse date query into an date array
+ * @param {string} str                      - query string
+ * @return {array}                          - an array shaped as [[YYYY, MM, DD], [YYYY, MM, DD]]
+ */
+const parseQueryDate = (str) => {
+  if (!str || !_U_.string.checkToStringTag(str, 'String')) return [];
+  //
+  const group = '((?:\\d{4}(?:(?:0[1-9]|1[0-2])(?:0[1-9]|[1-2][0-9]|3[0-1])?)?)?)';
+  const query = new RegExp(`^(?!-?\\/?$)${group}(?:-|\\/?$)${group}\\/?$`);
+  const range = new RegExp('(\\d{4})(\\d{2})(\\d{2})');
+  return (query.exec(str) || []).slice(1, 3)
+    .map(date => range.exec(date.padEnd(8, '0')).slice(1, 4)
+      .map(value => Number(value)));
+};
+
+
+/**
+ * parse sorting query into fieldName-direction entries
+ * @param {string} str                      - query string
+ * @param {string} [order]                  - contains information about sorting direction
+ * @param {number} [preset]                 - default sorting direction (as descending direction)
+ * @return {array}                          - an array shaped as [[fieldName, direction], ...]
+ */
+const parseQuerySort = (str, order = '', preset = -1) => {
+  if (!str || !_U_.string.checkToStringTag(str, 'String')) return [];
+  //
+  const entries = [];
+  const flag = order.split(':')[1];
+  const weight = flag === 'a' ? 1 : flag === 'd' ? -1 : 0;
+  const item = str && str.split(',');
+  for (let i = item.length - 1; i > -1; i -= 1) {
+    const [field, directionFlag] = item[i].split(':');
+    const fieldWeight = (Math.trunc(directionFlag) && (directionFlag > 0 ? 1 : -1))
+        || (directionFlag === 'a' && 1)
+        || (directionFlag === 'd' && -1)
+        || (preset > 0 ? 1 : -1);
+    entries.push([field.trim(), weight || fieldWeight]);
+  }
+  return entries.reverse();
+};
+
+
+// exports
+module.exports = {
+  paginatedMetaExpression,
+  queryDateExpression,
+  parseQueryDate,
+  parseQuerySort,
+};
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});
+
+
+/***/ }),
+/* 81 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { paginatedMetaExpression, queryDateExpression, parseQueryDate, parseQuerySort } = __webpack_require__(80);
+
+
+// aggregation pipes
+/**
+ * pull-pipeline stage 1: matching rules
+ * @param {string} collection               - MongoDB collection name
+ * @param {object} params                   - express.js param object
+ * @param {object} query                    - express.js query object
+ * @return {{$match}}
+ */
+const pullPipe_1_matching = (collection, params, query) => {
+  const $match = params.search ? { $text: { $search: params.search } } : {};
+  const _$$date = query.date ? queryDateExpression(...parseQueryDate(query.date)) : null;                               // tofix: query time zone problem
+  if (_$$date) $match['time._created'] = _$$date;
+  if (['posts', 'media', 'page'].includes(collection)) {
+    $match['time._recycled'] = (params.collection && query.access === 'bin') ? { $ne: null } : { $eq: null };
+    if (!params.collection) $match['state.published'] = true;
+    if (!params.collection) $match['state.hidden'] = false;
+  }
+  return { $match };
+};
+
+
+/**
+ * pull-pipeline stage 2: fields masking
+ * @param {object} params                   - express.js param object
+ * @return {{$project}}
+ */
+const pullPipe_2_masking = (params) => {
+  const $project = {};
+  const mask = ['content'];
+  if (params.collection) mask.push('featured');
+  for (let i = mask.length - 1; i > -1; i -= 1) $project[mask[i]] = 0;
+  return { $project };
+};
+
+
+/**
+ * pull-pipeline stage 3: fields sorting
+ * @param {object} query                    - express.js query object
+ * @param {object} [sort]                   - preset sorting configurations
+ * @return {{$project}}
+ */
+const pullPipe_3_sorting = (query, sort = {}) => {
+  const $sort = { 'state.pinned': -1, 'time._updated': -1, ...sort };
+  const sortMap = new Map();
+  Object.keys(query)
+    .filter(key => ['sort', 'sort:a', 'sort:d'].includes(key))
+    .forEach(rule => parseQuerySort(query[rule], rule).forEach(pair => sortMap.set(...pair)));
+  //
+  if (sortMap.has('pin'))       $sort['state.pinned']     = sortMap.get('pin');
+  if (sortMap.has('time'))      $sort['time._updated']    = sortMap.get('time');
+  if (sortMap.has('update'))    $sort['time._updated']    = sortMap.get('update');
+  if (sortMap.has('post'))      $sort['time._created']    = sortMap.get('post');
+  if (sortMap.has('author'))    $sort['author.nickname']  = sortMap.get('author');
+  if (sortMap.has('title'))     $sort.title               = sortMap.get('title');
+  if (sortMap.has('category'))  $sort.category            = sortMap.get('category');
+  if (sortMap.has('tags'))      $sort.tags                = sortMap.get('tags');
+  if (sortMap.has('revise'))    $sort._revised            = sortMap.get('revise');
+  return { $sort };
+};
+
+
+/**
+ * pull-pipeline stage 4: grouping with document counting
+ * @return {{$group}}
+ */
+const pullPipe_4_grouping = () => {
+  const $group = { _id: null, count: { $sum: 1 }, list: { $push: '$$ROOT' } };
+  return { $group };
+};
+
+
+/**
+ * pull-pipeline stage 5: paginating projection
+ * @param {object} query                    - express.js query object
+ * @param {number} num                      - preset numbers of document per page
+ * @param {object} sort                     - preset sorting configurations
+ * @return {{$project}}
+ */
+const pullPipe_5_paginating = (query, num, sort) => {
+  const $$meta = paginatedMetaExpression(query, num);
+  const $project = {
+    _id: 0,
+    list: { $slice: ['$list', { $multiply: [{ $add: [$$meta.now, -1] }, $$meta.num] }, $$meta.num] },
+    meta: {
+      count: '$count',
+      num: { $literal: $$meta.num },
+      now: $$meta.now,
+      end: $$meta.end,
+      sort: { $literal: pullPipe_3_sorting(query, sort).$sort },
+      period: { $literal: queryDateExpression(...parseQueryDate(query.date)) },
+    },
+  };
+  return { $project };
+};
+
+
+// const pushPipe_1_modifying = (body) => {
+//   const _$$filter = { $filter: { input: '$list', as: 'doc', cond: {
+//         $and: [{ $in: ['$$doc._id', [ObjectId('5ab33bec53da62203f81676d')] /** body.list.map(i => ObjectId(i)) **/] } /** ,additional matcher **/]}
+//     }};
+//   const _$$map = { $map: { input: _$$filter, as: 'doc', in: { $mergeObjects: ['$$doc', body] }}};
+//   const $project = { list: _$$map };
+//   return { $project };
+// };
+//
+//
+// const pushPipe_2_splitting = () => {
+//   const $unwind = '$list';
+//   return { $unwind };
+// };
+//
+//
+// const pushPipe_3_destructuring = () => {
+//   const $replaceRoot = { newRoot: '$list' };
+//   return { $replaceRoot };
+// };
+//
+//
+// const pushPipe_4_overwriting = (collection) => {
+//   const $out = collection;                                                                                              // todo: note: <CURRENT MONGODB IS NOT SUPPORTED> current (v3.6): overwrite the whole collection (x)
+//   return { $out };
+// };
+
+
+// query-builder
+/**
+ * combined all pipeline stages into an Mongo aggregation query
+ * @param {string} collection               - MongoDB collection name
+ * @param {object} params                   - express.js param object
+ * @param {object} query                    - express.js query object
+ * @param {number} num                      - preset numbers of document per page
+ * @param {object} sort                     - preset sorting configurations
+ * @return {array}                          - Mongo aggregation query
+ */
+const getAggregationQuery = (collection, params, query, num, sort/** , update **/) => {
+  const pullDocuments = [
+    pullPipe_1_matching(collection, params, query),
+    pullPipe_2_masking(params),
+    pullPipe_3_sorting(query, sort),
+    pullPipe_4_grouping(),
+    pullPipe_5_paginating(query, num, sort),
+  ];
+
+  // const pushDocuments = [
+  //   ...pullDocuments,
+  //   pushPipe_1_modifying(update),
+  //   pushPipe_2_splitting(),
+  //   pushPipe_3_destructuring(),
+  //   pushPipe_4_overwriting(collection)
+  // ];
+
+  return pullDocuments;
+  // return update ? pushDocuments : pullDocuments;
+};
+
+
+// exports
+module.exports = {
+  getAggregationQuery,
+};
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    pullPipe_1_matching,
+    pullPipe_2_masking,
+    pullPipe_3_sorting,
+    pullPipe_4_grouping,
+    pullPipe_5_paginating,
+    ...module.exports,
+  },
+});
+
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { _U_ } = __webpack_require__(1);
+const { getAggregationQuery } = __webpack_require__(81);
+const modelIndex = __webpack_require__(12);
+
+
+// middleware
+/**
+ * (factory) populate paginated query result via Mongo aggregation
+ * @param {string} collection               - MongoDB collection name
+ * @param {number} [num]                    - preset numbers of document per page
+ * @param {object} [sort]                   - preset sorting configurations
+ * @return {function}
+ */
+const paginatedQuery = (collection, { num, sort } = {}) => function queryController(req, res, next) {
+  const Model = modelIndex[`${_U_.string.toCapitalized(collection)}Model`];
+  return Model
+    .aggregate(getAggregationQuery(collection, req.params, req.query, num || res.locals.config.sets.num, sort))
+    .then(docs => docs[0])
+    .then(result => {
+      if (result) res.locals.data = { ...res.locals.data, ...result };
+      if (result && result.list) res.locals.data.list = result.list.map(doc => Model.hydrate(doc));
+      return next();
+    })
+    .catch(next);
+};
+
+
+// exports
+module.exports = {
+  paginatedQuery,
+};
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    getAggregationQuery,
+    ...module.exports,
+  },
+});
+
+
+/***/ }),
+/* 83 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* eslint-disable no-shadow, no-template-curly-in-string */
+const { checkToStringTag } = __webpack_require__(8);
+
+
+class ErrorCodeDictionary {
+  constructor(dictionary) {
+    this.dictionary = new Map(Object.entries(dictionary).map(pair => [+pair[0], pair[1]]));
+  }
+
+  lookup(entry, literals) {
+    if (!this.dictionary.has(entry)) return null;
+    if (!['Object', 'String'].includes(checkToStringTag(literals))) return this.dictionary.get(entry);
+
+    // replacing with template literals
+    return this.dictionary.get(entry).replace(/\${([^}]*)}/g, (match, key) => {
+      const replacement = checkToStringTag(literals, 'Object')
+        ? literals[key] || literals[key] === 0 ? literals[key] : match
+        : literals;
+      return `${replacement}`.trim();
+    });
+  }
+}
+
+
+// dictionary collection
+const collection = new Map();
+
+collection.set('ServerError_en', new ErrorCodeDictionary({
+  90001: 'Failed to load website configs, please contact the admin.',
+  92001: '[MultiPartUpload] Cannot create the folder (fs.mkdir, missing parent folder?): ${dirPath}',
+  92002: '[MultiPartUpload] Failed to clean up the truncated file...\n${errString}',
+}));
+
+collection.set('TemplateException_en', new ErrorCodeDictionary({
+  91001: 'Failed to compile template function: ${filePath}\n${err}',
+  91002: 'Failed to render template function: ${filePath}\n${err}',
+  91003: 'Failed to asynchronously lookup file (fs.readFile): ${filePath}',
+  91004: 'Failed to synchronously lookup file (fs.readFileSync): ${filePath}',
+}));
+
+collection.set('ClientException_en', new ErrorCodeDictionary({
+  10001: 'Please fill all required fields.',
+  10002: 'Two new password does not the same.',
+  10003: 'Password cannot be set to the same as the current.',
+  20000: 'Please sign in first!',
+  20001: 'Invalid authorization...',
+  20002: 'Wrong email/username or password!',
+}));
+
+collection.set('HttpException_en', new ErrorCodeDictionary({
+  400: 'HTTP 400 - Bad Request.',
+  401: 'HTTP 401 - Unauthorized.',
+  403: 'HTTP 403 - Forbidden.',
+  404: 'HTTP 404 - Not found.',
+  500: 'HTTP 500 - Internal Server Error.',
+}));
+
+
+// exports
+module.exports = new Proxy(collection, {
+  get: (collection, name) => {
+    const book = `${name}_${process.env.LANG || 'en'}`;
+    if (collection.has(book)) return (entry, literals) => collection.get(book).lookup(entry, literals) || entry;
+    return (entry) => entry;
+  },
+});
+
+
+/***/ }),
+/* 84 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { checkToStringTag } = __webpack_require__(8);
+const errorCodeProxyAgent = __webpack_require__(83);
+
+
+// main
+class ExtendableError extends Error {
+  constructor(entry, literals) {
+    if (Reflect.getPrototypeOf(new.target) === TransferableError) {                                                     // note: lock-in this parental class can be only extended by a special child class
+      super();
+      this.name = this.constructor.name;
+      this.message = String(errorCodeProxyAgent[this.name](entry, literals));
+      if (checkToStringTag(entry, 'Number')) this.code = entry;
+      if (!Error.captureStackTrace) this.stack = (new Error(this.message)).stack;                                       // note: V8 JS-engine only
+      else Error.captureStackTrace(this, this.constructor);                                                             // note: non-V8 browser only
+    }
+  }
+}
+
+
+class TransferableError extends ExtendableError {
+  constructor(entry, literals) {
+    if (new.target !== TransferableError) {
+      if (entry instanceof ExtendableError) return entry;
+      if (entry instanceof Error) {
+        super(entry.message);
+        this.code = entry.code;
+        this.from = entry.name;
+        this.stack = `${this.name} (transferred):${new RegExp(/\s+at.+[^\n]/).exec(this.stack)[0]}\n${entry.stack}`;
+      } else {
+        super(entry, literals);
+      }
+    }
+  }
+}
+
+
+// extensions
+class ServerError extends TransferableError {}                                                                          // note: this type is not intended to handle by the middleware
+class TemplateException extends TransferableError {}
+class ClientException extends TransferableError {}
+class HttpException extends TransferableError {}
+
+
+// exports
+module.exports = {
+  ServerError,
+  ClientException,
+  TemplateException,
+  HttpException,
+};
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ExtendableError,
+    TransferableError,
+    ...module.exports,
+  },
+});
+
+
+/***/ }),
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* eslint-disable no-restricted-syntax */
+const { checkToStringTag, parseObjPath } = __webpack_require__(8);
+
+
+/**
+ * check if object has the property
+ * @param {object} obj                      - object to be evaluate
+ * @param {string} prop                     - name of the property
+ * @return {boolean}                        - evaluation result
+ */
+const hasOwnKey = (obj, prop) => {
+  return Object.prototype.hasOwnProperty.call(obj, prop);
+};
+
+
+/**
+ * clone the object/array deeply by its value (reference decoupled)
+ * @param {object|array} source             - referencing object
+ * @return {object|array}                   - cloned object which is allocated at different memory
+ */
+const cloneDeep = (source) => {
+  if (!['Object', 'Array'].includes(checkToStringTag(source))) throw new TypeError('Invalid arguments as input.');
+  return mergeDeep(checkToStringTag(source, 'Array') ? [] : {}, source, { mutate: true });
+};
+
+
+/**
+ * merge two object recursively                                                                                         // note: this function can not copy getter/setter properties
+ * @param {object} target                   - object to be operated
+ * @param {object|array} source             - referencing object
+ * @param {boolean} [mutate = false]        - mutation setting
+ * @return {object}                         - the merged object
+ */
+const mergeDeep = (target, source, { mutate = false } = {}) => {
+  const worker = mutate === true ? target : cloneDeep(target);
+
+  // non-tail-call recursion (parallel)
+  const mergeRecursion = (obj, src) => {
+    const srcKeys = Reflect.ownKeys(src);
+    const objKeys = Reflect.ownKeys(obj);
+    for (let i = srcKeys.length - 1, currentKey = srcKeys[i]; i > -1; currentKey = srcKeys[i -= 1]) {
+      if (checkToStringTag(src[currentKey], 'Object')) {
+        if (!objKeys.includes(currentKey)) obj[currentKey] = {};
+        mergeRecursion(obj[currentKey], src[currentKey]);
+      } else obj[currentKey] = src[currentKey];
+    }
+  };
+
+  mergeRecursion(worker, source);
+  return worker;
+};
+
+
+/**
+ * assigned the value to an object by path recursively                                                                  // note: (1) can be set to mutable; (2) value could be 0{number}
+ * @param {object} target                   - object to be operated
+ * @param {string|array} path               - assigning object path
+ * @param {*} [value]                       - value to be assigned (by reference)
+ * @param {boolean} [mutate = false]        - mutation setting
+ * @return {object}                         - the assigned object
+ */
+const assignDeep = (target, path, value, { mutate = false } = {}) => {
+  const worker = mutate === true ? target : cloneDeep(target);
+  const pathStack = checkToStringTag(path, 'String') ? parseObjPath(path) : path;
+
+  // tail-call recursion (single-file)
+  const assignRecursion = (obj, keys) => {
+    if (keys.length === 1) obj[keys[0]] = value;
+    else {
+      if (obj[keys[0]] === undefined) obj[keys[0]] = {};
+      return assignRecursion(obj[keys[0]], keys.slice(1), value);
+    }
+  };
+
+  assignRecursion(worker, pathStack, value);
+  return worker;
+};
+
+
+/**
+ * frozen the target and its property deeply
+ * @param {object|array} target             - object to be operated
+ * @param {boolean} [mutate = false]        - mutation setting
+ * @return {object|array}                   - the frozen object/array
+ */
+const freezeDeep = (target, { mutate = false } = {}) => {
+  const worker = mutate === true ? target : cloneDeep(target);
+
+  // non-tail-call recursion (parallel)
+  const freezeRecursion = (obj) => {
+    if (['Object', 'Array'].includes(checkToStringTag(obj))) {
+      const objKeys = Reflect.ownKeys(obj);
+      for (let i = objKeys.length - 1; i > -1; i -= 1) freezeRecursion(obj[objKeys[i]]);
+      Object.freeze(obj);
+    }
+  };
+
+  freezeRecursion(worker);
+  return worker;
+};
+
+
+/**
+ * burst array in a nested object based on a given position in all array
+ * @param {object} target                   - object to be operated
+ * @param {boolean} [mutate = false]        - mutation setting
+ * @param {number} [position = -1]          - position in the array (0 = first-one-win; -1 = last-one-win)
+ * @return {object}                         - the resulted object
+ */
+const burstArrayDeep = (target, { mutate = false, position = -1 } = {}) => {
+  const worker = mutate === true ? target : cloneDeep(target);
+  const index = Number(position);
+
+  // non-tail-call recursion (parallel)
+  const burstArrayRecursion = (obj) => {
+    const keys = Object.keys(obj);
+    for (let i = keys.length - 1, key = keys[i]; i > -1; key = keys[i -= 1]) {
+      const type = checkToStringTag(obj[key]);
+      if (type === 'Array') obj[key] = obj[key][index < 0 ? obj[key].length + index : index];
+      if (type === 'Object') burstArrayRecursion(obj[key]);
+    }
+  };
+
+  burstArrayRecursion(worker);
+  return worker;
+};
+
+
+/**
+ * (decorator) proxyfy the object for allowing case-insensitive access
+ * @param {object} obj                      - object to be delegated
+ * @param {boolean} [reverse = true]        - reverse the inspection direction
+ * @return {object}                         - the resulted proxy
+ */
+const createCaseInsensitiveProxy = (obj, { reverse = true } = {}) => {
+  if (!checkToStringTag(obj, 'Object')) throw new TypeError('Invalid arguments as input.');
+  return new Proxy(obj, {
+    get: (target, name) => {
+      if (!checkToStringTag(name, 'String')) return Reflect.get(target, name);
+      if (reverse === false) return target[Object.keys(target).find(key => key.toLowerCase() === name.toLowerCase())];
+      return target[Object.keys(target).reverse().find(key => key.toLowerCase() === name.toLowerCase())];
+    },
+  });
+};
+
+
+// exports
+module.exports = {
+  hasOwnKey,
+  cloneDeep,
+  mergeDeep,
+  assignDeep,
+  freezeDeep,
+  burstArrayDeep,
+  createCaseInsensitiveProxy,
+};
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});
+
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports) {
+
+module.exports = require("mongodb");
+
+/***/ }),
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { checkToStringTag } = __webpack_require__(8);
+const { Router } = __webpack_require__(15);
+
+
+/**
+ * (decorator) handle asyncfunction for error bubbling
+ * @param {array|function} target           - fn to be wrapped
+ * @return {array|function}                 - wrapped middleware
+ */
+const wrapAsync = (target) => {
+  const unnamedWrapper = (fn) => (...arg) => fn.apply(this, arg).catch(arg[arg.length - 1]);
+  const namedWrapper = (fn) => Object.defineProperty(unnamedWrapper(fn), 'name', { value: `wrappedAsync ${fn.name}` });
+  const evaluator = (fn) => (checkToStringTag(fn, 'AsyncFunction') ? namedWrapper(fn) : fn);
+  const type = checkToStringTag(target);
+  if (type === 'Array') return target.map(fn => evaluator(fn));
+  return evaluator(target);
+};
+
+
+/**
+ * (factory) insert additional middleware into the chain
+ * @param {array|function} target           - fn to be wrapped
+ * @return {function}                       - repacked middleware
+ */
+const wrapMiddleware = (queue) => {
+  const router = new Router({ mergeParams: true });
+  const type = checkToStringTag(queue);
+  switch (type) {
+    case 'Array':
+    case 'Function':
+    case 'AsyncFunction':
+      return router.use(wrapAsync(queue));
+    case 'Map':
+      queue.forEach((condition, middleware) => {
+        if (condition) router.use(wrapAsync(middleware));
+      });
+      return router;
+    default: {
+      throw new TypeError(`Argument is neither an Array, Map, nor (Async)Function but ${type}.`);
+    }
+  }
+};
+
+
+// exports
+module.exports = {
+  wrapAsync,
+  wrapMiddleware,
+};
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});
+
+
+/***/ }),
+/* 88 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { _U_ } = __webpack_require__(1);
+
+
+/**
+ * app configurations loader
+ */
+const appConfigsLoader = (req, res, next) => {
+  res.locals.config = req.app.get('APP_CONFIG');
+  return next();
+};
+
+
+/**
+ * JSON response handler
+ */
+const JSONResponseHandler = (req, res) => {
+  const doc = {
+    ...res.locals.data,
+    _timestamp: Date.now(),
+    _status: 200,
+    _cache: false,
+  };
+  return res.json(doc);
+};
+
+
+/**
+ * allow case insensitive accessing of `req.query`
+ */
+const caseInsensitiveQueryProxy = (req, res, next) => {
+  req.query = _U_.object.createCaseInsensitiveProxy(req.query);
+  return next();
+};
+
+
+/**
+ * modify HTML title tag
+ * @param {object|string} option            - modifying options
+ * @param {string} option.tag               - title substring
+ * @param {boolean} [option.extend = true]  - replace the whole string
+ * @param {boolean} [option.append = false] - append title tag
+ * @param {string} [option.delimiter = '-'] - delimiter used in conjunction
+ */
+const titleTagModifier = (option) => function titleTagModifierByOption(req, res, next) {
+  if (res.locals.$$MODE === 'HTML') {
+    const config = (_U_.string.checkToStringTag(option, 'String')) ? { tag: option } : option;
+    const { tag, extend = true, append = false, delimiter = '-' } = config;
+
+    // populate sequence
+    const sequence = [];
+    if (extend !== false) sequence.push(res.locals.$$VIEW.title);
+    if (append === true) sequence.push(tag);
+    else sequence.unshift(tag);
+
+    res.locals.$$VIEW.title = sequence.join(` ${delimiter} `);
+  }
+  if (typeof next === 'function') return next();
+};
+
+
+// exports
+module.exports = {
+  appConfigsLoader,
+  JSONResponseHandler,
+  caseInsensitiveQueryProxy,
+  titleTagModifier,
+  // postNormalizer,
+};
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});
+
+
+/***/ }),
+/* 89 */
+/***/ (function(module, exports) {
+
+class ContentSecurityPolicy {
+  constructor() {
+    this.whitelist = [];
+  }
+
+  addToWhitelist(src, domain) {
+    this.whitelist.push([src, domain]);
+    return this;
+  }
+
+  getTrustedDomains(src) {
+    return this.whitelist.filter(i => i[0].includes(src)).map(j => j[1]).join(' ');
+  }
+
+  generateRules() {
+    const RuleMaps  = {
+      'connect-src': `'self' ${this.getTrustedDomains('connect')}`,
+      'default-src': '\'self\'',
+      'font-src': `${this.getTrustedDomains('font')}`,
+      'frame-src': '\'none\'',
+      'img-src': '*',
+      'object-src': '\'none\'',
+      'script-src': `'self' 'unsafe-inline' ${this.getTrustedDomains('script')}`,
+      'style-src': `'self' 'unsafe-inline' ${this.getTrustedDomains('style')}`,
+    };
+    return Object.entries(RuleMaps).map(i => i.join(' ')).join('; ');
+  }
+}
+
+
+// exports
+module.exports = {
+  ContentSecurityPolicy,
+};
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});
+
+
+/***/ }),
+/* 90 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { ContentSecurityPolicy } = __webpack_require__(89);
+
+
+/**
+ * headers for web security
+ */
+const securityHeaders = (req, res, next) => {
+  const CSPConfigs = new ContentSecurityPolicy();
+  CSPConfigs.addToWhitelist('script, style, font', 'https://stackpath.bootstrapcdn.com/');
+  CSPConfigs.addToWhitelist('script, style', 'https://cdnjs.cloudflare.com/');
+  CSPConfigs.addToWhitelist('connect', `https://${process.env.AUTH0_SERVER_DOMAIN}/`);
+  CSPConfigs.addToWhitelist('connect', process.env.API_SERVICES);
+  res.set({
+    'Content-Security-Policy': CSPConfigs.generateRules(),
+    'Cache-Control': 'max-age=0',
+    'X-XSS-Protection': '1; mode=block',
+    'X-Frame-Options': 'DENY',
+  });
+  return next();
+};
+
+
+/**
+ * headers for CORS communications
+ */
+const CORSHeaders = (req, res, next) => {
+  res.set('Access-Control-Allow-Origin', '*'); // todo: bind with domain name
+  res.set('Access-Control-Allow-Methods', 'GET, PUT, HEAD, OPTIONS'); // todo: create OPTION route @engine
+  res.set('Access-Control-Allow-Headers', 'Content-Type, Cache-Control, Cookies, Authorization');
+  res.set('Access-Control-Allow-credentials', 'true');
+  res.set('Access-Control-Max-Age', '600');
+  return next();
+};
+
+
+/**
+ * header for denying crawlers
+ */
+const noCrawlerHeader = (req, res, next) => {
+  res.set('Cache-Control', 'private, max-age=0');
+  res.set('x-robots-tag', 'none');
+  if (typeof next === 'function') return next();
+};
+
+
+/**
+ * header for preventing from caching
+ */
+const noStoreCacheHeader = (req, res, next) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+  if (typeof next === 'function') return next();
+};
+
+
+// exports
+module.exports = {
+  securityHeaders,
+  CORSHeaders,
+  noCrawlerHeader,
+  noStoreCacheHeader,
+};
+
+Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
+  value: {
+    ...module.exports,
+  },
+});
+
+
+/***/ }),
+/* 91 */
+/***/ (function(module, exports) {
+
+module.exports = require("body-parser");
+
+/***/ }),
+/* 92 */
+/***/ (function(module, exports) {
+
+module.exports = require("connect-mongo");
+
+/***/ }),
+/* 93 */
+/***/ (function(module, exports) {
+
+module.exports = require("morgan");
+
+/***/ }),
+/* 94 */
+/***/ (function(module, exports) {
+
+module.exports = require("serve-favicon");
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports) {
+
+module.exports = require("express-session");
+
+/***/ }),
+/* 96 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const qs = __webpack_require__(13);
+const session = __webpack_require__(95);
+const favicon = __webpack_require__(94);
+const logger = __webpack_require__(93);
+const MongoStore = __webpack_require__(92)(session);
+const bodyParser = __webpack_require__(91);
+const mongoose = __webpack_require__(9);
+const express = __webpack_require__(15);
+const path = __webpack_require__(20);
+
+
+// MODULE
+const { _M_ } = __webpack_require__(4);
+const { _U_ } = __webpack_require__(1);
+const { ConfigsModel } = __webpack_require__(12);
+const { APIRouters } = __webpack_require__(26);
+
+
+// CONNECTION
+const app = express();
+
+
+/** database **/
+mongoose.connect(process.env.DB).then(() => ConfigsModel.initConfig(app));
+
+
+/** setting **/
+app.set('x-powered-by', false);
+app.set('env', 'development');
+app.set('upload', path.resolve('./static/public/media'));
+app.set('query parser', str => {
+  return _U_.object.burstArrayDeep(qs.parse(str, { parseArrays: false, depth: 0 }), { mutate: true, position: -1 });
+});
+
+
+/** security **/
+app.use(_M_.securityHeaders);
+
+
+/** static public resources **/
+// todo: added authentications to private resources
+app.use(favicon(path.resolve('./static/public/media', 'favicon.ico')));
+app.use('/static', _M_.noCrawlerHeader, express.static(path.resolve('./static/public')));
+app.use('/static', _M_.noCrawlerHeader, express.static(path.resolve('./static/private')));
+
+
+/** session **/
+app.use(session({
+  name: 'session_id',
+  secret: process.env.SESSION_SECRET,
+  saveUninitialized: false,
+  rolling: false,
+  resave: false,
+  cookie: ( false) ? undefined : { secure: true, httpOnly: true, sameSite: true },
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection,
+    autoRemove: 'native',
+  }),
+}));
+
+
+/** debugger **/
+if (false) {}
+
+
+/** routers **/
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ type: 'application/json' }));
+app.use(_M_.appConfigsLoader);
+
+
+/** auth endpoint **/
+app.get('/signout', (req, res, next) => {
+  if (req.session.accessToken) req.session.destroy();
+  next();
+});
+
+
+/** API endpoints **/
+app.use('/api', APIRouters);
+app.use((err, req, res, next) => {
+  console.dir(err);
+  switch (err.name) {
+    case 'UnauthorizedError':
+      return res.status(401).json({
+        _error: err.name,
+        _status: 401,
+      });
+    case 'ValidationError':
+      return res.status(400).json({
+        _error: err.name,
+        _status: 400,
+      });
+    case 'HttpException':
+      return res.status(404).json({
+        _error: err.name,
+        _status: 404,
+      });
+    default: {
+      return res.status(500).json({
+        _error: 'InternalServerError',
+        _status: 500,
+      });
+    }
+  }
+});
+
+
+/** SSR endpoint **/
+app.use(_M_.serverSideRenderer);
+app.use((err, req, res, next) => {
+  console.log(err);
+  res.send('HTTP 500 - InternalServerError');
+});
+
+
+// exports
+module.exports = app;
+
+
+/***/ }),
+/* 97 */
+/***/ (function(module, exports) {
+
+module.exports = require("debug");
+
+/***/ }),
+/* 98 */
+/***/ (function(module, exports) {
+
+module.exports = require("http");
+
+/***/ }),
+/* 99 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const http = __webpack_require__(98);
+const debug = __webpack_require__(97)('OpenBox:server');
+const app = __webpack_require__(96);
+const { _U_: { string: { checkToStringTag } } } = __webpack_require__(1);
+
+
+// helper functions
+/** Normalize a port into a number, string, or false **/
+const normalizePort = (val) => {
+  const port = parseInt(val, 10);
+
+  if (Number.isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+};
+
+
+// server entity
+/** Get port from environment and store in Express **/
+const port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+
+/** Create HTTP server **/
+const server = http.createServer(app);
+
+
+// events handler
+/** Event listener for HTTP server "error" event **/
+const onError = (error) => {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  const bind = checkToStringTag(port, 'String')
+    ? `Pipe ${port}`
+    : `Port ${port}`;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(`${bind} requires elevated privileges`);
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(`${bind} is already in use`);
+      process.exit(1);
+      break;
+    default: {
+      throw error;
+    }
+  }
+};
+
+
+/** Event listener for HTTP server "listening" event **/
+const onListening = () => {
+  const addr = server.address();
+  const bind = checkToStringTag(addr, 'String')
+    ? `pipe ${addr}`
+    : `port ${addr.port}`;
+  debug(`Listening on ${bind}`);
+};
+
+
+// events listener
+/** Listen on provided port, on all network interfaces **/
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+
+/** Event listener for 'unhandledRejection' event **/
+process.on('unhandledRejection', (err) => console.log('Unhandled Promise Rejection:\n', err.stack));
+
+
+/***/ })
+/******/ ]);

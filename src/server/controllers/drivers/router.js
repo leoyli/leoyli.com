@@ -110,7 +110,7 @@ class Device {
       const methodKeys = Object.keys(controller).sort().reverse();
       const option = { ...this.setting, ...setting };
       for (let i = methodKeys.length - 1, method = methodKeys[i]; i > -1; method = methodKeys[i -= 1]) {
-        const pathOption = { ...option, authentication: secure || method.toLowerCase() !== 'get' };
+        const pathOption = { ...option, authentication: secure === undefined ? method.toLowerCase() !== 'get' : secure };
         router[method.toLowerCase()](path, getRouterStacks(this._hook, controller[method], pathOption));
       }
     });

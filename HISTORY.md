@@ -1,5 +1,32 @@
-Version 0.11.0 / 2018-06-28
+### Version 1.0.5 / 2018-07-05
+> General
+- Updated README.md.
+- Chanced from Apache License 2.0 to MIT License.
+- Chanced to HTTP server for easy server-side configurations.
+- Added 'webpack-bundle-analyzer' dev-dependencies.
+- Removed unused dependencies: 'connect-flash', 'lodash', 'spdy'.
+- Reduced bundle size with webpack plugins and appropriate configs.
+- Moved 'node-sass' to dev-dependencies.
+- Committed with webpack emitted files for easier deployment.
+- Fixed local variables by loading proper env variables.
+- Fixed CSS layout.
 
+> Server
+- Fixed 'Media' modle schema bugs.
+- Fixed 'util/upload' bugs.
+
+> React
+- Fixed 'post' layout.
+- Fixed 'navbar' in mobile window.
+- Updated 'Lisence' information in 'footer'.
+
+
+### Version 1.0.0 / 2018-06-28
+> General
+- Published the v1 and merged into the 'master' branch.
+
+
+### Version 0.11.0 / 2018-06-28
 > General
 - Finished v0.11: 'React SSR and deploy preparations'.
 

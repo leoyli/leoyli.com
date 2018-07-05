@@ -6,10 +6,7 @@ const mongoose = require('mongoose');
 // schema
 const MediaSchema   = new mongoose.Schema({
   author: {
-    _id: {
-      type          : mongoose.Schema.Types.ObjectId,
-      ref           : 'users',
-    },
+    _id             : { type: String },
     nickname        : { type: String },
   },
   file: {

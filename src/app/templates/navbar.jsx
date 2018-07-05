@@ -55,15 +55,25 @@ const NavLeftPort = ({ siteName }) => (
     <NavLink
       exact
       to="/blog/about"
-      className="_-nav__link"
+      className="_-nav__link d-none d-sm-inline"
       activeClassName="_-nav__link--active"
     >About
     </NavLink>
     <NavLink
-      to="/blog"
-      className="_-nav__link"
+      exact
+      to="/blog/CV"
+      className="_-nav__link d-none d-sm-inline"
       activeClassName="_-nav__link--active"
-      isActive={(match, location) => location.pathname.includes('/blog') && !location.pathname.includes('/blog/about')}
+    >CV
+    </NavLink>
+    <NavLink
+      to="/blog"
+      className="_-nav__link d-none d-sm-inline"
+      activeClassName="_-nav__link--active"
+      isActive={(match, location) => {
+        return location.pathname.includes('/blog')
+          && !['/blog/about', '/blog/cv'].includes(location.pathname.toLowerCase());
+      }}
     >Blog
     </NavLink>
   </div>

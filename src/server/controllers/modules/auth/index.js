@@ -9,10 +9,10 @@ const JWTVerification = jwt({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 10,
-    jwksUri: process.env.AUTH0_JWKS,
+    jwksUri: `https://${process.env.AUTH0_SERVER_DOMAIN}/.well-known/jwks.json`,
   }),
   audience: process.env.AUTH0_AUDIENCE,
-  issuer: process.env.AUTH0_ISSUER,
+  issuer: `https://${process.env.AUTH0_SERVER_DOMAIN}/`,
   algorithms: ['RS256'],
 });
 
