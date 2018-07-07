@@ -1,3 +1,14 @@
+### Version 1.0.6 / 2018-07-07
+> General
+- Update webpack settings.
+- Added 'classNames' into dependencies.
+
+> React
+- Refracted 'Sticky' in preventing from direct DOM manipulation.
+- Generalized 'Dropdown' as renamed 'Toggle' as a `render prop` component.
+- Extracted 'DropdownMenu@navbar' as 'Menu'.
+
+
 ### Version 1.0.5 / 2018-07-05
 > General
 - Updated README.md.

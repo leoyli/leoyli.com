@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 99);
+/******/ 	return __webpack_require__(__webpack_require__.s = 101);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -96,10 +96,10 @@ module.exports = require("react");
 
 const utilities = {
   _U_: {
-    express: __webpack_require__(87),
-    object: __webpack_require__(85),
+    express: __webpack_require__(89),
+    object: __webpack_require__(87),
     string: __webpack_require__(8),
-    error: __webpack_require__(84),
+    error: __webpack_require__(86),
   },
 };
 
@@ -124,11 +124,11 @@ module.exports = require("react-router");
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const headers = __webpack_require__(90);
-const helpers = __webpack_require__(88);
-const query = __webpack_require__(82);
-const upload = __webpack_require__(74);
-const renderer = __webpack_require__(70);
+const headers = __webpack_require__(92);
+const helpers = __webpack_require__(90);
+const query = __webpack_require__(84);
+const upload = __webpack_require__(76);
+const renderer = __webpack_require__(72);
 const auth = __webpack_require__(29);
 
 
@@ -287,7 +287,7 @@ var _jwtDecode = __webpack_require__(17);
 
 var _jwtDecode2 = _interopRequireDefault(_jwtDecode);
 
-var _webAuth = __webpack_require__(67);
+var _webAuth = __webpack_require__(69);
 
 var _webAuth2 = _interopRequireDefault(_webAuth);
 
@@ -401,7 +401,7 @@ exports._handleSignOut = _handleSignOut;
 /***/ (function(module, exports, __webpack_require__) {
 
 /* eslint-disable no-bitwise */
-const { ObjectId } = __webpack_require__(86);
+const { ObjectId } = __webpack_require__(88);
 
 
 /**
@@ -601,10 +601,10 @@ exports.default = Unfounded;
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = {
-  ConfigsModel: __webpack_require__(79),
-  UsersModel: __webpack_require__(78),
-  PostsModel: __webpack_require__(76),
-  MediaModel: __webpack_require__(75),
+  ConfigsModel: __webpack_require__(81),
+  UsersModel: __webpack_require__(80),
+  PostsModel: __webpack_require__(78),
+  MediaModel: __webpack_require__(77),
 };
 
 
@@ -631,7 +631,7 @@ var _qs = __webpack_require__(13);
 
 var _qs2 = _interopRequireDefault(_qs);
 
-var _nodeFetch = __webpack_require__(68);
+var _nodeFetch = __webpack_require__(70);
 
 var _nodeFetch2 = _interopRequireDefault(_nodeFetch);
 
@@ -731,7 +731,7 @@ var _reactRouterDom = __webpack_require__(2);
 
 var _reactFontawesome = __webpack_require__(10);
 
-var _style = __webpack_require__(62);
+var _style = __webpack_require__(64);
 
 var _style2 = _interopRequireDefault(_style);
 
@@ -820,7 +820,7 @@ var _fetch = __webpack_require__(14);
 
 var _fetch2 = _interopRequireDefault(_fetch);
 
-var _routers = __webpack_require__(66);
+var _routers = __webpack_require__(68);
 
 var _routers2 = _interopRequireDefault(_routers);
 
@@ -1555,6 +1555,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+// style
+
+
 var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
@@ -1577,12 +1582,9 @@ const NAMESPACE = {
 };
 
 // helpers
-
-
-// style
-const getScaledValue = (value, scaleFactor) => {
+const getNormalizedConstant = (value, normalizationFactor) => {
   const parse = /^(-?\d+)?(?:.(\d+))?(%|px)?$/.exec(`${value}`.trim()) || {};
-  return parse[3] === '%' ? +`${parse[1] || 0}.${parse[2] || 0}` / 100 * (scaleFactor || 1) : +parse[1];
+  return parse[3] === '%' ? +`${parse[1] || 0}.${parse[2] || 0}` / 100 * (normalizationFactor || 1) : +parse[1];
 };
 
 const getQuantityUponBaseline = (num, baseline) => {
@@ -1593,85 +1595,90 @@ const scrollPosition = () => {
   return Math.max(document.documentElement.scrollTop, document.body.scrollTop, window.pageYOffset);
 };
 
-const viewPortWidth = () => {
-  return Math.max(document.documentElement.clientWidth, window.innerWidth);
-};
+const measureCurrentViewPort = () => ({
+  height: Math.max(document.documentElement.scrollHeight, window.innerHeight),
+  width: Math.max(document.documentElement.clientWidth, window.innerWidth)
+});
 
 // components
 class Sticky extends _react2.default.Component {
   constructor(...args) {
     var _temp;
 
-    return _temp = super(...args), this.stickyBoxClassNames = [NAMESPACE.className.leader, this.props.className].join(' ').trim(), this.stickyBox = _react2.default.createRef(), this._loadConfigs = () => {
-      this.stickyBoxNode = this.stickyBox.current;
-      this.stickyConfigs = {
-        $TOP: getScaledValue(this.props.top, window.innerHeight),
-        $BOTTOM: getScaledValue(this.props.bottom, window.innerHeight),
-        $START: getScaledValue(this.props.start, document.documentElement.scrollHeight),
-        $STOP: getScaledValue(this.props.stop, document.documentElement.scrollHeight),
-        $DISTANCE: getScaledValue(this.props.distance, document.documentElement.scrollHeight)
-      };
+    return _temp = super(...args), this.stickyBox = _react2.default.createRef(), this.state = { className: '', style: {} }, this.cache = { constants: {}, positions: {}, dimensions: {} }, this._calculateConstants = () => {
+      const { top, bottom, start, stop, distance } = this.props;
+
+      // perform calculations
+      const TOP = getNormalizedConstant(top, window.innerHeight);
+      const BOTTOM = getNormalizedConstant(bottom, window.innerHeight);
+      const START = getNormalizedConstant(start, document.documentElement.scrollHeight);
+      const STOP = getNormalizedConstant(stop, document.documentElement.scrollHeight);
+      const DISTANCE = getNormalizedConstant(distance, document.documentElement.scrollHeight);
+
+      // cache calculations
+      this.cache.constants = { TOP, BOTTOM, START, STOP, DISTANCE };
+      return this;
+    }, this._calculateVariables = () => {
+      const { TOP, BOTTOM, START, STOP, DISTANCE } = this.cache.constants;
+
+      // calculate positions
+      const initial = this.stickyBox.current.getBoundingClientRect().top + scrollPosition();
+      const vertex = getQuantityUponBaseline(TOP) || getQuantityUponBaseline(-BOTTOM, window.innerHeight) || getQuantityUponBaseline(START - initial) || (initial ? -initial : 0);
+      const active = getQuantityUponBaseline(initial - vertex) + (initial ? 0 : this.stickyBox.current.offsetHeight);
+      const frozen = getQuantityUponBaseline(STOP, document.documentElement.scrollHeight) || active + (getQuantityUponBaseline(DISTANCE) || document.documentElement.scrollHeight);
+
+      // cache calculations
+      this.cache.positions = { initial, vertex, active, frozen };
+      return this;
+    }, this._calculateDimensions = () => {
+      // relax the box
+      const stickyBoxDOM = this.stickyBox.current;
+      const [name, height, width] = [stickyBoxDOM.className, stickyBoxDOM.style.height, stickyBoxDOM.style.width];
+      stickyBoxDOM.className = this.props.className;
+      stickyBoxDOM.style.height = '';
+      stickyBoxDOM.style.width = '';
+
+      // calculate and cache dimensions
+      const box = { height: stickyBoxDOM.offsetHeight, width: stickyBoxDOM.offsetWidth };
+      const view = measureCurrentViewPort();
+      this.cache.dimensions = { box, view };
+
+      // contract the box
+      [stickyBoxDOM.className, stickyBoxDOM.style.height, stickyBoxDOM.style.width] = [name, height, width];
       return this;
     }, this._updateStickyBox = () => {
-      const { className } = this.stickyBoxNode;
-      this.stickyBoxNode.className = this.stickyBoxNode.style.height = this.stickyBoxNode.style.width = '';
-      this.stickyBoxNode.style.height = `${this.stickyBoxNode.offsetHeight}px`;
-      this.stickyBoxNode.style.width = `${this.stickyBoxNode.offsetWidth}px`;
-      this.stickyBoxNode.className = className;
-      return this;
-    }, this._calculatePositions = () => {
-      const { $TOP, $BOTTOM, $START, $STOP, $DISTANCE } = this.stickyConfigs;
-
-      // calculating positions
-      const initial = this.stickyBoxNode.getBoundingClientRect().top + scrollPosition();
-      const vertex = getQuantityUponBaseline($TOP) // by $TOP
-      || getQuantityUponBaseline(-$BOTTOM, window.innerHeight) // by $BOTTOM
-      || getQuantityUponBaseline($START - initial) // by $START
-      || (initial ? -initial : 0); // (default, non-sticky)
-      const active = getQuantityUponBaseline(initial - vertex) + (initial ? 0 : this.stickyBoxNode.offsetHeight);
-      const frozen = getQuantityUponBaseline($STOP, document.documentElement.scrollHeight) // by $STOP
-      || active + (getQuantityUponBaseline($DISTANCE) || document.documentElement.scrollHeight); // by $DISTANCE (default, endless)
-
-      // caching view port parameters
-      const height = document.documentElement.scrollHeight;
-      const width = viewPortWidth();
-
-      // exposing the results
-      this.stickyPositions = { initial, vertex, active, frozen, height, width };
-
-      return this;
-    }, this._updateStickyElement = () => {
       const { className } = NAMESPACE;
-      const { initial, vertex, active, frozen } = this.stickyPositions;
+      const { initial, vertex, active, frozen } = this.cache.positions;
       const current = scrollPosition();
 
-      // assigning classNames
-      if (active < current && initial === 0) this.stickyBoxNode.classList.add(className.topped);
-      if (active < current) this.stickyBoxNode.classList.add(className.active, className.hauled);
-      if (active >= current) {
-        this.stickyBoxNode.classList.remove(className.active, className.hauled, className.topped);
-        this.stickyBoxNode.style.top = '';
-      } else if (active < current && current <= frozen) {
-        this.stickyBoxNode.style.top = `${vertex}px`;
-      } else {
-        this.stickyBoxNode.classList.remove(className.active);
-        this.stickyBoxNode.style.top = `${frozen - active}px`;
-      }
+      // control sticky element
+      const classList = [this.props.className, className.leader];
+      if (current > active) classList.push(className.hauled);
+      if (current > active && initial === 0) classList.push(className.topped);
+      if (current > active && current < frozen) classList.push(className.active);
 
+      const style = {
+        height: `${this.cache.dimensions.box.height}px`,
+        width: `${this.cache.dimensions.box.width}px`,
+        top: current > active ? `${current < frozen ? vertex : frozen - active}px` : ''
+      };
+
+      this.setState(() => ({ className: classList.join(' '), style }));
       return this;
     }, this._handleStickyEvent = () => {
-      const { height, width } = this.stickyPositions;
-      if (width !== viewPortWidth()) return this._updateStickyBox()._calculatePositions()._updateStickyElement();
-      if (height !== document.documentElement.scrollHeight) return this._calculatePositions()._updateStickyElement();
-      return this._updateStickyElement();
+      const { height: currentHeight, width: currentWidth } = measureCurrentViewPort();
+      const { height: cachedHeight, width: cachedWidth } = this.cache.dimensions.view;
+      if (cachedWidth !== currentWidth) return this._calculateDimensions()._calculateVariables()._updateStickyBox();
+      if (cachedHeight !== currentHeight) return this._calculateVariables()._updateStickyBox();
+      return this._updateStickyBox();
     }, this.componentDidMount = () => {
-      this._loadConfigs()._updateStickyBox()._calculatePositions()._updateStickyElement();
+      this._calculateConstants()._calculateDimensions()._calculateVariables()._updateStickyBox();
       NAMESPACE.eventList.forEach(event => window.addEventListener(event, this._handleStickyEvent));
     }, this.componentWillUnmount = () => {
       NAMESPACE.eventList.forEach(event => window.removeEventListener(event, this._handleStickyEvent));
     }, this.render = () => _react2.default.createElement(
       'div',
-      { className: this.stickyBoxClassNames, ref: this.stickyBox },
+      _extends({ ref: this.stickyBox }, this.state),
       this.props.children
     ), _temp;
   }
@@ -1781,12 +1788,6 @@ exports.default = SearchBar;
 
 /***/ }),
 /* 36 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1800,60 +1801,229 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _style = __webpack_require__(36);
-
-var _style2 = _interopRequireDefault(_style);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// magic-strings
-const NAMESPACE = {
-  eventList: ['click', 'scroll'],
-  className: {
-    leader: '_-dropdown',
-    toggle: '_-dropdown__toggle',
-    target: '_-dropdown__menu',
-    hidden: '_-dropdown__menu--hidden'
-  }
-};
+// helpers
+const stopPropagation = e => e.stopPropagation();
 
 // components
-
-
-// styles
-class Dropdown extends _react2.default.Component {
+class Toggle extends _react.Component {
   constructor(...args) {
     var _temp;
 
-    return _temp = super(...args), this.dropdownBoxClassName = [NAMESPACE.className.leader, this.props.className].join(' ').trim(), this.dropdownBox = _react2.default.createRef(), this._handleDropdownEvent = e => {
-      const { className, eventList } = NAMESPACE;
-      if (!e.target.className || !e.target.className.toString().includes(className.target)) {
-        this.dropdownMenuNode.classList.add(className.hidden);
-        eventList.map(type => document.removeEventListener(type, this._handleDropdownEvent));
-      }
-    }, this._onClickToggleMenu = e => {
-      const { className, eventList } = NAMESPACE;
-      if (e.target.className.toString().includes(className.toggle) && !this.dropdownMenuNode.classList.toggle(className.hidden)) {
-        eventList.map(type => document.addEventListener(type, this._handleDropdownEvent));
+    return _temp = super(...args), this.eventList = ['click', 'scroll'], this.state = { hidden: this.props.hidden !== undefined ? this.props.hidden : true }, this.ref = _react2.default.createRef(), this._handleOnClickToggle = e => {
+      const { hidden } = this.state;
+      if (hidden || e && e.path && !e.path.includes(this.ref.current)) {
+        this.eventList.forEach(event => {
+          document[hidden ? 'addEventListener' : 'removeEventListener'](event, this._handleOnClickToggle);
+        });
+        this.setState(() => ({ hidden: !hidden }));
       }
     }, this.componentDidMount = () => {
-      const { className } = NAMESPACE;
-      this.dropdownMenuNode = this.dropdownBox.current.getElementsByClassName(className.target)[0];
-      this.dropdownMenuNode.classList.add(className.hidden);
-    }, this.render = () => _react2.default.createElement(
-      'div',
-      { className: this.dropdownBoxClassName, ref: this.dropdownBox, onClick: this._onClickToggleMenu },
-      this.props.children
-    ), _temp;
+      const { hidden } = this.state;
+      if (!hidden) this.eventList.forEach(event => document.addEventListener(event, this._handleOnClickToggle));
+    }, this.componentWillUnmount = () => {
+      this.eventList.forEach(event => document.removeEventListener(event, this._handleOnClickToggle));
+    }, this.render = () => {
+      const { hidden } = this.state;
+      const { children } = this.props;
+      return children({ hidden, toggle: this._handleOnClickToggle, refToStopOnClick: this.ref });
+    }, _temp;
   }
 
 }
 
 // exports
-exports.default = Dropdown;
+exports.default = Toggle;
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports) {
+
+
 
 /***/ }),
 /* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+  Copyright (c) 2017 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
+*/
+/* global define */
+
+(function () {
+	'use strict';
+
+	var hasOwn = {}.hasOwnProperty;
+
+	function classNames () {
+		var classes = [];
+
+		for (var i = 0; i < arguments.length; i++) {
+			var arg = arguments[i];
+			if (!arg) continue;
+
+			var argType = typeof arg;
+
+			if (argType === 'string' || argType === 'number') {
+				classes.push(arg);
+			} else if (Array.isArray(arg) && arg.length) {
+				var inner = classNames.apply(null, arg);
+				if (inner) {
+					classes.push(inner);
+				}
+			} else if (argType === 'object') {
+				for (var key in arg) {
+					if (hasOwn.call(arg, key) && arg[key]) {
+						classes.push(key);
+					}
+				}
+			}
+		}
+
+		return classes.join(' ');
+	}
+
+	if (typeof module !== 'undefined' && module.exports) {
+		classNames.default = classNames;
+		module.exports = classNames;
+	} else if (true) {
+		// register as 'classnames', consistent with npm package name
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function () {
+			return classNames;
+		}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else {}
+}());
+
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _classNames = __webpack_require__(38);
+
+var _classNames2 = _interopRequireDefault(_classNames);
+
+var _reactRouterDom = __webpack_require__(2);
+
+var _style = __webpack_require__(37);
+
+var _style2 = _interopRequireDefault(_style);
+
+var _toggle = __webpack_require__(36);
+
+var _toggle2 = _interopRequireDefault(_toggle);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// helper
+// components
+
+
+// style
+const UserMenu = () => _react2.default.createElement(
+  _toggle2.default,
+  null,
+  ({ hidden, toggle, refToStopOnClick }) => {
+    const toggleMenuClassName = (0, _classNames2.default)({
+      '_-dropdown__menu': true,
+      '_-dropdown__menu--hidden': hidden
+    });
+    return _react2.default.createElement(
+      'div',
+      { className: '_-dropdown' },
+      _react2.default.createElement(
+        'div',
+        { className: '_-dropdown__toggle', onClick: toggle },
+        _react2.default.createElement('img', { alt: 'user menu', src: '/static/media/icon.png', className: '_-dropdown__toggle__icon' })
+      ),
+      _react2.default.createElement(
+        'div',
+        { className: toggleMenuClassName, ref: refToStopOnClick },
+        _react2.default.createElement(
+          'ul',
+          { className: '_-dropdown__menu__box' },
+          _react2.default.createElement(
+            'li',
+            { className: '_-dropdown__menu__item--title' },
+            'Welcome!'
+          ),
+          _react2.default.createElement(
+            'li',
+            { className: '_-dropdown__menu__item--divider' },
+            '\xA0'
+          ),
+          _react2.default.createElement(
+            'li',
+            { className: '_-dropdown__menu__item' },
+            _react2.default.createElement(
+              _reactRouterDom.Link,
+              { to: '/blog/new' },
+              'New Post'
+            )
+          ),
+          _react2.default.createElement(
+            'li',
+            { className: '_-dropdown__menu__item' },
+            _react2.default.createElement(
+              _reactRouterDom.Link,
+              { to: '/util/stacks/posts' },
+              'Posts Management'
+            )
+          ),
+          _react2.default.createElement(
+            'li',
+            { className: '_-dropdown__menu__item--divider' },
+            '\xA0'
+          ),
+          _react2.default.createElement(
+            'li',
+            { className: '_-dropdown__menu__item' },
+            _react2.default.createElement(
+              _reactRouterDom.Link,
+              { to: '/util/settings' },
+              'Website Settings'
+            )
+          ),
+          _react2.default.createElement(
+            'li',
+            { className: '_-dropdown__menu__item--divider' },
+            '\xA0'
+          ),
+          _react2.default.createElement(
+            'li',
+            { className: '_-dropdown__menu__item' },
+            _react2.default.createElement(
+              _reactRouterDom.Link,
+              { to: '/signout' },
+              'Sign out'
+            )
+          )
+        )
+      )
+    );
+  }
+);
+
+// dependents
+exports.default = UserMenu;
+
+/***/ }),
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1869,9 +2039,9 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouterDom = __webpack_require__(2);
 
-var _dropdown = __webpack_require__(37);
+var _usermenu = __webpack_require__(39);
 
-var _dropdown2 = _interopRequireDefault(_dropdown);
+var _usermenu2 = _interopRequireDefault(_usermenu);
 
 var _searchbar = __webpack_require__(35);
 
@@ -1883,9 +2053,8 @@ var _sticky2 = _interopRequireDefault(_sticky);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// helper
 // components
-const NavMenuAuthOff = () => {
+const SignInButton = () => {
   const state = { returnTo: false && window.location.pathname || '/' };
   return _react2.default.createElement(
     'button',
@@ -1900,84 +2069,6 @@ const NavMenuAuthOff = () => {
 
 // dependents
 /* global __isBrowser__ */
-
-const NavMenuAuthOn = () => _react2.default.createElement(
-  _dropdown2.default,
-  null,
-  _react2.default.createElement(
-    'div',
-    { className: '_-dropdown__toggle' },
-    _react2.default.createElement('img', {
-      alt: 'user menu',
-      className: '_-dropdown__toggle__icon',
-      src: '/static/media/icon.png'
-    })
-  ),
-  _react2.default.createElement(
-    'div',
-    { className: '_-dropdown__menu _-dropdown__menu--hidden' },
-    _react2.default.createElement(
-      'ul',
-      { className: '_-dropdown__menu__box' },
-      _react2.default.createElement(
-        'li',
-        { className: '_-dropdown__menu__item--title' },
-        'Welcome!'
-      ),
-      _react2.default.createElement(
-        'li',
-        { className: '_-dropdown__menu__item--divider' },
-        '\xA0'
-      ),
-      _react2.default.createElement(
-        'li',
-        { className: '_-dropdown__menu__item' },
-        _react2.default.createElement(
-          _reactRouterDom.Link,
-          { to: '/blog/new' },
-          'New Post'
-        )
-      ),
-      _react2.default.createElement(
-        'li',
-        { className: '_-dropdown__menu__item' },
-        _react2.default.createElement(
-          _reactRouterDom.Link,
-          { to: '/util/stacks/posts' },
-          'Posts Management'
-        )
-      ),
-      _react2.default.createElement(
-        'li',
-        { className: '_-dropdown__menu__item--divider' },
-        '\xA0'
-      ),
-      _react2.default.createElement(
-        'li',
-        { className: '_-dropdown__menu__item' },
-        _react2.default.createElement(
-          _reactRouterDom.Link,
-          { to: '/util/settings' },
-          'Website Settings'
-        )
-      ),
-      _react2.default.createElement(
-        'li',
-        { className: '_-dropdown__menu__item--divider' },
-        '\xA0'
-      ),
-      _react2.default.createElement(
-        'li',
-        { className: '_-dropdown__menu__item' },
-        _react2.default.createElement(
-          _reactRouterDom.Link,
-          { to: '/signout' },
-          'Sign out'
-        )
-      )
-    )
-  )
-);
 
 const NavLeftPort = ({ siteName }) => _react2.default.createElement(
   'div',
@@ -2028,7 +2119,7 @@ const NavRightPort = ({ isSignedIn }) => _react2.default.createElement(
   'div',
   { className: '_-nav__right-menu' },
   _react2.default.createElement(_searchbar2.default, null),
-  isSignedIn ? _react2.default.createElement(NavMenuAuthOn, null) : _react2.default.createElement(NavMenuAuthOff, null)
+  isSignedIn ? _react2.default.createElement(_usermenu2.default, null) : _react2.default.createElement(SignInButton, null)
 );
 
 const NavBar = ({ isSignedIn, _$CONFIG }) => _react2.default.createElement(
@@ -2050,61 +2141,61 @@ const NavBar = ({ isSignedIn, _$CONFIG }) => _react2.default.createElement(
 exports.default = NavBar;
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, exports) {
 
 module.exports = require("@fortawesome/free-brands-svg-icons/faGithub");
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, exports) {
 
 module.exports = require("@fortawesome/free-brands-svg-icons/faLinkedin");
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (function(module, exports) {
 
 module.exports = require("@fortawesome/free-brands-svg-icons/faFacebookSquare");
 
 /***/ }),
-/* 42 */
+/* 44 */
 /***/ (function(module, exports) {
 
 module.exports = require("@fortawesome/free-solid-svg-icons/faSearch");
 
 /***/ }),
-/* 43 */
+/* 45 */
 /***/ (function(module, exports) {
 
 module.exports = require("@fortawesome/free-solid-svg-icons/faEraser");
 
 /***/ }),
-/* 44 */
+/* 46 */
 /***/ (function(module, exports) {
 
 module.exports = require("@fortawesome/free-solid-svg-icons/faSignInAlt");
 
 /***/ }),
-/* 45 */
+/* 47 */
 /***/ (function(module, exports) {
 
 module.exports = require("@fortawesome/free-solid-svg-icons/faPencilAlt");
 
 /***/ }),
-/* 46 */
+/* 48 */
 /***/ (function(module, exports) {
 
 module.exports = require("@fortawesome/free-solid-svg-icons/faAngleDoubleRight");
 
 /***/ }),
-/* 47 */
+/* 49 */
 /***/ (function(module, exports) {
 
 module.exports = require("@fortawesome/fontawesome-svg-core");
 
 /***/ }),
-/* 48 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2114,23 +2205,23 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _fontawesomeSvgCore = __webpack_require__(47);
+var _fontawesomeSvgCore = __webpack_require__(49);
 
-var _faAngleDoubleRight = __webpack_require__(46);
+var _faAngleDoubleRight = __webpack_require__(48);
 
-var _faPencilAlt = __webpack_require__(45);
+var _faPencilAlt = __webpack_require__(47);
 
-var _faSignInAlt = __webpack_require__(44);
+var _faSignInAlt = __webpack_require__(46);
 
-var _faEraser = __webpack_require__(43);
+var _faEraser = __webpack_require__(45);
 
-var _faSearch = __webpack_require__(42);
+var _faSearch = __webpack_require__(44);
 
-var _faFacebookSquare = __webpack_require__(41);
+var _faFacebookSquare = __webpack_require__(43);
 
-var _faLinkedin = __webpack_require__(40);
+var _faLinkedin = __webpack_require__(42);
 
-var _faGithub = __webpack_require__(39);
+var _faGithub = __webpack_require__(41);
 
 // configs
 
@@ -2149,7 +2240,7 @@ const fontawesome = { library: _fontawesomeSvgCore.library, config: _fontawesome
 exports.default = _fontawesomeSvgCore.library;
 
 /***/ }),
-/* 49 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2177,11 +2268,11 @@ var _fetch = __webpack_require__(14);
 
 var _fetch2 = _interopRequireDefault(_fetch);
 
-var _fontawesome = __webpack_require__(48);
+var _fontawesome = __webpack_require__(50);
 
 var _fontawesome2 = _interopRequireDefault(_fontawesome);
 
-var _navbar = __webpack_require__(38);
+var _navbar = __webpack_require__(40);
 
 var _navbar2 = _interopRequireDefault(_navbar);
 
@@ -2258,7 +2349,7 @@ class App extends _react2.default.Component {
 exports.default = App;
 
 /***/ }),
-/* 50 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2277,7 +2368,7 @@ var _reactRouterDom = __webpack_require__(2);
 
 var _auth = __webpack_require__(7);
 
-var _app = __webpack_require__(49);
+var _app = __webpack_require__(51);
 
 var _app2 = _interopRequireDefault(_app);
 
@@ -2320,7 +2411,7 @@ exports.RenderServer = RenderServer;
 exports.RenderClient = RenderClient;
 
 /***/ }),
-/* 51 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2504,7 +2595,7 @@ const Settings = ({ _$CONFIG, onSubmit, isSubmittable }) => _react2.default.crea
 exports.default = Settings;
 
 /***/ }),
-/* 52 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2518,7 +2609,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _settings = __webpack_require__(51);
+var _settings = __webpack_require__(53);
 
 var _settings2 = _interopRequireDefault(_settings);
 
@@ -2563,7 +2654,7 @@ class Settings extends _react.Component {
 exports.default = Settings;
 
 /***/ }),
-/* 53 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2774,7 +2865,7 @@ const Stacks = props => _react2.default.createElement(
 exports.default = Stacks;
 
 /***/ }),
-/* 54 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2788,7 +2879,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _stacks = __webpack_require__(53);
+var _stacks = __webpack_require__(55);
 
 var _stacks2 = _interopRequireDefault(_stacks);
 
@@ -2866,7 +2957,7 @@ class Stacks extends _react.Component {
 exports.default = Stacks;
 
 /***/ }),
-/* 55 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2984,7 +3075,7 @@ const Editor = ({ onSubmit, isSubmittable, post: { title, featured, category, ta
 exports.default = Editor;
 
 /***/ }),
-/* 56 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3007,7 +3098,7 @@ var _header = __webpack_require__(6);
 
 var _header2 = _interopRequireDefault(_header);
 
-var _editor = __webpack_require__(55);
+var _editor = __webpack_require__(57);
 
 var _editor2 = _interopRequireDefault(_editor);
 
@@ -3050,7 +3141,7 @@ class Editor extends _react.Component {
 exports.default = Editor;
 
 /***/ }),
-/* 57 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3089,7 +3180,7 @@ class Signout extends _react.Component {
 exports.default = Signout;
 
 /***/ }),
-/* 58 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3135,13 +3226,13 @@ class Signin extends _react.Component {
 exports.default = Signin;
 
 /***/ }),
-/* 59 */
+/* 61 */
 /***/ (function(module, exports) {
 
 module.exports = require("markdown-to-jsx");
 
 /***/ }),
-/* 60 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3155,7 +3246,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _markdownToJsx = __webpack_require__(59);
+var _markdownToJsx = __webpack_require__(61);
 
 var _markdownToJsx2 = _interopRequireDefault(_markdownToJsx);
 
@@ -3184,7 +3275,7 @@ const Post = ({ post = {} }) => _react2.default.createElement(
 exports.default = Post;
 
 /***/ }),
-/* 61 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3198,7 +3289,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _post = __webpack_require__(60);
+var _post = __webpack_require__(62);
 
 var _post2 = _interopRequireDefault(_post);
 
@@ -3259,13 +3350,13 @@ class Post extends _react.Component {
 exports.default = Post;
 
 /***/ }),
-/* 62 */
+/* 64 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 63 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3346,7 +3437,7 @@ const List = ({ list = [] }) => _react2.default.createElement(
 exports.default = List;
 
 /***/ }),
-/* 64 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3364,7 +3455,7 @@ var _header = __webpack_require__(6);
 
 var _header2 = _interopRequireDefault(_header);
 
-var _list = __webpack_require__(63);
+var _list = __webpack_require__(65);
 
 var _list2 = _interopRequireDefault(_list);
 
@@ -3419,7 +3510,7 @@ class List extends _react.Component {
 exports.default = List;
 
 /***/ }),
-/* 65 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3444,7 +3535,7 @@ const Landing = () => _react2.default.createElement(_reactRouter.Redirect, { to:
 exports.default = Landing;
 
 /***/ }),
-/* 66 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3458,35 +3549,35 @@ var _unfounded = __webpack_require__(11);
 
 var _unfounded2 = _interopRequireDefault(_unfounded);
 
-var _landing = __webpack_require__(65);
+var _landing = __webpack_require__(67);
 
 var _landing2 = _interopRequireDefault(_landing);
 
-var _list = __webpack_require__(64);
+var _list = __webpack_require__(66);
 
 var _list2 = _interopRequireDefault(_list);
 
-var _post = __webpack_require__(61);
+var _post = __webpack_require__(63);
 
 var _post2 = _interopRequireDefault(_post);
 
-var _signin = __webpack_require__(58);
+var _signin = __webpack_require__(60);
 
 var _signin2 = _interopRequireDefault(_signin);
 
-var _signout = __webpack_require__(57);
+var _signout = __webpack_require__(59);
 
 var _signout2 = _interopRequireDefault(_signout);
 
-var _editor = __webpack_require__(56);
+var _editor = __webpack_require__(58);
 
 var _editor2 = _interopRequireDefault(_editor);
 
-var _stacks = __webpack_require__(54);
+var _stacks = __webpack_require__(56);
 
 var _stacks2 = _interopRequireDefault(_stacks);
 
-var _settings = __webpack_require__(52);
+var _settings = __webpack_require__(54);
 
 var _settings2 = _interopRequireDefault(_settings);
 
@@ -3517,31 +3608,31 @@ const index = {
 exports.default = index;
 
 /***/ }),
-/* 67 */
+/* 69 */
 /***/ (function(module, exports) {
 
 module.exports = require("auth0-js/src/web-auth");
 
 /***/ }),
-/* 68 */
+/* 70 */
 /***/ (function(module, exports) {
 
 module.exports = require("node-fetch");
 
 /***/ }),
-/* 69 */
+/* 71 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-dom/server");
 
 /***/ }),
-/* 70 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const { matchPath } = __webpack_require__(2);
-const { renderToString } = __webpack_require__(69);
+const { renderToString } = __webpack_require__(71);
 const { routers } = __webpack_require__(18);
-const { RenderServer } = __webpack_require__(50);
+const { RenderServer } = __webpack_require__(52);
 const { template } = __webpack_require__(30);
 const { _U_ } = __webpack_require__(1);
 
@@ -3574,7 +3665,7 @@ Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
 
 
 /***/ }),
-/* 71 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const fs = __webpack_require__(19);
@@ -3677,7 +3768,7 @@ Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
 
 
 /***/ }),
-/* 72 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const fs = __webpack_require__(19);
@@ -3685,7 +3776,7 @@ const fs = __webpack_require__(19);
 
 // modules
 const { _U_ } = __webpack_require__(1);
-const { getSavingPath, isUploadable, fetchRawDoc, fetchMessage, upload } = __webpack_require__(71);
+const { getSavingPath, isUploadable, fetchRawDoc, fetchMessage, upload } = __webpack_require__(73);
 
 
 // handlers
@@ -3754,20 +3845,20 @@ Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
 
 
 /***/ }),
-/* 73 */
+/* 75 */
 /***/ (function(module, exports) {
 
 module.exports = require("busboy");
 
 /***/ }),
-/* 74 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Busboy = __webpack_require__(73);
+const Busboy = __webpack_require__(75);
 
 
 // helpers
-const { handleOnFile, handleOnField, handleOnFinish } = __webpack_require__(72);
+const { handleOnFile, handleOnField, handleOnFinish } = __webpack_require__(74);
 
 
 // middleware
@@ -3810,7 +3901,7 @@ Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
 
 
 /***/ }),
-/* 75 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* eslint-disable key-spacing */
@@ -3850,7 +3941,7 @@ module.exports = mongoose.model('media', MediaSchema);
 
 
 /***/ }),
-/* 76 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* eslint-disable key-spacing */
@@ -3943,19 +4034,19 @@ module.exports = mongoose.model('posts', PostsSchema);
 
 
 /***/ }),
-/* 77 */
+/* 79 */
 /***/ (function(module, exports) {
 
 module.exports = require("validator");
 
 /***/ }),
-/* 78 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* eslint-disable key-spacing */
 
 const mongoose = __webpack_require__(9);
-const validator = __webpack_require__(77);
+const validator = __webpack_require__(79);
 
 
 // schema
@@ -4036,7 +4127,7 @@ module.exports = mongoose.model('users', UsersSchema);
 
 
 /***/ }),
-/* 79 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* eslint-disable key-spacing */
@@ -4086,7 +4177,7 @@ module.exports = mongoose.model('settings', configsSchema);
 
 
 /***/ }),
-/* 80 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const { _U_ } = __webpack_require__(1);
@@ -4187,10 +4278,10 @@ Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
 
 
 /***/ }),
-/* 81 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const { paginatedMetaExpression, queryDateExpression, parseQueryDate, parseQuerySort } = __webpack_require__(80);
+const { paginatedMetaExpression, queryDateExpression, parseQueryDate, parseQuerySort } = __webpack_require__(82);
 
 
 // aggregation pipes
@@ -4367,11 +4458,11 @@ Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
 
 
 /***/ }),
-/* 82 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const { _U_ } = __webpack_require__(1);
-const { getAggregationQuery } = __webpack_require__(81);
+const { getAggregationQuery } = __webpack_require__(83);
 const modelIndex = __webpack_require__(12);
 
 
@@ -4411,7 +4502,7 @@ Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
 
 
 /***/ }),
-/* 83 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* eslint-disable no-shadow, no-template-curly-in-string */
@@ -4483,11 +4574,11 @@ module.exports = new Proxy(collection, {
 
 
 /***/ }),
-/* 84 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const { checkToStringTag } = __webpack_require__(8);
-const errorCodeProxyAgent = __webpack_require__(83);
+const errorCodeProxyAgent = __webpack_require__(85);
 
 
 // main
@@ -4547,7 +4638,7 @@ Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
 
 
 /***/ }),
-/* 85 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* eslint-disable no-restricted-syntax */
@@ -4715,13 +4806,13 @@ Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
 
 
 /***/ }),
-/* 86 */
+/* 88 */
 /***/ (function(module, exports) {
 
 module.exports = require("mongodb");
 
 /***/ }),
-/* 87 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const { checkToStringTag } = __webpack_require__(8);
@@ -4782,7 +4873,7 @@ Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
 
 
 /***/ }),
-/* 88 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const { _U_ } = __webpack_require__(1);
@@ -4862,7 +4953,7 @@ Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
 
 
 /***/ }),
-/* 89 */
+/* 91 */
 /***/ (function(module, exports) {
 
 class ContentSecurityPolicy {
@@ -4908,10 +4999,10 @@ Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
 
 
 /***/ }),
-/* 90 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const { ContentSecurityPolicy } = __webpack_require__(89);
+const { ContentSecurityPolicy } = __webpack_require__(91);
 
 
 /**
@@ -4981,45 +5072,45 @@ Object.defineProperty(module.exports, Symbol.for('__TEST__'), {
 
 
 /***/ }),
-/* 91 */
+/* 93 */
 /***/ (function(module, exports) {
 
 module.exports = require("body-parser");
 
 /***/ }),
-/* 92 */
+/* 94 */
 /***/ (function(module, exports) {
 
 module.exports = require("connect-mongo");
 
 /***/ }),
-/* 93 */
+/* 95 */
 /***/ (function(module, exports) {
 
 module.exports = require("morgan");
 
 /***/ }),
-/* 94 */
+/* 96 */
 /***/ (function(module, exports) {
 
 module.exports = require("serve-favicon");
 
 /***/ }),
-/* 95 */
+/* 97 */
 /***/ (function(module, exports) {
 
 module.exports = require("express-session");
 
 /***/ }),
-/* 96 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const qs = __webpack_require__(13);
-const session = __webpack_require__(95);
-const favicon = __webpack_require__(94);
-const logger = __webpack_require__(93);
-const MongoStore = __webpack_require__(92)(session);
-const bodyParser = __webpack_require__(91);
+const session = __webpack_require__(97);
+const favicon = __webpack_require__(96);
+const logger = __webpack_require__(95);
+const MongoStore = __webpack_require__(94)(session);
+const bodyParser = __webpack_require__(93);
 const mongoose = __webpack_require__(9);
 const express = __webpack_require__(15);
 const path = __webpack_require__(20);
@@ -5135,24 +5226,24 @@ module.exports = app;
 
 
 /***/ }),
-/* 97 */
+/* 99 */
 /***/ (function(module, exports) {
 
 module.exports = require("debug");
 
 /***/ }),
-/* 98 */
+/* 100 */
 /***/ (function(module, exports) {
 
 module.exports = require("http");
 
 /***/ }),
-/* 99 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const http = __webpack_require__(98);
-const debug = __webpack_require__(97)('OpenBox:server');
-const app = __webpack_require__(96);
+const http = __webpack_require__(100);
+const debug = __webpack_require__(99)('OpenBox:server');
+const app = __webpack_require__(98);
 const { _U_: { string: { checkToStringTag } } } = __webpack_require__(1);
 
 

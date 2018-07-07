@@ -2,7 +2,7 @@ import React from 'react';
 
 
 // style
-import style from './style.scss';
+import $style from './style.scss';
 
 
 // magic-strings
@@ -18,10 +18,10 @@ const NAMESPACE = {
 
 
 // helpers
-const getScaledValue = (value, scaleFactor) => {
+const getNormalizedConstant = (value, normalizationFactor) => {
   const parse = /^(-?\d+)?(?:.(\d+))?(%|px)?$/.exec(`${value}`.trim()) || {};
   return parse[3] === '%'
-    ? ((+`${parse[1] || 0}.${parse[2] || 0}`) / 100) * (scaleFactor || 1)
+    ? ((+`${parse[1] || 0}.${parse[2] || 0}`) / 100) * (normalizationFactor || 1)
     : +parse[1];
 };
 
@@ -37,89 +37,100 @@ const scrollPosition = () => {
   return Math.max(document.documentElement.scrollTop, document.body.scrollTop, window.pageYOffset);
 };
 
-const viewPortWidth = () => {
-  return Math.max(document.documentElement.clientWidth, window.innerWidth);
-};
+const measureCurrentViewPort = () => ({
+  height: Math.max(document.documentElement.scrollHeight, window.innerHeight),
+  width: Math.max(document.documentElement.clientWidth, window.innerWidth),
+});
+
 
 // components
 class Sticky extends React.Component {
-  stickyBoxClassNames = [NAMESPACE.className.leader, this.props.className].join(' ').trim();
   stickyBox = React.createRef();
+  state = { className: '', style: {} };
+  cache = { constants: {}, positions: {}, dimensions: {} };
 
-  _loadConfigs = () => {
-    this.stickyBoxNode = this.stickyBox.current;
-    this.stickyConfigs = {
-      $TOP: getScaledValue(this.props.top, window.innerHeight),
-      $BOTTOM: getScaledValue(this.props.bottom, window.innerHeight),
-      $START: getScaledValue(this.props.start, document.documentElement.scrollHeight),
-      $STOP: getScaledValue(this.props.stop, document.documentElement.scrollHeight),
-      $DISTANCE: getScaledValue(this.props.distance, document.documentElement.scrollHeight),
-    };
+  _calculateConstants = () => {
+    const { top, bottom, start, stop, distance } = this.props;
+
+    // perform calculations
+    const TOP = getNormalizedConstant(top, window.innerHeight);
+    const BOTTOM = getNormalizedConstant(bottom, window.innerHeight);
+    const START = getNormalizedConstant(start, document.documentElement.scrollHeight);
+    const STOP = getNormalizedConstant(stop, document.documentElement.scrollHeight);
+    const DISTANCE = getNormalizedConstant(distance, document.documentElement.scrollHeight);
+
+    // cache calculations
+    this.cache.constants = { TOP, BOTTOM, START, STOP, DISTANCE };
+    return this;
+  };
+
+  _calculateVariables = () => {
+    const { TOP, BOTTOM, START, STOP, DISTANCE } = this.cache.constants;
+
+    // calculate positions
+    const initial = this.stickyBox.current.getBoundingClientRect().top + scrollPosition();
+    const vertex = getQuantityUponBaseline(TOP)
+      || getQuantityUponBaseline(-BOTTOM, window.innerHeight)
+      || getQuantityUponBaseline(START - initial)
+      || (initial ? -initial : 0);
+    const active = getQuantityUponBaseline(initial - vertex) + (initial ? 0 : this.stickyBox.current.offsetHeight);
+    const frozen = getQuantityUponBaseline(STOP, document.documentElement.scrollHeight)
+      || (active + (getQuantityUponBaseline(DISTANCE) || document.documentElement.scrollHeight));
+
+    // cache calculations
+    this.cache.positions = { initial, vertex, active, frozen };
+    return this;
+  };
+
+  _calculateDimensions = () => {
+    // relax the box
+    const stickyBoxDOM = this.stickyBox.current;
+    const [name, height, width] = [stickyBoxDOM.className, stickyBoxDOM.style.height, stickyBoxDOM.style.width];
+    stickyBoxDOM.className = this.props.className;
+    stickyBoxDOM.style.height = '';
+    stickyBoxDOM.style.width = '';
+
+    // calculate and cache dimensions
+    const box = { height: stickyBoxDOM.offsetHeight, width: stickyBoxDOM.offsetWidth };
+    const view = measureCurrentViewPort();
+    this.cache.dimensions = { box, view };
+
+    // contract the box
+    [stickyBoxDOM.className, stickyBoxDOM.style.height, stickyBoxDOM.style.width] = [name, height, width];
     return this;
   };
 
   _updateStickyBox = () => {
-    const { className } = this.stickyBoxNode;
-    this.stickyBoxNode.className = this.stickyBoxNode.style.height = this.stickyBoxNode.style.width = '';
-    this.stickyBoxNode.style.height = `${this.stickyBoxNode.offsetHeight}px`;
-    this.stickyBoxNode.style.width = `${this.stickyBoxNode.offsetWidth}px`;
-    this.stickyBoxNode.className = className;
-    return this;
-  };
-
-  _calculatePositions = () => {
-    const { $TOP, $BOTTOM, $START, $STOP, $DISTANCE } = this.stickyConfigs;
-
-    // calculating positions
-    const initial = this.stickyBoxNode.getBoundingClientRect().top + scrollPosition();
-    const vertex = getQuantityUponBaseline($TOP)                                                                        // by $TOP
-      || getQuantityUponBaseline(-$BOTTOM, window.innerHeight)                                                          // by $BOTTOM
-      || getQuantityUponBaseline($START - initial)                                                                      // by $START
-      || (initial ? -initial : 0);                                                                                      // (default, non-sticky)
-    const active = getQuantityUponBaseline(initial - vertex) + (initial ? 0 : this.stickyBoxNode.offsetHeight);
-    const frozen = getQuantityUponBaseline($STOP, document.documentElement.scrollHeight)                                // by $STOP
-      || (active + (getQuantityUponBaseline($DISTANCE) || document.documentElement.scrollHeight));                      // by $DISTANCE (default, endless)
-
-    // caching view port parameters
-    const height = document.documentElement.scrollHeight;
-    const width = viewPortWidth();
-
-    // exposing the results
-    this.stickyPositions = { initial, vertex, active, frozen, height, width };
-
-    return this;
-  };
-
-  _updateStickyElement = () => {
     const { className } = NAMESPACE;
-    const { initial, vertex, active, frozen } = this.stickyPositions;
+    const { initial, vertex, active, frozen } = this.cache.positions;
     const current = scrollPosition();
 
-    // assigning classNames
-    if (active < current && initial === 0) this.stickyBoxNode.classList.add(className.topped);
-    if (active < current) this.stickyBoxNode.classList.add(className.active, className.hauled);
-    if (active >= current) {
-      this.stickyBoxNode.classList.remove(className.active, className.hauled, className.topped);
-      this.stickyBoxNode.style.top = '';
-    } else if (active < current && current <= frozen) {
-      this.stickyBoxNode.style.top = `${vertex}px`;
-    } else {
-      this.stickyBoxNode.classList.remove(className.active);
-      this.stickyBoxNode.style.top = `${frozen - active}px`;
-    }
+    // control sticky element
+    const classList = [this.props.className, className.leader];
+    if (current > active) classList.push(className.hauled);
+    if (current > active && initial === 0) classList.push(className.topped);
+    if (current > active && current < frozen) classList.push(className.active);
 
+    const style = {
+      height: `${this.cache.dimensions.box.height}px`,
+      width: `${this.cache.dimensions.box.width}px`,
+      top: current > active ? `${(current < frozen) ? vertex : (frozen - active)}px` : '',
+    };
+
+    this.setState(() => ({ className: classList.join(' '), style }));
     return this;
   };
 
   _handleStickyEvent = () => {
-    const { height, width } = this.stickyPositions;
-    if (width !== viewPortWidth()) return this._updateStickyBox()._calculatePositions()._updateStickyElement();
-    if (height !== document.documentElement.scrollHeight) return this._calculatePositions()._updateStickyElement();
-    return this._updateStickyElement();
+    const { height: currentHeight, width: currentWidth } = measureCurrentViewPort();
+    const { height: cachedHeight, width: cachedWidth } = this.cache.dimensions.view;
+    if (cachedWidth !== currentWidth) return this._calculateDimensions()._calculateVariables()._updateStickyBox();
+    if (cachedHeight !== currentHeight) return this._calculateVariables()._updateStickyBox();
+    return this._updateStickyBox();
   };
 
   componentDidMount = () => {
-    this._loadConfigs()._updateStickyBox()._calculatePositions()._updateStickyElement();
+    this._calculateConstants()._calculateDimensions()._calculateVariables()._updateStickyBox();
     NAMESPACE.eventList.forEach(event => window.addEventListener(event, this._handleStickyEvent));
   };
 
@@ -127,7 +138,11 @@ class Sticky extends React.Component {
     NAMESPACE.eventList.forEach(event => window.removeEventListener(event, this._handleStickyEvent));
   };
 
-  render = () => (<div className={this.stickyBoxClassNames} ref={this.stickyBox}>{this.props.children}</div>);
+  render = () => (
+    <div ref={this.stickyBox} {...this.state}>
+      {this.props.children}
+    </div>
+  );
 }
 
 

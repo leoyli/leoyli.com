@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 // style
-import style from './style.scss';
+import $style from './style.scss';
 
 
 // magic-strings

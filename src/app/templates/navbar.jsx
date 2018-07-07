@@ -5,14 +5,13 @@ import { Link, NavLink } from 'react-router-dom';
 
 
 // dependents
-import Dropdown from '../widgets/dropdown/';
-import SearchBar from '../widgets/searchbar/';
-import Sticky from '../widgets/sticky/';
+import UserMenu from './usermenu';
+import SearchBar from '../widgets/searchbar';
+import Sticky from '../widgets/sticky';
 
 
-// helper
 // components
-const NavMenuAuthOff = () => {
+const SignInButton = () => {
   const state = { returnTo: (__isBrowser__ && window.location.pathname) || '/' };
   return (
     <button className="btn mt-1 ml-2 _-button--signin">
@@ -20,30 +19,6 @@ const NavMenuAuthOff = () => {
     </button>
   );
 };
-
-const NavMenuAuthOn = () => (
-  <Dropdown>
-    <div className="_-dropdown__toggle">
-      <img
-        alt="user menu"
-        className="_-dropdown__toggle__icon"
-        src="/static/media/icon.png"
-      />
-    </div>
-    <div className="_-dropdown__menu _-dropdown__menu--hidden">
-      <ul className="_-dropdown__menu__box">
-        <li className="_-dropdown__menu__item--title">Welcome!</li>
-        <li className="_-dropdown__menu__item--divider">&nbsp;</li>
-        <li className="_-dropdown__menu__item"><Link to="/blog/new">New Post</Link></li>
-        <li className="_-dropdown__menu__item"><Link to="/util/stacks/posts">Posts Management</Link></li>
-        <li className="_-dropdown__menu__item--divider">&nbsp;</li>
-        <li className="_-dropdown__menu__item"><Link to="/util/settings">Website Settings</Link></li>
-        <li className="_-dropdown__menu__item--divider">&nbsp;</li>
-        <li className="_-dropdown__menu__item"><Link to="/signout">Sign out</Link></li>
-      </ul>
-    </div>
-  </Dropdown>
-);
 
 const NavLeftPort = ({ siteName }) => (
   <div className="_-nav__left-menu">
@@ -82,7 +57,7 @@ const NavLeftPort = ({ siteName }) => (
 const NavRightPort = ({ isSignedIn }) => (
   <div className="_-nav__right-menu">
     <SearchBar />
-    {(isSignedIn) ? (<NavMenuAuthOn />) : (<NavMenuAuthOff />)}
+    {(isSignedIn) ? (<UserMenu />) : (<SignInButton />)}
   </div>
 );
 
