@@ -1,7 +1,7 @@
 {
   "name": "leoyli-com",
-  "version": "1.0.1",
-  "license": "Apache-2.0",
+  "version": "1.1.0-dev",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "p": "webpack --mode=production & node ./bin/www",
@@ -10,7 +10,7 @@
     "test": "jest --config __tests__/__configs__/jest.config.js --watch",
     "start": "node ./bin/www",
     "pack-production": "webpack --mode=production --env.production",
-    "pack-development": "webpack --mode=development"
+    "pack-development": "webpack --mode=development -w"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.0-14",

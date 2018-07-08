@@ -28,6 +28,7 @@
     "arrow-parens": 0,
     "consistent-return": 0,
     "constructor-super": 0,
+    "lines-between-class-members": 0,
     "max-len": 0,
     "no-multi-spaces": 0,
     "no-nested-ternary": 0,
@@ -49,6 +50,7 @@
     "no-use-before-define": 1,
     "no-param-reassign": 1,
     "prefer-destructuring": 1,
-    "import/no-dynamic-require": 1
+    "import/no-dynamic-require": 1,
+    "react/destructuring-assignment": 1
   }
 }
