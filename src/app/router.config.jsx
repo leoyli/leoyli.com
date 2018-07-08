@@ -1,4 +1,4 @@
-import fetchData from './libs/fetch';
+import { fetchData } from './widgets/fetch/lib';
 import config from './routers';
 
 

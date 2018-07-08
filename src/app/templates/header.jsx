@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import fetchData from '../libs/fetch/';
+import { fetchData } from '../widgets/fetch/lib';
 
 
 // components

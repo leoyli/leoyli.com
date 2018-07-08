@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import { routers } from './router.config';
 import { isClientSignedIn } from './libs/auth';
-import fetchData from './libs/fetch';
+import { fetchData } from './widgets/fetch/lib';
+
 
 // font-awesome
-import fontawesome from './libs/fontawesome/';
+import fontawesome from './libs/fontawesome';
 
 
 // blocks
@@ -31,7 +32,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         <NavBar isSignedIn={this.state.isSignedIn} _$CONFIG={this.state._$CONFIG} />
         <div className="container _-body">
           <Switch>
@@ -57,7 +58,7 @@ class App extends React.Component {
           </Switch>
         </div>
         <Footer _$CONFIG={this.state._$CONFIG} />
-      </div>
+      </Fragment>
     );
   }
 }

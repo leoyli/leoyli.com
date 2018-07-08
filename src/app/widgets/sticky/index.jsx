@@ -138,11 +138,15 @@ class Sticky extends React.Component {
     NAMESPACE.eventList.forEach(event => window.removeEventListener(event, this._handleStickyEvent));
   };
 
-  render = () => (
-    <div ref={this.stickyBox} {...this.state}>
-      {this.props.children}
-    </div>
-  );
+  render = () => {
+    const { stickyBox, state: { className, style }, props: { children } } = this;
+    //
+    return (
+      <div ref={stickyBox} className={className} style={style}>
+        {children}
+      </div>
+    );
+  }
 }
 
 

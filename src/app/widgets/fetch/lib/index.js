@@ -1,12 +1,12 @@
 /* global __isBrowser__ */
 
-import qs from 'qs';
-import nodeFetch from 'node-fetch';
-import { authStorage } from '../auth';
+const qs = require('qs');
+const nodeFetch = require('node-fetch');
+const { authStorage } = require('../../../libs/auth/index');
 
 
-// configurations
-const API_SERVICES = process.env.API_SERVICES;
+// env
+const { API_SERVICES } = process.env;
 
 
 // helper
@@ -22,7 +22,6 @@ const parseRouteParams = (pattern, path) => {
   }
   return routeParams;
 };
-
 
 const fetchData = (routePath) => ({
   path    = __isBrowser__ ? window.location.pathname : '',
@@ -68,4 +67,7 @@ const fetchData = (routePath) => ({
 
 
 // exports
-export default fetchData;
+module.exports = {
+  default: fetchData,
+  fetchData,
+};

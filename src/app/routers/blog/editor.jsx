@@ -1,41 +1,49 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 
 // views
 import Header from '../../templates/header';
 import PostEditor from '../../templates/post/editor';
-import Unfounded from '../unfounded';
+import Fetch from '../../widgets/fetch';
 
 
 // router
 class Editor extends Component {
-  state = { data: this.props.initialData() || this.props.location.state, loading: false };
+  state = { isSubmittable: true };
 
   _handleOnSubmit = (e) => {
     e.preventDefault();
-    this.setState(() => ({ loading: true }));
-    this.props.send({ method: this.state.data ? 'PUT' : 'POST', data: e.target })
+    const { location, history, send } = this.props;
+
+    this.setState(() => ({ processing: false }));
+    send({ method: location.pathname === '/blog/new' ? 'POST' : 'PUT', data: e.target })
       .then(doc => {
-        if (doc && doc.post) this.props.history.push(`/blog/${doc.post.canonical}`);
+        if (doc && doc.post) history.push(`/blog/${doc.post.canonical}`);
       });
   };
 
-  componentDidMount = () => {
-    if (!this.state.data && this.props.request) {
-      this.setState(() => ({ loading: true }));
-      this.props.request().then(data => this.setState(() => ({ data, loading: false })));
-    }
-  };
-
   render = () => {
-    if (this.state.data && this.state.data._status === 404) return (<Unfounded {...this.props} />);
+    const {
+      state: { isSubmittable },
+      props: { location, initialData },
+    } = this;
+    const loadInitialData = () => {
+      const serverData = initialData();
+      const passedData = location.state || (location.pathname === '/blog/new' && {});
+      return serverData || (passedData && { ...passedData, _status: 200 });
+    };
+
     return (
-      <div>
-        <Header title="Post Editor" />
-        <PostEditor onSubmit={this._handleOnSubmit} isSubmittable={!this.state.loading} {...this.state.data} />
-      </div>
+      <Fetch pathname="/blog/:key" location={location} initialData={loadInitialData}>
+        {({ post = {} }) => (
+          <Fragment>
+            <Header title="Post Editor" />
+            <PostEditor onSubmit={this._handleOnSubmit} isSubmittable={isSubmittable} post={post} />
+          </Fragment>
+        )}
+      </Fetch>
     );
-  };
+  }
 }
 
 
