@@ -13,8 +13,9 @@ class Toggle extends Component {
 
   _handleOnClickToggle = (e) => {
     const { hidden } = this.state;
+    const { current } = this.toggledTarget;
     //
-    if (hidden || (e && e.path && !e.path.includes(this.toggledTarget.current))) {
+    if (hidden || (current && !current.contains(e.target))) {
       const eventListenerToggle = hidden ? 'addEventListener' : 'removeEventListener';
       this.eventList.forEach(event => document[eventListenerToggle](event, this._handleOnClickToggle));
       this.setState(() => ({ hidden: !hidden }));
