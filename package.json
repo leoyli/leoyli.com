@@ -1,7 +1,7 @@
 {
   "name": "leoyli-com",
-  "version": "1.0.1",
-  "license": "Apache-2.0",
+  "version": "1.0.7",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "p": "webpack --mode=production & node ./bin/www",

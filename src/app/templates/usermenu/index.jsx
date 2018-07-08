@@ -15,7 +15,7 @@ import Toggle from '../../widgets/toggle';
 // components
 const UserMenu = () => (
   <Toggle>
-    {({ hidden, toggle, refToStopOnClick }) => {
+    {({ hidden, toggle, toggledTarget }) => {
       const toggleMenuClassName = classNames({
         '_-dropdown__menu': true,
         '_-dropdown__menu--hidden': hidden,
@@ -25,7 +25,7 @@ const UserMenu = () => (
           <div className="_-dropdown__toggle" onClick={toggle}>
             <img alt="user menu" src="/static/media/icon.png" className="_-dropdown__toggle__icon" />
           </div>
-          <div className={toggleMenuClassName} ref={refToStopOnClick}>
+          <div className={toggleMenuClassName} ref={toggledTarget}>
             <ul className="_-dropdown__menu__box">
               <li className="_-dropdown__menu__item--title">Welcome!</li>
               <li className="_-dropdown__menu__item--divider">&nbsp;</li>
