@@ -7,22 +7,24 @@ const stopPropagation = (e) => e.stopPropagation();
 
 // components
 class Toggle extends Component {
-  eventList = ['click', 'scroll'];
   state = { hidden: this.props.hidden !== undefined ? this.props.hidden : true };
-  ref = React.createRef();
+  eventList = ['click', 'scroll'];
+  toggledTarget = React.createRef();
 
   _handleOnClickToggle = (e) => {
     const { hidden } = this.state;
-    if (hidden || (e && e.path && !e.path.includes(this.ref.current))) {
-      this.eventList.forEach(event => {
-        document[hidden ? 'addEventListener' : 'removeEventListener'](event, this._handleOnClickToggle);
-      });
+    const { current } = this.toggledTarget;
+    //
+    if (hidden || (current && !current.contains(e.target))) {
+      const eventListenerToggle = hidden ? 'addEventListener' : 'removeEventListener';
+      this.eventList.forEach(event => document[eventListenerToggle](event, this._handleOnClickToggle));
       this.setState(() => ({ hidden: !hidden }));
     }
   };
 
   componentDidMount = () => {
     const { hidden } = this.state;
+    //
     if (!hidden) this.eventList.forEach(event => document.addEventListener(event, this._handleOnClickToggle));
   };
 
@@ -31,9 +33,13 @@ class Toggle extends Component {
   };
 
   render = () => {
-    const { hidden } = this.state;
-    const { children } = this.props;
-    return children({ hidden, toggle: this._handleOnClickToggle, refToStopOnClick: this.ref });
+    const {
+      toggledTarget,
+      state: { hidden },
+      props: { children },
+    } = this;
+    //
+    return children({ toggledTarget, hidden, toggle: this._handleOnClickToggle });
   }
 }
 
