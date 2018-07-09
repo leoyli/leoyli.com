@@ -1,6 +1,6 @@
-const { _M_ } = require('../controllers/modules/index');
-const { _U_ } = require('../utilities/index');
-const ModelIndex = require('../models/index');
+const { _M_ } = require('../controllers/modules');
+const { _U_ } = require('../utilities');
+const ModelIndex = require('../models');
 
 
 // controllers

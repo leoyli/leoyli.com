@@ -69,9 +69,6 @@ const serverConfig = (env = {}) => ({
   target: 'node',
   module: {
     rules: [{
-      test: /\.s?css$/,
-      loader: 'ignore-loader',
-    }, {
       test: /\.(jsx)$/,
       exclude: /node_modules/,
       use: [{
@@ -85,6 +82,9 @@ const serverConfig = (env = {}) => ({
           ],
         },
       }],
+    }, {
+      test: /\.s?css$/,
+      loader: 'ignore-loader',
     }],
   },
   plugins: [new webpack.DefinePlugin({ __isBrowser__: 'false' })],

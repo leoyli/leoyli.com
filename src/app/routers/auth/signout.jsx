@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
-import { _handleSignOut, isClientSignedIn } from '../../libs/auth';
+import { _handleSignOut, isClientSignedIn } from '../../utilities/auth';
 
 
 // components

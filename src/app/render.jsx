@@ -2,10 +2,10 @@
 
 import React, { Component } from 'react';
 import { StaticRouter, BrowserRouter } from 'react-router-dom';
-import { isClientSignedIn } from './libs/auth';
+import { isClientSignedIn } from './utilities/auth';
 
 
-// root-component
+// modules
 import App from './app';
 
 

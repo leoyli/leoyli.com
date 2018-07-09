@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
-import { isClientSignedIn, _handleSignIn, authStorage } from '../../libs/auth';
+import { isClientSignedIn, _handleSignIn, authStorage } from '../../utilities/auth';
 
 
 // components
