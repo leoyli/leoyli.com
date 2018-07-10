@@ -1,6 +1,6 @@
-const { _M_ } = require('../controllers/modules/index');
-const { _U_ } = require('../utilities/index');
-const ModelIndex = require('../models/index');
+const { _M_ } = require('../controllers/modules');
+const { _U_ } = require('../utilities');
+const ModelIndex = require('../models');
 
 
 // controllers
@@ -37,7 +37,6 @@ util.stacks = {
 util.upload = {                                                                                                         // todo: to be integrated in profile and media manager
   POST: [_M_.streamingUploader({ fileSize: 25 * 1048576 }), async function util_upload_POST(req, res, next) {
     const { raw = [], mes = [] } = req.body.busboySlip;
-    if (mes.length) mes.map(hint => req.flash('error', hint));
     if (raw.length) {
       for (let i = raw.length - 1, doc = raw[i]; i > -1; doc = raw[i -= 1]) {
         doc.author = { _id: req.session.user.sub, nickname: 'admin' };

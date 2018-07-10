@@ -1,4 +1,4 @@
-const { _M_ } = require('../controllers/modules/index');
+const { _M_ } = require('../controllers/modules');
 
 
 // controllers

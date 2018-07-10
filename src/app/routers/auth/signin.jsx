@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
-import { isClientSignedIn, _handleSignIn, authStorage } from '../../libs/auth';
+import { isClientSignedIn, _handleSignIn, authStorage } from '../../utilities/auth';
+import { APIRequest } from '../../utilities/fetch';
 
 
 // components
@@ -8,19 +9,24 @@ class Signin extends Component {
   state = { isSignedIn: isClientSignedIn(), returnTo: '/' };
 
   componentDidMount = () => {
-    if (this.state.isSignedIn) return null;
-    _handleSignIn(this.props.location.state, (err, returnTo) => {
+    const {
+      state: { isSignedIn },
+      props: { location, sendPath },
+    } = this;
+    if (isSignedIn) return null;
+    _handleSignIn(location.state, (err, returnTo) => {
       if (err) throw err;
       this.setState(() => ({ returnTo, isSignedIn: true }));
-      this.props.send({ data: null, method: 'POST' })
+      return APIRequest(sendPath)({ data: null, method: 'POST' })
         .then(({ accessToken }) => {
-          if (accessToken !== authStorage.accessToken.get()) authStorage.clearAllTokens();                              // todo: FAILED ON SERVER: show error to the client
+          if (accessToken !== authStorage.accessToken.get()) authStorage.clearAllTokens();
         });
     });
   };
 
   render = () => {
-    if (this.state.isSignedIn) return (<Redirect to={this.state.returnTo || '/'} />);
+    const { isSignedIn, returnTo } = this.state;
+    if (isSignedIn) return (<Redirect to={returnTo || '/'} />);
     return null;
   };
 }

@@ -1,5 +1,4 @@
-const fs = require('fs');
-const http2 = require('spdy');
+const http = require('http');
 const debug = require('debug')('OpenBox:server');
 const app = require('./app');
 const { _U_: { string: { checkToStringTag } } } = require('./utilities/');
@@ -26,19 +25,12 @@ const normalizePort = (val) => {
 
 // server entity
 /** Get port from environment and store in Express **/
-const port = normalizePort(process.env.PORT || '3443');
+const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 
-/** Get SSL credentials as options **/
-const options = {
-  key: fs.readFileSync(process.env.SSL_KEY, 'utf8'),
-  cert: fs.readFileSync(process.env.SSL_CRT, 'utf8'),
-};
-
-
-/** Create HTTP2 server **/
-const server = http2.createServer(options, app);
+/** Create HTTP server **/
+const server = http.createServer(app);
 
 
 // events handler
