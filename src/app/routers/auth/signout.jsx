@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
-import { _handleSignOut, isClientSignedIn } from '../../libs/auth';
+import { _handleSignOut, isClientSignedIn } from '../../utilities/auth';
 
 
 // components
@@ -8,11 +8,13 @@ class Signout extends Component {
   state = { isSignedIn: isClientSignedIn() };
 
   componentDidMount = () => {
-    if (this.state.isSignedIn) return _handleSignOut();
+    const { isSignedIn } = this.state;
+    if (isSignedIn) return _handleSignOut();
   };
 
   render = () => {
-    if (this.state.isSignedIn) return null;
+    const { isSignedIn } = this.state;
+    if (isSignedIn) return null;
     return (<Redirect to="/" />);
   };
 }

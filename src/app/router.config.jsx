@@ -1,4 +1,3 @@
-import fetchData from './libs/fetch';
 import config from './routers';
 
 
@@ -9,80 +8,78 @@ const { auth, page, blog, util } = config;
 // configs
 const authConfigs = [
   {
-    path: '/signin',
-    exact: true,
     component: auth.signin,
-    send: fetchData('/signin'),
+    path: '/signin',
+    sendPath: '/signin',
+    exact: true,
   },
   {
+    component: auth.signout,
     path: '/signout',
     exact: true,
-    component: auth.signout,
   },
 ];
 
 const pageConfigs = [
   {
-    path: '/search/:search',
-    exact: true,
     component: page.search,
-    request: fetchData('/search/:search'),
+    path: '/search/:search',
+    fetchPath: '/search/:search',
+    exact: true,
   },
 ];
 
 const blogConfigs = [
   {
-    path: '/blog',
-    exact: true,
     component: blog.list,
-    request: fetchData('/blog'),
+    path: '/blog',
+    fetchPath: '/blog',
+    exact: true,
   },
   {
-    path: '/blog/new',
-    exact: true,
     component: blog.editor,
-    send: fetchData('/blog'),
+    path: '/blog/new',
+    sendPath: '/blog',
+    exact: true,
     secure: true,
   },
   {
-    path: '/blog/:key',
-    exact: true,
     component: blog.post,
-    request: fetchData('/blog/:key'),
+    path: '/blog/:key',
+    fetchPath: '/blog/:key',
+    exact: true,
   },
   {
-    path: '/blog/:key/edit',
-    exact: true,
     component: blog.editor,
-    request: fetchData('/blog/:key'),
-    send: fetchData('/blog/:key'),
+    path: '/blog/:key/edit',
+    fetchPath: '/blog/:key',
+    exact: true,
     secure: true,
   },
 ];
 
 const utilConfigs = [
   {
-    path: '/util/stacks/posts',
-    exact: true,
     component: util.stacks,
-    request: fetchData('/util/stacks/:collection'),
-    send: fetchData('/util/stacks/:collection'),
+    path: '/util/stacks/posts',
+    fetchPath: '/util/stacks/:collection',
+    exact: true,
     secure: true,
   },
   {
-    path: '/util/settings',
-    exact: true,
     component: util.settings,
-    send: fetchData('/util/settings'),
+    path: '/util/settings',
+    sendPath: '/util/settings',
+    exact: true,
     secure: true,
   },
 ];
 
 const rootConfigs = [
   {
+    component: page.landing,
     path: '/',
     exact: true,
-    component: page.landing,
   },
 ];
 

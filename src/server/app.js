@@ -51,7 +51,9 @@ app.use(session({
   saveUninitialized: false,
   rolling: false,
   resave: false,
-  cookie: (process.env.NODE_ENV === 'test') ? {} : { secure: true, httpOnly: true, sameSite: true },
+  cookie: (process.env.NODE_ENV !== 'test')
+    ? { secure: process.NODE_ENV === 'production', httpOnly: true, sameSite: true }
+    : {},
   store: new MongoStore({
     mongooseConnection: mongoose.connection,
     autoRemove: 'native',
