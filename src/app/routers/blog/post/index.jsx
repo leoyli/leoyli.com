@@ -8,8 +8,8 @@ import PostView from './view';
 
 
 // components
-const Post = ({ location, history, initialData, isSignedIn }) => (
-  <Fetch location={location} initialData={initialData}>
+const Post = ({ fetchPath, location, history, initialData, isSignedIn }) => (
+  <Fetch fetchPath={fetchPath} initialData={initialData}>
     {({ post = {} }) => (
       <Fragment>
         <Header

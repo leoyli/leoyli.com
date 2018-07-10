@@ -9,8 +9,8 @@ import ListView from './view';
 
 
 // components
-const List = ({ location, initialData }) => (
-  <Fetch location={location} initialData={initialData}>
+const List = ({ fetchPath, location, initialData }) => (
+  <Fetch fetchPath={fetchPath} initialData={initialData}>
     {({ list = [], meta }) => (
       <Fragment>
         <Header title={location.pathname === '/blog' ? 'Post List' : 'Searched Results'} />

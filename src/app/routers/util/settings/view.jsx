@@ -6,7 +6,9 @@ const SettingsView = ({ _$CONFIG, onSubmit, isSubmittable }) => (
   <form className="pt-3" onSubmit={onSubmit}>
     <div className="input-group my-1">
       <div className="input-group-prepend col-2 px-0">
-        <span className="input-group-text w-100">Website name</span>
+        <span className="input-group-text w-100">
+          Website name
+        </span>
       </div>
       <input
         type="text"
@@ -19,7 +21,9 @@ const SettingsView = ({ _$CONFIG, onSubmit, isSubmittable }) => (
     </div>
     <div className="input-group my-1">
       <div className="input-group-prepend col-2 px-0">
-        <span className="input-group-text w-100">Description</span>
+        <span className="input-group-text w-100">
+          Description
+        </span>
       </div>
       <input
         type="text"
@@ -32,7 +36,9 @@ const SettingsView = ({ _$CONFIG, onSubmit, isSubmittable }) => (
     </div>
     <div className="input-group my-1">
       <div className="input-group-prepend col-2 px-0">
-        <span className="input-group-text w-100">Keywords</span>
+        <span className="input-group-text w-100">
+          Keywords
+        </span>
       </div>
       <input
         type="text"
@@ -45,31 +51,45 @@ const SettingsView = ({ _$CONFIG, onSubmit, isSubmittable }) => (
     </div>
     <div className="input-group my-1">
       <div className="input-group-prepend col-2 px-0">
-        <span className="input-group-text w-100">Language</span>
+        <span className="input-group-text w-100">
+          Language
+        </span>
       </div>
       <select id="language" name="config[sets][language]" className="custom-select">
-        <option value="en">English (en)</option>
+        <option value="en">
+          English (en)
+        </option>
       </select>
     </div>
     <div className="input-group my-1">
       <div className="input-group-prepend col-2 px-0">
-        <span className="input-group-text w-100">Timezone</span>
+        <span className="input-group-text w-100">
+          Timezone
+        </span>
       </div>
       <select id="timezone" name="config[sets][timezone]" className="custom-select">
-        <option value="UTC−06:00 (MST)">UTC−06:00 (MST)</option>
+        <option value="UTC−06:00 (MST)">
+          UTC−06:00 (MST)
+        </option>
       </select>
     </div>
     <div className="input-group my-1">
       <div className="input-group-prepend col-2 px-0">
-        <span className="input-group-text w-100">Time Format</span>
+        <span className="input-group-text w-100">
+          Time Format
+        </span>
       </div>
       <select id="time-format" name="config[sets][timeFormat]" className="custom-select">
-        <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+        <option value="YYYY-MM-DD">
+          YYYY-MM-DD
+        </option>
       </select>
     </div>
     <div className="input-group my-1">
       <div className="input-group-prepend col-2 px-0">
-        <span className="input-group-text w-100">Posts per page</span>
+        <span className="input-group-text w-100">
+          Posts per page
+        </span>
       </div>
       <input
         type="number"

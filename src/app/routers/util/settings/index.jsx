@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 
 // vies
+import { APIRequest } from '../../../utilities/fetch';
 import Header from '../../../layouts/header';
 import SettingsView from './view';
 
@@ -12,8 +13,9 @@ class Settings extends Component {
 
   _handleOnSubmitUpdatedSettings = (e) => {
     e.preventDefault();
+    const { sendPath } = this.props;
     this.setState(() => ({ isSubmittable: false }));
-    this.props.send({ method: 'PATCH', data: e.target })
+    return APIRequest(sendPath)({ method: 'PATCH', data: e.target })
       .then(res => {
         if (res.result.nModified === 1) {
           document.dispatchEvent(new Event('_configUpdated'));
@@ -22,16 +24,22 @@ class Settings extends Component {
       });
   };
 
-  render = () => (
-    <div className="_-settings">
-      <Header title="Website Settings" />
-      <SettingsView
-        _$CONFIG={this.props._$CONFIG}
-        onSubmit={this._handleOnSubmitUpdatedSettings}
-        isSubmittable={this.state.isSubmittable}
-      />
-    </div>
-  );
+  render = () => {
+    const {
+      props: { _$CONFIG },
+      state: { isSubmittable },
+    } = this;
+    return (
+      <div className="_-settings">
+        <Header title="Website Settings" />
+        <SettingsView
+          _$CONFIG={_$CONFIG}
+          onSubmit={this._handleOnSubmitUpdatedSettings}
+          isSubmittable={isSubmittable}
+        />
+      </div>
+    );
+  }
 }
 
 

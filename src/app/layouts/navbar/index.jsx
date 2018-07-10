@@ -24,6 +24,11 @@ const NavLeftPort = ({ siteName }) => {
   const className = '_-nav__link d-none d-sm-inline';
   const activeClassName = '_-nav__link--active';
   const option = { className, activeClassName };
+  const isOnBlog = (match, location) => {
+    return location.pathname.includes('/blog')
+      && !['/blog/about', '/blog/cv'].includes(location.pathname.toLowerCase());
+  };
+
   return (
     <div className="_-nav__left-menu">
       <Link to="/" className="navbar-brand mb-0 h1">
@@ -35,14 +40,8 @@ const NavLeftPort = ({ siteName }) => {
       <NavLink {...option} exact to="/blog/CV">
         CV
       </NavLink>
-      <NavLink
-        {...option}
-        to="/blog"
-        isActive={(match, location) => {
-          return location.pathname.includes('/blog')
-            && !['/blog/about', '/blog/cv'].includes(location.pathname.toLowerCase());
-        }}
-      >Blog
+      <NavLink {...option} isActive={isOnBlog} to="/blog">
+        Blog
       </NavLink>
     </div>
   );

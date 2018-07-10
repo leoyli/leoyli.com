@@ -2,74 +2,75 @@ import React, { Component } from 'react';
 
 
 // vies
-import Header from '../../../layouts/header';
+import Fetch from '../../../utilities/fetch';
 import Pagination from '../../../utilities/pagination';
+import Header from '../../../layouts/header';
 import StacksView from './view';
 
 
 // components
 class Stacks extends Component {
-  state = { data: this.props.initialData(), loading: false, command: 'null', checked: [] };
-  event = {
-    _onSelectCommand: (e) => {
-      const checkedValue = e.target.value;
-      this.setState(() => ({ command: checkedValue }));
-    },
+  state = { command: 'null', checked: [] };
 
-    _onCheckDoc: (e) => {
-      const checkedValue = e.target.value;
-      this.setState(() => ({
-        checked: this.state.checked.includes(checkedValue)
-          ? this.state.checked.filter(_id => _id !== checkedValue)
-          : this.state.checked.concat(checkedValue),
-      }));
-    },
-
-    _onCheckAllDocs: (e) => {
-      this.setState(() => ({
-        checked: this.state.data && (this.state.data.list.length !== this.state.checked.length)
-          ? this.state.data.list.map(item => item._id)
-          : [],
-      }));
-    },
-
-    _onFireAction: (e) => {
-      e.preventDefault();
-      this.setState(() => ({ loading: true }));
-      this.props.send({ method: 'PATCH', data: { action: this.state.command, target: this.state.checked } })
-        .then(res => {
-          if (res.result.nModified === this.state.checked.length) {
-            const data = { list: res.list, meta: res.meta };
-            this.setState(() => ({ data, loading: false, command: 'null', checked: [] }));
-          }
-        });
-    },
+  _onSelectCommand = (e) => {
+    const checkedValue = e.target.value;
+    this.setState(() => ({ command: checkedValue }));
   };
 
-  componentDidMount = () => {
-    if (!this.state.data && this.props.request) {
-      this.setState(() => ({ loading: true }));
-      this.props.request()
-        .then(data => this.setState(() => ({ data, loading: false })));
-    }
+  _onCheckItem = (e) => {
+    const { checked } = this.state;
+    const checkedValue = e.target.value;
+    this.setState(() => ({
+      checked: checked.includes(checkedValue)
+        ? checked.filter(_id => _id !== checkedValue)
+        : checked.concat(checkedValue),
+    }));
   };
 
-  componentDidUpdate = (prevProps) => {
-    if (prevProps.location.path === this.props.location.path
-    && prevProps.location.search !== this.props.location.search) {
-      this.props.request()
-        .then(data => this.setState(() => ({ data, loading: false })));
+  _onCheckAllItems = (items = []) => (e) => {
+    const { checked } = this.state;
+    this.setState(() => ({
+      checked: items.length !== checked.length
+        ? items.map(item => item._id)
+        : [],
+    }));
+  };
+
+  _onSubmitCB = (err, res) => {
+    const { checked } = this.state;
+    if (res.result.nModified === checked.length) {
+      this.setState(() => ({ isSubmittable: true, command: 'null', checked: [] }));
     }
   };
 
   render = () => {
-    if (!this.state.data) return null;
+    const {
+      props: { fetchPath, location, initialData },
+      state: { checked, command },
+    } = this;
+
     return (
-      <div className="_-stacks">
-        <Header title="Content Manager" subtitle="Posts" />
-        <StacksView state={this.state} event={this.event} location={this.props.location} />
-        <Pagination meta={this.state.data.meta} />
-      </div>
+      <Fetch fetchPath={fetchPath} initialData={initialData}>
+        {({ list, meta }, { isSubmittable, onSubmit }) => {
+          const { _onSelectCommand, _onCheckAllItems, _onCheckItem, _onSubmitCB } = this;
+          const _onFireAction = onSubmit({ method: 'PATCH', data: { action: command, target: checked } }, _onSubmitCB);
+          const event = { _onSelectCommand, _onCheckAllItems, _onCheckItem, _onFireAction };
+          return (
+            <div className="_-stacks">
+              <Header title="Content Manager" subtitle="Posts" />
+              <StacksView
+                list={list}
+                location={location}
+                checked={checked}
+                command={command}
+                event={event}
+                isSubmittable={isSubmittable}
+              />
+              <Pagination meta={meta} />
+            </div>
+          );
+        }}
+      </Fetch>
     );
   };
 }

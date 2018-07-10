@@ -6,7 +6,7 @@ import { Redirect } from 'react-router';
 // modules
 import { routers } from './router.config';
 import { isClientSignedIn } from './utilities/auth';
-import { fetchData } from './utilities/fetch/lib';
+import { APIRequest } from './utilities/fetch';
 import Navbar from './layouts/navbar';
 import Footer from './layouts/footer';
 import Unfounded from './routers/unfounded';
@@ -23,8 +23,11 @@ class App extends React.Component {
       this.setState(() => ({ isSignedIn: isClientSignedIn() }));
     });
     document.addEventListener('_configUpdated', () => {
-      const request = fetchData('/util/settings');
-      request().then((res) => this.setState(() => ({ _$CONFIG: res.config })));
+      return APIRequest('/util/settings')()
+        .then((res) => {
+          document.title = res.config.siteName;
+          this.setState(() => ({ _$CONFIG: res.config }));
+        });
     });
   }
 

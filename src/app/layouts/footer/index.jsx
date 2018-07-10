@@ -12,12 +12,21 @@ const Index = ({ _$CONFIG }) => (
   <footer className="mt-5 _-footer">
     <div id="misc" className="container d-lg-flex text-justify pt-4">
       <div className="col-lg-9" id="sitePolicy" role="contentinfo">
-        <p id="copyright">{moment().format('YYYY')}&nbsp;&copy;&nbsp;{_$CONFIG.siteName}</p>
+        <p id="copyright">
+          {moment().format('YYYY')}
+          &nbsp;&copy;&nbsp;
+          {_$CONFIG.siteName}
+        </p>
         <p id="licence">
-          Except as otherwise noted, the content of this site is licensed under the&nbsp;
-          <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0 Licence</a>,
-          and code samples are licensed under the&nbsp;
-          <a href="https://github.com/leoyli/leoyli.com/blob/master/LICENSE">MIT License</a>.
+          Except as otherwise noted, the content of this site is licensed under the
+          <a href="https://creativecommons.org/licenses/by-sa/4.0/" className="mx-1">
+            CC BY-SA 4.0 Licence
+          </a>
+          , and code samples are licensed under the
+          <a href="https://github.com/leoyli/leoyli.com/blob/master/LICENSE" className="mx-1">
+            MIT License
+          </a>
+          .
         </p>
       </div>
       <div id="socialLinks" className="col-lg-3 text-lg-right pb-3" aria-label="socialMedia">

@@ -1,38 +1,41 @@
 import moment from 'moment';
-import classNames from 'classNames';
+import classNames from 'classnames';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 // modules
-import { fetchData } from '../../utilities/fetch/lib';
+import { APIRequest } from '../../utilities/fetch';
 import $style from './style.scss';
 
 
 // components
 class EditOptions extends Component {
-  _handleOnClickButton = () => {
-    if (window.confirm('Are you sure you want to trash this article?'
-        + '\n(Note: You may recover it later from the trash bin.)')) {
-      const send = fetchData('/blog/:key');
-      send({ path: `/blog/${this.props.post._id}`, method: 'DELETE' })
+  _handleOnClickButton = (e) => {
+    const hint = 'Are you sure you want to trash this article?\n(Note: You may recover it later from the trash bin.)';
+    if (window.confirm(hint)) {
+      const { history, post } = this.props;
+      return APIRequest('/blog/:key')({ path: `/blog/${post._id}`, method: 'DELETE' })
         .then(({ result = {} }) => {
-          if (result.ok) this.props.history.replace('/blog');
+          if (result.ok) history.replace('/blog');
         });
     }
   };
 
-  render = () => (
-    <div className="align-self-end text-right _-header__edit">
-      <Link to={{ pathname: `/blog/${this.props.post._id}/edit`, state: { post: this.props.post } }}>
-        <FontAwesomeIcon icon="pencil-alt" />
-      </Link>
-      <button type="button" className="_-header__edit__button" onClick={this._handleOnClickButton}>
-        <FontAwesomeIcon icon="eraser" />
-      </button>
-    </div>
-  );
+  render = () => {
+    const { post } = this.props;
+    return (
+      <div className="align-self-end text-right _-header__edit">
+        <Link to={{ pathname: `/blog/${post._id}/edit`, state: { post } }}>
+          <FontAwesomeIcon icon="pencil-alt" />
+        </Link>
+        <button type="button" className="_-header__edit__button" onClick={this._handleOnClickButton}>
+          <FontAwesomeIcon icon="eraser" />
+        </button>
+      </div>
+    );
+  };
 }
 
 const MetaBox = ({ post: { author, category, tags, time }, post, history, isSignedIn }) => (
@@ -70,7 +73,11 @@ const Header = ({ title, subtitle, featured, post, isSignedIn, history }) => {
           {title}
           {subtitle && ` - ${subtitle}`}
         </h2>
-        {post ? (<MetaBox post={post} history={history} isSignedIn={isSignedIn} />) : (<div>&nbsp;</div>)}
+        {post ? (<MetaBox post={post} history={history} isSignedIn={isSignedIn} />) : (
+          <div>
+            &nbsp;
+          </div>
+        )}
       </div>
     </header>
   );

@@ -10,28 +10,46 @@ const StacksSwitch = ({ location }) => {
   const leaveBin = `${location.pathname}?${qs.stringify({ ...query, access: undefined })}`;
   const enterBin = `${location.pathname}?${qs.stringify({ ...query, access: 'bin' })}`;
   return location.search.includes('access=bin')
-    ? (<Link className="btn btn-sm btn-outline-primary float-right" to={leaveBin}>LEAVE BIN</Link>)
-    : (<Link className="btn btn-sm btn-outline-success float-right" to={enterBin}>ENTER BIN</Link>);
+    ? (
+      <Link className="btn btn-sm btn-outline-primary float-right" to={leaveBin}>
+        LEAVE BIN
+      </Link>
+    )
+    : (
+      <Link className="btn btn-sm btn-outline-success float-right" to={enterBin}>
+        ENTER BIN
+      </Link>
+    );
 };
 
-const StacksAction = ({ state, event, location }) => {
+const StacksCommand = ({ command, isSubmittable, event, location }) => {
   const regularOptions = [
-    <option value="pinned" key="option-pin">Pin</option>,
-    <option value="hidden" key="option-hide">Hide</option>,
-    <option value="recycled" key="option-recycle">Recycle</option>,
+    <option value="pinned" key="option-pin">
+      Pin
+    </option>,
+    <option value="hidden" key="option-hide">
+      Hide
+    </option>,
+    <option value="recycled" key="option-recycle">
+      Recycle
+    </option>,
   ];
   const binOptions = [
-    <option value="restored" key="option-restore">Restore</option>,
+    <option value="restored" key="option-restore">
+      Restore
+    </option>,
   ];
   return (
     <div className="my-3 d-inline">
       <select
         className="custom-select custom-select-sm col-2 mr-2"
         name="command"
-        value={state.command}
+        value={command}
         onChange={event._onSelectCommand}
       >
-        <option value="null">Select a bulk command</option>
+        <option value="null">
+          Select a bulk command
+        </option>
         {location.search.includes('access=bin') ? binOptions : regularOptions}
       </select>
       <button
@@ -39,7 +57,9 @@ const StacksAction = ({ state, event, location }) => {
         className="btn btn-sm btn-outline-primary"
         aria-label="Apply"
         onClick={event._onFireAction}
-      >Apply
+        disabled={!isSubmittable}
+      >
+        Apply
       </button>
     </div>
   );
@@ -53,20 +73,32 @@ const StacksCell = ({ event, checked, doc = {} }) => (
           type="checkbox"
           id={doc._id}
           value={doc._id}
-          onChange={event._onCheckDoc}
+          onChange={event._onCheckItem}
           checked={checked.includes(doc._id)}
         />
       </label>
     </th>
-    <td>{doc.author.nickname}</td>
-    <td><Link to={`/blog/${doc.canonical}`}>{doc.title}</Link></td>
-    <td>{doc.category}</td>
-    <td>{doc.tags || 'null'}</td>
-    <td>{moment(doc.time && doc.time._created).format('MM/DD/YYYY')}</td>
+    <td>
+      {doc.author.nickname}
+    </td>
+    <td>
+      <Link to={`/blog/${doc.canonical}`}>
+        {doc.title}
+      </Link>
+    </td>
+    <td>
+      {doc.category}
+    </td>
+    <td>
+      {doc.tags || 'null'}
+    </td>
+    <td>
+      {moment(doc.time && doc.time._created).format('MM/DD/YYYY')}
+    </td>
   </tr>
 );
 
-const StacksList = ({ event, state: { checked, data: { list = [] } } }) => (
+const StacksList = ({ checked, event, list = [] }) => (
   <table className="table table-sm table-hover mt-3">
     <thead>
       <tr>
@@ -75,16 +107,26 @@ const StacksList = ({ event, state: { checked, data: { list = [] } } }) => (
             <input
               id="select-all"
               type="checkbox"
-              onChange={event._onCheckAllDocs}
+              onChange={event._onCheckAllItems(list)}
               checked={checked.length && list.length === checked.length}
             />
           </label>
         </th>
-        <th scope="col" width="10%">Author</th>
-        <th scope="col" width="50%">Title</th>
-        <th scope="col" width="14%">Category</th>
-        <th scope="col" width="14%">Tags</th>
-        <th scope="col" width="12%">Date</th>
+        <th scope="col" width="10%">
+          Author
+        </th>
+        <th scope="col" width="50%">
+          Title
+        </th>
+        <th scope="col" width="14%">
+          Category
+        </th>
+        <th scope="col" width="14%">
+          Tags
+        </th>
+        <th scope="col" width="12%">
+          Date
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -95,11 +137,11 @@ const StacksList = ({ event, state: { checked, data: { list = [] } } }) => (
   </table>
 );
 
-const StacksView = (props) => (
+const StacksView = ({ command, checked, isSubmittable, event, location, list }) => (
   <form className="container text-justify pt-3">
-    <StacksSwitch {...props} />
-    <StacksAction {...props} />
-    <StacksList {...props} />
+    <StacksSwitch location={location} />
+    <StacksCommand command={command} isSubmittable={isSubmittable} event={event} location={location} />
+    <StacksList checked={checked} event={event} list={list} />
   </form>
 );
 

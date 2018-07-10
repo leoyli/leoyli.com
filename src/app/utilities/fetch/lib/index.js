@@ -23,7 +23,7 @@ const parseRouteParams = (pattern, path) => {
   return routeParams;
 };
 
-const fetchData = (routePath) => ({
+const APIRequest = (routePath) => ({
   path    = __isBrowser__ ? window.location.pathname : '',
   search  = __isBrowser__ ? window.location.search : '',
   method  = 'GET',
@@ -59,15 +59,11 @@ const fetchData = (routePath) => ({
     headers: { authorization, ...headers },
     method,
     body,
-  }).then(res => res.json())
-    .catch(err => {
-      throw err;
-    });
+  }).then(res => res.json());
 };
 
 
 // exports
 module.exports = {
-  default: fetchData,
-  fetchData,
+  APIRequest,
 };

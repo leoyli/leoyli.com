@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 
 
-// helpers
-const stopPropagation = (e) => e.stopPropagation();
-
-
 // components
 class Toggle extends Component {
   state = { hidden: this.props.hidden !== undefined ? this.props.hidden : true };
@@ -14,7 +10,6 @@ class Toggle extends Component {
   _handleOnClickToggle = (e) => {
     const { hidden } = this.state;
     const { current } = this.toggledTarget;
-    //
     if (hidden
       || (current && !current.contains(e.target))
       || (e.keyCode === 27)
@@ -27,7 +22,6 @@ class Toggle extends Component {
 
   componentDidMount = () => {
     const { hidden } = this.state;
-    //
     if (!hidden) this.eventList.forEach(event => document.addEventListener(event, this._handleOnClickToggle));
   };
 
@@ -41,7 +35,6 @@ class Toggle extends Component {
       state: { hidden },
       props: { children },
     } = this;
-    //
     return children({ controller: this._handleOnClickToggle, monitored: toggledTarget, isHidden: hidden });
   }
 }

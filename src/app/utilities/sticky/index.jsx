@@ -5,7 +5,7 @@ import React from 'react';
 import $style from './style.scss';
 
 
-// magic-strings
+// namespaces
 const NAMESPACE = {
   eventList: ['resize', 'scroll'],
   className: {
@@ -139,10 +139,12 @@ class Sticky extends React.Component {
   };
 
   render = () => {
-    const { stickyBox, state: { className, style }, props: { children } } = this;
-    //
+    const {
+      state: { className, style },
+      props: { children },
+    } = this;
     return (
-      <div ref={stickyBox} className={className} style={style}>
+      <div ref={this.stickyBox} className={className} style={style}>
         {children}
       </div>
     );

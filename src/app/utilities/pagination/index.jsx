@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import $style from './style.scss';
 
 
-// magic-strings
+// namespaces
 const NAMESPACE = {
   queryName: 'page',
   className: {
@@ -20,7 +20,7 @@ const NAMESPACE = {
 };
 
 
-// modifiers
+// components
 const populatePageItem = ({ now = 1, end = 0 } = {}, url = '/', search = '') => {
   const pp = [];
   const query = qs.parse(search, { ignoreQueryPrefix: true, parseArrays: false, depth: 0 });
@@ -33,7 +33,8 @@ const populatePageItem = ({ now = 1, end = 0 } = {}, url = '/', search = '') => 
       className={NAMESPACE.className.leader}
       activeClassName={NAMESPACE.className.active}
       isActive={() => i === now}
-    >{i}
+    >
+      {i}
     </NavLink>
   );
   if (min !== 1) {
@@ -59,8 +60,7 @@ const populatePageItem = ({ now = 1, end = 0 } = {}, url = '/', search = '') => 
 };
 
 
-// components
-const Pagination = withRouter(({ meta, match, location }) => {
+const Pagination = ({ meta, match, location }) => {
   if (meta) {
     return (
       <nav id="pagination" className="mt-5">
@@ -69,8 +69,8 @@ const Pagination = withRouter(({ meta, match, location }) => {
     );
   }
   return null;
-});
+};
 
 
 // exports
-export default Pagination;
+export default withRouter(Pagination);

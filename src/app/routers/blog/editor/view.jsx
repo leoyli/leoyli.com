@@ -71,8 +71,12 @@ const EditorView = ({ onSubmit, isSubmittable, post: { title, featured, category
         />
       </div>
       <div className="_-form__row d-inline-flex">
-        <div className="col-10">&nbsp;</div>
-        <button type="submit" className="col-2" disabled={!isSubmittable}>{title ? 'UPDATE' : 'SUBMIT'}</button>
+        <div className="col-10">
+          &nbsp;
+        </div>
+        <button type="submit" className="col-2" disabled={!isSubmittable}>
+          {title ? 'UPDATE' : 'SUBMIT'}
+        </button>
       </div>
     </div>
   </form>
