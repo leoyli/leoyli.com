@@ -8,25 +8,22 @@ const PostTile = ({ post: { _id, author, featured, canonical, category, state, t
   const style = featured ? { backgroundImage: `url('${featured}')` } : {};
   return (
     <article id={_id} key={_id} className="col-xl-4 col-md-6 col-12 p-3 _-body__card">
-      <header className="row _-body__card__header" style={style}>
-        <div className="m-2 pl-1">
-          <span className="badge badge-pill badge-warning mr-2 text-capitalize">
-            {category}
-          </span>
-        </div>
-        <h2 className="col-12 align-self-end _-body__card__title">
-          <Link to={`/blog/${canonical}`}>
-            {title}
-          </Link>
-        </h2>
-      </header>
-      <section className="_-body__card__section mt-1">
-        <time dateTime={time._created} className="badge badge-primary mr-2">
+      <Link to={`/blog/${canonical}`}>
+        <header className="row _-body__card__header" style={style}>
+          <div className="m-2 pl-1">
+            <span className="badge badge-pill badge-warning mr-2 text-capitalize">
+              {category}
+            </span>
+          </div>
+        </header>
+      </Link>
+      <section className="_-body__card__section mt-2">
+        <time dateTime={time._created} className="badge badge-secondary mr-2">
           {moment(time._created).format('MMM-DD')}
         </time>
-        <span>
-          {author.nickname}
-        </span>
+        <Link className="_-body__card__title" to={`/blog/${canonical}`}>
+          {title}
+        </Link>
       </section>
     </article>
   );

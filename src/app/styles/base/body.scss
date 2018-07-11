@@ -47,10 +47,11 @@
     }
 
     &__title {
-      font-size: 1.25em;
-      font-weight: 400;
-      & a {
-        color: white;
+      color: #666;
+      font-weight: 500;
+
+      &:hover {
+        color: lighten(#666, 15%);
       }
     }
   }

@@ -22,7 +22,7 @@ const SearchBarView = ({ onSubmit }) => (
           <div id="searchBar" className={monitoredClassName} ref={monitored}>
             <form autoComplete="off" className="container" onSubmit={onSubmit}>
               <input id="searchInput" name="search" aria-label="search" placeholder="Search keywords" />
-              <button type="button">
+              <button type="submit">
                 <FontAwesomeIcon icon="sign-in-alt" />
               </button>
             </form>
