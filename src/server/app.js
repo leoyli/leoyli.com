@@ -26,7 +26,7 @@ mongoose.connect(process.env.DB).then(() => ConfigsModel.initConfig(app));
 
 /** setting **/
 app.set('x-powered-by', false);
-app.set('env', 'development');
+app.set('env', process.env.NODE_ENV);
 app.set('upload', path.resolve('./static/public/media'));
 app.set('query parser', str => {
   return _U_.object.burstArrayDeep(qs.parse(str, { parseArrays: false, depth: 0 }), { mutate: true, position: -1 });
@@ -35,13 +35,6 @@ app.set('query parser', str => {
 
 /** security **/
 app.use(_M_.securityHeaders);
-
-
-/** static public resources **/
-// todo: added authentications to private resources
-app.use(favicon(path.resolve('./static/public/media', 'favicon.ico')));
-app.use('/static', _M_.noCrawlerHeader, express.static(path.resolve('./static/public')));
-app.use('/static', _M_.noCrawlerHeader, express.static(path.resolve('./static/private')));
 
 
 /** session **/
@@ -59,6 +52,14 @@ app.use(session({
     autoRemove: 'native',
   }),
 }));
+
+
+/** static public resources **/
+app.use(favicon(path.resolve('./static/public/media', 'favicon.ico')));
+app.use('/static', express.static(path.resolve('./static/public')));
+app.use('/static', _M_.JWTAuthentication, express.static(path.resolve('./static/private')), (err, req, res, next) => {
+  if (err.name === 'UnauthorizedError') return next();
+});
 
 
 /** debugger **/
@@ -79,9 +80,8 @@ app.get('/signout', (req, res, next) => {
 
 
 /** API endpoints **/
-app.use('/api', APIRouters);
-app.use((err, req, res, next) => {
-  console.dir(err);
+app.use('/api', APIRouters, (err, req, res, next) => {
+  console.log(err);
   switch (err.name) {
     case 'UnauthorizedError':
       return res.status(401).json({

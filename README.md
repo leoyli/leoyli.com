@@ -2,7 +2,7 @@
 ### TL;DR
 The Project CMS is a self-learning project as a proto-demo of my knowledges and progress in WebApp development.  This A-to-Z project is developed independently from scratch (except the use of libraries in limited).  The architecture is based on MERN stack, one of the most popular tech stacks.  Deployment is done with Amazon Cloud Services.
 
-👉 You can visited GitHub to view the source code for this project: https://github.com/leoyli/leoyli.com/
+👉 You can visit GitHub to view the source code for this project: https://github.com/leoyli/leoyli.com/
 
 
 ## What and Why Is MERN?
