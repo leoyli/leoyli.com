@@ -1,8 +1,8 @@
 const { matchPath } = require('react-router-dom');
 const { renderToString } = require('react-dom/server');
-const { routers } = require('../../../../app/router.config');
-const { APIRequest } = require('../../../../app/utilities/fetch');
-const { RenderServer } = require('../../../../app/render');
+const { routers } = require('../../../../client/router.config');
+const { APIRequest } = require('../../../../client/utilities/fetch');
+const { RenderServer } = require('../../../../markups');
 const { template } = require('./template');
 const { _U_ } = require('../../../utilities');
 

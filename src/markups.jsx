@@ -2,11 +2,11 @@
 
 import React, { Component } from 'react';
 import { StaticRouter, BrowserRouter } from 'react-router-dom';
-import { isClientSignedIn } from './utilities/auth';
 
 
 // modules
-import App from './app';
+import { isClientSignedIn } from './client/utilities/auth';
+import App from './client/app';
 
 
 // helper
@@ -14,6 +14,7 @@ const loadParamData = (param) => (data) => () => {
   if (__isBrowser__) setTimeout(() => delete window[param], 0);
   return (__isBrowser__ ? window[param] : data) || null;
 };
+
 
 // markups
 const RenderServer = (location, data, config, isServerSignedIn) => (

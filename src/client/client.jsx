@@ -1,6 +1,6 @@
 import React from 'react';
 import { hydrate } from 'react-dom';
-import { RenderClient } from '../app/render';
+import { RenderClient } from '../markups';
 
 
 // client
