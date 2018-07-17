@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 
 // vies
 import { APIRequest } from '../../../utilities/fetch';
+import { WebConfig } from '../../../utilities/contexts';
 import Header from '../../../layouts/header';
 import SettingsView from './view';
 
@@ -13,29 +14,27 @@ class Settings extends Component {
 
   _handleOnSubmitUpdatedSettings = (e) => {
     e.preventDefault();
-    const { sendPath } = this.props;
+    const { sendPath, updateWebConfigContext } = this.props;
     this.setState(() => ({ isSubmittable: false }));
     return APIRequest(sendPath)({ method: 'PATCH', data: e.target })
       .then(res => {
         if (res.result.nModified === 1) {
-          document.dispatchEvent(new Event('_configUpdated'));
+          updateWebConfigContext(res.result.config);
           this.setState(() => ({ isSubmittable: true }));
         }
       });
   };
 
   render = () => {
-    const {
-      props: { _$CONFIG },
-      state: { isSubmittable },
-    } = this;
+    const { isSubmittable } = this.state;
+    const { config } = this.props;
     return (
       <div className="_-settings">
         <Header title="Website Settings" />
         <SettingsView
-          _$CONFIG={_$CONFIG}
           onSubmit={this._handleOnSubmitUpdatedSettings}
           isSubmittable={isSubmittable}
+          {...config}
         />
       </div>
     );
@@ -43,5 +42,14 @@ class Settings extends Component {
 }
 
 
+const SettingWithWebConfigContext = (props) => (
+  <WebConfig.Consumer>
+    {({ update, ...config }) => (
+      <Settings {...props} updateWebConfigContext={update} config={config} />
+    )}
+  </WebConfig.Consumer>
+);
+
+
 // exports
-export default Settings;
+export default SettingWithWebConfigContext;

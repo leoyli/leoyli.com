@@ -30,12 +30,9 @@ class Toggle extends Component {
   };
 
   render = () => {
-    const {
-      toggledTarget,
-      state: { hidden },
-      props: { children },
-    } = this;
-    return children({ controller: this._handleOnClickToggle, monitored: toggledTarget, isHidden: hidden });
+    const { hidden } = this.state;
+    const { children } = this.props;
+    return children({ controller: this._handleOnClickToggle, monitored: this.toggledTarget, isHidden: hidden });
   }
 }
 

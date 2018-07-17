@@ -139,10 +139,8 @@ class Sticky extends React.Component {
   };
 
   render = () => {
-    const {
-      state: { className, style },
-      props: { children },
-    } = this;
+    const { className, style } = this.state;
+    const { children } = this.props;
     return (
       <div ref={this.stickyBox} className={className} style={style}>
         {children}

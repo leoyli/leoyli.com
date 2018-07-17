@@ -44,11 +44,8 @@ class Stacks extends Component {
   };
 
   render = () => {
-    const {
-      props: { fetchPath, location, initialData },
-      state: { checked, command },
-    } = this;
-
+    const { checked, command } = this.state;
+    const { fetchPath, location, initialData } = this.props;
     return (
       <Fetch fetchPath={fetchPath} initialData={initialData}>
         {({ list, meta }, { isSubmittable, onSubmit }) => {

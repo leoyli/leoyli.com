@@ -5,6 +5,7 @@ import { Link, NavLink } from 'react-router-dom';
 
 
 // modules
+import { AuthState, WebConfig } from '../../utilities/contexts';
 import Sticky from '../../utilities/sticky';
 import SearchBar from '../searchbar';
 import UserMenu from '../usermenu';
@@ -20,46 +21,55 @@ const SignInButton = () => (
   </button>
 );
 
-const NavLeftPort = ({ siteName }) => {
-  const className = '_-nav__link d-none d-sm-inline';
-  const activeClassName = '_-nav__link--active';
-  const option = { className, activeClassName };
+const NavLeftPort = () => {
+  const navLinkSharedProps = {
+    className: '_-nav__link d-none d-sm-inline',
+    activeClassName: '_-nav__link--active',
+  };
   const isOnBlog = (match, location) => {
     return location.pathname.includes('/blog')
       && !['/blog/about', '/blog/cv'].includes(location.pathname.toLowerCase());
   };
 
   return (
-    <div className="_-nav__left-menu">
-      <Link to="/" className="navbar-brand mb-0 h1">
-        {siteName}
-      </Link>
-      <NavLink {...option} exact to="/blog/about">
-        About
-      </NavLink>
-      <NavLink {...option} exact to="/blog/CV">
-        CV
-      </NavLink>
-      <NavLink {...option} isActive={isOnBlog} to="/blog">
-        Blog
-      </NavLink>
-    </div>
+    <WebConfig.Consumer>
+      {({ siteName }) => (
+        <div className="_-nav__left-menu">
+          <Link to="/" className="navbar-brand mb-0 h1">
+            {siteName}
+          </Link>
+          <NavLink {...navLinkSharedProps} exact to="/blog/about">
+            About
+          </NavLink>
+          <NavLink {...navLinkSharedProps} exact to="/blog/CV">
+            CV
+          </NavLink>
+          <NavLink {...navLinkSharedProps} isActive={isOnBlog} to="/blog">
+            Blog
+          </NavLink>
+        </div>
+      )}
+    </WebConfig.Consumer>
   );
 };
 
-const NavRightPort = ({ isSignedIn }) => (
-  <div className="_-nav__right-menu">
-    <SearchBar />
-    {(isSignedIn) ? (<UserMenu />) : (<SignInButton />)}
-  </div>
+const NavRightPort = () => (
+  <AuthState.Consumer>
+    {({ isSignedIn }) => (
+      <div className="_-nav__right-menu">
+        <SearchBar />
+        {(isSignedIn) ? (<UserMenu />) : (<SignInButton />)}
+      </div>
+    )}
+  </AuthState.Consumer>
 );
 
-const Navbar = ({ isSignedIn, _$CONFIG }) => (
+const Navbar = () => (
   <Sticky>
     <nav className="navbar navbar-expand-lg _-nav">
       <div className="container">
-        <NavLeftPort siteName={_$CONFIG.siteName} />
-        <NavRightPort isSignedIn={isSignedIn} />
+        <NavLeftPort />
+        <NavRightPort />
       </div>
     </nav>
   </Sticky>

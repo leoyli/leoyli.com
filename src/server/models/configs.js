@@ -32,9 +32,10 @@ configsSchema.static('initConfig', async function configsSchema_initialize(app, 
 });
 
 
-configsSchema.static('updateConfig', async function configsSchema_updateConfig(req, doc, cb) {                          // todo: update lang (process.env)
-  req.app.set('APP_CONFIG', (await this.findOneAndUpdate({ active: true }, doc, { new: true })).toObject());
-  const result = { n: 1, nModified: 1, ok: 1 };
+configsSchema.static('updateConfig', async function configsSchema_updateConfig(req, doc, cb) {
+  const config = await this.findOneAndUpdate({ active: true }, doc, { new: true });
+  const result = { config, n: 1, nModified: 1, ok: 1 };
+  req.app.set('APP_CONFIG', config.toObject());
   if (typeof cb === 'function') return cb(null, result);
   return Promise.resolve(result);
 });

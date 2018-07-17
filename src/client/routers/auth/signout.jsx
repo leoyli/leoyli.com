@@ -4,7 +4,7 @@ import { _handleSignOut, isClientSignedIn } from '../../utilities/auth';
 
 
 // components
-class Signout extends Component {
+class SignOut extends Component {
   state = { isSignedIn: isClientSignedIn() };
 
   componentDidMount = () => {
@@ -21,4 +21,4 @@ class Signout extends Component {
 
 
 // exports
-export default Signout;
+export default SignOut;

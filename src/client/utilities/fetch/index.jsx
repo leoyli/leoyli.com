@@ -33,13 +33,11 @@ class Fetch extends Component {
   };
 
   componentDidMount = () => {
+    const { loading } = this.state;
     const {
-      props: {
-        fetchPath: predefinedPathname,
-        location: { pathname: locationPathname },
-      },
-      state: { loading },
-    } = this;
+      fetchPath: predefinedPathname,
+      location: { pathname: locationPathname },
+    } = this.props;
     const pathname = predefinedPathname || locationPathname;
     if (loading) {
       return APIRequest(pathname)()
@@ -54,11 +52,9 @@ class Fetch extends Component {
     },
   }) => {
     const {
-      props: {
-        fetchPath: predefinedPathname,
-        location: { pathname: locationPathname, search },
-      },
-    } = this;
+      fetchPath: predefinedPathname,
+      location: { pathname: locationPathname, search },
+    } = this.props;
     const pathname = predefinedPathname || locationPathname;
     if (prevPathname !== locationPathname || prevSearch !== search) {
       this.setState(() => ({ loading: true }));
@@ -68,10 +64,8 @@ class Fetch extends Component {
   };
 
   render = () => {
-    const {
-      props: { children },
-      state: { loading, data = {}, isSubmittable },
-    } = this;
+    const { children } = this.props;
+    const { loading, data = {}, isSubmittable } = this.state;
     if (loading) return null;
     if (data._status !== 200) return (<Unfounded />);
     return children(data, { isSubmittable, onSubmit: this._handleFormSubmit });

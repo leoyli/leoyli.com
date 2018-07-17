@@ -32,7 +32,6 @@ const authStorage = {
   clearAllTokens: () => {
     localStorage.removeItem(ID_TOKEN_KEY);
     localStorage.removeItem(ACCESS_TOKEN_KEY);
-    document.dispatchEvent(new Event('_authenticationStateChanged'));
   },
   clearAllWebAuthStateCaches: () => {
     const storedKeys = Object.keys(localStorage);
@@ -91,7 +90,6 @@ const _handleSignIn = ({ returnTo } = {}, cb) => {
       if (err) return cb(err);
       authStorage.idToken.set(authResult.idToken);
       authStorage.accessToken.set(authResult.accessToken);
-      document.dispatchEvent(new Event('_authenticationStateChanged'));
       setTimeout(authStorage.clearAllWebAuthStateCaches, 0);
       return cb(null, authStorage.returnTo.pop());
     });

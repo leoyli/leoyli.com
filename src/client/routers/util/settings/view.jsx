@@ -2,7 +2,7 @@ import React from 'react';
 
 
 // components
-const SettingsView = ({ _$CONFIG, onSubmit, isSubmittable }) => (
+const SettingsView = ({ onSubmit, isSubmittable, siteName, description, keywords, sets: { num } }) => (
   <form className="pt-3" onSubmit={onSubmit}>
     <div className="input-group my-1">
       <div className="input-group-prepend col-2 px-0">
@@ -15,7 +15,7 @@ const SettingsView = ({ _$CONFIG, onSubmit, isSubmittable }) => (
         id="siteName"
         name="config[siteName]"
         className="form-control"
-        defaultValue={_$CONFIG.siteName}
+        defaultValue={siteName}
         placeholder="Website name"
       />
     </div>
@@ -31,7 +31,7 @@ const SettingsView = ({ _$CONFIG, onSubmit, isSubmittable }) => (
         name="config[description]"
         className="form-control"
         placeholder="Description"
-        defaultValue={_$CONFIG.description}
+        defaultValue={description}
       />
     </div>
     <div className="input-group my-1">
@@ -45,7 +45,7 @@ const SettingsView = ({ _$CONFIG, onSubmit, isSubmittable }) => (
         id="keywords"
         name="config[keywords]"
         className="form-control"
-        defaultValue={_$CONFIG.keywords}
+        defaultValue={keywords}
         placeholder="Keywords (separated by ',')"
       />
     </div>
@@ -64,7 +64,7 @@ const SettingsView = ({ _$CONFIG, onSubmit, isSubmittable }) => (
     <div className="input-group my-1">
       <div className="input-group-prepend col-2 px-0">
         <span className="input-group-text w-100">
-          Timezone
+            Timezone
         </span>
       </div>
       <select id="timezone" name="config[sets][timezone]" className="custom-select">
@@ -96,7 +96,7 @@ const SettingsView = ({ _$CONFIG, onSubmit, isSubmittable }) => (
         id="num"
         name="config[sets][num]"
         className="form-control"
-        defaultValue={_$CONFIG.sets.num}
+        defaultValue={num}
       />
     </div>
     <button
