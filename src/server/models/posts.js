@@ -1,7 +1,7 @@
 /* eslint-disable key-spacing */
 
 const mongoose = require('mongoose');
-const { _U_ } = require('../utilities/');
+const { _U_ } = require('../utilities');
 
 
 // schema

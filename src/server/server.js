@@ -1,7 +1,7 @@
 const http = require('http');
 const debug = require('debug')('OpenBox:server');
 const app = require('./app');
-const { _U_: { string: { checkToStringTag } } } = require('./utilities/');
+const { _U_: { string: { checkToStringTag } } } = require('./utilities');
 
 
 // helper functions

@@ -10,9 +10,9 @@ const path = require('path');
 
 
 // MODULE
-const { _M_ } = require('./controllers/modules');
-const { _U_ } = require('./utilities/');
-const { ConfigsModel } = require('./models/');
+const { _M_ } = require('./modules');
+const { _U_ } = require('./utilities');
+const { ConfigsModel } = require('./models');
 const { APIRouters } = require('./router.config');
 
 
@@ -89,15 +89,15 @@ app.use('/api', APIRouters);
 app.use('/api', (err, req, res, next) => {
   console.log(err);
   switch (err.name) {
-    case 'UnauthorizedError':
-      return res.status(401).json({
-        _error: err.name,
-        _status: 401,
-      });
     case 'ValidationError':
       return res.status(400).json({
         _error: err.name,
         _status: 400,
+      });
+    case 'UnauthorizedError':
+      return res.status(401).json({
+        _error: err.name,
+        _status: 401,
       });
     case 'HttpException':
       return res.status(404).json({

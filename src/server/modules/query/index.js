@@ -1,6 +1,6 @@
-const { _U_ } = require('../../../utilities/');
+const { _U_ } = require('../../utilities');
 const { getAggregationQuery } = require('./pipes');
-const modelIndex = require('../../../models/');
+const modelIndex = require('../../models');
 
 
 // middleware

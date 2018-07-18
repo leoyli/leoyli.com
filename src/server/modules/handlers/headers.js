@@ -1,4 +1,4 @@
-const { ContentSecurityPolicy } = require('./security/');
+const { ContentSecurityPolicy } = require('../security/index');
 
 
 /**
@@ -6,8 +6,8 @@ const { ContentSecurityPolicy } = require('./security/');
  */
 const securityHeaders = (req, res, next) => {
   const CSPConfigs = new ContentSecurityPolicy();
-  CSPConfigs.addToWhitelist('script, style, font', 'https://stackpath.bootstrapcdn.com/');
-  CSPConfigs.addToWhitelist('script, style', 'https://cdnjs.cloudflare.com/');
+  CSPConfigs.addToWhitelist('script, style, font', 'https://stackpath.bootstrapcdn.com');
+  CSPConfigs.addToWhitelist('script, style', 'https://cdnjs.cloudflare.com');
   CSPConfigs.addToWhitelist('connect', `https://${process.env.AUTH0_SERVER_DOMAIN}/`);
   CSPConfigs.addToWhitelist('connect', process.env.API_SERVICES);
   res.set({

@@ -1,5 +1,5 @@
 const { checkToStringTag } = require('./string');
-const errorCodeProxyAgent = require('./error-code/');
+const errorCodeProxyAgent = require('./error-code');
 
 
 // main

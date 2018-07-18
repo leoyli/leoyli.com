@@ -1,7 +1,7 @@
 const jwt = require('express-jwt');
 const jwks = require('jwks-rsa');
 const decode = require('jwt-decode');
-const { _U_ } = require('../../../utilities/');
+const { _U_ } = require('../../utilities');
 
 
 const JWTVerification = jwt({

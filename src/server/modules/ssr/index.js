@@ -1,10 +1,10 @@
 const { matchPath } = require('react-router-dom');
 const { renderToString } = require('react-dom/server');
-const { routers } = require('../../../../client/router.config');
-const { APIRequest } = require('../../../../client/utilities/fetch');
-const { RenderServer } = require('../../../../markups');
+const { routers } = require('../../../client/router.config');
+const { APIRequest } = require('../../../client/utilities/fetch');
+const { RenderServer } = require('../../../markups');
 const { template } = require('./template');
-const { _U_ } = require('../../../utilities');
+const { _U_ } = require('../../utilities');
 
 
 // middleware

@@ -1,4 +1,4 @@
-const { _M_ } = require('../controllers/modules');
+const { _M_ } = require('../modules');
 const { _U_ } = require('../utilities');
 const { PostsModel } = require('../models');
 

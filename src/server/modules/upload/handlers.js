@@ -2,7 +2,7 @@ const fs = require('fs');
 
 
 // modules
-const { _U_ } = require('../../../utilities/');
+const { _U_ } = require('../../utilities');
 const { getSavingPath, isUploadable, fetchRawDoc, fetchMessage, upload } = require('./helpers');
 
 

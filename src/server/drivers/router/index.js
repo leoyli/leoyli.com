@@ -1,9 +1,9 @@
-const { Router } = require('express');
+const { Router: Index } = require('express');
 
 
 // modules
-const { _M_ } = require('../modules/');
-const { _U_ } = require('../../utilities/');
+const { _M_ } = require('../../modules');
+const { _U_ } = require('../../utilities');
 
 
 // helpers
@@ -102,7 +102,7 @@ class Device {
    */
   exec() {
     // create router
-    const router = new Router(this._baseOption);
+    const router = new Index(this._baseOption);
     if (this._baseStack.size) router.use(...this._baseStack);
 
     // register router
@@ -125,7 +125,7 @@ class Device {
    * @return {function}                     - middleware assembly (device cluster)
    */
   static assemble(config) {
-    const router = new Router({});
+    const router = new Index({});
     router.use(_M_.CORSHeaders);
     config.forEach(([path, device]) => router.use(path, device.exec()));
     router.use(_M_.JSONResponseHandler);

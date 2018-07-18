@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // modules
 import { APIRequest } from '../../utilities/fetch';
+import { AuthState } from '../../utilities/contexts';
 import $style from './style.scss';
 
 
@@ -38,29 +39,33 @@ class EditOptions extends Component {
   };
 }
 
-const MetaBox = ({ post: { author, category, tags, time }, post, history, isSignedIn }) => (
-  <div className="d-flex justify-content-between mb-3">
-    <div className="d-sm-flex flex-row-reverse mb-4 mb-sm-2 _-header__meta">
-      <div className="ml-sm-2">
-        <span>
-          {`By ${author.nickname}`}
-        </span>
-        <time dateTime={time._created}>
-          &nbsp;@&nbsp;
-          {moment(time._created).format('MM/DD/YYYY')}
-        </time>
+const MetaBox = ({ post: { author, category, tags, time }, post, history }) => (
+  <AuthState.Consumer>
+    {({ isSignedIn }) => (
+      <div className="d-flex justify-content-between mb-3">
+        <div className="d-sm-flex flex-row-reverse mb-4 mb-sm-2 _-header__meta">
+          <div className="ml-sm-2">
+            <span>
+              {`By ${author.nickname}`}
+            </span>
+            <time dateTime={time._created}>
+              &nbsp;@&nbsp;
+              {moment(time._created).format('MM/DD/YYYY')}
+            </time>
+          </div>
+          <div className="d-sm-inline-block ml-sm-0 ml-1">
+            <span className="badge badge-pill badge-warning text-capitalize">
+              {category}
+            </span>
+          </div>
+        </div>
+        {isSignedIn && <EditOptions post={post} history={history} />}
       </div>
-      <div className="d-sm-inline-block ml-sm-0 ml-1">
-        <span className="badge badge-pill badge-warning text-capitalize">
-          {category}
-        </span>
-      </div>
-    </div>
-    {isSignedIn && <EditOptions post={post} history={history} />}
-  </div>
+    )}
+  </AuthState.Consumer>
 );
 
-const Header = ({ title, subtitle, featured, post, isSignedIn, history }) => {
+const Header = ({ title, subtitle, featured, post, history }) => {
   const style = featured ? { backgroundImage: `url('${featured}')` } : {};
   const className = classNames({
     'd-flex mb-4 _-header': true,
@@ -73,7 +78,7 @@ const Header = ({ title, subtitle, featured, post, isSignedIn, history }) => {
           {title}
           {subtitle && ` - ${subtitle}`}
         </h2>
-        {post ? (<MetaBox post={post} history={history} isSignedIn={isSignedIn} />) : (
+        {post ? (<MetaBox post={post} history={history} />) : (
           <div>
             &nbsp;
           </div>

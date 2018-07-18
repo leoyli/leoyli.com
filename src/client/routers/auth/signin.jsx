@@ -18,7 +18,7 @@ class SignIn extends Component {
     if (returnTo === null) {
       _handleSignIn(location.state, (err, path = '/') => {
         if (err) throw err;
-        this.setState(() => ({ returnTo: path, isSignedIn: true }));
+        this.setState(() => ({ returnTo: path }));
         return APIRequest(sendPath)({ data: null, method: 'POST' })
           .then(({ accessToken }) => {
             if (accessToken !== authStorage.accessToken.get()) authStorage.clearAllTokens();

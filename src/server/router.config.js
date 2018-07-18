@@ -1,4 +1,4 @@
-const { Device } = require('./controllers/drivers/router');
+const { Device } = require('./drivers/router');
 const { pages } = require('./routers/pages');
 const { auth } = require('./routers/auth');
 const { blog } = require('./routers/blog');
