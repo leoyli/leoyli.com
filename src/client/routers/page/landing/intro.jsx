@@ -16,14 +16,14 @@ const Intro = () => (
         to="/blog/cv"
         className="btn btn-lg btn-light font-weight-bold m-2 d-block d-md-inline-block d-lg-none"
       >
-        Review CV
+        View my résumé!
       </Link>
-      <a
-        href="mailto:leo@leoyli.com"
+      <Link
+        to="/blog/about"
         className="btn btn-lg btn-warning font-weight-bold d-md-inline-block d-block m-2"
       >
-        Hire Leo!
-      </a>
+        More about me!
+      </Link>
     </header>
     <aside className="align-self-center text-center col-lg-5 d-lg-inline-block d-none mt-3">
       <Link to="/blog/cv">

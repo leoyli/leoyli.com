@@ -22,7 +22,7 @@ const configs = {
     },
     table: {
       props: {
-        className: 'table table-sm table-hover',
+        className: 'table table-sm table-hover table-responsive',
       },
     },
     thead: {

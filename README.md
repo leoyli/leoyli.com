@@ -1,4 +1,4 @@
-#### TL;DR
+## TL;DR
 The Project CMS is a self-motivated project as a demonstration of my learning capacity and the actual progress in WebApp development.  This A-to-Z project is developed independently from scratch (very limited with the use of libraries).  The architecture is based on MERN stack, one of the most popular tech stacks.  Deployment is done using Amazon Cloud Services (AWS).
 
 👉 You can visit GitHub to view the source code for this project: https://github.com/leoyli/leoyli.com/
@@ -12,20 +12,20 @@ MERN is a shorthand for the combination of [MongoDB](https://www.mongodb.com) + 
 
 ***
 
-#### JavaScrip in Node.js
+### JavaScrip in Node.js
 Based on [the result of 2018 annual developer survey collected by StackOverflow](https://insights.stackoverflow.com/survey/2018/):
 
 > Node.js and AngularJS continue to be the most commonly used technologies in this category (note: Frameworks, Libraries, and Tools), with React and .Net Core also important to many developers.
 
 In comparison of previous years, a growing trend of the adaptions of Node.js, React.js, and MongoDB could be found over developer communities.  No doubts, JavaScript nowadays is the most dominant language on the web for its high integrations among all browsers as the only way to manipulate DOM directly.  Therefore, the advantage for using single language that united the front-end and back-end makes Node.js truly an ideal environment for the developer who is on his path to master in full-stack web development.
 
-#### Express for serving RESTful API
+### Express for serving RESTful API
 One of the biggest drift in current industry compared with the past is the separation of front-end and back-end.  Back-end now more or less handle the controlling and data modelling logic, while front-end are more focusing on view rendering and user experiences (UI/UX), with some overlapping possible though. Express, based on their homepage — _"fast, unopinionated, minimalist web framework for Node.js"_, is a classic choice for serving RESTful API.  Although GraphQL is believed to be the standard for the next generation (and fashionable) by many, I found it is important to first know about the most common pattern which its concept have been solidified into the convention.
 
-#### The Front-end Frameworks
+### The Front-end Frameworks
 As for the front-end, there are many frameworks or libraries such as Angular, Vue, and React are available.  Choosing one over the other is case-by-case and can rise many debates since they all comes for its pros and cons.  I believe the developer must capable to quickly switch the gear if needs, especially in such a fast changing moment in the web history.  However, standing as a returning developer like myself, I made the chose of React over the others mainly for a learning reasons.  React is famous for its flexibility in logic with a learning-friendly curve.  Also, one of the selling points for React is its informative error messages, making it easy to debug and to learn.  Here, this project is aim to quickly prototype a CMS with basic functionality, and React is good starting point.
 
-#### NoSQL Database
+### NoSQL Database
 I have experienced developing several websites over 2010-2015 using WordPress, where naturally MySQL is used.  Often I found myself lost in the complexity of relational tables stored in my database.  On the other hand, with the merge of new technology and the growing need to build a flexible and easy to scale WebApp, MongoDB as a non-tabular database is one of the super nova among NoSQL Databases.
 
 > MongoDB’s document data model maps naturally to objects in application code, making it simple for developers to learn and use.
@@ -33,8 +33,8 @@ I have experienced developing several websites over 2010-2015 using WordPress, w
 Quoted from [MongoDB v.s. MySQL](https://www.mongodb.com/compare/mongodb-mysql), I found my data is more maintainable, approachable, and scalable using MongoDB.
 
 ## Features in This App
-<br />
-![Infrastructures](https://leoyli.com/static/media/architecture_f.png "The infrastructures used in https://leoyli.com")
+
+![Infrastructures](https://leoyli.com/static/media/architecture_f.png "The Infrastructures of leoyli.com")
 
 _For an overview discussion of the core application, please visit this post: [The Architecture and Backend Services](https://leoyli.com/blog/the-project-cms-the-architecture-and-backend-services)._
 
