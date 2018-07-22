@@ -1,3 +1,7 @@
+const serialize = require('serialize-javascript');
+
+
+// template
 const template = ({ config, data, body } = {}) => (`
   <!DOCTYPE html>
   <html lang="en">
@@ -10,8 +14,8 @@ const template = ({ config, data, body } = {}) => (`
     <link rel="stylesheet" type="text/css" href="/static/stylesheets/style.css">
     <script>
       document.scripts[0].remove();
-      window.__CONFIG__ = ${JSON.stringify(config)};
-      window.__INIT__ = ${JSON.stringify(data)};
+      window.__CONFIG__ = ${serialize(config, { isJSON: true })};
+      window.__INIT__ = ${serialize(data, { isJSON: true })};
     </script>
     <script src="/static/scripts/bundle.js" defer></script>
   </head>

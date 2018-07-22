@@ -12,9 +12,9 @@ const Marketer = () => (
       <h1>
         Online Marketer
       </h1>
-      <em>
-        (more portfolio to show shortly!)
-      </em>
+      <h4>
+        Insightful ideas shaped by a critical thinker!
+      </h4>
     </header>
   </session>
 );
