@@ -13,16 +13,16 @@ const Intro = () => (
         A self-motivated web developer solves problems with elegant code!
       </h2>
       <Link
-        to="/blog/cv"
-        className="btn btn-lg btn-light font-weight-bold m-2 d-block d-md-inline-block d-lg-none"
-      >
-        View my résumé!
-      </Link>
-      <Link
         to="/blog/about"
         className="btn btn-lg btn-warning font-weight-bold d-md-inline-block d-block m-2"
       >
-        More about me!
+        Learn More!
+      </Link>
+      <Link
+        to="/blog/cv"
+        className="btn btn-lg btn-light font-weight-bold m-2 d-block d-md-inline-block d-lg-none"
+      >
+        My Résumé!
       </Link>
     </header>
     <aside className="align-self-center text-center col-lg-5 d-lg-inline-block d-none mt-3">

@@ -68,7 +68,7 @@
 
       @media only screen and (max-width: 576px) {
         & h1 {
-          font-size: 4rem;
+          font-size: 16vw;
         }
       }
     }
@@ -102,6 +102,13 @@
           & {
             transform: scale(.8);
             margin: 0;
+          }
+        }
+
+        @media only screen and (max-width: 350px) {
+          & {
+            transform: scale(.7);
+            margin: -.4rem;
           }
         }
       }

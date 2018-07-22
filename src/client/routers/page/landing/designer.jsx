@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 // components
 const Designer = () => {
   const skills = [
-    'Fr', 'Ai', 'In', 0,
-    'Ps', 'XD',
+    'Fw', 'Ai', 'In', 0,
+    'Ps', 'Xd',
   ];
   const posters = [
     '14-06-01', '14-06-02', 0,

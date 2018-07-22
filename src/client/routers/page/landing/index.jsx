@@ -7,6 +7,7 @@ import Intro from './intro';
 import Developer from './developer';
 import Designer from './designer';
 import Marketer from './marketer';
+import Close from './close';
 import style from './style.scss';
 
 
@@ -17,6 +18,7 @@ const Landing = () => (
     <Developer />
     <Designer />
     <Marketer />
+    <Close />
   </Fragment>
 );
 
