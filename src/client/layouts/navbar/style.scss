@@ -2,7 +2,7 @@
   background-color: #232a3d;
   color: white;
 
-  ._-sticky--topped & {
+  div[data-sticky-topped=true] & {
     background-color: rgba(whitesmoke, .95);
     color: #232a3d;
   }
@@ -27,7 +27,7 @@
       padding-bottom: .25em;
     }
 
-    ._-sticky--topped & {
+    div[data-sticky-topped=true] & {
       font-weight: bold;
 
       &--active {
@@ -65,7 +65,7 @@
     transition: .25s;
   }
 
-  ._-sticky--topped & {
+  div[data-sticky-topped=true] & {
     color: #232a3d;
 
     &:hover {

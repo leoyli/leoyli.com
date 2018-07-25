@@ -3,9 +3,18 @@ import { Link } from 'react-router-dom';
 import Markdown from 'markdown-to-jsx';
 
 
+// modules
+import Sticky from '../../../utilities/sticky';
+
+
 // markdown
 const configs = {
   overrides: {
+    Sticky: ({ children, ...props }) => (
+      <Sticky {...props}>
+        {children}
+      </Sticky>
+    ),
     a: ({ href, children, ...props }) => {
       if (href.startsWith('/')) {
         return (

@@ -34,7 +34,7 @@ const APIRequest = (routePath) => ({
   session = {},
   data    = {},
 } = {}) => {
-  const fetchDriver = __isBrowser__ ? fetch : nodeFetch;
+  const fetchDriver = __isBrowser__ && ('fetch' in window) ? fetch : nodeFetch;
 
   // address
   const routeParams = Object.keys(params).length ? params : parseRouteParams(routePath, path);
