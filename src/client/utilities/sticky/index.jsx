@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 
 
 // modules
+import { getDocumentDimensions } from './lib/helpers';
 import calculate from './lib/calculators';
 
 
@@ -30,12 +31,12 @@ const StyledStickyBox = styled.div.attrs({
 class Sticky extends Component {
   stickyBox = React.createRef();
   eventList = ['resize', 'scroll'];
-  state = { styledProp: {}, initialized: false };
+  state = { initialized: false, styledProp: {} };
   cache = { constants: {}, dimensions: {}, breakpoints: {} };
 
-  _dispatchByDepth = (depth) => {
+  _setStateFromReducer = (depth) => {
     // update cache in accordance with the given depth
-    const pipeline = [calculate.constants, calculate.dimensions, calculate.breakpoints];
+    const pipeline = [calculate.dimensions, calculate.constants, calculate.breakpoints];
     const reducer = (cache, currentFn) => currentFn(cache, this.props, this.stickyBox.current);
     this.cache = pipeline.slice(depth).reduce(reducer, this.cache);
 
@@ -44,18 +45,30 @@ class Sticky extends Component {
     this.setState(() => ({ styledProp, initialized: true }));
   };
 
-  _handleStickyEvent = (e) => {
-    if (e.type === this.eventList[1]) return this._dispatchByDepth(3);
-    return this.setState(() => ({ initialized: false }), () => this._dispatchByDepth(0));
+  _dispatchByDepth = (e) => {
+    const { height: cachedViewHeight, width: cachedViewWidth } = this.cache.dimensions.view;
+    const { height: currentViewHeight, width: currentViewWidth } = getDocumentDimensions();
+
+    // dispatch an action
+    switch (true) {
+      case (cachedViewWidth !== currentViewWidth):
+        return this.setState(() => ({ initialized: false }),
+          () => this._setStateFromReducer(0));
+      case (currentViewHeight !== cachedViewHeight):
+        this.cache.dimensions.view.height = currentViewHeight;
+        return this._setStateFromReducer(1);
+      default:
+        return this._setStateFromReducer(3);
+    }
   };
 
   componentDidMount = () => {
-    this._dispatchByDepth(0);
-    this.eventList.forEach(event => window.addEventListener(event, this._handleStickyEvent));
+    this._setStateFromReducer(0);
+    this.eventList.forEach(event => window.addEventListener(event, this._dispatchByDepth));
   };
 
   componentWillUnmount = () => {
-    this.eventList.forEach(event => window.removeEventListener(event, this._handleStickyEvent));
+    this.eventList.forEach(event => window.removeEventListener(event, this._dispatchByDepth));
   };
 
   render = () => {

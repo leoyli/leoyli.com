@@ -7,7 +7,21 @@ const {
 
 
 /**
- * (depth#0) calculate sticky constants (initializing the component only)
+ * (depth#0) calculate the wrapper div dimensions from the children props
+ * @param cache
+ * @param props
+ * @param ref
+ * @return {{dimensions}}}
+ */
+const calculateDimensions = (cache, props, ref) => {
+  const box = { height: ref.offsetHeight, width: ref.offsetWidth };
+  const view = getDocumentDimensions();
+  return { ...cache, dimensions: { box, view } };
+};
+
+
+/**
+ * (depth#1) calculate sticky constants (initializing the component only)
  * @param cache
  * @param props
  * @param ref
@@ -15,24 +29,16 @@ const {
  */
 const calculateConstants = (cache, props, ref) => {
   const { top, bottom, start, stop, distance } = props;
+  const { height: pageHeight } = cache.dimensions.view;
+
+  // normalize constants
   const TOP = normalizeByScaledFactor(top, window.innerHeight);
   const BOTTOM = normalizeByScaledFactor(bottom, window.innerHeight);
-  const START = normalizeByScaledFactor(start, document.documentElement.scrollHeight);
-  const STOP = normalizeByScaledFactor(stop, document.documentElement.scrollHeight);
-  const DISTANCE = normalizeByScaledFactor(distance, document.documentElement.scrollHeight);
+  const START = normalizeByScaledFactor(start, pageHeight);
+  const STOP = normalizeByScaledFactor(stop, pageHeight);
+  const DISTANCE = normalizeByScaledFactor(distance, pageHeight);
+
   return { ...cache, constants: { TOP, BOTTOM, START, STOP, DISTANCE } };
-};
-
-
-/**
- * (depth#1) calculate the wrapper div dimensions from the children props
- * @param cache
- * @param props
- * @param ref
- * @return {{dimensions}}}
- */
-const calculateDimensions = (cache, props, ref) => {
-  return { ...cache, dimensions: { height: ref.offsetHeight, width: ref.offsetWidth } };
 };
 
 
@@ -45,8 +51,7 @@ const calculateDimensions = (cache, props, ref) => {
  */
 const calculateBreakpoints = (cache, props, ref) => {
   const { TOP, BOTTOM, START, STOP, DISTANCE } = cache.constants;
-  const { height: pageHeight } = getDocumentDimensions();
-  const { height: boxHeight } = cache.dimensions;
+  const { box: { height: boxHeight }, view: { height: pageHeight } } = cache.dimensions;
   const viewportHeight = window.innerHeight;
 
   // calculate breakpoints
@@ -68,11 +73,11 @@ const calculateBreakpoints = (cache, props, ref) => {
 /**
  * (depth#3) calculated styled props for the styled components
  * @param cache
- * @return {styledProps}
+ * @return {object}
  */
 const calculateStyledProps = (cache) => {
   const { initial, vertex, adjust, active, frozen } = cache.breakpoints;
-  const { height: _height, width: _width } = cache.dimensions;
+  const { height: _height, width: _width } = cache.dimensions.box;
   const current = getScrollPosition();
   return {
     // control sticky element
