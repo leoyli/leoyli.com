@@ -1,3 +1,5 @@
+/* global __isBrowser__, gtag */
+
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { Redirect } from 'react-router';
@@ -42,10 +44,19 @@ class App extends Component {
                   key={path}
                   path={path}
                   exact={exact}
-                  render={(routerProps) => (secure && !isSignedIn
-                    ? (<Redirect to="/signin" />)
-                    : (<C {...appProps} {...routerProps} {...rest} />))
-                  }
+                  render={(receivedProps) => {
+                    // google analytics
+                    if (__isBrowser__ && 'gtag' in window) {
+                      gtag('config', process.env.GTAG_ID, {
+                        page_path: receivedProps.location.pathname,
+                      });
+                    }
+
+                    // router screaming
+                    return (secure && !isSignedIn
+                      ? (<Redirect to="/signin" />)
+                      : (<C {...appProps} {...receivedProps} {...rest} />));
+                  }}
                 />
               ))}
               <Route render={(routerProps) => (<Unfounded {...appProps} {...routerProps} />)} />

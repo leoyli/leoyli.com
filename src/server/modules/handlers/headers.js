@@ -6,15 +6,28 @@ const { ContentSecurityPolicy } = require('../security/index');
  */
 const securityHeaders = (req, res, next) => {
   const CSPConfigs = new ContentSecurityPolicy();
-  CSPConfigs.addToWhitelist('script, style, font', 'https://stackpath.bootstrapcdn.com');
+  // CDN networking
   CSPConfigs.addToWhitelist('script, style', 'https://cdnjs.cloudflare.com');
+  CSPConfigs.addToWhitelist('script, style, font', 'https://stackpath.bootstrapcdn.com');
+
+  // auth0
   CSPConfigs.addToWhitelist('connect', `https://${process.env.AUTH0_SERVER_DOMAIN}/`);
+
+  // GitHub Gist
+  CSPConfigs.addToWhitelist('script', 'https://gist.github.com');
+  CSPConfigs.addToWhitelist('style', 'https://assets-cdn.github.com');
+
+  // google analytics
+  CSPConfigs.addToWhitelist('script', 'https://www.googletagmanager.com');
+  CSPConfigs.addToWhitelist('script, connect', 'https://www.google-analytics.com');
+
+  // in-site API
   CSPConfigs.addToWhitelist('connect', process.env.API_SERVICES);
   res.set({
     'Content-Security-Policy': CSPConfigs.generateRules(),
     'Cache-Control': 'max-age=0',
     'X-XSS-Protection': '1; mode=block',
-    'X-Frame-Options': 'DENY',
+    'X-Frame-Options': 'ALLOW-FROM https://gist.github.com/',
   });
   return next();
 };

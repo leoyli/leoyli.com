@@ -7,6 +7,33 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import style from './style.scss';
 
 
+// data
+const skills = [
+  'html5', 'css3-alt', 'js', 0,
+  'sass', 'node', 'react', 'git', 0,
+  'github', 'aws', 'wordpress', 0,
+  'python', 'r-project',
+];
+
+const articles = [
+  {
+    to: '/blog/the-project-cms-a-mern-stack-from-a-to-z',
+    title: 'The Project CMS: A MERN Stack from A-to-Z',
+    featured: '/static/media/mern.png',
+  },
+  {
+    to: '/blog/the-project-cms-the-architecture-and-backend-services',
+    title: 'The Project CMS: The Architecture and Backend Services',
+    featured: '/static/media/architecture_f.png',
+  },
+  {
+    to: '/blog/react-js-design-a-responsive-sticky-component-from-scratch',
+    title: 'ReactJS: Design A Responsive Sticky Component from Scratch',
+    featured: '/static/media/sticky.png',
+  },
+];
+
+
 // components
 const Icon = ({ icon, onClick }) => {
   if (icon === 0) return (<br />);
@@ -29,14 +56,6 @@ const Article = ({ to, title, featured }) => (
 );
 
 class Developer extends Component {
-  skills = [
-    'html5', 'css3-alt', 'js', 0,
-    'sass', 'node', 'react', 'git', 0,
-    'github', 'aws', 'wordpress', 0,
-    'python', 'r-project',
-  ];
-  state = { item: this.skills[0] };
-
   _handledSelect = (icon) => (e) => {
     this.setState(() => ({ item: icon }));
   };
@@ -58,18 +77,10 @@ class Developer extends Component {
           </header>
           <session className="mt-5 py-4">
             <div className="d-inline-block col-xl-4 col-12 my-sm-5 my-3 _L_land__session__skills">
-              {this.skills.map(icon => (<Icon icon={icon} key={Date.now} onClick={this._handledSelect} />))}
+              {skills.map(icon => (<Icon icon={icon} key={Date.now} onClick={this._handledSelect} />))}
             </div>
-            <Article
-              to="/blog/the-project-cms-a-mern-stack-from-a-to-z"
-              title="The Project CMS: A MERN Stack from A-to-Z"
-              featured="/static/media/mern.png"
-            />
-            <Article
-              to="/blog/the-project-cms-the-architecture-and-backend-services"
-              title="The Project CMS: The Architecture and Backend Services"
-              featured="/static/media/architecture_f.png"
-            />
+            <Article {...articles[0]} />
+            <Article {...articles[2]} />
           </session>
         </article>
       </session>

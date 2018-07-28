@@ -5,11 +5,13 @@ import Markdown from 'markdown-to-jsx';
 
 // modules
 import Sticky from '../../../utilities/sticky';
+import Gist from  '../../../utilities/gist';
 
 
 // markdown
 const configs = {
   overrides: {
+    Gist: (props) => (<Gist {...props} />),
     Sticky: ({ children, ...props }) => (
       <Sticky {...props}>
         {children}
