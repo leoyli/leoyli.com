@@ -16,9 +16,10 @@ const serverSideRenderer = async (req, res) => {
   const data = secure
     ? (fetchPath && isServerSignedIn ? await APIRequest(fetchPath)(req) : null)
     : (fetchPath ? await APIRequest(fetchPath)(req) : null);
+  const { featured } = (data && data.post) || {};
   const body = renderToString(RenderServer(req.url, data, config, isServerSignedIn));
   if (data && data._status === 401) return res.redirect('/signin');
-  res.send(template({ config, data, body }));
+  res.send(template({ config, data, body, featured }));
 };
 
 
