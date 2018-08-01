@@ -11,7 +11,7 @@ import $style from './style.scss';
 // components
 const Index = () => (
   <WebConfig.Consumer>
-    {({ siteName }) => (
+    {({ general: { siteName } }) => (
       <footer className="mt-5 _-footer">
         <div id="misc" className="container d-lg-flex text-justify pt-4">
           <div className="col-lg-9" id="sitePolicy" role="contentinfo">

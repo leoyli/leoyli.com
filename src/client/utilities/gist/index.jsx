@@ -19,6 +19,23 @@ const template = (scriptSrc) => `
 
 
 // component
+const StyledIFrameContainer = styled.div`
+  position: relative;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  
+  > iframe {
+    box-sizing: border-box;
+    margin: 0 auto;
+    max-width: 100%;
+    position: relative;
+  }
+`;
+
 const StyledIframe = styled.iframe`
   border: none;
   overflow: scroll;
@@ -63,13 +80,15 @@ class Gist extends PureComponent {
     const { className, id } = this.props;
     if (!id) return null;
     return (
-      <StyledIframe
-        innerRef={this.iframe}
-        onLoad={this._handleOnLoadIframe}
-        className={className}
-        title="code snippet"
-        _height={_height}
-      />
+      <StyledIFrameContainer>
+        <StyledIframe
+          innerRef={this.iframe}
+          onLoad={this._handleOnLoadIframe}
+          className={className}
+          title="code snippet"
+          _height={_height}
+        />
+      </StyledIFrameContainer>
     );
   };
 }

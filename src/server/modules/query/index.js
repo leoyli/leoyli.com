@@ -13,8 +13,9 @@ const modelIndex = require('../../models');
  */
 const paginatedQuery = (collection, { num, sort } = {}) => function queryController(req, res, next) {
   const Model = modelIndex[`${_U_.string.toCapitalized(collection)}Model`];
+  const config = req.app.get('APP_CONFIG');
   return Model
-    .aggregate(getAggregationQuery(collection, req.params, req.query, num || res.locals.config.sets.num, sort))
+    .aggregate(getAggregationQuery(collection, req.params, req.query, num || config.display.num, sort))
     .then(docs => docs[0])
     .then(result => {
       if (result) res.locals.data = { ...res.locals.data, ...result };

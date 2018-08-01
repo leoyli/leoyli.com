@@ -5,18 +5,24 @@ const mongoose = require('mongoose');
 
 // schema
 const configsSchema  = new mongoose.Schema({
-  initialized        : { type: Boolean, default: false },
-  active             : { type: Boolean, default: false, unique: true },
-  siteName           : { type: String, default: 'New Website' },
-  description        : { type: String, default: 'n/a' },
-  keywords           : { type: String, default: 'n/a' },
-  sets: {
-    imageTypes       : { type: [[String]], default: ['gif', 'jpe?g', 'png', 'svg', 'tiff', 'webp'] },
-    language         : { type: String, default: 'en' },
-    timezone         : { type: String, default: '' },
-    timeFormat       : { type: String, default: '' },
-    sort             : { type: String, default: '' },
-    num              : { type: Number, default: 12 },
+  initialized         : { type: Boolean, default: false },
+  active              : { type: Boolean, default: false, unique: true },
+  general: {
+    imageTypes        : { type: [[String]], default: ['gif', 'jpe?g', 'png', 'svg', 'tiff', 'webp'] },
+    siteName          : { type: String, default: 'New Website' },
+    domain            : { type: String, default: '' },
+  },
+  services : {
+    googleAnalytics   : { type: String, default: '' },
+    facebookApp       : { type: String, default: '' },
+    twitter           : { type: String, default: '' },
+  },
+  display: {
+    language          : { type: String, default: 'en' },
+    timezone          : { type: String, default: '' },
+    timeFormat        : { type: String, default: '' },
+    sort              : { type: String, default: '' },
+    num               : { type: Number, default: 12 },
   },
 }, {
   timestamps         : { createdAt: 'time._created', updatedAt: 'time._updated' },

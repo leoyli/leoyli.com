@@ -79,7 +79,6 @@ app.get('/signout', (req, res, next) => {
 /** dynamic resources **/
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ type: 'application/json' }));
-app.use(_M_.appConfigsLoader);
 
 
 /** API services **/

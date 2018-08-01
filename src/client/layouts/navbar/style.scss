@@ -53,11 +53,9 @@
   background-color: rgba(whitesmoke, .1);
   border: none;
   color: #fff;
-  font-weight: bold;
-  font-size: small;
   text-transform: uppercase;
   transition: none;
-  width: 6em;
+  width: 5.5em;
 
   &:hover {
     background: rgba(whitesmoke, .95);
@@ -75,6 +73,12 @@
 
   & a {
     color: inherit;
+    font-weight: bold;
     text-decoration: none;
+    font-size: .85rem;
+
+    &:hover {
+      text-decoration: none;
+    }
   }
 }

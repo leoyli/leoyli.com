@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 
 // components
-const SettingsView = ({ onSubmit, isSubmittable, siteName, description, keywords, sets: { num } }) => (
-  <form className="pt-3" onSubmit={onSubmit}>
+const GeneralSettings = ({ siteName, domain }) => (
+  <Fragment>
+    <h3>
+      General
+    </h3>
     <div className="input-group my-1">
       <div className="input-group-prepend col-2 px-0">
         <span className="input-group-text w-100">
@@ -12,8 +15,7 @@ const SettingsView = ({ onSubmit, isSubmittable, siteName, description, keywords
       </div>
       <input
         type="text"
-        id="siteName"
-        name="config[siteName]"
+        name="config[general][siteName]"
         className="form-control"
         defaultValue={siteName}
         placeholder="Website name"
@@ -22,41 +24,34 @@ const SettingsView = ({ onSubmit, isSubmittable, siteName, description, keywords
     <div className="input-group my-1">
       <div className="input-group-prepend col-2 px-0">
         <span className="input-group-text w-100">
-          Description
+          Domain
         </span>
       </div>
       <input
         type="text"
-        id="description"
-        name="config[description]"
+        name="config[general][domain]"
         className="form-control"
-        placeholder="Description"
-        defaultValue={description}
+        defaultValue={domain}
+        placeholder="Website domain"
       />
     </div>
-    <div className="input-group my-1">
-      <div className="input-group-prepend col-2 px-0">
-        <span className="input-group-text w-100">
-          Keywords
-        </span>
-      </div>
-      <input
-        type="text"
-        id="keywords"
-        name="config[keywords]"
-        className="form-control"
-        defaultValue={keywords}
-        placeholder="Keywords (separated by ',')"
-      />
-    </div>
+    <hr className="pb-4" />
+  </Fragment>
+);
+
+const DisplaySettings = ({ language, timezone, timeFormat, sort, num }) => (
+  <Fragment>
+    <h3>
+      Display
+    </h3>
     <div className="input-group my-1">
       <div className="input-group-prepend col-2 px-0">
         <span className="input-group-text w-100">
           Language
         </span>
       </div>
-      <select id="language" name="config[sets][language]" className="custom-select">
-        <option value="en">
+      <select name="config[general][language]" className="custom-select">
+        <option value={language}>
           English (en)
         </option>
       </select>
@@ -67,7 +62,7 @@ const SettingsView = ({ onSubmit, isSubmittable, siteName, description, keywords
             Timezone
         </span>
       </div>
-      <select id="timezone" name="config[sets][timezone]" className="custom-select">
+      <select name="config[display][timezone]" className="custom-select">
         <option value="UTC−06:00 (MST)">
           UTC−06:00 (MST)
         </option>
@@ -79,7 +74,7 @@ const SettingsView = ({ onSubmit, isSubmittable, siteName, description, keywords
           Time Format
         </span>
       </div>
-      <select id="time-format" name="config[sets][timeFormat]" className="custom-select">
+      <select name="config[display][timeFormat]" className="custom-select">
         <option value="YYYY-MM-DD">
           YYYY-MM-DD
         </option>
@@ -93,20 +88,78 @@ const SettingsView = ({ onSubmit, isSubmittable, siteName, description, keywords
       </div>
       <input
         type="number"
-        id="num"
-        name="config[sets][num]"
+        name="config[display][num]"
         className="form-control"
         defaultValue={num}
       />
     </div>
-    <button
-      type="submit"
-      aria-label="Update"
-      className="btn btn-outline-primary text-uppercase float-right mx-1 mt-3"
-      disabled={!isSubmittable}
-    >
-      Update
-    </button>
+    <hr className="pb-4" />
+  </Fragment>
+);
+
+const SEOSettings = ({ googleAnalytics, facebookApp, twitter }) => (
+  <Fragment>
+    <h3>
+      SEO & Marketing
+    </h3>
+    <div className="input-group my-1">
+      <div className="input-group-prepend col-2 px-0">
+        <span className="input-group-text w-100">
+          Google Analytics
+        </span>
+      </div>
+      <input
+        type="text"
+        name="config[services][googleAnalytics]"
+        className="form-control"
+        defaultValue={googleAnalytics}
+      />
+    </div>
+    <div className="input-group my-1">
+      <div className="input-group-prepend col-2 px-0">
+        <span className="input-group-text w-100">
+          Facebook App ID
+        </span>
+      </div>
+      <input
+        type="text"
+        name="config[services][facebookApp]"
+        className="form-control"
+        defaultValue={facebookApp}
+      />
+    </div>
+    <div className="input-group my-1">
+      <div className="input-group-prepend col-2 px-0">
+        <span className="input-group-text w-100">
+          Twitter Creator ID
+        </span>
+      </div>
+      <input
+        type="text"
+        name="config[services][twitter]"
+        className="form-control"
+        defaultValue={twitter}
+      />
+    </div>
+    <hr className="pb-4" />
+  </Fragment>
+);
+
+const SettingsView = ({ isSubmittable, onSubmit, services, general, display }) => (
+  <form className="pt-3" onSubmit={onSubmit}>
+    <GeneralSettings {...general} />
+    <DisplaySettings {...display} />
+    <SEOSettings {...services} />
+    <div className="text-right">
+      <button
+        type="submit"
+        aria-label="Update"
+        className="btn btn-outline-primary text-uppercase mx-1"
+        disabled={!isSubmittable}
+      >
+        Update
+      </button>
+    </div>
   </form>
 );
 

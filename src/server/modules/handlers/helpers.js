@@ -2,15 +2,6 @@ const { _U_ } = require('../../utilities/index');
 
 
 /**
- * app configurations loader
- */
-const appConfigsLoader = (req, res, next) => {
-  res.locals.config = req.app.get('APP_CONFIG');
-  return next();
-};
-
-
-/**
  * JSON response handler
  */
 const JSONResponseHandler = (req, res) => {
@@ -60,7 +51,6 @@ const titleTagModifier = (option) => function titleTagModifierByOption(req, res,
 
 // exports
 module.exports = {
-  appConfigsLoader,
   JSONResponseHandler,
   caseInsensitiveQueryProxy,
   titleTagModifier,

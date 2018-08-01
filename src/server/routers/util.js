@@ -51,7 +51,7 @@ util.upload = {                                                                 
 
 util.settings = {
   GET: function util_settings_GET(req, res, next) {
-    res.locals.data = { ...res.locals.data, config: res.locals.config };
+    res.locals.data = { ...res.locals.data, config: req.app.get('APP_CONFIG') };
     return next();
   },
   PATCH: async function util_settings_PATCH(req, res, next) {

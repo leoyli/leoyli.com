@@ -14,7 +14,7 @@ import $style from './style.scss';
 
 // components
 const SignInButton = () => (
-  <button type="button" className="btn mt-1 ml-2 _-button--signin">
+  <button type="button" className="btn mx-2 _-button--signin">
     <Link to={{ state: { returnTo: (__isBrowser__ && window.location.pathname) || '/' }, pathname: '/signin' }}>
       Sign in
     </Link>
@@ -33,7 +33,7 @@ const NavLeftPort = () => {
 
   return (
     <WebConfig.Consumer>
-      {({ siteName }) => (
+      {({ general: { siteName } }) => (
         <div className="_-nav__left-menu">
           <Link to="/" className="navbar-brand mb-0 h1">
             {siteName}

@@ -47,7 +47,7 @@ class App extends Component {
                   render={(receivedProps) => {
                     // google analytics
                     if (__isBrowser__ && 'gtag' in window) {
-                      gtag('config', process.env.GTAG_ID, {
+                      gtag('config', webConfig.services.googleAnalytics, {
                         page_path: receivedProps.location.pathname,
                       });
                     }
