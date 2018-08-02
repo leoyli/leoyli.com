@@ -86,17 +86,18 @@ const googleAnalytics = (trackingId) => {
 
 
 // template
-const template = ({ config, data, body } = {}) => (`
+const template = ({ config, data, body, styleTags } = {}) => (`
   <!DOCTYPE html>
   <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>${config.general.siteName}</title>
-    ${reactClientSide(config, data)}
-    ${contentDeliverNetworks()}
-    ${metaTags(data && data.post, config)}
     ${googleAnalytics(config.services.googleAnalytics)}
+    ${reactClientSide(config, data)}
+    ${metaTags(data && data.post, config)}
+    ${contentDeliverNetworks()}
+    ${styleTags}
   </head>
   <body>
     <div id="root">${body}</div>

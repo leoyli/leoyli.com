@@ -40,8 +40,9 @@ const browserConfig = (env = {}) => {
           options: {
             presets: ['env', 'react'],
             plugins: [
-              'babel-plugin-transform-class-properties',
-              'babel-plugin-transform-object-rest-spread',
+              ['babel-plugin-styled-components', { ssr: true }],
+              ['babel-plugin-transform-class-properties'],
+              ['babel-plugin-transform-object-rest-spread'],
             ],
           },
         }],
@@ -76,9 +77,10 @@ const serverConfig = (env = {}) => ({
         options: {
           presets: ['react'],
           plugins: [
-            'babel-plugin-transform-class-properties',
-            'babel-plugin-transform-object-rest-spread',
-            'babel-plugin-transform-es2015-modules-commonjs',
+            ['babel-plugin-styled-components', { ssr: true }],
+            ['babel-plugin-transform-class-properties'],
+            ['babel-plugin-transform-object-rest-spread'],
+            ['babel-plugin-transform-es2015-modules-commonjs'],
           ],
         },
       }],
