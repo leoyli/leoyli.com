@@ -1,12 +1,9 @@
 import qs from 'qs';
+import styled from 'styled-components';
 import React from 'react';
 import { withRouter } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-
-// style
-import $style from './style.scss';
 
 
 // namespaces
@@ -18,6 +15,40 @@ const NAMESPACE = {
     icon: '_-pagination__icon',
   },
 };
+
+
+// style
+const StyledNav = styled.nav`
+  & ._-pagination {
+    background: whitesmoke;
+    border-radius: 0.3em;
+    color: dimgray;
+    display: inline-flex;
+    flex-direction: column;
+    height: 2em;
+    justify-content: center;
+    margin: 0.2em;
+    text-align: center;
+    transition: 250ms;
+    width: 2em;
+  
+    &:hover {
+      background: dodgerblue;
+      color: white;
+      text-decoration: none;
+    }
+  
+    &--active {
+      background: dimgray;
+      color: whitesmoke;
+    }
+  
+    &__icon {
+      color: #BBB;
+      margin: 0 .5em;
+    }
+  }
+`;
 
 
 // components
@@ -60,12 +91,13 @@ const populatePageItem = ({ now = 1, end = 0 } = {}, url = '/', search = '') => 
 };
 
 
-const Pagination = ({ meta, match, location }) => {
+// view
+const Pagination = ({ className, meta, match, location }) => {
   if (meta) {
     return (
-      <nav id="pagination" className="mt-5">
+      <StyledNav id="pagination" className={className}>
         {populatePageItem(meta, match.url, location.search)}
-      </nav>
+      </StyledNav>
     );
   }
   return null;

@@ -1,4 +1,4 @@
-const { ContentSecurityPolicy } = require('../security/index');
+const { ContentSecurityPolicy } = require('../security');
 
 
 /**
@@ -7,11 +7,13 @@ const { ContentSecurityPolicy } = require('../security/index');
 const securityHeaders = (req, res, next) => {
   const CSPConfigs = new ContentSecurityPolicy();
   // CDN networking
-  CSPConfigs.addToWhitelist('script, style', 'https://cdnjs.cloudflare.com');
-  CSPConfigs.addToWhitelist('script, style, font', 'https://stackpath.bootstrapcdn.com');
+  CSPConfigs.addToWhitelist('script, style, font', 'https://cdnjs.cloudflare.com');
+  CSPConfigs.addToWhitelist('style, font', 'https://fonts.googleapis.com');
+  CSPConfigs.addToWhitelist('font', 'https://fonts.gstatic.com');
+  CSPConfigs.addToWhitelist('font', 'data: fonts.gstatic.com');
 
   // auth0
-  CSPConfigs.addToWhitelist('connect', `https://${process.env.AUTH0_SERVER_DOMAIN}/`);
+  CSPConfigs.addToWhitelist('connect', `https://${process.env.AUTH0_SERVER_DOMAIN}`);
 
   // GitHub Gist
   CSPConfigs.addToWhitelist('script', 'https://gist.github.com');

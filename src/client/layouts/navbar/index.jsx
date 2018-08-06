@@ -1,80 +1,113 @@
 /* global __isBrowser__ */
 
-import React from 'react';
+import styled from 'styled-components';
+import React, { Fragment } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import { Button, Container, Menu, Responsive } from 'semantic-ui-react';
 
 
 // modules
 import { AuthState, WebConfig } from '../../utilities/contexts';
 import Sticky from '../../utilities/sticky';
-import SearchBar from '../searchbar';
-import UserMenu from '../usermenu';
-import $style from './style.scss';
+import SearchBar from './search-bar';
+import UserMenu from './user-menu';
+
+
+// style
+const StyledNavBar = styled.nav`
+  background: #232a3d;
+  color: white;
+  padding-bottom: .5rem;
+  width: 100vw !important;
+  
+  & .secondary.menu.container > .right.item {
+    height: 3.5rem;
+  }
+  
+  & .header.item {
+    font-size: 1.3rem;
+    font-weight: 600 !important;
+    margin-right: 2rem !important;
+    padding: .75rem !important;
+  }
+  
+  & .responsive.mobile {
+    display: inherit;
+  }
+
+  & .disabled.item + .divider {
+    margin-top: 0;
+  }
+
+  & #sign-in-button {
+    font-weight: 500;
+    top: .3rem;
+  }
+`;
 
 
 // components
-const SignInButton = () => (
-  <button type="button" className="btn mx-2 _-button--signin">
-    <Link to={{ state: { returnTo: (__isBrowser__ && window.location.pathname) || '/' }, pathname: '/signin' }}>
-      Sign in
-    </Link>
-  </button>
+const NavSignInButton = () => (
+  <Button
+    inverted
+    compact
+    floated="right"
+    id="sign-in-button"
+    content="SIGN IN"
+    as={Link}
+    to={{ state: { returnTo: (__isBrowser__ && window.location.pathname) || '/' }, pathname: '/signin' }}
+  />
 );
 
-const NavLeftPort = () => {
-  const navLinkSharedProps = {
-    className: '_-nav__link d-none d-sm-inline',
-    activeClassName: '_-nav__link--active',
-  };
-  const isOnBlog = (match, location) => {
-    return location.pathname.includes('/blog')
-      && !['/blog/about', '/blog/cv'].includes(location.pathname.toLowerCase());
-  };
-
-  return (
-    <WebConfig.Consumer>
-      {({ general: { siteName } }) => (
-        <div className="_-nav__left-menu">
-          <Link to="/" className="navbar-brand mb-0 h1">
-            {siteName}
-          </Link>
-          <NavLink {...navLinkSharedProps} exact to="/blog/about">
-            About
-          </NavLink>
-          <NavLink {...navLinkSharedProps} exact to="/blog/CV">
-            CV
-          </NavLink>
-          <NavLink {...navLinkSharedProps} isActive={isOnBlog} to="/blog">
-            Blog
-          </NavLink>
-        </div>
-      )}
-    </WebConfig.Consumer>
-  );
-};
-
-const NavRightPort = () => (
+const NavMenuRight = () => (
   <AuthState.Consumer>
     {({ isSignedIn }) => (
-      <div className="_-nav__right-menu">
+      <Menu.Item position="right">
         <SearchBar />
-        {(isSignedIn) ? (<UserMenu />) : (<SignInButton />)}
-      </div>
+        {isSignedIn ? (<UserMenu />) : (<NavSignInButton />)}
+      </Menu.Item>
     )}
   </AuthState.Consumer>
 );
 
-const Navbar = () => (
+const NavMenuLeft = () => (
+  <WebConfig.Consumer>
+    {({ general: { siteName } }) => (
+      <Menu.Menu position="left">
+        <Fragment>
+          <Menu.Item header content={siteName} as={Link} to="/" />
+          <Responsive minWidth={768} className="responsive mobile">
+            <Menu.Item content="ABOUT" as={NavLink} exact to="/blog/about" />
+            <Menu.Item content="CV" as={NavLink} exact to="/blog/CV" />
+            <Menu.Item
+              content="BLOG"
+              as={NavLink}
+              to="/blog"
+              isActive={(match, location) => {
+                return location.pathname.includes('/blog')
+                  && !['/blog/about', '/blog/cv'].includes(location.pathname.toLowerCase());
+              }}
+            />
+          </Responsive>
+        </Fragment>
+      </Menu.Menu>
+    )}
+  </WebConfig.Consumer>
+);
+
+
+// view
+const NavBar = () => (
   <Sticky>
-    <nav className="navbar navbar-expand-lg _-nav">
-      <div className="container">
-        <NavLeftPort />
-        <NavRightPort />
-      </div>
-    </nav>
+    <StyledNavBar>
+      <Menu inverted secondary pointing as={Container}>
+        <NavMenuLeft />
+        <NavMenuRight />
+      </Menu>
+    </StyledNavBar>
   </Sticky>
 );
 
 
 // exports
-export default Navbar;
+export default NavBar;

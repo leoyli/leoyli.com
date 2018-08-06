@@ -63,8 +63,12 @@ class Sticky extends Component {
   };
 
   componentDidMount = () => {
-    this._setStateFromReducer(0);
-    this.eventList.forEach(event => window.addEventListener(event, this._dispatchByDepth));
+    const trigger = () => {
+      this._setStateFromReducer(0);
+      this.eventList.forEach(event => window.addEventListener(event, this._dispatchByDepth));
+    };
+    if (document.readyState === 'complete') return trigger();
+    window.addEventListener('load', trigger);
   };
 
   componentWillUnmount = () => {

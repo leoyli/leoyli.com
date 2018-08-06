@@ -1,19 +1,21 @@
 import styled from 'styled-components';
 import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router';
+import { Container } from 'semantic-ui-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 // modules
-import Toggle from '../utilities/toggle/index';
+import Toggle from '../../utilities/toggle';
 
 
 // style
 const StyledSearchBarContainer = styled.div`
   display: inline;
   float: unset;
+  margin-right: 1.5rem;
   position: relative;
-  top: .25em;
+  top: .35em;
   z-index: 1098;
   
   & svg {
@@ -31,6 +33,10 @@ const StyledSearchFormContainer = styled.div`
   top: 0; left: 0;
   width: 100%;
   z-index: 1100;
+  
+  & form {
+    padding: .5rem 0;
+  }
   
   & input {
     background: none;
@@ -63,14 +69,14 @@ const SearchBarView = ({ onSubmit }) => (
     {({ controller, monitored, isHidden }) => {
       return (
         <StyledSearchBarContainer>
-          <FontAwesomeIcon icon="search" onClick={controller} className="mr-2" />
+          <FontAwesomeIcon icon="search" onClick={controller} />
           <StyledSearchFormContainer isHidden={isHidden} innerRef={monitored}>
-            <form autoComplete="off" onSubmit={onSubmit} className="container">
+            <Container as="form" autoComplete="off" onSubmit={onSubmit}>
               <input name="search" aria-label="search" placeholder="Search keywords" />
               <button type="submit">
                 <FontAwesomeIcon icon="sign-in-alt" />
               </button>
-            </form>
+            </Container>
           </StyledSearchFormContainer>
         </StyledSearchBarContainer>
       );

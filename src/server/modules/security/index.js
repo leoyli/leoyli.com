@@ -16,7 +16,7 @@ class ContentSecurityPolicy {
     const RuleMaps  = {
       'connect-src': `'self' ${this.getTrustedDomains('connect')}`,
       'default-src': '\'self\'',
-      'font-src': `${this.getTrustedDomains('font')}`,
+      'font-src': `'self' ${this.getTrustedDomains('font')}`,
       'frame-src': '\'none\'',
       'img-src': '*',
       'object-src': '\'none\'',

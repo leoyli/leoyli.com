@@ -1,92 +1,135 @@
 import moment from 'moment';
-import classNames from 'classnames';
-import React, { Component } from 'react';
+import styled from 'styled-components';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { Grid, Icon, Label } from 'semantic-ui-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 // modules
-import { APIRequest } from '../../utilities/fetch';
 import { AuthState } from '../../utilities/contexts';
-import $style from './style.scss';
+import ConfirmModal from './confirm-modal';
+
+
+// style
+const StyledHeaderPostEditMenu = styled.span`
+  @media only screen and (min-width: 768px) {
+    display: inline-block;
+    float: right;
+  }
+  display: none;
+  
+  & button {
+    background: none;
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  & svg {
+    background: whitesmoke;
+    border-radius: .2em;
+    color: #333;
+    cursor: pointer;
+    font-size: 2em;
+    margin-top: .75rem;
+    margin-right: .5rem;
+    opacity: .9;
+    padding: .2em;
+    transition: .25s;
+    &:hover {
+      color: whitesmoke;
+      background: dimgray;
+
+      &[data-icon="eraser"] {
+        background: tomato;
+      }
+
+      &[data-icon="pencil-alt"] {
+        background: dodgerblue;
+      }
+    }
+  }
+`;
+
+const StyledHeader = styled.header`
+  background: #232a3d no-repeat center ${({ featured = '' }) => `url('${featured}')`};
+  background-size: cover;
+  margin-top: 1rem;
+  padding-bottom: 2rem;
+  position: relative;
+  z-index: 1090;
+  
+  & h1 {
+    font-size: 2.5rem;
+    text-shadow: 3px 3px rgba(0, 0, 0, .25);
+  }
+  
+  & .grid.container {
+    height: ${({ featured }) => (featured ? '22.5rem' : '15rem')};
+    &.inverted {
+      color: white;
+    }
+  }
+`;
 
 
 // components
-class EditOptions extends Component {
-  _handleOnClickButton = (e) => {
-    const hint = 'Are you sure you want to trash this article?\n(Note: You may recover it later from the trash bin.)';
-    if (window.confirm(hint)) {
-      const { history, post } = this.props;
-      return APIRequest('/blog/:key')({ path: `/blog/${post._id}`, method: 'DELETE' })
-        .then(({ result = {} }) => {
-          if (result.ok) history.replace('/blog');
-        });
-    }
-  };
+const HeaderPostEditItem = {
+  Edit: (props) => (<FontAwesomeIcon {...props} icon="pencil-alt" />),
+  Erase: (props) => (<FontAwesomeIcon {...props} icon="eraser" />),
+};
 
-  render = () => {
-    const { post } = this.props;
-    return (
-      <div className="align-self-end text-right _-header__edit">
-        <Link to={{ pathname: `/blog/${post._id}/edit`, state: { post } }}>
-          <FontAwesomeIcon icon="pencil-alt" />
-        </Link>
-        <button type="button" className="_-header__edit__button" onClick={this._handleOnClickButton}>
-          <FontAwesomeIcon icon="eraser" />
-        </button>
-      </div>
-    );
-  };
-}
 
-const MetaBox = ({ post: { author, category, tags, time }, post, history }) => (
+// view
+// // general -> isPost -> isSignedIn
+const HeaderPostEditMenu = ({ post, history }) => (
   <AuthState.Consumer>
-    {({ isSignedIn }) => (
-      <div className="d-flex justify-content-between mb-3">
-        <div className="d-sm-flex flex-row-reverse mb-4 mb-sm-2 _-header__meta">
-          <div className="ml-sm-2">
-            <span>
-              {`By ${author.nickname}`}
-            </span>
-            <time dateTime={time._created}>
-              &nbsp;@&nbsp;
-              {moment(time._created).format('MM/DD/YYYY')}
-            </time>
-          </div>
-          <div className="d-sm-inline-block ml-sm-0 ml-1">
-            <span className="badge badge-pill badge-warning text-capitalize">
-              {category}
-            </span>
-          </div>
-        </div>
-        {isSignedIn && <EditOptions post={post} history={history} />}
-      </div>
+    {({ isSignedIn }) => isSignedIn && (
+      <StyledHeaderPostEditMenu className="manage">
+        <Link to={{ pathname: `/blog/${post._id}/edit`, state: { post } }}>
+          <HeaderPostEditItem.Edit />
+        </Link>
+        <ConfirmModal trigger={HeaderPostEditItem.Erase} post={post} history={history} />
+      </StyledHeaderPostEditMenu>
     )}
   </AuthState.Consumer>
 );
 
-const Header = ({ title, subtitle, featured, post, history }) => {
-  const style = featured ? { backgroundImage: `url('${featured}')` } : {};
-  const className = classNames({
-    'd-flex mb-4 _-header': true,
-    '_-header--with-overlay': !!featured,
-  });
-  return (
-    <header className={className} style={style}>
-      <div className="container align-self-end">
-        <h2>
+// // general -> isPost
+const HeaderPostMeta = ({ post: { author, category, tags, time }, post, history }) => (
+  <Grid.Row column={2}>
+    <Grid.Column width={10}>
+      <Label size="large" color="grey" image>
+        <img src="/static/media/icon.png" alt={author.nickname} />
+        {author.nickname}
+      </Label>
+      <Label size="large" color="blue" image>
+        <Icon name="book" />
+        {category.toUpperCase()}
+        <Label.Detail as="time" dateTime={time._created}>
+          {`@ ${moment(time._created).format('MM/DD, YY')}`}
+        </Label.Detail>
+      </Label>
+      <HeaderPostEditMenu post={post} history={history} />
+    </Grid.Column>
+  </Grid.Row>
+);
+
+// // general
+const Header = ({ inverted = true, title, subtitle, featured, post, history }) => (
+  <StyledHeader featured={featured}>
+    <Grid inverted={inverted} container>
+      <Grid.Column width={16} verticalAlign="bottom">
+        <h1>
           {title}
           {subtitle && ` - ${subtitle}`}
-        </h2>
-        {post ? (<MetaBox post={post} history={history} />) : (
-          <div>
-            &nbsp;
-          </div>
-        )}
-      </div>
-    </header>
-  );
-};
+        </h1>
+        {post && (<HeaderPostMeta post={post} history={history} />)}
+      </Grid.Column>
+    </Grid>
+  </StyledHeader>
+);
 
 
 // exports

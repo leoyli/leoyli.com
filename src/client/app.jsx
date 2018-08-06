@@ -9,11 +9,14 @@ import { Redirect } from 'react-router';
 import { isClientSignedIn } from './utilities/auth';
 import { AuthState, WebConfig } from './utilities/contexts';
 import { routers } from './router.config';
-import Navbar from './layouts/navbar';
+import NavBar from './layouts/navbar';
 import Footer from './layouts/footer';
 import Unfounded from './routers/unfounded';
-import fontawesome from './utilities/fontawesome';
-import style from './styles/styles.scss';
+
+
+// standalone
+import './utilities/fontawesome';
+import './styles/styles.scss';
 
 
 // components
@@ -36,7 +39,7 @@ class App extends Component {
     return (
       <WebConfig.Provider value={webConfigValue}>
         <AuthState.Provider value={authStateValue}>
-          <Navbar />
+          <NavBar />
           <main className="container _-body">
             <Switch>
               {routers.map(({ path, exact, secure, component: C, ...rest }) => (

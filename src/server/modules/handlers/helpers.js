@@ -1,4 +1,4 @@
-const { _U_ } = require('../../utilities/index');
+const { _U_ } = require('../../utilities');
 
 
 /**
