@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 
-// vies
+// modules
 import { APIRequest } from '../../../utilities/fetch';
 import { WebConfig } from '../../../utilities/contexts';
 import Header from '../../../layouts/header';
-import SettingsView from './view';
+import SettingsForm from './form';
 
 
-// components
+// container
 class Settings extends Component {
   state = { isSubmittable: true };
 
@@ -29,19 +29,20 @@ class Settings extends Component {
     const { isSubmittable } = this.state;
     const { config } = this.props;
     return (
-      <div className="_-settings">
+      <Fragment>
         <Header title="Website Settings" />
-        <SettingsView
+        <SettingsForm
           onSubmit={this._handleOnSubmitUpdatedSettings}
           isSubmittable={isSubmittable}
           {...config}
         />
-      </div>
+      </Fragment>
     );
   }
 }
 
 
+// Decorator (HOC)
 const SettingWithWebConfigContext = (props) => (
   <WebConfig.Consumer>
     {({ update, ...config }) => (

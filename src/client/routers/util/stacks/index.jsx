@@ -1,20 +1,45 @@
 import React, { Component } from 'react';
 
 
-// vies
+// modules
 import Fetch from '../../../utilities/fetch';
-import Pagination from '../../../utilities/pagination';
 import Header from '../../../layouts/header';
-import StacksView from './view';
+import StacksForm from './form';
 
 
-// components
+// component
+const StackDataFetchLayer = ({ location, fetchPath, initialData, checked, command, event: eRaw }) => (
+  <Fetch fetchPath={fetchPath} initialData={initialData}>
+    {({ list, meta }, { isSubmittable, onSubmit }) => {
+      const event = {
+        ...eRaw,
+        _onFireAction: onSubmit({ method: 'PATCH', data: { action: command, target: checked } }, eRaw._onSubmitCB),
+      };
+      return (
+        <div className="_-stacks">
+          <Header title="Content Manager" subtitle="Posts" />
+          <StacksForm
+            location={location}
+            checked={checked}
+            command={command}
+            event={event}
+            isSubmittable={isSubmittable}
+            list={list}
+            meta={meta}
+          />
+        </div>
+      );
+    }}
+  </Fetch>
+);
+
+
+// container
 class Stacks extends Component {
   state = { command: 'null', checked: [] };
 
-  _onSelectCommand = (e) => {
-    const checkedValue = e.target.value;
-    this.setState(() => ({ command: checkedValue }));
+  _onSelectCommand = (e, { value }) => {
+    this.setState(() => ({ command: value }));
   };
 
   _onCheckItem = (e) => {
@@ -44,30 +69,9 @@ class Stacks extends Component {
   };
 
   render = () => {
-    const { checked, command } = this.state;
-    const { fetchPath, location, initialData } = this.props;
-    return (
-      <Fetch fetchPath={fetchPath} initialData={initialData}>
-        {({ list, meta }, { isSubmittable, onSubmit }) => {
-          const { _onSelectCommand, _onCheckAllItems, _onCheckItem, _onSubmitCB } = this;
-          const _onFireAction = onSubmit({ method: 'PATCH', data: { action: command, target: checked } }, _onSubmitCB);
-          const event = { _onSelectCommand, _onCheckAllItems, _onCheckItem, _onFireAction };
-          return (
-            <div className="_-stacks">
-              <Header title="Content Manager" subtitle="Posts" />
-              <StacksView
-                list={list}
-                location={location}
-                checked={checked}
-                command={command}
-                event={event}
-                isSubmittable={isSubmittable}
-              />
-              <Pagination meta={meta} />
-            </div>
-          );
-        }}
-      </Fetch>
+    const { _onSelectCommand, _onCheckItem, _onCheckAllItems, _onSubmitCB } = this;
+    const event = { _onSelectCommand, _onCheckItem, _onCheckAllItems, _onSubmitCB };
+    return (<StackDataFetchLayer event={event} {...this.props} {...this.state} />
     );
   };
 }

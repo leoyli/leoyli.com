@@ -4,7 +4,7 @@ import React, { Component, Fragment } from 'react';
 // modules
 import Fetch from '../../../utilities/fetch';
 import Header from '../../../layouts/header';
-import EditorView from './view';
+import EditorPanel from './editor-panel';
 
 
 // components
@@ -28,7 +28,7 @@ class Editor extends Component {
         {({ post = {} }, { isSubmittable, onSubmit }) => (
           <Fragment>
             <Header title="Post Editor" />
-            <EditorView
+            <EditorPanel
               post={post}
               isSubmittable={isSubmittable}
               onSubmit={onSubmit({
