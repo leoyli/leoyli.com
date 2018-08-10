@@ -7,7 +7,7 @@ import { Grid } from 'semantic-ui-react';
 import Section from './section';
 
 
-// component
+// components
 const Developer = ({ content = [] }) => {
   return content.map((article) => (
     <Grid.Column key={article.featured}>

@@ -12,7 +12,7 @@ import { Button, Container, Checkbox, Dropdown, Form, Header, Image, Table } fro
 import Pagination from '../../../utilities/pagination';
 
 
-// style
+// styles
 const StyledForm = styled(Form)`
   margin-top: 2rem;
 `;

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button, Grid, Icon } from 'semantic-ui-react';
 
 
-// style
+// styles
 const StyledIntroContainer = styled.div`
   background: linear-gradient(90deg, #7db00e 65%, #232a3d 35%);
   color: white;
@@ -75,7 +75,7 @@ const StyledIntroContainer = styled.div`
 `;
 
 
-// components
+// view
 const Intro = () => (
   <StyledIntroContainer as="section">
     <Grid container columns="equal">
@@ -95,7 +95,6 @@ const Intro = () => (
           <Icon name="right arrow" />
         </Button>
       </Grid.Column>
-
       <Grid.Column only="computer" width={2} />
       <Grid.Column stretched only="computer" width={6} textAlign="right">
         <span>

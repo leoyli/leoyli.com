@@ -10,6 +10,37 @@ import { Container, Grid } from 'semantic-ui-react';
 import { WebConfig } from '../../utilities/contexts';
 
 
+// data
+const licence = 'Except as otherwise noted, the content of this site is licensed '
+  + 'under the [CC BY-SA 4.0 Licence](https://creativecommons.org/licenses/by-sa/4.'
+  + '0/), and code samples are licensed under the [MIT License](https://github.com/'
+  + 'leoyli/leoyli.com/blob/master/LICENSE).';
+
+const socialLinks = [
+  {
+    key: 'GitHub',
+    title: 'GitHub',
+    color: '#333333',
+    icon: ['fab', 'github'],
+    href: 'https://github.com/leoyli',
+  },
+  {
+    key: 'LinkedIn',
+    title: 'LinkedIn',
+    color: '#0077B5',
+    icon: ['fab', 'linkedin'],
+    href: 'https://www.linkedin.com/in/leoyli',
+  },
+  {
+    key: 'Facebook',
+    title: 'Facebook',
+    color: '#3B5998',
+    icon: ['fab', 'facebook-square'],
+    href: 'https://www.facebook.com/leo.yuxiu.li',
+  },
+];
+
+
 // styles
 const StyledFooterContainer = styled.footer`
   background: rgba(245, 245, 245, 0.95);
@@ -68,37 +99,6 @@ const StyledAnchor = styled.a`
 `;
 
 
-// data
-const licence = 'Except as otherwise noted, the content of this site is licensed '
-  + 'under the [CC BY-SA 4.0 Licence](https://creativecommons.org/licenses/by-sa/4.'
-  + '0/), and code samples are licensed under the [MIT License](https://github.com/'
-  + 'leoyli/leoyli.com/blob/master/LICENSE).';
-
-const socialLinks = [
-  {
-    key: 'GitHub',
-    title: 'GitHub',
-    color: '#333333',
-    icon: ['fab', 'github'],
-    href: 'https://github.com/leoyli',
-  },
-  {
-    key: 'LinkedIn',
-    title: 'LinkedIn',
-    color: '#0077B5',
-    icon: ['fab', 'linkedin'],
-    href: 'https://www.linkedin.com/in/leoyli',
-  },
-  {
-    key: 'Facebook',
-    title: 'Facebook',
-    color: '#3B5998',
-    icon: ['fab', 'facebook-square'],
-    href: 'https://www.facebook.com/leo.yuxiu.li',
-  },
-];
-
-
 // component
 const IconLink = ({ color = '#333', hover = 'white', icon, ...rest }) => (
   <StyledAnchor color={color} hover={hover} {...rest}>
@@ -123,7 +123,6 @@ const Footer = () => (
           <Grid.Column id="social-connect" computer={4} tablet={4} mobile={16}>
             {socialLinks.map(props => (<IconLink {...props} />))}
           </Grid.Column>
-
           <Grid.Row columns={1}>
             <Grid.Column id="declaration">
               <Markdown>

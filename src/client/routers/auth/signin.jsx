@@ -38,10 +38,11 @@ class SignIn extends Component {
 
 const SignInWithAuthStateContext = (props) => (
   <AuthState.Consumer>
-    {({ isSignedIn, update }) => {
-      if (isSignedIn && isClientSignedIn()) return (<Redirect to="/" />);
-      return <SignIn updateAuthState={update} {...props} />;
-    }}
+    {({ isSignedIn, update }) => (
+      (isSignedIn && isClientSignedIn())
+        ? (<Redirect to="/" />)
+        : (<SignIn updateAuthState={update} {...props} />)
+    )}
   </AuthState.Consumer>
 );
 

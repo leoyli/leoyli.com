@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 import { Button, Container, Form, Header } from 'semantic-ui-react';
 
 
-// style
+// styles
 const StyledSettingsForm = styled(Form)`
   margin-top: 2rem;
 `;

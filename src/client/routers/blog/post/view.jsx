@@ -41,7 +41,7 @@ const configs = {
       );
     },
     table: ({ children, ...props }) => (
-      <Table {...props} cpmpact celled selectable>
+      <Table {...props} compact celled selectable>
         {children}
       </Table>
     ),
@@ -64,7 +64,7 @@ const configs = {
 };
 
 
-// components
+// styles
 const Article = styled.article`
   overflow: hidden;
   padding: 2rem 7.5rem !important;
@@ -97,6 +97,8 @@ const Article = styled.article`
   }
 `;
 
+
+// view
 const PostView = ({ post = {} }) => (
   <Container>
     <Segment basic as={Article} id={post._id}>

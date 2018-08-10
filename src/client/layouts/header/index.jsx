@@ -11,7 +11,7 @@ import { AuthState } from '../../utilities/contexts';
 import ConfirmModal from './confirm-modal';
 
 
-// style
+// styles
 const StyledHeaderPostEditMenu = styled.span`
   @media only screen and (min-width: 768px) {
     display: inline-block;

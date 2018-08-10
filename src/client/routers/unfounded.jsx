@@ -1,16 +1,16 @@
 import React from 'react';
-
+import { Container } from 'semantic-ui-react';
 
 // components
 const Unfounded = () => (
-  <div className="text-center my-5 py-5 text-muted">
-    <h1 className="display-2 mt-5 pt-5">
+  <Container>
+    <h1>
       404
     </h1>
-    <p className="text-capitalize">
+    <p>
       The resources requested was not found...
     </p>
-  </div>
+  </Container>
 );
 
 

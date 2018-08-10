@@ -92,16 +92,15 @@ const populatePageItem = ({ now = 1, end = 0 } = {}, url = '/', search = '') => 
 
 
 // view
-const Pagination = ({ className, meta, match, location }) => {
-  if (meta) {
-    return (
+const Pagination = ({ className, meta, match, location }) => (
+  meta
+    ? (
       <StyledNav id="pagination" className={className}>
         {populatePageItem(meta, match.url, location.search)}
       </StyledNav>
-    );
-  }
-  return null;
-};
+    )
+    : null
+);
 
 
 // exports

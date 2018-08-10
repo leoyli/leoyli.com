@@ -6,7 +6,7 @@ import { Grid } from 'semantic-ui-react';
 import Section from './section';
 
 
-// component
+// components
 const Marketer = () => (
   <Grid.Column>
     &nbsp;

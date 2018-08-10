@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Toggle from '../../utilities/toggle';
 
 
-// style
+// styles
 const StyledSearchBarContainer = styled.div`
   display: inline;
   float: unset;
@@ -66,21 +66,19 @@ const StyledSearchFormContainer = styled.div`
 // view
 const SearchBarView = ({ onSubmit }) => (
   <Toggle>
-    {({ controller, monitored, isHidden }) => {
-      return (
-        <StyledSearchBarContainer>
-          <FontAwesomeIcon icon="search" onClick={controller} />
-          <StyledSearchFormContainer isHidden={isHidden} innerRef={monitored}>
-            <Container as="form" autoComplete="off" onSubmit={onSubmit}>
-              <input name="search" aria-label="search" placeholder="Search keywords" />
-              <button type="submit">
-                <FontAwesomeIcon icon="sign-in-alt" />
-              </button>
-            </Container>
-          </StyledSearchFormContainer>
-        </StyledSearchBarContainer>
-      );
-    }}
+    {({ controller, monitored, isHidden }) => (
+      <StyledSearchBarContainer>
+        <FontAwesomeIcon icon="search" onClick={controller} />
+        <StyledSearchFormContainer isHidden={isHidden} innerRef={monitored}>
+          <Container as="form" autoComplete="off" onSubmit={onSubmit}>
+            <input name="search" aria-label="search" placeholder="Search keywords" />
+            <button type="submit">
+              <FontAwesomeIcon icon="sign-in-alt" />
+            </button>
+          </Container>
+        </StyledSearchFormContainer>
+      </StyledSearchBarContainer>
+    )}
   </Toggle>
 );
 
@@ -95,7 +93,9 @@ class SearchBar extends PureComponent {
     }
   };
 
-  render = () => (<SearchBarView onSubmit={this._handleOnSubmitSearchQuery} />);
+  render = () => (
+    <SearchBarView onSubmit={this._handleOnSubmitSearchQuery} />
+  );
 }
 
 

@@ -4,7 +4,7 @@ import { Button, Icon, Segment } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 
-// style
+// styles
 const StyledSectionContainer = styled.h1`
   h1 {
     font-size: 3rem;
@@ -27,7 +27,7 @@ const StyledSectionContainer = styled.h1`
 `;
 
 
-// components
+// view
 const Close = () => (
   <Segment basic size="huge" padded="very" textAlign="center" as={StyledSectionContainer}>
     <h1>

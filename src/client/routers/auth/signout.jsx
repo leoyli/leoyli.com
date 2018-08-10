@@ -14,8 +14,9 @@ class SignOut extends Component {
 
   render = () => {
     const { isSignedIn } = this.state;
-    if (isSignedIn) return null;
-    return (<Redirect to="/" />);
+    return isSignedIn
+      ? null
+      : (<Redirect to="/" />);
   };
 }
 

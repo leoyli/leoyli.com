@@ -56,9 +56,11 @@ class App extends Component {
                     }
 
                     // router screaming
-                    return (secure && !isSignedIn
-                      ? (<Redirect to="/signin" />)
-                      : (<C {...appProps} {...receivedProps} {...rest} />));
+                    return (
+                      (secure && !isSignedIn)
+                        ? (<Redirect to="/signin" />)
+                        : (<C {...appProps} {...receivedProps} {...rest} />)
+                    );
                   }}
                 />
               ))}

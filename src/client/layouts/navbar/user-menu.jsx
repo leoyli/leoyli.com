@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Dropdown, Image } from 'semantic-ui-react';
 
 
-// style
+// styles
 const StyledUserMenu = styled.div`
   & .dropdown.icon {
     margin-left: 0 !important;
@@ -17,7 +17,7 @@ const StyledUserMenu = styled.div`
 `;
 
 
-// data
+// components
 // eslint-disable-next-line react/jsx-one-expression-per-line
 const greet = (<span>Welcome&nbsp;<strong>Leo</strong></span>);
 const trigger = (<Image avatar src="/static/media/icon.png" />);

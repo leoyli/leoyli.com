@@ -75,21 +75,28 @@ class Sticky extends Component {
     this.eventList.forEach(event => window.removeEventListener(event, this._dispatchByDepth));
   };
 
+  shouldComponentUpdate = (nextProps, nextState) => {
+    const { initialized: prevInitialized, styledProp: prevStyledProp } = this.state;
+    const { initialized: nextInitialized, styledProp: nextStyledProp } = nextState;
+    if (prevStyledProp._active !== nextStyledProp._active) return true;
+    if (prevStyledProp._stuck !== nextStyledProp._stuck) return true;
+    if (prevInitialized !== nextInitialized) return true;
+  };
+
   render = () => {
     const { styledProp, initialized } = this.state;
     const { children, className } = this.props;
-    if (!initialized) {
-      return (
+    return initialized
+      ? (
+        <StyledStickyBox innerRef={this.stickyBox} className={className} {...styledProp}>
+          {children}
+        </StyledStickyBox>
+      )
+      : (
         <div ref={this.stickyBox} className={className}>
           {children}
         </div>
       );
-    }
-    return (
-      <StyledStickyBox innerRef={this.stickyBox} className={className} {...styledProp}>
-        {children}
-      </StyledStickyBox>
-    );
   }
 }
 

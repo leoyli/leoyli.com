@@ -4,7 +4,7 @@ import React from 'react';
 import { Button, Container, Form } from 'semantic-ui-react';
 
 
-// style
+// styles
 const StyledForm = styled(Form)`
   margin-top: 2rem;
 `;

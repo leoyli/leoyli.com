@@ -1,10 +1,12 @@
+/* eslint-disable react/jsx-one-expression-per-line */
+
 import styled from 'styled-components';
 import React from 'react';
 import { Grid } from 'semantic-ui-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
-// style
+// styles
 const StyledSectionContainer = styled.section`
   background: linear-gradient(
     90deg,
@@ -81,9 +83,7 @@ const SectionHeader = ({ sup, main, sub }) => (
 
 const SkillIcon = ({ icon, name }) => (
   icon
-    // eslint-disable-next-line react/jsx-one-expression-per-line
     ? (<span><FontAwesomeIcon icon={['fab', name]} /></span>)
-    // eslint-disable-next-line react/jsx-one-expression-per-line
     : (<span>{name}</span>)
 );
 

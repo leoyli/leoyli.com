@@ -11,7 +11,7 @@ import Pagination from '../../../utilities/pagination';
 import Header from '../../../layouts/header';
 
 
-// style
+// styles
 const StyledArticle = styled.article`
   & section {
     background: #232a3d no-repeat center ${({ featured = '' }) => `url('${featured}')`};
@@ -79,7 +79,7 @@ const PostTile = ({ post: { _id, author, featured, canonical, category, state, t
 const ListView = ({ meta, list }) => (
   <Grid doubling stackable container columns={3}>
     <Grid.Row>
-      {list.length && list.map(post => (<PostTile key={post._id} post={post} />))}
+      {!!list.length && list.map(post => (<PostTile key={post._id} post={post} />))}
     </Grid.Row>
     <Grid.Row columns={1}>
       {meta && <Segment basic padded as={Pagination} meta={meta} />}

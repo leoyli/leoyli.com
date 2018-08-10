@@ -8,7 +8,7 @@ import { Grid } from 'semantic-ui-react';
 import Section from './section';
 
 
-// style
+// styles
 const StyledAside = styled.aside`
   text-align: right;
   @media only screen and (max-width: 576px) {
@@ -26,14 +26,16 @@ const StyledAside = styled.aside`
 `;
 
 
-// component
+// components
 const Designer = ({ content = [] }) => (
   <Fragment>
     <Grid.Column width={1} />
     <Grid.Column as={StyledAside}>
       {content.map(poster => (
         !poster
-          ? (<br key={Date.now} />)
+          ? (
+            <br key={Date.now} />
+          )
           : (
             <Link to="/blog/artworks-posters">
               <img src={`/static/media/posters/${poster}.jpg`} alt={`Artworks @${poster}`} />

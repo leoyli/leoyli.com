@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Button, Header, Icon, Modal } from 'semantic-ui-react';
 
 
@@ -33,7 +33,7 @@ const PostModalDeleteView = ({ open, trigger, eToggle, eDelete }) => (
 
 
 // control
-class ConfirmModal extends Component {
+class ConfirmModal extends PureComponent {
   state = { open: false };
 
   _handleOnClickToggle = () => {

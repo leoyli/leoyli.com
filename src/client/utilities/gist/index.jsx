@@ -78,18 +78,19 @@ class Gist extends PureComponent {
   render = () => {
     const { _height } = this.state;
     const { className, id } = this.props;
-    if (!id) return null;
-    return (
-      <StyledIFrameContainer>
-        <StyledIframe
-          innerRef={this.iframe}
-          onLoad={this._handleOnLoadIframe}
-          className={className}
-          title="code snippet"
-          _height={_height}
-        />
-      </StyledIFrameContainer>
-    );
+    return id
+      ? (
+        <StyledIFrameContainer>
+          <StyledIframe
+            innerRef={this.iframe}
+            onLoad={this._handleOnLoadIframe}
+            className={className}
+            title="code snippet"
+            _height={_height}
+          />
+        </StyledIFrameContainer>
+      )
+      : null;
   };
 }
 

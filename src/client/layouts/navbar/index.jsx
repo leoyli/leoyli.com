@@ -3,7 +3,7 @@
 import styled from 'styled-components';
 import React, { Fragment } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { Button, Container, Menu, Responsive } from 'semantic-ui-react';
+import { Button, Container, Menu } from 'semantic-ui-react';
 
 
 // modules
@@ -13,7 +13,7 @@ import SearchBar from './search-bar';
 import UserMenu from './user-menu';
 
 
-// style
+// styles
 const StyledNavBar = styled.nav`
   background: #232a3d;
   color: white;
@@ -31,10 +31,6 @@ const StyledNavBar = styled.nav`
     padding: .75rem !important;
   }
   
-  & .responsive.mobile {
-    display: inherit;
-  }
-
   & .disabled.item + .divider {
     margin-top: 0;
   }
@@ -42,6 +38,13 @@ const StyledNavBar = styled.nav`
   & #sign-in-button {
     font-weight: 500;
     top: .3rem;
+  }
+`;
+
+const Responsive = styled.span`
+  display: none;
+  @media only screen and (min-width: ${({ minWidth }) => minWidth}px) {
+    display: inherit;
   }
 `;
 
@@ -76,17 +79,15 @@ const NavMenuLeft = () => (
       <Menu.Menu position="left">
         <Fragment>
           <Menu.Item header content={siteName} as={Link} to="/" />
-          <Responsive minWidth={768} className="responsive mobile">
+          <Responsive minWidth={768}>
             <Menu.Item content="ABOUT" as={NavLink} exact to="/blog/about" />
             <Menu.Item content="CV" as={NavLink} exact to="/blog/CV" />
             <Menu.Item
               content="BLOG"
               as={NavLink}
               to="/blog"
-              isActive={(match, location) => {
-                return location.pathname.includes('/blog')
-                  && !['/blog/about', '/blog/cv'].includes(location.pathname.toLowerCase());
-              }}
+              isActive={(match, location) => location.pathname.includes('/blog')
+                && !['/blog/about', '/blog/cv'].includes(location.pathname.toLowerCase())}
             />
           </Responsive>
         </Fragment>
