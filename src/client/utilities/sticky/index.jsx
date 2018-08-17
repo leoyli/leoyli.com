@@ -31,69 +31,74 @@ const StyledStickyBox = styled.div.attrs({
 class Sticky extends Component {
   stickyBox = React.createRef();
   eventList = ['resize', 'scroll'];
-  state = { initialized: false, styledProp: {} };
   cache = { constants: {}, dimensions: {}, breakpoints: {} };
+  state = { initialized: false, stickyProps: {} };
 
-  _setStateFromReducer = (depth) => {
-    // update cache in accordance with the given depth
+  _updateStickyPropsInDepth = (depth) => {
+    // update new cache values
     const pipeline = [calculate.dimensions, calculate.constants, calculate.breakpoints];
-    const reducer = (cache, currentFn) => currentFn(cache, this.props, this.stickyBox.current);
+    const reducer = (cache, workingFn) => workingFn(cache, this.props, this.stickyBox.current);
     this.cache = pipeline.slice(depth).reduce(reducer, this.cache);
 
-    // calculate and dispatch the new styledProps
-    const styledProp = calculate.styledProps(this.cache);
-    this.setState(() => ({ styledProp, initialized: true }));
+    // update new stickyProps
+    this.setState(() => ({
+      initialized: true,
+      stickyProps: calculate.stickyProps(this.cache),
+    }));
   };
 
-  _dispatchByDepth = (e) => {
-    const { height: cachedViewHeight, width: cachedViewWidth } = this.cache.dimensions.view;
-    const { height: currentViewHeight, width: currentViewWidth } = getDocumentDimensions();
+  _handleReCalculation = () => {
+    const { height: prevVH, width: prevVW } = this.cache.dimensions.view;
+    const { height: nextVH, width: nextVW } = getDocumentDimensions();
 
-    // dispatch an action
+    // dispatcher
     switch (true) {
-      case (cachedViewWidth !== currentViewWidth):
-        return this.setState(() => ({ initialized: false }),
-          () => this._setStateFromReducer(0));
-      case (currentViewHeight !== cachedViewHeight):
-        this.cache.dimensions.view.height = currentViewHeight;
-        return this._setStateFromReducer(1);
+      case (prevVW !== nextVW):
+        return this.setState(
+          () => ({ initialized: false }),
+          () => this._updateStickyPropsInDepth(0),
+        );
+      case (prevVH !== nextVH):
+        this.cache.dimensions.view.height = nextVH;
+        return this._updateStickyPropsInDepth(1);
       default:
-        return this._setStateFromReducer(3);
+        return this._updateStickyPropsInDepth(3);
     }
   };
 
+  _handleInitialization = () => {
+    this._updateStickyPropsInDepth(0);
+    this.eventList.forEach(event => window.addEventListener(event, this._handleReCalculation));
+  };
+
   componentDidMount = () => {
-    const trigger = () => {
-      this._setStateFromReducer(0);
-      this.eventList.forEach(event => window.addEventListener(event, this._dispatchByDepth));
-    };
-    if (document.readyState === 'complete') return trigger();
-    window.addEventListener('load', trigger);
+    if (document.readyState === 'complete') return this._handleInitialization();
+    window.addEventListener('load', this._handleInitialization, { once: true });
   };
 
   componentWillUnmount = () => {
-    this.eventList.forEach(event => window.removeEventListener(event, this._dispatchByDepth));
+    this.eventList.forEach(event => window.removeEventListener(event, this._handleReCalculation));
   };
 
   shouldComponentUpdate = (nextProps, nextState) => {
-    const { initialized: prevInitialized, styledProp: prevStyledProp } = this.state;
-    const { initialized: nextInitialized, styledProp: nextStyledProp } = nextState;
-    if (prevStyledProp._active !== nextStyledProp._active) return true;
-    if (prevStyledProp._stuck !== nextStyledProp._stuck) return true;
-    if (prevInitialized !== nextInitialized) return true;
+    const { initialized: prevInitialized, stickyProps: prevStyledProp } = this.state;
+    const { initialized: nextInitialized, stickyProps: nextStyledProp } = nextState;
+    return (prevStyledProp._active !== nextStyledProp._active)
+      || (prevStyledProp._stuck !== nextStyledProp._stuck)
+      || (prevInitialized !== nextInitialized);
   };
 
   render = () => {
-    const { styledProp, initialized } = this.state;
+    const { stickyProps, initialized } = this.state;
     const { children, className } = this.props;
     return initialized
       ? (
-        <StyledStickyBox innerRef={this.stickyBox} className={className} {...styledProp}>
+        <StyledStickyBox className={className} innerRef={this.stickyBox} {...stickyProps}>
           {children}
         </StyledStickyBox>
       )
       : (
-        <div ref={this.stickyBox} className={className}>
+        <div className={className} ref={this.stickyBox}>
           {children}
         </div>
       );

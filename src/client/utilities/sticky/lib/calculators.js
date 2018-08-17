@@ -75,7 +75,7 @@ const calculateBreakpoints = (cache, props, ref) => {
  * @param cache
  * @return {object}
  */
-const calculateStyledProps = (cache) => {
+const calculateStickyProps = (cache) => {
   const { initial, vertex, adjust, active, frozen } = cache.breakpoints;
   const { height: _height, width: _width } = cache.dimensions.box;
   const current = getScrollPosition();
@@ -99,5 +99,5 @@ module.exports = {
   constants: calculateConstants,
   dimensions: calculateDimensions,
   breakpoints: calculateBreakpoints,
-  styledProps: calculateStyledProps,
+  stickyProps: calculateStickyProps,
 };

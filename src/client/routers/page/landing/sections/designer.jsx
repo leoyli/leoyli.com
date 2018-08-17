@@ -37,7 +37,7 @@ const Designer = ({ content = [] }) => (
             <br key={Date.now} />
           )
           : (
-            <Link to="/blog/artworks-posters">
+            <Link key={poster} to="/blog/artworks-posters">
               <img src={`/static/media/posters/${poster}.jpg`} alt={`Artworks @${poster}`} />
             </Link>
           )
