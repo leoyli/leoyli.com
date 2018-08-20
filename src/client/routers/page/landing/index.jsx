@@ -30,12 +30,12 @@ const data = {
       {
         to: '/blog/the-project-cms-a-mern-stack-from-a-to-z',
         title: 'The Project CMS: A MERN Stack from A-to-Z',
-        featured: '/static/media/mern.png',
+        featured: '/static/media/features/mern.png',
       },
       {
         to: '/blog/react-js-design-a-responsive-sticky-component-from-scratch',
         title: 'ReactJS: Design A Responsive Sticky Component from Scratch',
-        featured: '/static/media/sticky.png',
+        featured: '/static/media/features/sticky.png',
       },
     ],
   },

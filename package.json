@@ -11,7 +11,7 @@
     "start": "node ./bin/www",
     "start-nodemon": "nodemon ./bin/www",
     "pack-production": "webpack --mode=production --env.production",
-    "pack-development": "webpack --mode=development -w"
+    "pack-development": "webpack --mode=development --env.development -w"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "1.2.2",

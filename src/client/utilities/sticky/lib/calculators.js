@@ -1,8 +1,7 @@
 const {
-  normalizeByScaledFactor,
-  normalizeToRelativeNatureNumber,
-  getScrollPosition,
   getDocumentDimensions,
+  normalizeByScaledFactor,
+  calcFromRefPtsInNatureNumber,
 } = require('./helpers');
 
 
@@ -32,11 +31,8 @@ const calculateConstants = (cache, props, ref) => {
   const { height: pageHeight } = cache.dimensions.view;
 
   // normalize constants
-  const TOP = normalizeByScaledFactor(top, window.innerHeight);
-  const BOTTOM = normalizeByScaledFactor(bottom, window.innerHeight);
-  const START = normalizeByScaledFactor(start, pageHeight);
-  const STOP = normalizeByScaledFactor(stop, pageHeight);
-  const DISTANCE = normalizeByScaledFactor(distance, pageHeight);
+  const [TOP, BOTTOM] = [top, bottom].map(param => normalizeByScaledFactor(param, window.innerHeight));
+  const [START, STOP, DISTANCE] = [start, stop, distance].map(param => normalizeByScaledFactor(param, pageHeight));
 
   return { ...cache, constants: { TOP, BOTTOM, START, STOP, DISTANCE } };
 };
@@ -55,16 +51,16 @@ const calculateBreakpoints = (cache, props, ref) => {
   const viewportHeight = window.innerHeight;
 
   // calculate breakpoints
-  const initial = ref.getBoundingClientRect().top + getScrollPosition();
-  const vertex = normalizeToRelativeNatureNumber(TOP)
-    || normalizeToRelativeNatureNumber(-BOTTOM, viewportHeight)
-    || (initial - normalizeToRelativeNatureNumber(START))
+  const initial = ref.getBoundingClientRect().top + window.pageYOffset;
+  const vertex = calcFromRefPtsInNatureNumber(TOP)
+    || calcFromRefPtsInNatureNumber(-BOTTOM, viewportHeight)
+    || (initial - calcFromRefPtsInNatureNumber(START))
     || (initial ? -initial : 0);
-  const adjust = normalizeToRelativeNatureNumber(vertex - initial);
-  const active = normalizeToRelativeNatureNumber(START)
-    || normalizeToRelativeNatureNumber(initial - vertex) + (initial ? 0 : boxHeight);
-  const frozen = normalizeToRelativeNatureNumber(STOP, pageHeight - viewportHeight)
-    || ((active || adjust) + (normalizeToRelativeNatureNumber(DISTANCE) || pageHeight));
+  const adjust = calcFromRefPtsInNatureNumber(vertex - initial);
+  const active = calcFromRefPtsInNatureNumber(START)
+    || calcFromRefPtsInNatureNumber(initial - vertex) + (initial ? 0 : boxHeight);
+  const frozen = calcFromRefPtsInNatureNumber(STOP, pageHeight - viewportHeight)
+    || ((active || adjust) + (calcFromRefPtsInNatureNumber(DISTANCE) || pageHeight));
 
   return { ...cache, breakpoints: { initial, vertex, adjust, active, frozen } };
 };
@@ -78,7 +74,7 @@ const calculateBreakpoints = (cache, props, ref) => {
 const calculateStickyProps = (cache) => {
   const { initial, vertex, adjust, active, frozen } = cache.breakpoints;
   const { height: _height, width: _width } = cache.dimensions.box;
-  const current = getScrollPosition();
+  const current = window.pageYOffset;
   return {
     // control sticky element
     _active: current >= active,

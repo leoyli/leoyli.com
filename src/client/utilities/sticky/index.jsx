@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 
 // modules
@@ -28,11 +28,11 @@ const StyledStickyBox = styled.div.attrs({
 
 
 // container
-class Sticky extends Component {
+class Sticky extends PureComponent {
   stickyBox = React.createRef();
   eventList = ['resize', 'scroll'];
   cache = { constants: {}, dimensions: {}, breakpoints: {} };
-  state = { initialized: false, stickyProps: {} };
+  state = { initialized: false, _active: false, _topped: false, _stuck: false, _height: '', _width: '', _top: '' };
 
   _updateStickyPropsInDepth = (depth) => {
     // update new cache values
@@ -40,10 +40,10 @@ class Sticky extends Component {
     const reducer = (cache, workingFn) => workingFn(cache, this.props, this.stickyBox.current);
     this.cache = pipeline.slice(depth).reduce(reducer, this.cache);
 
-    // update new stickyProps
+    // update states
     this.setState(() => ({
       initialized: true,
-      stickyProps: calculate.stickyProps(this.cache),
+      ...calculate.stickyProps(this.cache),
     }));
   };
 
@@ -80,20 +80,12 @@ class Sticky extends Component {
     this.eventList.forEach(event => window.removeEventListener(event, this._handleReCalculation));
   };
 
-  shouldComponentUpdate = (nextProps, nextState) => {
-    const { initialized: prevInitialized, stickyProps: prevStyledProp } = this.state;
-    const { initialized: nextInitialized, stickyProps: nextStyledProp } = nextState;
-    return (prevStyledProp._active !== nextStyledProp._active)
-      || (prevStyledProp._stuck !== nextStyledProp._stuck)
-      || (prevInitialized !== nextInitialized);
-  };
-
   render = () => {
-    const { stickyProps, initialized } = this.state;
+    const { initialized } = this.state;
     const { children, className } = this.props;
     return initialized
       ? (
-        <StyledStickyBox className={className} innerRef={this.stickyBox} {...stickyProps}>
+        <StyledStickyBox className={className} innerRef={this.stickyBox} {...this.state}>
           {children}
         </StyledStickyBox>
       )

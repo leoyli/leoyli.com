@@ -76,7 +76,7 @@ const reactClientSide = (config = {}, data = {}) => (`
 const googleAnalytics = (trackingId) => {
   if (!trackingId) return '';
   return (`
-    <script async src="https://www.googletagmanager.com/gtag/js?id=${trackingId}"></script>
+    <script src="https://www.googletagmanager.com/gtag/js?id=${trackingId}" async></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}

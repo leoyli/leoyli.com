@@ -102,7 +102,7 @@ const Intro = () => (
             <h1>
               Have a look on my résumé!
             </h1>
-            <img src="/static/media/cv.png" alt="CV" />
+            <img src="/static/media/features/cv.png" alt="CV" />
           </Link>
         </span>
       </Grid.Column>
