@@ -8,7 +8,7 @@ The Project CMS is a self-motivated project as a demonstration of my learning ca
 ## What and Why Is MERN?
 MERN is a shorthand for the combination of [MongoDB](https://www.mongodb.com) + [Express.js](http://expressjs.com) + [React.js](http://reactjs.org) + [Node.js](https://nodejs.org/). It is good for quickly prototyping a concept for many good benefits:
 
-![MERN Stack](https://leoyli.com/static/media/mern.png "MERN Stack")
+![MERN Stack](https://leoyli.com/static/media/features/mern.png "MERN Stack")
 
 ***
 
@@ -34,7 +34,7 @@ Quoted from [MongoDB v.s. MySQL](https://www.mongodb.com/compare/mongodb-mysql),
 
 ## Features in This App
 
-![Infrastructures](https://leoyli.com/static/media/architecture_f.png "The Infrastructures of leoyli.com")
+![Infrastructures](https://leoyli.com/static/media/features/architecture.png "The Infrastructures of leoyli.com")
 
 _For an overview discussion of the core application, please visit this post: [The Architecture and Backend Services](https://leoyli.com/blog/the-project-cms-the-architecture-and-backend-services)._
 
