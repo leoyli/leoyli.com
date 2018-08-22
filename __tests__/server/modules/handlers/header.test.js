@@ -1,7 +1,7 @@
 /* global __ROOT__, req, res, next */
 const {
   noCrawlerHeader, noStoreCacheHeader,
-} = require(`${__ROOT__}/server/controllers/modules/header`)[Symbol.for('__TEST__')];
+} = require(`${__ROOT__}/server/modules/handlers/headers`)[Symbol.for('__TEST__')];
 
 
 // modules

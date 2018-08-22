@@ -2,7 +2,7 @@
 const {
   pullPipe_1_matching, pullPipe_2_masking, pullPipe_3_sorting, pullPipe_4_grouping, pullPipe_5_paginating,
   getAggregationQuery,
-} = require(`${__ROOT__}/server/controllers/modules/query/pipes`)[Symbol.for('__TEST__')];
+} = require(`${__ROOT__}/server/modules/query/pipes`)[Symbol.for('__TEST__')];
 
 
 // tests

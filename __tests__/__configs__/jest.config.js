@@ -7,6 +7,6 @@ module.exports = {
   coveragePathIgnorePatterns: ['/node_modules/', '/__configs__/', '/src/', '/static/', '/view/'],
   testPathIgnorePatterns: ['/node_modules/', '/__configs__/', '/src/', '/static/', '/view/'],
   rootDir: path.join(__dirname, '../../'),
-  globals: { __ROOT__: path.join(__dirname, '../../src/') },
+  globals: { __ROOT__: path.join(__dirname, '../../src') },
   setupFiles: [path.join(__dirname, 'env.config.js')],
 };

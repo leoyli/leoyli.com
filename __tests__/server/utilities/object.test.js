@@ -1,7 +1,7 @@
 /* global __ROOT__ */
 const {
   hasOwnKey, cloneDeep, mergeDeep, assignDeep, freezeDeep, burstArrayDeep, createCaseInsensitiveProxy,
-} = require(`${__ROOT__}/server/controllers/utilities/object`)[Symbol.for('__TEST__')];
+} = require(`${__ROOT__}/server/utilities/object`)[Symbol.for('__TEST__')];
 
 
 // tests

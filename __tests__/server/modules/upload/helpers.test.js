@@ -1,7 +1,7 @@
 /* global __ROOT__ */
 const {
   getSavingPath, isUploadable, fetchRawDoc, fetchMessage, upload,
-} = require(`${__ROOT__}/server/controllers/modules/upload/helpers`)[Symbol.for('__TEST__')];
+} = require(`${__ROOT__}/server/modules/upload/helpers`)[Symbol.for('__TEST__')];
 
 
 // modules

@@ -1,11 +1,11 @@
 /* global __ROOT__, req, res, next */
 const {
   streamingUploader,
-} = require(`${__ROOT__}/server/controllers/modules/upload/packet`)[Symbol.for('__TEST__')];
+} = require(`${__ROOT__}/server/modules/upload`)[Symbol.for('__TEST__')];
 
 
 // modules
-const handlers = require(`${__ROOT__}/server/controllers/modules/upload/handlers`);
+const handlers = require(`${__ROOT__}/server/modules/upload/handlers`);
 const httpMocks = require('node-mocks-http');
 const EventEmitter = require('events');
 const Busboy = require('busboy');
@@ -13,7 +13,7 @@ const Busboy = require('busboy');
 
 // mocks
 jest.mock('busboy');
-jest.mock(`${__ROOT__}/server/controllers/modules/upload/handlers`, () => ({
+jest.mock(`${__ROOT__}/server/modules/upload/handlers`, () => ({
   handleOnFile: jest.fn(),
   handleOnField: jest.fn(),
   handleOnFinish: jest.fn(),

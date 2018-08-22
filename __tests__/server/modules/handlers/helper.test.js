@@ -1,7 +1,7 @@
 /* global __ROOT__, req, res, next */
 const {
   caseInsensitiveQueryProxy, titleTagModifier,
-} = require(`${__ROOT__}/server/controllers/modules/helper`)[Symbol.for('__TEST__')];
+} = require(`${__ROOT__}/server/modules/handlers/helpers`)[Symbol.for('__TEST__')];
 
 
 // modules

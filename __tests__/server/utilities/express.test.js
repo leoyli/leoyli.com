@@ -1,7 +1,7 @@
 /* global __ROOT__ */
 const {
   wrapAsync, wrapMiddleware,
-} = require(`${__ROOT__}/server/controllers/utilities/express`)[Symbol.for('__TEST__')];
+} = require(`${__ROOT__}/server/utilities/express`)[Symbol.for('__TEST__')];
 
 
 // tests

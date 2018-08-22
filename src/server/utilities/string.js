@@ -105,7 +105,7 @@ const parsePath = (str) => {
   const query     = _decoded.includes('/') && _decoded.replace(`#${hash}`, '').split('?')[1];
 
   // check location
-  const _slug     = _decoded.replace(/^\w*:?\/\//, '').replace(`#${hash}`, '').replace(`?${query}`, '').split('');
+  const _slug     = _decoded.replace(/^\w*:?\/\//, '').replace(`#${hash}`, '').replace(`?${query}`, '').split('/');
   const _host     = _decoded.includes('/') && _slug[0].includes('.') && _slug[0];
 
   // check port

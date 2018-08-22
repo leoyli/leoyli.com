@@ -1,7 +1,7 @@
 /* global __ROOT__ *//* eslint-disable space-in-parens, array-bracket-spacing, comma-spacing */
 const {
   paginatedMetaExpression, queryDateExpression, parseQueryDate, parseQuerySort,
-} = require(`${__ROOT__}/server/controllers/modules/query/helpers`)[Symbol.for('__TEST__')];
+} = require(`${__ROOT__}/server/modules/query/helpers`)[Symbol.for('__TEST__')];
 
 
 // tests

@@ -1,18 +1,18 @@
 /* global __ROOT__, req, res, next */
 const {
   handleOnFile, handleOnField, handleOnFinish,
-} = require(`${__ROOT__}/server/controllers/modules/upload/handlers`)[Symbol.for('__TEST__')];
+} = require(`${__ROOT__}/server/modules/upload/handlers`)[Symbol.for('__TEST__')];
 
 
 // modules
-const helpers = require(`${__ROOT__}/server/controllers/modules/upload/helpers`);
+const helpers = require(`${__ROOT__}/server/modules/upload/helpers`);
 const httpMocks = require('node-mocks-http');
 const fs = require('fs');
 const EventEmitter = require('events');
 
 
 // mocks
-jest.mock(`${__ROOT__}/server/controllers/modules/upload/helpers`);
+jest.mock(`${__ROOT__}/server/modules/upload/helpers`);
 jest.mock('fs', () => ({
   unlink: jest.fn(),
 }));
